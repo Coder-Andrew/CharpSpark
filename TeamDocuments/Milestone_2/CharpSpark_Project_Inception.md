@@ -47,6 +47,7 @@ Project Inception Worksheet
     14. Ability to practice for interviews via industry-specific preparation questions
 
 ## Initial Modeling
+- [MindMap](https://miro.com/app/board/uXjVN4G_02o=/)
 
 ### Use Case Diagrams
     Diagrams
