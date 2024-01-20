@@ -75,7 +75,9 @@ T: Task
         a. [T]
 
 ## Initial Architecture Envisioning
-    Diagrams and drawings, lists of components
+![Initial Architecture Diagram](Resources/CharpSpark_Initial_Architecture_Diagram.drawio.svg)
+
+Diagrams and drawings, lists of components
 
 ## Agile Data Modeling
     Diagrams, SQL modeling (dbdiagram.io), UML diagrams
