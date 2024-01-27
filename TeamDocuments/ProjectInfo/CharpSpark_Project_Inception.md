@@ -55,20 +55,27 @@ The AI-Powered Resume Enhancement Platform is a software application that enable
     As needed
 
 ## List of Needs and Features
-    (Ability = User perspective | Process = Server side)
-    1. Ability to submit resume
-    2. Process to parse submitted resume
-    3. Process to produce meaningful feedback on resume through A.I. & API technology
-    4. Ability to review A.I. feedback
-    5. Ability to build new resume based off of feedback
-    6. Ability to save multiple resumes
-    7. Ability to edit saved resumes
-    8. Process to test resume against A.I. and resume filtering software programs
-    9. Ability to test created or saved resumes
-    11. Ability to generate a cover letter
-    12. Ability to view and search for jobs through API
-    13. Ability to enable alerts for job listings that match a user's criteria
-    14. Ability to practice for interviews via industry-specific preparation questions
+    1. Build Resume (Dynamic Resume Sections, Save Resume)
+    2. User Profile
+    3. Edit Saved Resumes
+    4. Resume feedback from A.I. (Integrated Soft Skills Assessment)
+    5. Upload Resume (Parse Resume)
+    6. Test Resume
+    7. Create Cover Letter
+    8. Job Listings (Web Scraper)
+    9. Reverse Job Matching
+    10. Job Application Tracker
+    11. Automated Follow-up Reminders
+    12. Personalized Job Market Reports
+    13. AI Career Advisor
+    14. AI Career Path Predictions
+    15. Cross-Industry Skill Transferability Analysis
+    16. Skill Gap Analysis
+    17. Personal SWOT Analysis
+    18. Interview Prep
+    19. Automated LinkedIn Profile Sync
+    20. Multilingual Support
+    *** Accessibility Features (Should this be it's own epic, or are there smaller things we can accomplish with each sprint?)
 
 ## Initial Modeling
 - [MindMap](https://miro.com/app/board/uXjVN4G_02o=/)
