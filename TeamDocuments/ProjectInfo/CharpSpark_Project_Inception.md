@@ -1,9 +1,8 @@
-Project Inception Worksheet
+CharpSpark Inception Worksheet
 =====================================
 
 ## Summary of Our Approach to Software Development
-    What processes are we following?  How will we run this project? ==> Agile, Scrum, ...  
-    What are we choosing to do, how will we do it and at what level of detail or extent?
+Agile, Scrum, Git Workflow, TDD, OOP, REST, microservice architecture
 
 ## Vision Statement
 The AI-Powered Resume Enhancement Platform is a software application that enables stakeholders who already have a resume to submit their current resume, build a new resume based on recieved feedback from A.I. and industry-specific standards, as well as the capability to go back and edit their resume whenever they need to. For stakeholders who have no resume, this software application will elicit questions from the user in order to obtain enough information to build them a professional resume with ease. The purpose of this software is to enable end users the capability to produce a strong resume that will catch the attention of employers. CharpSpark is proposing this topic as each industry and position has different standards for what they look for in resumes, which can become a headache for people applying to jobs to figure out what they need to include in order to get their dream job. Not only do we recognize the difficulty to produce a strong resume, but A.I. and resume filtering softwares tend to leave applicants in the dark as to if their resume will even be looked at by human eyes. Through our proposed software, we would like to give applicants the upper hand in "defeating" these resume filtering techniques as we believe every applicant's resume should be given a chance at human review, not treated as merely another piece of data by software. There are competitors and existing applications that do this, however, the largest difference is that ours is going to be free. Another thing to note is that we have thrown around a lot of ideas for features, and while all of those features have already been created by one company or another, we haven’t yet found a competitor that has all of the proposed features that we are listing.
@@ -41,24 +40,36 @@ The AI-Powered Resume Enhancement Platform is a software application that enable
     - **Background:** Born and raised in a culturally diverse community in Chicago, Jasmine has always been fascinated by the world of marketing and its impact on consumer behavior. She actively participates in student organizations related to marketing and business, where she has had the opportunity to work on various projects, gaining hands-on experience in creating marketing campaigns and conducting market research. Jasmine is known for her creativity, strong communication skills, and her ability to think strategically. She is also involved in community service initiatives, demonstrating her commitment to making a positive impact beyond the academic setting.
 
 ## Initial Requirements Elaboration and Elicitation
-    See Requirements_template for more
 
 ### Elicitation Questions
-    1. 
-    2.
-    3. ...
+1.
+    - Q: Which epic will deliver the most amount of value to clients in the least amount of sprints? 
+    - A: The "Build Resume" epic will deliver the most amount value to clients upon completion, because the user will immediately be able to perform actions with the software. This epic is also independent, while other epics/features will depend on this one to be complete.
 
-### Elicitation Interviews
-    Transcript or summary of what was learned
+2. 
+    - Q: Should accessibility features be implemented as their own epic/feature, or should they be included as a task for each user story?
+    - A: N/A, will be able to answer as project progresses as stakeholders clarify requirements.
+3.
+    - Q: Why was editing saved resumes important to our users?
+    - A: It would be frustrating to our users if they can't go back and modify their previously created resumes.
 
-### Other Elicitation Activities?
-    As needed
+4. 
+    - Q: Why is having a user profile important?
+    - A: Having a profile for users has value in that users need not to enter their basic information for each resume/cover letter they create. Profiles will also allow users to keep their scores for interview prep questions, as well as keeping track of job listings the user has applied to.
+
+5. 
+    - Q: How does A.I. feedback provide benefit to the user?
+    - A: The A.I. will enable the user's resume to get passed A.I. and ATS resume filtering systems. It will also help the user's resume have a clean, strong, and professional look.
+
+6. 
+    - Q: What benefit does uploading a resume bring to the user?
+    - A: Allowing the user to upload a resume they've previously created will reduce the amount of time the user would spend building/modifying the resume with the provided A.I. feedback. This will also give the user more time to focus on more important things, such as applying and getting their dream job.
 
 ## List of Needs and Features
-    1. Build Resume (Dynamic Resume Sections, Save Resume)
+    1. Build Resume (Save Resume)
     2. User Profile
     3. Edit Saved Resumes
-    4. Resume feedback from A.I. (Integrated Soft Skills Assessment)
+    4. Resume feedback from A.I. (Dynamic Resume Sections, Integrated Soft Skills Assessment)
     5. Upload Resume (Parse Resume)
     6. Test Resume
     7. Create Cover Letter
@@ -86,7 +97,13 @@ The AI-Powered Resume Enhancement Platform is a software application that enable
 ### Sequence Diagrams
 
 ### Other Modeling
-    Diagrams, UI wireframes, page flows, ...
+- ![DB Diagram](Resources/Models/Initial_DBDiagram.svg)
+- [DB Diagram Link](https://dbdiagram.io/d/65b57b80ac844320aedb5a1f)
+- ![Use Case Diagram](Resources/Models/M3_UseCaseDiagram.png)
+- ![Home Page](Resources/Models/Home%20Page.svg)
+- ![Creation Choice Page](Resources/Models/Creation%20Choice%20Page.svg)
+- ![Create Page](Resources/Models/Create%20Page.svg)
+- ![View Page](Resources/Models/View%20Page.svg)
 
 ## Identify Non-Functional Requirements
     1.
@@ -99,15 +116,23 @@ E: Epic
 U: User Story  
 T: Task  
 
-7. [E] 
-    1. [U]
+1. [E] Build Resume
+    1. [U] As a user who has no previously created resume, I'd like to be able to fill out a form to create a resume.
         a. [T]
         b. [T]
-    2. [U]
+    2. [U] As a user who has just created a resume, I'd like my resume to be saved so that I can modify it a later time.
+        a. [T]
+    3. [U] As a user who multiple skills (along with other resume criteria), I'd like to be able to include all of them on my resume.
+        a. [T]
+
+2. [E] User Profile
+    1. [U] As a user, I'd like to be able to make changes to my account and have it reflect in my saved work.
+        a. [T]
+    2. [U] As a user, I'd like a graphical dashboard where I can view all of my previously saved resumes.
         a. [T]
 
 ## Initial Architecture Envisioning
-![Initial Architecture Diagram](Resources/CharpSpark_Initial_Architecture_Diagram.drawio.svg)
+![Initial Architecture Diagram](Resources/Models/CharpSpark_Initial_Architecture_Diagram.drawio.svg)
 
 Diagrams and drawings, lists of components
 
