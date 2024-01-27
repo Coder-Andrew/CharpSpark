@@ -115,4 +115,4 @@ Diagrams and drawings, lists of components
     Diagrams, SQL modeling (dbdiagram.io), UML diagrams
 
 ## Timeline and Release Plan
-    Schedule: meaningful dates, milestones, sprint cadence, how releases are made (CI/CD, or fixed releases, or ?)
+[Timeline](Resources/timeline.html)
