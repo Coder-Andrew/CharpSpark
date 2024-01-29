@@ -122,7 +122,7 @@ T: Task
         b. [T]
     2. [U] As a user who has just created a resume, I'd like my resume to be saved so that I can modify it a later time.
         a. [T]
-    3. [U] As a user who multiple skills (along with other resume criteria), I'd like to be able to include all of them on my resume.
+    3. [U] As a user who has multiple skills (along with other resume criteria), I'd like to be able to include all of them on my resume.
         a. [T]
 
 2. [E] User Profile
