@@ -3,6 +3,7 @@ CREATE TABLE [UserInfo] (
   [ASPNetIdentityId] nvarchar(450),
   [FirstName] nvarchar(50),
   [LastName] nvarchar(50),
+  [PhoneNumber] nvarchar(12),
   [Summary] nvarchar(250)
 );
 
