@@ -1,4 +1,4 @@
-namespace resuMeta_Tests;
+namespace ResuMeta_Tests;
 
 public class Tests
 {

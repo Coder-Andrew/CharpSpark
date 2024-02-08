@@ -1,4 +1,4 @@
-namespace resuMeta.Models;
+namespace ResuMeta.Models;
 
 public class ErrorViewModel
 {
