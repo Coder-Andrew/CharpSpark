@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace resuMeta.Models;
+namespace ResuMeta.Models;
 
 public partial class ResuMetaDbContext : DbContext
 {

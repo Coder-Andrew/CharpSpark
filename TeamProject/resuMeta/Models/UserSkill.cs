@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace resuMeta.Models;
+namespace ResuMeta.Models;
 
 [Table("UserSkill")]
 public partial class UserSkill

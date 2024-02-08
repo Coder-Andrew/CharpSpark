@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace resuMeta.Data;
+namespace ResuMeta.Data;
 
 public class ApplicationDbContext : IdentityDbContext
 {
