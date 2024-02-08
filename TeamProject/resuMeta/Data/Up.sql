@@ -14,7 +14,7 @@ CREATE TABLE [Education] (
   [EducationSummary] nvarchar(250),
   [StartDate] date,
   [EndDate] date,
-  [Completion] bool
+  [Completion] bit
 );
 
 CREATE TABLE [Degree] (
