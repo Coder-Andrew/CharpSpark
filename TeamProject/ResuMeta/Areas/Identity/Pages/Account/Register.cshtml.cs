@@ -172,6 +172,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        TempData["RegistrationMessage"] = "Account created successfully!";
                         return LocalRedirect(returnUrl);
                     }
                 }
