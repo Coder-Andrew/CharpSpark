@@ -1,5 +1,5 @@
 CREATE TABLE [UserInfo] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [ASPNetIdentityId] nvarchar(450),
   [FirstName] nvarchar(50),
   [LastName] nvarchar(50),
@@ -8,7 +8,7 @@ CREATE TABLE [UserInfo] (
 );
 
 CREATE TABLE [Education] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Institution] nvarchar(100),
   [EducationSummary] nvarchar(250),
@@ -18,7 +18,7 @@ CREATE TABLE [Education] (
 );
 
 CREATE TABLE [Degree] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [EducationId] integer,
   [Type] nvarchar(100),
   [Major] nvarchar(50),
@@ -26,7 +26,7 @@ CREATE TABLE [Degree] (
 );
 
 CREATE TABLE [EmployementHistory] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Company] nvarchar(100),
   [Description] nvarchar(250),
@@ -35,7 +35,7 @@ CREATE TABLE [EmployementHistory] (
 );
 
 CREATE TABLE [ReferenceContactInfo] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [EmployementHistoryId] integer,
   [FirstName] nvarchar(50),
   [LastName] nvarchar(50),
@@ -43,19 +43,19 @@ CREATE TABLE [ReferenceContactInfo] (
 );
 
 CREATE TABLE [UserSkill] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [SkillId] integer,
   [MonthDuration] int
 );
 
 CREATE TABLE [Skills] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [Skill] nvarchar(100)
 );
 
 CREATE TABLE [Projects] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Name] nvarchar(100),
   [Link] nvarchar(250),
@@ -63,14 +63,14 @@ CREATE TABLE [Projects] (
 );
 
 CREATE TABLE [Achievements] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Achievement] nvarchar(100),
   [Summary] nvarchar(250)
 );
 
 CREATE TABLE [Resume] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Resume] binary
 );
