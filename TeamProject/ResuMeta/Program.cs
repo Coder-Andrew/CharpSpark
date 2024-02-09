@@ -2,8 +2,10 @@ using System.Net;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ResuMeta.Data;
 using ResuMeta.Models;
+using ResuMeta.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,22 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try 
+    {
+        var config = services.GetRequiredService<IConfiguration>();
+        var seedUserPw = config["SeedUserPw"];
+        await SeedUsers.Initialize(services, SeedData.UserSeedData, seedUserPw!);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred seeding the DB.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
