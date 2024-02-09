@@ -44,16 +44,12 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Achievem__3214EC075EA0AEFE");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Achievements).HasConstraintName("Fk Achievements UserInfo Id");
         });
 
         modelBuilder.Entity<Degree>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Degree__3214EC07F6F3011C");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Education).WithMany(p => p.Degrees).HasConstraintName("Fk Degree Education Id");
         });
@@ -62,8 +58,6 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Educatio__3214EC077D330142");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Educations).HasConstraintName("Fk Education UserInfo Id");
         });
 
@@ -71,7 +65,6 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Employem__3214EC079178516B");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory UserInfo Id");
         });
@@ -80,7 +73,6 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Projects__3214EC070D8E6AF2");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Projects).HasConstraintName("Fk Projects UserInfo Id");
         });
@@ -89,7 +81,6 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Referenc__3214EC07B5AC2E47");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.EmployementHistory).WithMany(p => p.ReferenceContactInfos).HasConstraintName("Fk ReferenceContactInfo EmployementHistory Id");
         });
@@ -98,7 +89,6 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Resume__3214EC07612CD603");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Resume1).IsFixedLength();
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Resumes).HasConstraintName("Fk Resume UserInfo Id");
@@ -108,21 +98,17 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Skills__3214EC07B9CE9060");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<UserInfo>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC071FF47B53");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__UserSkil__3214EC07DAFE89ED");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Skill Id");
 
