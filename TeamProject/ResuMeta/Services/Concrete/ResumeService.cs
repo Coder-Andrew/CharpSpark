@@ -25,7 +25,7 @@ namespace ResuMeta.Services.Concrete
     }
     class Root
     {
-        public string id { get; set; }
+        public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
     }
     public class ResumeService : IResumeService

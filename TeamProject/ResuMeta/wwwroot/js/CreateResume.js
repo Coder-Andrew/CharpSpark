@@ -77,7 +77,6 @@ async function submitInfo() {
             }]
         }]
     };
-    console.log(resumeInfo);
 
     const response = await fetch(`/api/resume/info`, {
         method: 'PUT',
