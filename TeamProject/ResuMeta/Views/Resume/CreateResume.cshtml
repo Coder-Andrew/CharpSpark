@@ -9,6 +9,12 @@
         <div class="row mt-3 d-flex form-group" id="educationForm">
             <h4>Education</h4>
             <hr \>
+            <div id="validation">
+                <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
+                    <strong>Validation Error</strong>
+                    <p id="validationText"></p>
+                </div>
+            </div>
             <input type="hidden" id="userId" value="@Model.UserId" />
             <div class="col col-md-6">
                 <label for="institutionName" class="col-form-label">Institution Name:</label>
