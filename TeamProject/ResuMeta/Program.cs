@@ -8,6 +8,8 @@ using ResuMeta.Models;
 using ResuMeta.Utilities;
 using ResuMeta.DAL.Concrete;
 using ResuMeta.DAL.Abstract;
+using ResuMeta.Services.Abstract;
+using ResuMeta.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,7 @@ builder.Services.AddDbContext<ResuMetaDbContext>(options => options
 
 builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(options =>
