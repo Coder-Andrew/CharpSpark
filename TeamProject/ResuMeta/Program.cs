@@ -6,6 +6,10 @@ using Microsoft.Extensions.Configuration;
 using ResuMeta.Data;
 using ResuMeta.Models;
 using ResuMeta.Utilities;
+using ResuMeta.DAL.Concrete;
+using ResuMeta.DAL.Abstract;
+using ResuMeta.Services.Abstract;
+using ResuMeta.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +17,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
 
-//var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -26,6 +29,11 @@ builder.Services.AddDbContext<ResuMetaDbContext>(options => options
     .UseLazyLoadingProxies()
     .UseSqlServer(resuMetaConnectionString)
 );
+
+builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IResumeService, ResumeService>();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -56,6 +64,8 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
