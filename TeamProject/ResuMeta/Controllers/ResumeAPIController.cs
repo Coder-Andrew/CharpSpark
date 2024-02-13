@@ -13,9 +13,11 @@ namespace ResuMeta.Controllers
     public class ResumeApiController : ControllerBase
     {
         private readonly IResumeService _resumeService;
-        public ResumeApiController(IResumeService resumeService)
+        private readonly ISkillsRepository _skillsRepository;
+        public ResumeApiController(IResumeService resumeService, ISkillsRepository skillsRespository)
         {
             _resumeService = resumeService;
+            _skillsRepository = skillsRespository;
         }
 
         // PUT: api/resume/info
@@ -32,6 +34,22 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+
+        // GET: api/resume/skills/{skillSubstring}
+        [HttpGet("skills/{skillSubstring}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<Skill>> GetSkills(string skillSubstring)
+        {
+            try
+            {
+                var skills = _skillsRepository.GetSkills(skillSubstring);
+                return Ok(skills);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

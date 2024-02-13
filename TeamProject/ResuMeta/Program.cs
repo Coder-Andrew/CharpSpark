@@ -33,6 +33,7 @@ builder.Services.AddDbContext<ResuMetaDbContext>(options => options
 builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
+builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(options =>

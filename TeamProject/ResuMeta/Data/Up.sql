@@ -51,7 +51,7 @@ CREATE TABLE [UserSkill] (
 
 CREATE TABLE [Skills] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-  [Skill] nvarchar(100)
+  [SkillName] nvarchar(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE [Projects] (
