@@ -1,4 +1,4 @@
-INSERT INTO [SKILLS] ([SKILL]) VALUES
+INSERT INTO [SKILLS] ([SKILLNAME]) VALUES
     ('International Risk Management'),
     ('Poetry Writing'),
     ('Country Risk Analysis'),
@@ -812,4 +812,4 @@ INSERT INTO [SKILLS] ([SKILL]) VALUES
     ('Analytical Skills'),
     ('App Store Optimization (ASO)'),
     ('Kanban Boards'),
-    ('International Market Research'),
+    ('International Market Research');

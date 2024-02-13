@@ -13,7 +13,7 @@ namespace ResuMeta.DAL.Concrete
         }
         public IEnumerable<Skill> GetSkills(string skillSubstring)
         {
-            return _skills.Where(s => s.Skill1.Contains(skillSubstring)).ToList();
+            return _skills.Where(s => s.SkillName.Contains(skillSubstring)).ToList();
         }
     }
 }
