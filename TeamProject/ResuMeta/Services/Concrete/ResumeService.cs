@@ -5,6 +5,7 @@ using ResuMeta.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using ResuMeta.Models.DTO;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -35,13 +36,22 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<Education> _education;
         private readonly IRepository<Degree> _degree;
         private readonly ILogger<ResumeService> _logger;
-        public ResumeService(ILogger<ResumeService> logger, UserManager<IdentityUser> userManager, IRepository<UserInfo> userInfo, IRepository<Education> education, IRepository<Degree> degree)
+        private readonly ISkillsRepository _skillsRepository;
+        public ResumeService(
+            ILogger<ResumeService> logger,
+            UserManager<IdentityUser> userManager,
+            IRepository<UserInfo> userInfo,
+            IRepository<Education> education,
+            IRepository<Degree> degree,
+            ISkillsRepository skillsRepository
+            )
         {
             _logger = logger;
             _userManager = userManager;
             _userInfo = userInfo;
             _education = education;
             _degree = degree;
+            _skillsRepository = skillsRepository;
         }
 
         public void AddResumeInfo(JsonElement response)
@@ -92,6 +102,15 @@ namespace ResuMeta.Services.Concrete
                 _logger.LogError(e, "Error deserializing json");
                 throw new Exception("Error deserializing json");
             }
+        }
+
+        public IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring)
+        {
+            return _skillsRepository.GetSkillsBySubstring(skillsSubstring)
+                .Select(s => new SkillDTO { 
+                    Id = s.Id,
+                    SkillName = s.SkillName                
+                }).ToList();
         }
     }
 }

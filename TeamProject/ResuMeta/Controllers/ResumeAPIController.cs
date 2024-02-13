@@ -13,11 +13,9 @@ namespace ResuMeta.Controllers
     public class ResumeApiController : ControllerBase
     {
         private readonly IResumeService _resumeService;
-        private readonly ISkillsRepository _skillsRepository;
-        public ResumeApiController(IResumeService resumeService, ISkillsRepository skillsRespository)
+        public ResumeApiController(IResumeService resumeService)
         {
             _resumeService = resumeService;
-            _skillsRepository = skillsRespository;
         }
 
         // PUT: api/resume/info
@@ -43,7 +41,7 @@ namespace ResuMeta.Controllers
         {
             try
             {
-                var skills = _skillsRepository.GetSkills(skillSubstring);
+                var skills = _resumeService.GetSkillsBySubstring(skillSubstring);
                 return Ok(skills);
             }
             catch
