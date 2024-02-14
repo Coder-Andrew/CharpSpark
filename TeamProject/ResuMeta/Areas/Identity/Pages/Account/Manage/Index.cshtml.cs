@@ -49,6 +49,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        
+        public string FirstName { get; set; } = "Placeholder";
+        
         public class InputModel
         {
             /// <summary>
@@ -58,12 +61,33 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Summary")]
+            public string Summary { get; set; }
+
+            [Display(Name = "New First Name")]
+            public string NewFirstName { get; set; }
+
+            [Display(Name = "New Last Name")]
+            public string NewLastName { get; set; }
+
+            [Display(Name = "New Summary")]
+            public string NewSummary { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            //var firstName = await _userManager.GetFirstNameAsync(user);
+           // var lastName = user.LastName;
+           // var summary = user.Summary;
 
             Username = userName;
 
