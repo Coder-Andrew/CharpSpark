@@ -45,12 +45,18 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
+        public string FirstName { get; set; } = "Placeholder";
+
+        public string LastName { get; set; } = "Placeholder";
+
+        public string Summary { get; set; } = "Placeholder";
+
+        public string PhoneNumber { get; set; } = "Placeholder";
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        
-        public string FirstName { get; set; } = "Placeholder";
         
         public class InputModel
         {
@@ -79,6 +85,13 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "New Summary")]
             public string NewSummary { get; set; }
+
+            [Phone]
+            [Display(Name = "New Phone Number")]
+            public string NewPhoneNumber { get; set; }
+
+            [Display(Name = "New Username")]
+            public string NewUsername { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
