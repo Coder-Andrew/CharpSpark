@@ -89,19 +89,28 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(IdentityUser user)
         {
+            var userId = await _userManager.GetUserIdAsync(user);
+            var currentUser = await _ResuMetaDbContext.UserInfos.FirstOrDefaultAsync(u => u.AspnetIdentityId == userId);
+
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            var firstName = "";
-            var lastName = "";
-            var summary = "";
+            var firstName = currentUser.FirstName;
+            var lastName = currentUser.LastName;
+            var summary = currentUser.Summary;
+
+            Username = userName;
+            PhoneNumber = phoneNumber;
+            FirstName = firstName;
+            LastName = lastName;
+            Summary = summary;
 
             Input = new InputModel
             {
-                NewFirstName = firstName,
-                NewLastName = lastName,
-                NewSummary = summary,
-                NewPhoneNumber = phoneNumber,
-                NewUsername = userName
+                NewFirstName = "",
+                NewLastName = "",
+                NewSummary = "",
+                NewPhoneNumber = "",
+                NewUsername = ""
             };
         }
 
