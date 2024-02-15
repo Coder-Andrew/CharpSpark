@@ -25,6 +25,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddDbContext<ResuMetaDbContext>(options => options
     .UseLazyLoadingProxies()
     .UseSqlServer(resuMetaConnectionString)

@@ -13,6 +13,10 @@ namespace ResuMeta.DAL.Concrete
         }
         public IEnumerable<Skill> GetSkillsBySubstring(string skillSubstring)
         {
+            if (string.IsNullOrWhiteSpace(skillSubstring))
+            {
+                return new List<Skill>();
+            }
             return _skills.Where(s => s.SkillName.Contains(skillSubstring)).ToList();
         }
     }
