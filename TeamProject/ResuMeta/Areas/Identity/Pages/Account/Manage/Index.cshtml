@@ -56,7 +56,7 @@
                 <label asp-for="Input.NewSummary" class="form-label"></label>
                 <span asp-validation-for="Input.NewSummary" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <button id="update-profile-button" type="submit" asp-page-handler="ChangeProfile" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
 </div>

@@ -51,31 +51,14 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
         public string Summary { get; set; } = "Placeholder";
 
-        public string PhoneNumber { get; set; } = "Placeholder";
+        public string PhoneNumber { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
-
-            [Display(Name = "First Name")]
-            public string FirstName { get; set; }
-
-            [Display(Name = "Last Name")]
-            public string LastName { get; set; }
-
-            [Display(Name = "Summary")]
-            public string Summary { get; set; }
 
             [Display(Name = "New First Name")]
             public string NewFirstName { get; set; }
@@ -103,10 +86,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
            // var summary = user.Summary;
 
             Username = userName;
+            PhoneNumber = phoneNumber;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                NewPhoneNumber = phoneNumber
             };
         }
 
@@ -122,7 +106,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostChangeProfileAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -137,9 +121,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            if (Input.NewPhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.NewPhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     StatusMessage = "Unexpected error when trying to set phone number.";
