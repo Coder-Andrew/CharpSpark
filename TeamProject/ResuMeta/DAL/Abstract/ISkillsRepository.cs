@@ -2,7 +2,7 @@
 
 namespace ResuMeta.DAL.Abstract
 {
-    public interface ISkillsRepository
+    public interface ISkillsRepository : IRepository<Skill>
     {
         IEnumerable<Skill> GetSkillsBySubstring(string skillSubstring);
     }

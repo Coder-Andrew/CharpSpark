@@ -9,6 +9,10 @@ using ResuMeta.Models.DTO;
 
 namespace ResuMeta.Services.Concrete
 {
+    class JsonSkill
+    {
+        public int skillId { get; set; }
+    }
     class JsonDegree
     {
         public string? type { get; set; }
@@ -28,14 +32,16 @@ namespace ResuMeta.Services.Concrete
     {
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
+        public List<JsonSkill>? skills { get; set; }
     }
     public class ResumeService : IResumeService
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<ResumeService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IRepository<Education> _education;
         private readonly IRepository<Degree> _degree;
-        private readonly ILogger<ResumeService> _logger;
+        private readonly IRepository<UserSkill> _userSkills;
         private readonly ISkillsRepository _skillsRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
@@ -43,6 +49,7 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserInfo> userInfo,
             IRepository<Education> education,
             IRepository<Degree> degree,
+            IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository
             )
         {
@@ -51,6 +58,7 @@ namespace ResuMeta.Services.Concrete
             _userInfo = userInfo;
             _education = education;
             _degree = degree;
+            _userSkills = userSkills;
             _skillsRepository = skillsRepository;
         }
 
@@ -58,8 +66,7 @@ namespace ResuMeta.Services.Concrete
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true,
-                
+                PropertyNameCaseInsensitive = true,                
             };
             try
             {
@@ -94,6 +101,18 @@ namespace ResuMeta.Services.Concrete
                             Minor = degree.minor
                         };
                         _degree.AddOrUpdate(currDegree);
+                    }
+                    foreach(JsonSkill jsonSkill in resumeInfo.skills!)
+                    {
+                        Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
+                        if (skill != null)
+                        {
+                            _userSkills.AddOrUpdate(new UserSkill
+                            {
+                                UserInfoId = Int32.Parse(resumeInfo.id),
+                                SkillId = skill.Id
+                            });
+                        }
                     }
                 }
             }
