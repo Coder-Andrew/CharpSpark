@@ -6,9 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using ResuMeta.Models;
 
 namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +19,16 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ResuMetaDbContext _ResuMetaDbContext;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ResuMetaDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _ResuMetaDbContext = context;
         }
 
         /// <summary>
@@ -45,11 +51,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string FirstName { get; set; } = "Placeholder";
+        public string FirstName { get; set; }
 
-        public string LastName { get; set; } = "Placeholder";
+        public string LastName { get; set; }
 
-        public string Summary { get; set; } = "Placeholder";
+        public string Summary { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -59,20 +65,24 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-
+            [Required]
             [Display(Name = "New First Name")]
             public string NewFirstName { get; set; }
 
+            [Required]
             [Display(Name = "New Last Name")]
             public string NewLastName { get; set; }
 
+            [Required]
             [Display(Name = "New Summary")]
             public string NewSummary { get; set; }
 
+            [Required]
             [Phone]
             [Display(Name = "New Phone Number")]
             public string NewPhoneNumber { get; set; }
 
+            [Required]
             [Display(Name = "New Username")]
             public string NewUsername { get; set; }
         }
@@ -81,16 +91,17 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            //var firstName = await _userManager.GetFirstNameAsync(user);
-           // var lastName = user.LastName;
-           // var summary = user.Summary;
-
-            Username = userName;
-            PhoneNumber = phoneNumber;
+            var firstName = "";
+            var lastName = "";
+            var summary = "";
 
             Input = new InputModel
             {
-                NewPhoneNumber = phoneNumber
+                NewFirstName = firstName,
+                NewLastName = lastName,
+                NewSummary = summary,
+                NewPhoneNumber = phoneNumber,
+                NewUsername = userName
             };
         }
 
@@ -109,7 +120,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostChangeProfileAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            var userId = await _userManager.GetUserIdAsync(user);
+            var currentUser = await _ResuMetaDbContext.UserInfos.FirstOrDefaultAsync(u => u.AspnetIdentityId == userId);
+            if (user == null || currentUser == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
@@ -120,15 +133,82 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            var userName = await _userManager.GetUserNameAsync(user);
+            if (Input.NewUsername != userName)
+            {
+                var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.NewUsername);
+                if (!setUserNameResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set user name.";
+                    return RedirectToPage();
+                }
+            }
+
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.NewPhoneNumber != phoneNumber)
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.NewPhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                currentUser.PhoneNumber = Input.NewPhoneNumber;
+                var changes = await _ResuMetaDbContext.SaveChangesAsync();
+
+                if (!setPhoneResult.Succeeded || changes < 0)
                 {
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            //Non-ASP.NET Core Identity fields
+            var firstName = FirstName;
+            var lastName = LastName;
+            var summary = Summary;
+            
+            if (Input.NewFirstName != firstName)
+            {
+                currentUser.FirstName = Input.NewFirstName;
+                var changes = await _ResuMetaDbContext.SaveChangesAsync();
+                if (changes < 0)
+                {
+                    StatusMessage = "Unexpected error when trying to set first name.";
+                    return RedirectToPage();
+                }
+            }
+            else
+            {
+                StatusMessage = "Unexpected error when trying to set first name.";
+                return RedirectToPage();
+            }
+
+            if (Input.NewLastName != lastName)
+            {
+                currentUser.LastName = Input.NewLastName;
+                var changes = await _ResuMetaDbContext.SaveChangesAsync();
+                if (changes < 0)
+                {
+                    StatusMessage = "Unexpected error when trying to set last name.";
+                    return RedirectToPage();
+                }
+            }
+            else
+            {
+                StatusMessage = "Unexpected error when trying to set last name.";
+                return RedirectToPage();
+            }
+
+            if (Input.NewSummary != summary)
+            {
+                currentUser.Summary = Input.NewSummary;
+                var changes = await _ResuMetaDbContext.SaveChangesAsync();
+                if (changes < 0)
+                {
+                    StatusMessage = "Unexpected error when trying to set summary.";
+                    return RedirectToPage();
+                }
+            }
+            else
+            {
+                StatusMessage = "Unexpected error when trying to set summary.";
+                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(user);
