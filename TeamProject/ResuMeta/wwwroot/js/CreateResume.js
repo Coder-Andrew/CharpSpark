@@ -1,10 +1,44 @@
-
 document.addEventListener("DOMContentLoaded", initializePage, false);
+
+let selectedSkills = [];
 
 function initializePage() {
     console.log("Create Resume Page loaded");
     const submitBtn = document.getElementById("submitInfo");
     submitBtn.addEventListener('click', () => submitInfo(), false);
+
+    const skillsDropdown = document.getElementById("skills-dropdown");
+    const skillInput = document.getElementById("skills");
+    const skillCol = document.getElementById("skill-col");
+
+    // Add debounce to event listener
+    skillInput.addEventListener('input', debounce(() => {
+        if (skillInput.value) {
+            skillsDropdown.classList.add("show");
+            getSkills(skillInput.value);
+        } else {
+            skillsDropdown.classList.remove("show");
+        }
+
+    }, 350), false);
+
+    // Add event listener to dropdown
+    skillsDropdown.addEventListener('click', (event) => {
+        skillInput.value = "";
+        skillsDropdown.classList.remove("show");
+        addSkillToSkillList(event);
+    }, false);
+
+}
+
+function debounce(func, delay) {
+    let timeoutdId;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutdId);
+        timeoutdId = setTimeout(() => func.apply(context, args), delay);
+    }
 }
 
 async function submitInfo() {
@@ -16,6 +50,7 @@ async function submitInfo() {
     var textInputs = educationForm.getElementsByTagName('input');
     const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
     for (var i = 0; i < textInputs.length; i++) {
+        if (textInputs[i].id === "skills") continue;
         if (textInputs[i].id === "minor" && textInputs[i].value === "") {
             textInputs[i].value = "N/A";
         }
@@ -75,8 +110,11 @@ async function submitInfo() {
                 major: major.value,
                 minor: minor.value
             }]
-        }]
+        }],
+        skills: selectedSkills
     };
+
+    console.log(resumeInfo);
 
     const response = await fetch(`/api/resume/info`, {
         method: 'PUT',
@@ -95,4 +133,61 @@ async function submitInfo() {
     {
         console.log("Error saving information");
     }
+}
+
+async function getSkills(subString) {
+    // GET: api/resume/skills/{skillSubstring}
+    const response = await fetch(`/api/resume/skills/${subString}`);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const result = await response.json();
+    //console.log(result);
+
+    const skillsDropdown = document.getElementById('skills-dropdown');
+    skillsDropdown.innerHTML = "";
+
+    result.slice(0,10).forEach(skill => {
+        const anchor = document.createElement('a');
+
+        anchor.classList.add('dropdown-item');
+        anchor.dataset.skillId = skill.id;
+        anchor.textContent = skill.skillName;
+
+        skillsDropdown.appendChild(anchor);
+    })
+}
+
+function addSkillToSkillList(event) {
+    if (event.target.tagName !== "A") {
+        return;
+    }
+    //console.log(event.target);
+    const skillCol = document.getElementById("skill-col");
+
+    const skillPill = document.createElement("span");
+    skillPill.classList.add('badge', 'rounded-pill', 'bg-primary');
+    skillPill.textContent = event.target.textContent;
+
+    const skillId = Number.parseInt(event.target.dataset.skillId);
+    skillPill.dataset.skillId = skillId;
+
+    // console.log(skillPill);
+
+    // Add event listeners to skill badges
+    skillPill.addEventListener('click', (event) => {
+        if (event.target.tagName != "SPAN") return;
+
+        selectedSkills = selectedSkills.filter(id => id !== skillId);
+        skillCol.removeChild(skillPill);
+    });
+
+    if (!selectedSkills.includes(skillId)) {
+        skillCol.appendChild(skillPill);
+        selectedSkills.push({ 'skillId': skillId });
+    }
+
+
+     console.log(selectedSkills);
 }

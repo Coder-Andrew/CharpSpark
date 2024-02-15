@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = "Resume - Info";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/CreateResume.css" asp-append-version="true" />
+}
 
 <div class="text-center">
     <h1 class="display-4">Create New Resume</h1>
@@ -60,6 +63,14 @@
                 <label for="minor" class="col-form-label">Minor:</label>
                 <div class="d-flex justify-content-center">
                     <input type="text" id="minor" maxlength="50" style="width: 80%;" />
+                </div>
+                <label class="col-form-label">Skills:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" id="skills" maxlength="100" style="width: 80%;" />
+                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown"> <!-- inline styling :| -->
+                    </div>
+                </div>
+                <div class="col" id="skill-col">
                 </div>
             </div>
         </div>

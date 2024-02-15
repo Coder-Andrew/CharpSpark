@@ -25,6 +25,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddDbContext<ResuMetaDbContext>(options => options
     .UseLazyLoadingProxies()
     .UseSqlServer(resuMetaConnectionString)
@@ -33,6 +34,7 @@ builder.Services.AddDbContext<ResuMetaDbContext>(options => options
 builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
+builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuthorization(options =>
@@ -63,7 +65,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    // app.UseMigrationsEndPoint();
     app.UseSwagger();
     app.UseSwaggerUI();
 }

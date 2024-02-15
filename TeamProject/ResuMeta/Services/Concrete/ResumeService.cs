@@ -5,9 +5,14 @@ using ResuMeta.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using ResuMeta.Models.DTO;
 
 namespace ResuMeta.Services.Concrete
 {
+    class JsonSkill
+    {
+        public int skillId { get; set; }
+    }
     class JsonDegree
     {
         public string? type { get; set; }
@@ -27,29 +32,41 @@ namespace ResuMeta.Services.Concrete
     {
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
+        public List<JsonSkill>? skills { get; set; }
     }
     public class ResumeService : IResumeService
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<ResumeService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IRepository<Education> _education;
         private readonly IRepository<Degree> _degree;
-        private readonly ILogger<ResumeService> _logger;
-        public ResumeService(ILogger<ResumeService> logger, UserManager<IdentityUser> userManager, IRepository<UserInfo> userInfo, IRepository<Education> education, IRepository<Degree> degree)
+        private readonly IRepository<UserSkill> _userSkills;
+        private readonly ISkillsRepository _skillsRepository;
+        public ResumeService(
+            ILogger<ResumeService> logger,
+            UserManager<IdentityUser> userManager,
+            IRepository<UserInfo> userInfo,
+            IRepository<Education> education,
+            IRepository<Degree> degree,
+            IRepository<UserSkill> userSkills,
+            ISkillsRepository skillsRepository
+            )
         {
             _logger = logger;
             _userManager = userManager;
             _userInfo = userInfo;
             _education = education;
             _degree = degree;
+            _userSkills = userSkills;
+            _skillsRepository = skillsRepository;
         }
 
         public void AddResumeInfo(JsonElement response)
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true,
-                
+                PropertyNameCaseInsensitive = true,                
             };
             try
             {
@@ -85,6 +102,18 @@ namespace ResuMeta.Services.Concrete
                         };
                         _degree.AddOrUpdate(currDegree);
                     }
+                    foreach(JsonSkill jsonSkill in resumeInfo.skills!)
+                    {
+                        Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
+                        if (skill != null)
+                        {
+                            _userSkills.AddOrUpdate(new UserSkill
+                            {
+                                UserInfoId = Int32.Parse(resumeInfo.id),
+                                SkillId = skill.Id
+                            });
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -92,6 +121,15 @@ namespace ResuMeta.Services.Concrete
                 _logger.LogError(e, "Error deserializing json");
                 throw new Exception("Error deserializing json");
             }
+        }
+
+        public IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring)
+        {
+            return _skillsRepository.GetSkillsBySubstring(skillsSubstring)
+                .Select(s => new SkillDTO { 
+                    Id = s.Id,
+                    SkillName = s.SkillName                
+                }).ToList();
         }
     }
 }

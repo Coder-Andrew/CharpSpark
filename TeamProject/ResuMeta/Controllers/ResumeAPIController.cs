@@ -5,6 +5,7 @@ using ResuMeta.Models;
 using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using System.Text.Json;
+using ResuMeta.Models.DTO;
 
 namespace ResuMeta.Controllers
 {
@@ -32,6 +33,22 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
             return Ok();
+        }
+
+        // GET: api/resume/skills/{skillSubstring}
+        [HttpGet("skills/{skillSubstring}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<SkillDTO>> GetSkills(string skillSubstring)
+        {
+            try
+            {
+                var skills = _resumeService.GetSkillsBySubstring(skillSubstring);
+                return Ok(skills);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }
