@@ -65,24 +65,19 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
-            [Required]
             [Display(Name = "New First Name")]
             public string NewFirstName { get; set; }
 
-            [Required]
             [Display(Name = "New Last Name")]
             public string NewLastName { get; set; }
 
-            [Required]
             [Display(Name = "New Summary")]
             public string NewSummary { get; set; }
 
-            [Required]
             [Phone]
             [Display(Name = "New Phone Number")]
             public string NewPhoneNumber { get; set; }
 
-            [Required]
             [Display(Name = "New Username")]
             public string NewUsername { get; set; }
         }
@@ -143,7 +138,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             var userName = await _userManager.GetUserNameAsync(user);
-            if (Input.NewUsername != userName)
+            if (Input.NewUsername != userName && !string.IsNullOrEmpty(Input.NewUsername))
             {
                 var setUserNameResult = await _userManager.SetUserNameAsync(user, Input.NewUsername);
                 if (!setUserNameResult.Succeeded)
@@ -154,7 +149,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.NewPhoneNumber != phoneNumber)
+            if (Input.NewPhoneNumber != phoneNumber && !string.IsNullOrEmpty(Input.NewPhoneNumber))
             {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.NewPhoneNumber);
                 currentUser.PhoneNumber = Input.NewPhoneNumber;
@@ -168,11 +163,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             //Non-ASP.NET Core Identity fields
-            var firstName = FirstName;
+            var firstName = currentUser.FirstName;
             var lastName = LastName;
             var summary = Summary;
             
-            if (Input.NewFirstName != firstName)
+            if (Input.NewFirstName != firstName && !string.IsNullOrEmpty(Input.NewFirstName))
             {
                 currentUser.FirstName = Input.NewFirstName;
                 var changes = await _ResuMetaDbContext.SaveChangesAsync();
@@ -182,13 +177,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-            else
-            {
-                StatusMessage = "Unexpected error when trying to set first name.";
-                return RedirectToPage();
-            }
 
-            if (Input.NewLastName != lastName)
+            if (Input.NewLastName != lastName && !string.IsNullOrEmpty(Input.NewLastName))
             {
                 currentUser.LastName = Input.NewLastName;
                 var changes = await _ResuMetaDbContext.SaveChangesAsync();
@@ -198,13 +188,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-            else
-            {
-                StatusMessage = "Unexpected error when trying to set last name.";
-                return RedirectToPage();
-            }
 
-            if (Input.NewSummary != summary)
+            if (Input.NewSummary != summary && !string.IsNullOrEmpty(Input.NewSummary))
             {
                 currentUser.Summary = Input.NewSummary;
                 var changes = await _ResuMetaDbContext.SaveChangesAsync();
@@ -213,11 +198,6 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set summary.";
                     return RedirectToPage();
                 }
-            }
-            else
-            {
-                StatusMessage = "Unexpected error when trying to set summary.";
-                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(user);
