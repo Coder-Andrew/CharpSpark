@@ -20,15 +20,18 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ResuMetaDbContext _ResuMetaDbContext;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ResuMetaDbContext context)
+            ResuMetaDbContext context,
+            IWebHostEnvironment hostingEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _ResuMetaDbContext = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -59,6 +62,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
         public string PhoneNumber { get; set; }
 
+        public string ProfilePicturePath { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -80,6 +85,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "New Username")]
             public string NewUsername { get; set; }
+            
+            [Display(Name = "Profile Picture")]
+            public IFormFile NewProfilePicture { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -92,12 +100,14 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             var firstName = currentUser.FirstName;
             var lastName = currentUser.LastName;
             var summary = currentUser.Summary;
+            var profilePicturePath = currentUser.ProfilePicturePath ?? "/images/default-profile-picture.png";
 
             Username = userName;
             PhoneNumber = phoneNumber;
             FirstName = firstName;
             LastName = lastName;
             Summary = summary;
+            ProfilePicturePath = profilePicturePath;
 
             Input = new InputModel
             {
@@ -126,6 +136,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             var userId = await _userManager.GetUserIdAsync(user);
             var currentUser = await _ResuMetaDbContext.UserInfos.FirstOrDefaultAsync(u => u.AspnetIdentityId == userId);
+
             if (user == null || currentUser == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -163,7 +174,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             //Non-ASP.NET Core Identity fields
-            var firstName = currentUser.FirstName;
+            var firstName = FirstName;
             var lastName = LastName;
             var summary = Summary;
             
@@ -198,6 +209,24 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set summary.";
                     return RedirectToPage();
                 }
+            }
+
+            if (Input.NewProfilePicture != null)
+            {
+                // var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.NewProfilePicture.FileName);
+                // var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
+
+                // using var stream = new FileStream(filePath, FileMode.Create);
+                // await Input.NewProfilePicture.CopyToAsync(stream);
+
+                // currentUser.ProfilePicturePath = "/images/" + fileName;
+                // var changes = await _ResuMetaDbContext.SaveChangesAsync();
+
+              //  if (changes < 0)
+               // {
+                    StatusMessage = "Unexpected error when trying to set profile picture.";
+                    return RedirectToPage();
+                //}
             }
 
             await _signInManager.RefreshSignInAsync(user);

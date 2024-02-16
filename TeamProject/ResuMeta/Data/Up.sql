@@ -4,7 +4,8 @@ CREATE TABLE [UserInfo] (
   [FirstName] nvarchar(50),
   [LastName] nvarchar(50),
   [PhoneNumber] nvarchar(12),
-  [Summary] nvarchar(250)
+  [Summary] nvarchar(250),
+  [ProfilePicturePath] nvarchar(2048)
 );
 
 CREATE TABLE [Education] (
