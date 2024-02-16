@@ -26,7 +26,7 @@ namespace ResuMeta.Utilities
                         UserInfo appUser = new UserInfo { AspnetIdentityId = identityID, FirstName = u.FirstName, LastName = u.LastName, PhoneNumber = u.PhoneNumber };
                         if(!context.UserInfos.Any(x => x.AspnetIdentityId == appUser.AspnetIdentityId && x.FirstName == appUser.FirstName && x.LastName == appUser.LastName && x.PhoneNumber == appUser.PhoneNumber))
                         {
-                            context.Add(appUser);
+                            context.UserInfos.Add(appUser);
                             await context.SaveChangesAsync();
                         }
                     }

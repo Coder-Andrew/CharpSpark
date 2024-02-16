@@ -36,58 +36,61 @@ public partial class ResuMetaDbContext : DbContext
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ResuMetaConnection");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Name=ResuMetaConnection");
+        }
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Achievement>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Achievem__3214EC075EA0AEFE");
+            entity.HasKey(e => e.Id).HasName("PK__Achievem__3214EC07F29D3DAC");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Achievements).HasConstraintName("Fk Achievements UserInfo Id");
         });
 
         modelBuilder.Entity<Degree>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Degree__3214EC07F6F3011C");
+            entity.HasKey(e => e.Id).HasName("PK__Degree__3214EC07F6731261");
 
             entity.HasOne(d => d.Education).WithMany(p => p.Degrees).HasConstraintName("Fk Degree Education Id");
         });
 
         modelBuilder.Entity<Education>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Educatio__3214EC077D330142");
+            entity.HasKey(e => e.Id).HasName("PK__Educatio__3214EC07323EC1DE");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Educations).HasConstraintName("Fk Education UserInfo Id");
         });
 
         modelBuilder.Entity<EmployementHistory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Employem__3214EC079178516B");
-
+            entity.HasKey(e => e.Id).HasName("PK__Employem__3214EC07D6164316");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory UserInfo Id");
         });
 
         modelBuilder.Entity<Project>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Projects__3214EC070D8E6AF2");
-
+            entity.HasKey(e => e.Id).HasName("PK__Projects__3214EC0769D6F1FF");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Projects).HasConstraintName("Fk Projects UserInfo Id");
         });
 
         modelBuilder.Entity<ReferenceContactInfo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Referenc__3214EC07B5AC2E47");
-
+            entity.HasKey(e => e.Id).HasName("PK__Referenc__3214EC075F15FFDF");
 
             entity.HasOne(d => d.EmployementHistory).WithMany(p => p.ReferenceContactInfos).HasConstraintName("Fk ReferenceContactInfo EmployementHistory Id");
         });
 
         modelBuilder.Entity<Resume>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Resume__3214EC07612CD603");
+            entity.HasKey(e => e.Id).HasName("PK__Resume__3214EC07E40790C7");
 
             entity.Property(e => e.Resume1).IsFixedLength();
 
@@ -96,19 +99,17 @@ public partial class ResuMetaDbContext : DbContext
 
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Skills__3214EC07B9CE9060");
-
+            entity.HasKey(e => e.Id).HasName("PK__Skills__3214EC072B428F8E");
         });
 
         modelBuilder.Entity<UserInfo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC071FF47B53");
-
+            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC079DF15E61");
         });
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserSkil__3214EC07DAFE89ED");
+            entity.HasKey(e => e.Id).HasName("PK__UserSkil__3214EC076F17DBCD");
 
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Skill Id");
 
