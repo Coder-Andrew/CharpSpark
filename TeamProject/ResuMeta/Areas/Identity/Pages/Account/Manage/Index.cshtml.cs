@@ -100,7 +100,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             var firstName = currentUser.FirstName;
             var lastName = currentUser.LastName;
             var summary = currentUser.Summary;
-            var profilePicturePath = currentUser.ProfilePicturePath ?? "/images/default-profile-picture.png";
+            var profilePicturePath = currentUser.ProfilePicturePath ?? "https://placeholder.pics/svg/300";
 
             Username = userName;
             PhoneNumber = phoneNumber;
@@ -213,20 +213,31 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             if (Input.NewProfilePicture != null)
             {
-                // var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.NewProfilePicture.FileName);
-                // var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images", fileName);
+                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.NewProfilePicture.FileName);
 
-                // using var stream = new FileStream(filePath, FileMode.Create);
-                // await Input.NewProfilePicture.CopyToAsync(stream);
+                 var uploadsDirectoryPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
+                var filePath = Path.Combine(uploadsDirectoryPath, fileName);
 
-                // currentUser.ProfilePicturePath = "/images/" + fileName;
-                // var changes = await _ResuMetaDbContext.SaveChangesAsync();
+                 if (!Directory.Exists(uploadsDirectoryPath))
+                {
+                    Directory.CreateDirectory(uploadsDirectoryPath);
+                }
 
-              //  if (changes < 0)
-               // {
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.NewProfilePicture.CopyToAsync(fileStream);
+                }
+
+                var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
+
+                currentUser.ProfilePicturePath = fileUrl;
+                var changes = await _ResuMetaDbContext.SaveChangesAsync();
+
+                if (changes < 0)
+                {
                     StatusMessage = "Unexpected error when trying to set profile picture.";
                     return RedirectToPage();
-                //}
+                }
             }
 
             await _signInManager.RefreshSignInAsync(user);
