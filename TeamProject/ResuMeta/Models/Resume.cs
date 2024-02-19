@@ -18,7 +18,13 @@ public partial class Resume
     [MaxLength(1)]
     public byte[]? Resume1 { get; set; }
 
+    [InverseProperty("Resume")]
+    public virtual ICollection<Education> Educations { get; set; } = new List<Education>();
+
     [ForeignKey("UserInfoId")]
     [InverseProperty("Resumes")]
     public virtual UserInfo? UserInfo { get; set; }
+
+    [InverseProperty("Resume")]
+    public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
 }

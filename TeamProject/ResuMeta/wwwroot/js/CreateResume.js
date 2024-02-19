@@ -126,8 +126,10 @@ async function submitInfo() {
     });    
     if (response.ok)
     {
-        console.log("Information Saved!");
-        window.location.href = "/Resume/ViewResume";
+        const responseJson = await response.json();
+        const url = responseJson.redirectUrl
+        console.log(url);
+        window.location.href = url;
     }
     else
     {

@@ -26,13 +26,15 @@ namespace ResuMeta.Controllers
         {
             try
             {
-                _resumeService.AddResumeInfo(response);
+                int resumeId = _resumeService.AddResumeInfo(response);
+                string newUrl = "/Resume/ViewResume/" + resumeId;
+                return Ok(new { Success = true, RedirectUrl = newUrl });
             }
             catch
             {
                 return BadRequest();
             }
-            return Ok();
+            //return Ok()
         }
 
         // GET: api/resume/skills/{skillSubstring}
@@ -50,5 +52,7 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
+        
     }
 }
