@@ -18,6 +18,9 @@ public partial class UserSkill
 
     public int? MonthDuration { get; set; }
 
+    [InverseProperty("UserSkill")]
+    public virtual ICollection<Resume> Resumes { get; set; } = new List<Resume>();
+
     [ForeignKey("SkillId")]
     [InverseProperty("UserSkills")]
     public virtual Skill? Skill { get; set; }

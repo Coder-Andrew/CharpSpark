@@ -29,6 +29,9 @@ public partial class Education
     [InverseProperty("Education")]
     public virtual ICollection<Degree> Degrees { get; set; } = new List<Degree>();
 
+    [InverseProperty("Education")]
+    public virtual ICollection<Resume> Resumes { get; set; } = new List<Resume>();
+
     [ForeignKey("UserInfoId")]
     [InverseProperty("Educations")]
     public virtual UserInfo? UserInfo { get; set; }

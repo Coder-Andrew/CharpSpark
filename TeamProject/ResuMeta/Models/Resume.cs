@@ -14,11 +14,23 @@ public partial class Resume
 
     public int? UserInfoId { get; set; }
 
+    public int? EducationId { get; set; }
+
+    public int? UserSkillId { get; set; }
+
     [Column("Resume")]
     [MaxLength(1)]
     public byte[]? Resume1 { get; set; }
 
+    [ForeignKey("EducationId")]
+    [InverseProperty("Resumes")]
+    public virtual Education? Education { get; set; }
+
     [ForeignKey("UserInfoId")]
     [InverseProperty("Resumes")]
     public virtual UserInfo? UserInfo { get; set; }
+
+    [ForeignKey("UserSkillId")]
+    [InverseProperty("Resumes")]
+    public virtual UserSkill? UserSkill { get; set; }
 }

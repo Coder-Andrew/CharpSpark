@@ -71,13 +71,21 @@ CREATE TABLE [Achievements] (
 );
 
 CREATE TABLE [Resume] (
-  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [Id] integer PRIMARY KEY,
   [UserInfoId] integer,
+  [EducationId] integer,
+  [UserSkillId] integer,
   [Resume] binary
 );
 
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserSkill Id] 
+  FOREIGN KEY ([UserSkillId]) REFERENCES [UserSkill] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume Education Id] 
+  FOREIGN KEY ([EducationId]) REFERENCES [Education] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -27,8 +27,8 @@ public partial class UserInfo
 
     [StringLength(250)]
     public string? Summary { get; set; }
-    
-     [StringLength(2048)]
+
+    [StringLength(2048)]
     public string? ProfilePicturePath { get; set; }
 
     [InverseProperty("UserInfo")]

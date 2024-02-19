@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ResuMeta.Models;
 
-[Index("SkillName", Name = "UQ__Skills__B63C65717C1EDA10", IsUnique = true)]
+[Index("SkillName", Name = "UQ__Skills__B63C657128330FCE", IsUnique = true)]
 public partial class Skill
 {
     [Key]
