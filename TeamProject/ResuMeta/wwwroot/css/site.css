@@ -53,3 +53,16 @@ body {
 .nav-item:hover::after {
   width: 100% !important;
 }
+
+a {
+  color: #e9912c;
+}
+
+a:hover{
+  color: #E91D1C;
+}
+
+.footer{
+  background-color: #000B0E;
+  color: #b87223 !important;
+}
