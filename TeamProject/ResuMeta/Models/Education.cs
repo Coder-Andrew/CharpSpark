@@ -14,6 +14,8 @@ public partial class Education
 
     public int? UserInfoId { get; set; }
 
+    public int? ResumeId { get; set; }
+
     [StringLength(100)]
     public string? Institution { get; set; }
 
@@ -29,8 +31,9 @@ public partial class Education
     [InverseProperty("Education")]
     public virtual ICollection<Degree> Degrees { get; set; } = new List<Degree>();
 
-    [InverseProperty("Education")]
-    public virtual ICollection<Resume> Resumes { get; set; } = new List<Resume>();
+    [ForeignKey("ResumeId")]
+    [InverseProperty("Educations")]
+    public virtual Resume? Resume { get; set; }
 
     [ForeignKey("UserInfoId")]
     [InverseProperty("Educations")]

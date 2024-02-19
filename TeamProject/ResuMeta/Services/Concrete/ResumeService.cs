@@ -43,6 +43,7 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<Degree> _degree;
         private readonly IRepository<UserSkill> _userSkills;
         private readonly ISkillsRepository _skillsRepository;
+        private readonly IRepository<Resume> _resumeRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<IdentityUser> userManager,
@@ -50,7 +51,8 @@ namespace ResuMeta.Services.Concrete
             IRepository<Education> education,
             IRepository<Degree> degree,
             IRepository<UserSkill> userSkills,
-            ISkillsRepository skillsRepository
+            ISkillsRepository skillsRepository,
+            IRepository<Resume> resumeRepository
             )
         {
             _logger = logger;
@@ -60,9 +62,10 @@ namespace ResuMeta.Services.Concrete
             _degree = degree;
             _userSkills = userSkills;
             _skillsRepository = skillsRepository;
+            _resumeRepository = resumeRepository;
         }
 
-        public void AddResumeInfo(JsonElement response)
+        public int AddResumeInfo(JsonElement response)
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
@@ -75,6 +78,7 @@ namespace ResuMeta.Services.Concrete
                 {
                     throw new Exception("Invalid input");
                 }
+                Resume resume = _resumeRepository.AddOrUpdate(new Resume { UserInfoId = Int32.Parse(resumeInfo.id) });
                 foreach (JsonEducation ed in resumeInfo.education!)
                 {
                     if (ed.degree == null)
@@ -88,7 +92,8 @@ namespace ResuMeta.Services.Concrete
                         EducationSummary = ed.educationSummary,
                         StartDate = DateOnly.Parse(ed.startDate!),
                         EndDate = DateOnly.Parse(ed.endDate!),
-                        Completion = bool.Parse(ed.complete!)
+                        Completion = bool.Parse(ed.complete!),
+                        Resume = resume,
                     };
                     Education newUserEd = _education.AddOrUpdate(currEducation);
                     foreach (JsonDegree degree in ed.degree!)
@@ -110,11 +115,13 @@ namespace ResuMeta.Services.Concrete
                             _userSkills.AddOrUpdate(new UserSkill
                             {
                                 UserInfoId = Int32.Parse(resumeInfo.id),
-                                SkillId = skill.Id
+                                SkillId = skill.Id,
+                                Resume = resume
                             });
                         }
                     }
                 }
+                return resume.Id;
             }
             catch (Exception e)
             {
@@ -131,5 +138,6 @@ namespace ResuMeta.Services.Concrete
                     SkillName = s.SkillName                
                 }).ToList();
         }
+
     }
 }

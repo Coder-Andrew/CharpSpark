@@ -5,7 +5,7 @@ namespace ResuMeta.Services.Abstract
 {
     public interface IResumeService
     {
-        void AddResumeInfo(JsonElement resumeInfo);
+        int AddResumeInfo(JsonElement resumeInfo);
         IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring);
     }
 }

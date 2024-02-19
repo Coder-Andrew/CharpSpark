@@ -14,12 +14,15 @@ public partial class UserSkill
 
     public int? UserInfoId { get; set; }
 
+    public int? ResumeId { get; set; }
+
     public int? SkillId { get; set; }
 
     public int? MonthDuration { get; set; }
 
-    [InverseProperty("UserSkill")]
-    public virtual ICollection<Resume> Resumes { get; set; } = new List<Resume>();
+    [ForeignKey("ResumeId")]
+    [InverseProperty("UserSkills")]
+    public virtual Resume? Resume { get; set; }
 
     [ForeignKey("SkillId")]
     [InverseProperty("UserSkills")]

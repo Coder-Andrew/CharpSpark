@@ -1,3 +1,4 @@
+@model ResuMeta.ViewModels.ResumeVM;
 @{
     ViewData["Title"] = "Resume - View";
 }
@@ -9,7 +10,10 @@
     <h1 class="display-4">Your Resume</h1>
     <div class="container">
         <div>
-            <h2>Coming Soon...</h2>
+            @if (Model != null)
+            {
+                <p>@Model.ResumeId</p>
+            }
         </div>
     </div>
 </div>

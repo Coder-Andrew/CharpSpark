@@ -5,12 +5,13 @@ CREATE TABLE [UserInfo] (
   [LastName] nvarchar(50),
   [PhoneNumber] nvarchar(12),
   [Summary] nvarchar(250),
-  [ProfilePicturePath] nvarchar(2048)
+  [ProfilePicturePath] nvarchar(2048),
 );
 
 CREATE TABLE [Education] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
+  [ResumeId] integer,
   [Institution] nvarchar(100),
   [EducationSummary] nvarchar(250),
   [StartDate] date,
@@ -46,6 +47,7 @@ CREATE TABLE [ReferenceContactInfo] (
 CREATE TABLE [UserSkill] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
+  [ResumeId] integer,
   [SkillId] integer,
   [MonthDuration] int
 );
@@ -71,21 +73,20 @@ CREATE TABLE [Achievements] (
 );
 
 CREATE TABLE [Resume] (
-  [Id] integer PRIMARY KEY,
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [EducationId] integer,
-  [UserSkillId] integer,
   [Resume] binary
 );
 
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserSkill Id] 
-  FOREIGN KEY ([UserSkillId]) REFERENCES [UserSkill] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [UserSkill] ADD CONSTRAINT [Fk UserSkill Resume Id] 
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume Education Id] 
-  FOREIGN KEY ([EducationId]) REFERENCES [Education] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [Education] ADD CONSTRAINT [Fk Education Resume Id]
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
