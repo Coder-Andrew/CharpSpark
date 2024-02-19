@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ResuMeta.Models.DTO;
+using ResuMeta.ViewModels;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -137,6 +138,45 @@ namespace ResuMeta.Services.Concrete
                     Id = s.Id,
                     SkillName = s.SkillName                
                 }).ToList();
+        }
+
+        public ResumeVM GetResume(int resumeId)
+        {
+            Resume userResume = _resumeRepository.FindById(resumeId);
+            if (userResume == null)
+            {
+                throw new Exception("Resume not found");
+            }
+
+            try
+            {
+                return new ResumeVM
+                {
+                    Degree = userResume.Educations.FirstOrDefault()?.Degrees.Select(d => new DegreeVM
+                    {
+                        Type = d.Type,
+                        Major = d.Major,
+                        Minor = d.Minor
+                    }).FirstOrDefault(),
+                    Education = new EducationVM
+                    {
+                        EducationSummary = userResume.Educations.FirstOrDefault()?.EducationSummary,
+                        Institution = userResume.Educations.FirstOrDefault()?.Institution,
+                        StartDate = userResume.Educations.FirstOrDefault()?.StartDate,
+                        EndDate = userResume.Educations.FirstOrDefault()?.EndDate,
+                        Completion = userResume.Educations.FirstOrDefault()?.Completion
+                    },
+                    ResumeId = resumeId,
+                    Skills = userResume.UserSkills.Select(s => new SkillVM
+                    {
+                        SkillName = s.Skill.SkillName
+                    }).ToList()
+                };
+            }
+            catch
+            {
+                throw new Exception("Error getting resume");
+            }
         }
 
     }

@@ -1,4 +1,5 @@
 using ResuMeta.Models.DTO;
+using ResuMeta.ViewModels;
 using System.Text.Json;
 
 namespace ResuMeta.Services.Abstract
@@ -7,5 +8,6 @@ namespace ResuMeta.Services.Abstract
     {
         int AddResumeInfo(JsonElement resumeInfo);
         IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring);
+        ResumeVM GetResume(int resumeId);
     }
 }

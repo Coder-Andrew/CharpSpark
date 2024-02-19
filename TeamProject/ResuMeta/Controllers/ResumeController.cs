@@ -6,6 +6,8 @@ using ResuMeta.DAL.Abstract;
 using Microsoft.AspNetCore.Identity;
 using ResuMeta.ViewModels;
 using System.Linq;
+using ResuMeta.Services.Concrete;
+using ResuMeta.Services.Abstract;
 
 namespace ResuMeta.Controllers;
 
@@ -15,13 +17,21 @@ public class ResumeController : Controller
     private readonly IRepository<UserInfo> _userInfo;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IRepository<Resume> _resumeRepository;
+    private readonly IResumeService _resumeService;
 
-    public ResumeController(ILogger<ResumeController> logger, IRepository<UserInfo> userInfo, UserManager<IdentityUser> userManager, IRepository<Resume> resumeRepo)
+    public ResumeController(
+        ILogger<ResumeController> logger,
+        IRepository<UserInfo> userInfo,
+        UserManager<IdentityUser> userManager,
+        IRepository<Resume> resumeRepo,
+        IResumeService resumeService
+        )
     {
         _logger = logger;
         _userInfo = userInfo;
         _userManager = userManager;
         _resumeRepository = resumeRepo;
+        _resumeService = resumeService;
     }
 
     public IActionResult Index()
@@ -42,7 +52,7 @@ public class ResumeController : Controller
     }
 
     [HttpGet("Resume/ViewResume/{resumeId}")]
-    public IActionResult ViewResume(int? resumeId)
+    public IActionResult ViewResume(int resumeId)
     {
         string id = _userManager.GetUserId(User)!;
         if (id == null)
@@ -55,10 +65,7 @@ public class ResumeController : Controller
         {
             return RedirectToAction("Index", "Home");
         }
-        ResumeVM resumeVM = new ResumeVM()
-        {
-            ResumeId = userResume.Id,
-        };
+        ResumeVM resumeVM = _resumeService.GetResume(resumeId);
         return View(resumeVM);
     }
 
