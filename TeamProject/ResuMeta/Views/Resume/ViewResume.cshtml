@@ -10,9 +10,12 @@
     <div class="alert alert-success" role="alert">
         <h4>Success, Information Stored!</h4>
     </div>
+
     <h1 class="display-4 title">Your Resume</h1>
+    <input type="hidden" id="resume-id" value="@Model.ResumeId" />
+
     <div class="container">
-        <div class="container resume-container">
+        <div class="container resume-container" id="resume-container">
             <div class="text-start">
                 @if (Model != null)
                 {
@@ -49,5 +52,10 @@
                 }
             </div>
         </div>
+        <button class="btn btn-primary" id="save-resume">Save Resume</button>
     </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/ViewResume.js"></script>
+}
