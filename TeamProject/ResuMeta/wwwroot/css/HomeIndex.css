@@ -1,0 +1,56 @@
+section .title, section img, hr {
+    opacity: 0;
+    animation: slideIn 2.3s ease-out forwards;
+}
+
+body {
+    background-color: #000000;
+    animation: bodyFadeOut 2.3s ease-out forwards;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+@keyframes bodyFadeOut {
+    0% {
+        background-color: #000000;
+    }
+    100% {
+        background-color: #242525;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInMoveUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+section .body-paragraph, .navbar *:not(.border-bottom), .footer * {
+    opacity: 0;
+    animation: fadeInMoveUp 1s ease-out forwards;
+    animation-delay: 2.3s;
+}
+
+.title{
+    color: #e9912c;
+    font-size: 6rem;
+    text-align: center;
+    margin-top: 50px;
+}

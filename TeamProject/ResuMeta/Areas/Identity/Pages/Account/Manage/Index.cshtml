@@ -5,7 +5,7 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h3 class="title">@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
@@ -22,7 +22,7 @@
             </div>
 
             <div class="form-floating mb-3 input-group">
-                <input asp-for="Username" class="form-control" placeholder="Please enter your username." disabled />
+                <input asp-for="Username" class="form-control locked-label" placeholder="Please enter your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-floating mb-3 input-group">
-                <input asp-for="FirstName" class="form-control" placeholder="Please enter your first name." disabled />
+                <input asp-for="FirstName" class="form-control locked-label" placeholder="Please enter your first name." disabled />
                 <label asp-for="FirstName" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
@@ -42,7 +42,7 @@
             </div>
 
             <div class="form-floating mb-3 input-group">
-                <input asp-for="LastName" class="form-control" placeholder="Please enter your last name." disabled />
+                <input asp-for="LastName" class="form-control locked-label" placeholder="Please enter your last name." disabled />
                 <label asp-for="LastName" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-floating mb-3 input-group">
-                    <input asp-for="PhoneNumber" class="form-control" placeholder="Please enter your phone number." disabled />
+                    <input asp-for="PhoneNumber" class="form-control locked-label" placeholder="Please enter your phone number." disabled />
                     <label asp-for="PhoneNumber" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
@@ -62,7 +62,7 @@
             </div>
 
             <div class="form-floating mb-3 input-group">
-                    <input asp-for="Summary" class="form-control" placeholder="Please enter your summary." disabled />
+                    <input asp-for="Summary" class="form-control locked-label" placeholder="Please enter your summary." disabled />
                     <label asp-for="Summary" class="form-label"></label>
                 </div>
             <div class="form-floating mb-3">

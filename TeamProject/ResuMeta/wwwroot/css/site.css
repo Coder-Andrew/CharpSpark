@@ -9,7 +9,7 @@ html {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #E91D1C;
 }
 
 html {
@@ -19,4 +19,156 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: #242525 !important;
+  color: rgb(207, 207, 207);
+  font-family: "Roboto", sans-serif;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+  color: #E91D1C !important;
+}
+
+.nav-link {
+  color: #e9912c !important;
+}
+
+.navbar {
+  background-color: #000B0E !important;
+}
+
+.navbar .navbar-nav .nav-item {
+  position: relative;
+}
+
+.nav-item::after {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: auto !important;
+  background: linear-gradient(to right, #E91D1C, #FEB617) !important;
+  width: 0% !important;
+  content: "" !important;
+  height: 4px !important;
+  transition: all 0.5s !important;
+}
+
+.nav-item:hover::after {
+  width: 100% !important;
+}
+
+a {
+  color: #e9912c;
+  text-decoration: none;
+}
+
+a:hover{
+  color: #E91D1C;
+  text-decoration: none;
+}
+
+.red-text{
+  color: #E91D1C;
+}
+
+.footer{
+  background-color: #000B0E;
+  color: #b87223 !important;
+}
+
+.border-top, .border-bottom{
+  border-color: #e9912c !important;
+}
+
+.btn{
+  background-color: #e9912c;
+  border-color: #e9912c;
+  margin-bottom: 20px;
+}
+
+.btn:hover, .btn:active, .btn:focus {
+  background-color: #E91D1C;
+  border-color: #E91D1C;
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-logout{
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.title{
+  color: #e9912c;
+}
+
+hr{
+  background: linear-gradient(to right, #E91D1C, #FEB617);
+}
+
+input, option, select, textarea{
+  background-color: #525353 !important; 
+  border-radius: 5px !important;
+  color: rgb(207, 207, 207) !important;
+  border: none !important;
+}
+
+input:hover, option:hover, select:hover, textarea:hover,
+input:focus, option:focus, select:focus, textarea:focus {
+    background-color: #727272 !important;
+    border: none !important;
+    color: rgb(240, 240, 240) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.locked-label{
+  background-color: #383838 !important;
+  color: rgb(146, 146, 146) !important;
+}
+
+.locked-label:hover{
+  background-color: #383838 !important;
+  color: rgb(146, 146, 146) !important;
+}
+
+.manage-nav:hover{
+  background-color: #a30000 !important;
+  border-radius: 5px;
+}
+
+ .manage-nav:visited{
+  background-color: #a30000 !important;
+  border-radius: 5px;
+}
+
+#currentProfilePicture{
+  margin-bottom: 20px;
+}
+
+.bg-orange {
+  background-color: #e9912c !important;
+}
+
+option:hover {
+  background-color: #e9912c !important;
+}
+
+.resume-container{
+  background-color: #525353 !important; 
+  border-radius: 5px !important;
+  color: rgb(207, 207, 207) !important;
+  border: none !important;
+}
+
+.alert-success{
+  background-color: #e9912c !important;
+  color: white !important;
+  border: none;
+}
+
+.alert-danger{
+  background-color: #E91D1C !important;
+  color: white !important;
+  border: none;
 }

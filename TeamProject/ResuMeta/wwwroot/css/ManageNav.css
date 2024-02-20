@@ -1,0 +1,6 @@
+.manage-nav:hover, .manage-nav:focus, .manage-nav:active {
+    background-color: #E91D1C !important;
+    border-radius: 5px;
+    color: rgb(207, 207, 207) !important;
+  }
+  
