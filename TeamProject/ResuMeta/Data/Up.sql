@@ -75,7 +75,7 @@ CREATE TABLE [Achievements] (
 CREATE TABLE [Resume] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [Resume] binary
+  [Resume] nvarchar(MAX)
 );
 
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 

@@ -194,28 +194,3 @@ function addSkillToSkillList(event) {
      console.log(selectedSkills);
 }
 
-async function getHtmlInfo(resumeId) 
-{
-    //var resumeId = ...; // Get the resume id
-    var htmlContent = document.getElementById('resume-container').innerHTML;
-    const response = await fetch(`/api/resume/${resumeId}`, {
-        method: 'PUT',
-        headers: {
-            'Accept': 'application/json; application/problem+json; charset=utf-8',
-            'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify({
-            resumeId: resumeId,
-            htmlContent: htmlContent
-        })
-    });    
-    if (response.ok)
-    {
-        alert('Resume saved successfully.');
-    }
-    else
-    {
-        console.log("Error saving information");
-        alert('An error occurred while saving the resume.');
-    }
-}
