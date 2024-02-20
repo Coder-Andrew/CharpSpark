@@ -193,3 +193,4 @@ function addSkillToSkillList(event) {
 
      console.log(selectedSkills);
 }
+

@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/82af359e-a77d-4728-ad6f-a8dea81cbb81/resourceGroups/cs460_project/providers/Microsoft.Web/sites/resumeta461",
+    "appService.deploySubpath": "ResuMeta/publish"
+}

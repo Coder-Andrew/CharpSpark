@@ -10,6 +10,11 @@ using ResuMeta.ViewModels;
 
 namespace ResuMeta.Services.Concrete
 {
+    class JsonResume
+    {
+        public string? resumeId { get; set; }
+        public string? htmlContent { get; set; }
+    }
     class JsonSkill
     {
         public int skillId { get; set; }
@@ -34,6 +39,7 @@ namespace ResuMeta.Services.Concrete
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
         public List<JsonSkill>? skills { get; set; }
+        public List<JsonResume>? resume { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -70,7 +76,7 @@ namespace ResuMeta.Services.Concrete
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true,                
+                PropertyNameCaseInsensitive = true,
             };
             try
             {
@@ -108,7 +114,7 @@ namespace ResuMeta.Services.Concrete
                         };
                         _degree.AddOrUpdate(currDegree);
                     }
-                    foreach(JsonSkill jsonSkill in resumeInfo.skills!)
+                    foreach (JsonSkill jsonSkill in resumeInfo.skills!)
                     {
                         Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
                         if (skill != null)
@@ -134,9 +140,10 @@ namespace ResuMeta.Services.Concrete
         public IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring)
         {
             return _skillsRepository.GetSkillsBySubstring(skillsSubstring)
-                .Select(s => new SkillDTO { 
+                .Select(s => new SkillDTO
+                {
                     Id = s.Id,
-                    SkillName = s.SkillName                
+                    SkillName = s.SkillName
                 }).ToList();
         }
 
@@ -179,5 +186,57 @@ namespace ResuMeta.Services.Concrete
             }
         }
 
+        public void SaveResumeById(JsonElement content)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            try
+            {
+                JsonResume resumeContent = JsonSerializer.Deserialize<JsonResume>(content, options)!;
+                if (resumeContent.htmlContent == null)
+                {
+                    throw new Exception("Invalid input");
+                }
+                Resume resume = _resumeRepository.FindById(Int32.Parse(resumeContent.resumeId));
+                if (resume == null)
+                {
+                    throw new Exception("Resume not found");
+                }
+                resume.Resume1 = resumeContent.htmlContent;
+                _resumeRepository.AddOrUpdate(resume);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error deserializing json");
+                throw new Exception("Error deserializing json");
+            }
+        }
+
+        public ResumeVM GetResumeHtml(int resumeId)
+        {
+            Resume resume = _resumeRepository.FindById(resumeId);
+            if (resume == null)
+            {
+                throw new Exception("Resume not found");
+            }
+            ResumeVM resumeVM = new ResumeVM
+            {
+                ResumeId = resumeId,
+                HtmlContent = resume.Resume1
+            };
+            return resumeVM;
+        }
+
+        public List<int> GetResumeIdList(int userId)
+        {
+            var resumeIdList = _resumeRepository.GetAll()
+            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
+            .Select(x => x.Id)
+            .ToList();
+            
+            return resumeIdList;
+        }
     }
 }

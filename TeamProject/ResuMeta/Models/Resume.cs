@@ -16,7 +16,7 @@ public partial class Resume
 
     [Column("Resume")]
     [MaxLength(1)]
-    public byte[]? Resume1 { get; set; }
+    public string? Resume1 { get; set; }
 
     [InverseProperty("Resume")]
     public virtual ICollection<Education> Educations { get; set; } = new List<Education>();
