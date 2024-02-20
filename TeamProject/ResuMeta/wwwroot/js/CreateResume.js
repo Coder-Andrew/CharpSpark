@@ -169,7 +169,7 @@ function addSkillToSkillList(event) {
     const skillCol = document.getElementById("skill-col");
 
     const skillPill = document.createElement("span");
-    skillPill.classList.add('badge', 'rounded-pill', 'bg-primary');
+    skillPill.classList.add('badge', 'rounded-pill', 'bg-orange');
     skillPill.textContent = event.target.textContent;
 
     const skillId = Number.parseInt(event.target.dataset.skillId);

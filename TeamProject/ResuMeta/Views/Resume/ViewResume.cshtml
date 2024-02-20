@@ -10,14 +10,14 @@
     <div class="alert alert-success" role="alert">
         <h4>Success, Information Stored!</h4>
     </div>
-    <h1 class="display-4">Your Resume</h1>
+    <h1 class="display-4 title">Your Resume</h1>
     <div class="container">
         <div class="container resume-container">
             <div class="text-start">
                 @if (Model != null)
                 {
                     <div>
-                        <h2>Education</h2>
+                        <h2 class="title">Education</h2>
                         <hr />
                         <p><strong>Institution:</strong> @Model.Education.Institution</p>
                         <p><strong>Summary:</strong> @Model.Education.EducationSummary</p>
@@ -29,7 +29,7 @@
                     </div>
 
                     <div>
-                        <h2>Degree</h2>
+                        <h2 class="title">Degree</h2>
                         <hr />
                         <p><strong>Type:</strong> @Model.Degree.Type</p>
                         <p><strong>Major:</strong> @Model.Degree.Major</p>
@@ -37,7 +37,7 @@
                     </div>
 
                     <div>
-                        <h2>Skills</h2>
+                        <h2 class="title">Skills</h2>
                         <hr />
                         <ul>
                             @foreach (var skill in Model.Skills)
