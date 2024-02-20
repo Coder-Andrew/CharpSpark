@@ -53,6 +53,21 @@ namespace ResuMeta.Controllers
             }
         }
 
+        // PUT: api/resume/{resumeId}
+        [HttpPut("{resumeId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult SaveResume(JsonElement content)
+        {
+            try
+            {
+                _resumeService.SaveResumeById(content);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
         
     }
 }

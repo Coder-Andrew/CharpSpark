@@ -10,6 +10,10 @@ using ResuMeta.ViewModels;
 
 namespace ResuMeta.Services.Concrete
 {
+    class JsonResume
+    {
+        public string? id { get; set; }
+    }
     class JsonSkill
     {
         public int skillId { get; set; }
@@ -34,6 +38,7 @@ namespace ResuMeta.Services.Concrete
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
         public List<JsonSkill>? skills { get; set; }
+        public List<JsonResume>? resume { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -179,5 +184,21 @@ namespace ResuMeta.Services.Concrete
             }
         }
 
+        // public void SaveResumeById(JsonElement content)
+        // {
+        //    JsonSerializerOptions options = new JsonSerializerOptions
+        //     {
+        //         PropertyNameCaseInsensitive = true,                
+        //     };
+        //     try
+        //     {
+        //         Root resumeContent = JsonSerializer.Deserialize<Root>(content, options)!;
+        //         if (resumeContent.resume == null)
+        //         {
+        //             throw new Exception("Invalid input");
+        //         }
+        //         Resume resume = _resumeRepository.FindById(Int32.Parse
+        // }
+        // }
     }
 }
