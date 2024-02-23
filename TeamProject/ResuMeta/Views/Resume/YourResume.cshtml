@@ -1,0 +1,20 @@
+@model ResuMeta.ViewModels.ResumeVM;
+@{
+    ViewData["Title"] = "Resume - View";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/ViewResume.css" asp-append-version="true" />
+}
+
+<div class="text-center">
+    <h1 class="display-4 title">Your Resume</h1>
+    <input type="hidden" id="resume-id" value="@Model.ResumeId" />
+    <input type="hidden" id="resume-content" value="@Model.HtmlContent" />
+    <div class="container" id="resume-area">
+        
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/YourResume.js"></script>
+}

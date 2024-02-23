@@ -1,0 +1,83 @@
+@model ResuMeta.ViewModels.UserVM;
+@{
+    ViewData["Title"] = "Resume - Info";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/CreateResume.css" asp-append-version="true" />
+}
+
+<div class="text-center">
+    <h1 class="display-4 title">Create New Resume</h1>
+    <div class="container">
+        <div class="row mt-3 d-flex form-group" id="educationForm">
+            <h4>Education</h4>
+            <hr \>
+            <div id="validation">
+                <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
+                    <strong>Validation Error</strong>
+                    <p id="validationText"></p>
+                </div>
+            </div>
+            <input type="hidden" id="userId" value="@Model.UserId" />
+            <div class="col col-md-6">
+                <label for="institutionName" class="col-form-label title">Institution Name:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" class="form-control" id="institutionName" maxlength="100" style="width: 80%;"/>
+                </div>
+                <label for="educationSummary" class="col-form-label title">Education Summary:</label>
+                <div class="d-flex justify-content-center">
+                    <textarea class="form-control" id="educationSummary" rows="5" maxlength="250" style="width: 80%;"></textarea>
+                </div>
+                <label for="startDate" class="col-form-label title">Start Date:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="date" class="form-control" id="startDate" style="width: 80%;"/>
+                </div>
+                <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
+                <div class="d-flex justify-content-center">
+                    <input type="date" class="form-control" id="endDate" style="width: 80%;"/>
+                </div>
+                <label for="completed" class="col-form-label title">Education Completed:</label>
+                <div class="d-flex justify-content-center">
+                    <select class="form-control" id="completed" style="width: 80%;">
+                        <option selected disabled>Select a value</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <label for="degreeType" class="col-form-label title">Degree Type:</label>
+                <div class="d-flex justify-content-center">
+                    <select class="form-control" id="degreeType" style="width: 80%;">
+                        <option selected disabled>Select a type</option>
+                        <option value="associate">Associate Degree</option>
+                        <option value="bachelor">Bachelor's Degree</option>
+                        <option value="master">Master's Degree</option>
+                        <option value="doctoral">Doctoral Degree</option>
+                    </select>
+                </div>
+                <label for="major" class="col-form-label title">Major:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" id="major" maxlength="50" style="width: 80%;" />
+                </div>
+                <label for="minor" class="col-form-label title">Minor:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" id="minor" maxlength="50" style="width: 80%;" />
+                </div>
+                <label class="col-form-label title">Skills:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" id="skills" maxlength="100" style="width: 80%;" />
+                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown"> <!-- inline styling :| -->
+                    </div>
+                </div>
+                <div class="col" id="skill-col">
+                </div>
+            </div>
+        </div>
+        <button id="submitInfo" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/CreateResume.js"></script>
+}
