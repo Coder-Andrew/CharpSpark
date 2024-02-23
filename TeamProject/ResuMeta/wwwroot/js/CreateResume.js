@@ -181,7 +181,8 @@ function addSkillToSkillList(event) {
     skillPill.addEventListener('click', (event) => {
         if (event.target.tagName != "SPAN") return;
 
-        selectedSkills = selectedSkills.filter(id => id !== skillId);
+        selectedSkills = selectedSkills.filter(skill => skill.skillId !== skillId);
+        console.log(selectedSkills);
         skillCol.removeChild(skillPill);
     });
 
