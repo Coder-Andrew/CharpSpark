@@ -4,8 +4,8 @@ ALTER TABLE [Achievements] DROP CONSTRAINT [Fk Achievements UserInfo Id];
 ALTER TABLE [Projects] DROP CONSTRAINT [Fk Projects UserInfo Id];
 ALTER TABLE [UserSkill] DROP CONSTRAINT [Fk UserSkill Skill Id];
 ALTER TABLE [UserSkill] DROP CONSTRAINT [Fk UserSkill UserInfo Id];
-ALTER TABLE [Resume] DROP CONSTRAINT [Fk Resume UserSkill Id]
-ALTER TABLE [Resume] DROP CONSTRAINT [Fk Resume Education Id]
+ALTER TABLE [UserSkill] DROP CONSTRAINT [Fk UserSkill Resume Id];
+ALTER TABLE [Education] DROP CONSTRAINT [Fk Education Resume Id];
 ALTER TABLE [EmployementHistory] DROP CONSTRAINT [Fk EmployementHistory UserInfo Id];
 ALTER TABLE [Education] DROP CONSTRAINT [Fk Education UserInfo Id];
 ALTER TABLE [Resume] DROP CONSTRAINT [Fk Resume UserInfo Id];

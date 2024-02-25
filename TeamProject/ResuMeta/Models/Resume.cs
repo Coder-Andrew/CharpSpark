@@ -14,6 +14,9 @@ public partial class Resume
 
     public int? UserInfoId { get; set; }
 
+    [StringLength(100)]
+    public string? Title { get; set; }
+
     [Column("Resume")]
     [MaxLength(1)]
     public string? Resume1 { get; set; }

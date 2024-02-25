@@ -61,11 +61,17 @@ public class ResumeController : Controller
         }
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
         Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == resumeId).FirstOrDefault()!;
+        if (userResume == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
         if (userResume.UserInfoId != currUser.Id)
         {
             return RedirectToAction("Index", "Home");
         }
-        ResumeVM resumeVM = _resumeService.GetResume(resumeId);
+        IdentityUser idUser = _userManager.FindByIdAsync(id).Result!;
+        string email = _userManager.GetEmailAsync(idUser).Result!;
+        ResumeVM resumeVM = _resumeService.GetResume(resumeId, email!);
         return View(resumeVM);
     }
 
@@ -79,6 +85,10 @@ public class ResumeController : Controller
         }
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
         Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == resumeId).FirstOrDefault()!;
+        if (userResume == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
         if (userResume.UserInfoId != currUser.Id)
         {
             return RedirectToAction("Index", "Home");

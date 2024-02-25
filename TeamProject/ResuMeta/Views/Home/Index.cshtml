@@ -1,4 +1,4 @@
-﻿@model IEnumerable<int>;
+﻿@model IEnumerable<KeyValuePair<int, string>>;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -31,7 +31,7 @@
             <h2>Your Saved Resumes</h2>
             @foreach(var resume in Model)
             {
-                <a class="btn btn-primary" id="@resume" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume})'" >Saved Resume</a>
+                <a class="btn btn-primary" id="@resume.Key" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume.Key})'" >@resume.Value</a>
             }
             </div>
         }
