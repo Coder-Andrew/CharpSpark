@@ -30,7 +30,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        string currUserId = _userManager.GetUserId(User);
+        string currUserId = _userManager.GetUserId(User)!;
         if (currUserId == null)
         {
             return View();
@@ -40,7 +40,7 @@ public class HomeController : Controller
         {
             return View();
         }
-        List<int> resumeIdList = _resumeService.GetResumeIdList(user.Id);
+        List<KeyValuePair<int, string>> resumeIdList = _resumeService.GetResumeIdList(user.Id);
         return resumeIdList.Any() ? View(resumeIdList) : View();
     }
 

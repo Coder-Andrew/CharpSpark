@@ -13,6 +13,7 @@ namespace ResuMeta.Services.Concrete
     class JsonResume
     {
         public string? resumeId { get; set; }
+        public string? title { get; set; }
         public string? htmlContent { get; set; }
     }
     class JsonSkill
@@ -85,7 +86,7 @@ namespace ResuMeta.Services.Concrete
                 {
                     throw new Exception("Invalid input");
                 }
-                Resume resume = _resumeRepository.AddOrUpdate(new Resume { UserInfoId = Int32.Parse(resumeInfo.id) });
+                Resume resume = _resumeRepository.AddOrUpdate(new Resume { UserInfoId = Int32.Parse(resumeInfo.id!) });
                 foreach (JsonEducation ed in resumeInfo.education!)
                 {
                     if (ed.degree == null)
@@ -94,7 +95,7 @@ namespace ResuMeta.Services.Concrete
                     }
                     Education currEducation = new Education
                     {
-                        UserInfoId = Int32.Parse(resumeInfo.id),
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
                         Institution = ed.institution,
                         EducationSummary = ed.educationSummary,
                         StartDate = DateOnly.Parse(ed.startDate!),
@@ -121,7 +122,7 @@ namespace ResuMeta.Services.Concrete
                         {
                             _userSkills.AddOrUpdate(new UserSkill
                             {
-                                UserInfoId = Int32.Parse(resumeInfo.id),
+                                UserInfoId = Int32.Parse(resumeInfo.id!),
                                 SkillId = skill.Id,
                                 Resume = resume
                             });
@@ -147,7 +148,7 @@ namespace ResuMeta.Services.Concrete
                 }).ToList();
         }
 
-        public ResumeVM GetResume(int resumeId)
+        public ResumeVM GetResume(int resumeId, string userEmail)
         {
             Resume userResume = _resumeRepository.FindById(resumeId);
             if (userResume == null)
@@ -174,9 +175,13 @@ namespace ResuMeta.Services.Concrete
                         Completion = userResume.Educations.FirstOrDefault()?.Completion
                     },
                     ResumeId = resumeId,
+                    FirstName = userResume.UserInfo?.FirstName,
+                    LastName = userResume.UserInfo?.LastName,
+                    Email = userEmail,
+                    Phone = userResume.UserInfo?.PhoneNumber,
                     Skills = userResume.UserSkills.Select(s => new SkillVM
                     {
-                        SkillName = s.Skill.SkillName
+                        SkillName = s.Skill?.SkillName
                     }).ToList()
                 };
             }
@@ -199,12 +204,13 @@ namespace ResuMeta.Services.Concrete
                 {
                     throw new Exception("Invalid input");
                 }
-                Resume resume = _resumeRepository.FindById(Int32.Parse(resumeContent.resumeId));
+                Resume resume = _resumeRepository.FindById(Int32.Parse(resumeContent.resumeId!));
                 if (resume == null)
                 {
                     throw new Exception("Resume not found");
                 }
                 resume.Resume1 = resumeContent.htmlContent;
+                resume.Title = resumeContent.title;
                 _resumeRepository.AddOrUpdate(resume);
             }
             catch (Exception e)
@@ -224,16 +230,17 @@ namespace ResuMeta.Services.Concrete
             ResumeVM resumeVM = new ResumeVM
             {
                 ResumeId = resumeId,
+                Title = resume.Title,
                 HtmlContent = resume.Resume1
             };
             return resumeVM;
         }
 
-        public List<int> GetResumeIdList(int userId)
+        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
         {
             var resumeIdList = _resumeRepository.GetAll()
             .Where(x => x.UserInfoId == userId && x.Resume1 != null)
-            .Select(x => x.Id)
+            .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
             .ToList();
             
             return resumeIdList;
