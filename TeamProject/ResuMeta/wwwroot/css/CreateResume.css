@@ -1,0 +1,7 @@
+﻿.badge:hover {
+    background-color: #ff0000 !important;
+}
+
+.dropdown-menu {
+    overflow: auto;
+}
