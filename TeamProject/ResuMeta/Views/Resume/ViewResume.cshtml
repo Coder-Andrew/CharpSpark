@@ -4,6 +4,7 @@
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/ViewResume.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
 }
 
 <div class="text-center">
@@ -14,7 +15,7 @@
     <h1 class="display-4 title">Your Resume</h1>
     <input type="hidden" id="resume-id" value="@Model.ResumeId" />
 
-    <div class="container">
+    <div class="container" style="display: none;">
         <div class="container resume-container" id="resume-container">
             <div class="text-start">
                 @if (Model != null)
@@ -22,7 +23,7 @@
                     <div>
                         <h2 class="title">Education</h2>
                         <hr />
-                        <p><strong>Institution:</strong> @Model.Education.Institution</p>
+                        <p><strong>Institution:</strong> @Model.Education!.Institution</p>
                         <p><strong>Summary:</strong> @Model.Education.EducationSummary</p>
                         <p>
                             <strong>Dates:</strong>
@@ -30,20 +31,20 @@
                             @(Model.Education.Completion ?? false ? Model.Education.EndDate?.ToString("MMM yyyy") : "Present")
                         </p>
                     </div>
-
+                    <br />
                     <div>
                         <h2 class="title">Degree</h2>
                         <hr />
-                        <p><strong>Type:</strong> @Model.Degree.Type</p>
+                        <p><strong>Type:</strong> @Model.Degree!.Type</p>
                         <p><strong>Major:</strong> @Model.Degree.Major</p>
                         <p><strong>Minor:</strong> @Model.Degree.Minor</p>
                     </div>
-
+                    <br />
                     <div>
                         <h2 class="title">Skills</h2>
                         <hr />
                         <ul>
-                            @foreach (var skill in Model.Skills)
+                            @foreach (var skill in Model.Skills!)
                             {
                                 <li>@skill.SkillName</li>
                             }
@@ -52,8 +53,13 @@
                 }
             </div>
         </div>
-        <button class="btn btn-primary" id="save-resume">Save Resume</button>
     </div>
+</div>
+<div class="text-center">
+    <button class="btn btn-primary" id="save-resume">Save Resume</button>
+</div>
+<div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
+
 </div>
 
 @section Scripts {

@@ -172,3 +172,8 @@ option:hover {
   color: white !important;
   border: none;
 }
+
+.ql-editor {
+  white-space: pre-wrap;
+  font-size: 1.5em;
+}
