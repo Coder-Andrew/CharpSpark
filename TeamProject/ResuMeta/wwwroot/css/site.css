@@ -172,3 +172,9 @@ option:hover {
   color: white !important;
   border: none;
 }
+
+.bg-success{
+    background-color: green !important;
+    color: white;
+    border: none;
+}

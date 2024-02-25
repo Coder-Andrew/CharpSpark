@@ -195,3 +195,14 @@ function addSkillToSkillList(event) {
      console.log(selectedSkills);
 }
 
+function checkForIllegalCharacters(inputElement, validationElement, validationMessageElement) {
+    if (!inputElement | !validationElement | !validationMessageElement) {
+        throw new Error("Elements cannot be null");
+    }
+    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
+    if (inputElement.value.match(specialPattern)) {
+        validationElement.style.display = "block";
+        validationMessageElement.innerHTML = "Invalid character in form";
+        return;
+    }
+}
