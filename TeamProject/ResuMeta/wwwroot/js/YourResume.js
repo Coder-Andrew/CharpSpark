@@ -40,10 +40,19 @@ function initializePage() {
 
 async function getHtmlInfo() 
 {
+    const validationArea = document.getElementById('validation-area');
+    const successValidation = document.getElementById('validation-success');
+    const errorValidation = document.getElementById('validation-error');
+    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
+    const whiteSpacePattern = /^\s+$/;
     const title = document.getElementById('resume-title').value;
-    if (title === "" || title === null || title === "Resume Title")
+    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99)
     {
-        alert('Please enter a title for your resume.');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Resume Title is invalid, please use a valid title. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
         return;
     }
     console.log("Save Resume button clicked");
@@ -63,11 +72,21 @@ async function getHtmlInfo()
     });    
     if (response.ok)
     {
-        alert('Resume saved successfully.');
+        validationArea.innerHTML = "";
+        const cloneSuccess = successValidation.cloneNode(true);
+        cloneSuccess.style.display = "block";
+        cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneSuccess);
+        return;
     }
     else
     {
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `An error occurred while saving the resume. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
         console.log("Error saving information");
-        alert('An error occurred while saving the resume.');
+        return;
     }
 }

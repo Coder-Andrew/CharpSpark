@@ -11,6 +11,11 @@
     <div class="alert alert-success alert-dismissable fade show" role="alert">
         <h4>Success, Information Stored!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button></h4>
     </div>
+    <div id="validation-area"></div>
+    <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success" style="display:none;">
+    </div>
+    <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
+    </div>
 
     <h1 class="display-4 title">Your Resume</h1>
     <input type="hidden" id="resume-id" value="@Model.ResumeId" />
@@ -21,6 +26,10 @@
                 @if (Model != null)
                 {
                     <div>
+                        <h1 class="title">@Model!.FirstName @Model!.LastName</h1>
+                        <p>@Model!.Email</p>
+                        <p>@Model!.Phone</p>
+                        <hr />
                         <h2 class="title">Education</h2>
                         <hr />
                         <p><strong>Institution:</strong> @Model.Education!.Institution</p>

@@ -30,7 +30,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        string currUserId = _userManager.GetUserId(User);
+        string currUserId = _userManager.GetUserId(User)!;
         if (currUserId == null)
         {
             return View();
