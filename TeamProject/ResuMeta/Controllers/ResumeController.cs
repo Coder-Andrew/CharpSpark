@@ -51,6 +51,11 @@ public class ResumeController : Controller
         return View(userVM);
     }
 
+    public IActionResult YourDashboard()
+    {
+        return View();
+    }
+
     [HttpGet("Resume/ViewResume/{resumeId}")]
     public IActionResult ViewResume(int resumeId)
     {
