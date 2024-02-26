@@ -68,6 +68,7 @@ CREATE TABLE [Projects] (
 CREATE TABLE [Achievements] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
+  [ResumeId] integer,
   [Achievement] nvarchar(100),
   [Summary] nvarchar(250)
 );
@@ -88,6 +89,8 @@ ALTER TABLE [UserSkill] ADD CONSTRAINT [Fk UserSkill Resume Id]
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education Resume Id]
   FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+ALTER TABLE [Achievements] ADD CONSTRAINT [Fk Achievements Resume Id]
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;

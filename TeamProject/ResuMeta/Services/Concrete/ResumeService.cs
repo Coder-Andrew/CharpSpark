@@ -46,7 +46,7 @@ namespace ResuMeta.Services.Concrete
         public List<JsonEducation>? education { get; set; }
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
-        public List<JsonAchievement> achievements { get; set; }
+        public List<JsonAchievement>? achievements { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -137,7 +137,7 @@ namespace ResuMeta.Services.Concrete
                             });
                         }
                     }
-                    foreach (JsonAchievement jsonAch in resumeInfo.achievements)
+                    foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
                     {
                         _achievementRepository.AddOrUpdate(new Achievement
                         {
@@ -146,6 +146,7 @@ namespace ResuMeta.Services.Concrete
                             UserInfoId = Int32.Parse(resumeInfo.id!),
                             Achievement1 = jsonAch.title,
                             Summary = jsonAch.body,
+                            Resume = resume
                         });
                     }
                     
@@ -203,7 +204,12 @@ namespace ResuMeta.Services.Concrete
                     Skills = userResume.UserSkills.Select(s => new SkillVM
                     {
                         SkillName = s.Skill?.SkillName
-                    }).ToList()
+                    }).ToList(),
+                    Achievements = userResume.Achievements.Select(a => new AchievementVM
+                    {
+                        title = a.Achievement1,
+                        summary = a.Summary
+                    }).ToList(),
                 };
             }
             catch
