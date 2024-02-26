@@ -6,6 +6,7 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using System.Text.Json;
 using ResuMeta.Models.DTO;
+using ResuMeta.ViewModels;
 
 namespace ResuMeta.Controllers
 {
@@ -64,6 +65,28 @@ namespace ResuMeta.Controllers
                 return Ok();
             }
             catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET: api/resume/{userId}
+        [HttpGet("{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<ResumeVM>>> GetAllResumes(int userId)
+        {
+            try
+            {
+                var resumes = _resumeService.GetAllResumes(userId);
+                if (resumes == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(resumes);
+            }
+            catch (Exception)
             {
                 return BadRequest();
             }

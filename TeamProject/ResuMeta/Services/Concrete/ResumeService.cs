@@ -245,5 +245,20 @@ namespace ResuMeta.Services.Concrete
             
             return resumeIdList;
         }
+
+        public List<ResumeVM> GetAllResumes(int userId)
+        {
+            var resumeList = _resumeRepository.GetAll()
+            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
+            .Select(x => new ResumeVM
+            {
+                ResumeId = x.Id,
+                Title = x.Title,
+                HtmlContent = x.Resume1
+            })
+            .ToList();
+            
+            return resumeList;
+        }
     }
 }
