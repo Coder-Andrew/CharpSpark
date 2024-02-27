@@ -18,8 +18,10 @@ public partial class Resume
     public string? Title { get; set; }
 
     [Column("Resume")]
-    [MaxLength(1)]
     public string? Resume1 { get; set; }
+
+    [InverseProperty("Resume")]
+    public virtual ICollection<Achievement> Achievements { get; set; } = new List<Achievement>();
 
     [InverseProperty("Resume")]
     public virtual ICollection<Education> Educations { get; set; } = new List<Education>();
