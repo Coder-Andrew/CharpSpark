@@ -2,8 +2,18 @@
     ViewData["Title"] = "Resume - Your Dashboard";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/YourDashboard.css" asp-append-version="true" />
+}
+
 <div class="text-center">
     <h1 class="display-4 title">Your Dashboard</h1>
     <hr />
     <h4>Your Resumes</h4>
+    <section id="resume-section">
+    </section>
 </div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/YourDashboard.js"></script>
+}

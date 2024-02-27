@@ -1,0 +1,43 @@
+#resume-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 30px;
+    margin: 30px;
+}
+
+.thumbnail {
+    position: relative;
+    background-color: #383737;
+    width: 230px;
+    height: 330px;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px solid #161616;
+    padding-bottom: 10%;
+}
+
+.thumbnail h1, .thumbnail h2, .thumbnail p {
+    font-size: 45%;
+}
+
+.thumbnail :first-child {
+    margin-top: 15px;
+}
+
+.thumbnail :last-child {
+    margin-bottom: 15px;
+}
+
+.thumbnail-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10%;
+    background-color: #494848;
+    border-top: 1px solid #161616;
+}
+
+.thumbnail:hover {
+    border-color: #b87223;
+    cursor: pointer;
+}
