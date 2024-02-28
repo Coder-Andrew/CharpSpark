@@ -68,29 +68,6 @@ namespace ResuMeta.Controllers
             {
                 return BadRequest();
             }
-        }
-
-        // GET: api/resume/{userId}
-        [HttpGet("{userId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<ResumeVM>>> GetAllResumes(int userId)
-        {
-            try
-            {
-                var resumes = _resumeService.GetAllResumes(userId);
-                if (resumes == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(resumes);
-            }
-            catch (Exception)
-            {
-                return BadRequest();
-            }
-        }
-
+        } 
     }
 }
