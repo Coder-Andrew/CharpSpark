@@ -16,6 +16,12 @@ namespace ResuMeta.Services.Concrete
         public string? title { get; set; }
         public string? htmlContent { get; set; }
     }
+    class JsonProject
+    {
+        public string? name { get; set; }
+        public string? link { get; set; }
+        public string? summary { get; set; }
+    }
     class JsonSkill
     {
         public int skillId { get; set; }
@@ -47,6 +53,7 @@ namespace ResuMeta.Services.Concrete
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
         public List<JsonAchievement>? achievements { get; set; }
+        public List<JsonProject>? projects { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -59,6 +66,7 @@ namespace ResuMeta.Services.Concrete
         private readonly ISkillsRepository _skillsRepository;
         private readonly IRepository<Resume> _resumeRepository;
         private readonly IRepository<Achievement> _achievementRepository;
+        private readonly IRepository<Project> _projectRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<IdentityUser> userManager,
@@ -68,7 +76,8 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
-            IRepository<Achievement> achievementRepository
+            IRepository<Achievement> achievementRepository,
+            IRepository<Project> projectRepository
             )
         {
             _logger = logger;
@@ -80,6 +89,7 @@ namespace ResuMeta.Services.Concrete
             _skillsRepository = skillsRepository;
             _resumeRepository = resumeRepository;
             _achievementRepository = achievementRepository;
+            _projectRepository = projectRepository;
         }
 
         public int AddResumeInfo(JsonElement response)
@@ -149,6 +159,17 @@ namespace ResuMeta.Services.Concrete
                             Resume = resume
                         });
                     }
+                    foreach (JsonProject jsonProj in resumeInfo.projects!)
+                    {
+                        _projectRepository.AddOrUpdate(new Project
+                        {
+                            UserInfoId = Int32.Parse(resumeInfo.id!),
+                            Name = jsonProj.name,
+                            Link = jsonProj.link,
+                            Summary = jsonProj.summary,
+                            Resume = resume
+                        });
+                    }
                     
                 }
                 return resume.Id;
@@ -210,6 +231,12 @@ namespace ResuMeta.Services.Concrete
                         title = a.Achievement1,
                         summary = a.Summary
                     }).ToList(),
+                    Projects = userResume.Projects.Select(p => new ProjectVM
+                    {
+                        Name = p.Name,
+                        Link = p.Link,
+                        Summary = p.Summary
+                    }).ToList()
                 };
             }
             catch

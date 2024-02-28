@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", initializePage, false);
 
 let selectedSkills = [];
 let achievementList = [];
+let projectsList = [];
 let achievementNum = 0;
 
 
@@ -33,16 +34,21 @@ function initializePage() {
     }, false);
 
 
-    // get achievement box 
+    // get achievement & project boxes
     const achievementBox = document.getElementById("achievement-box");
+    const projectBox = document.getElementById("project-box");
 
-    // get and add event listener to add achievement button
+    // get and add event listener to add achievement & project buttons
     const addAchievementBtn = document.getElementById("achievement-add-btn");
     addAchievementBtn.addEventListener('click', () => addAchievement(achievementBox), false);
+    const addProjectBtn = document.getElementById("project-add-btn");
+    addProjectBtn.addEventListener('click', () => addProject(projectBox), false);
 
-    // get and add event listener to clear achievements button
+    // get and add event listener to clear achievements & projects buttons
     const clearAchievementBtn = document.getElementById("achievement-clear-btn");
     clearAchievementBtn.addEventListener('click', () => clearAchievements(achievementBox), false);
+    const clearProjectBtn = document.getElementById("project-clear-btn");
+    clearProjectBtn.addEventListener('click', () => clearProjects(projectBox), false);
 
 }
 
@@ -68,6 +74,8 @@ async function submitInfo() {
     const achievementContainer = document.getElementById("achievement-box");
     if (validateAchievements(achievementContainer, validationArea, validationMessage)) return;
 
+    const projectContainer = document.getElementById("project-box");
+    // if (validateProjects(projectContainer, validationArea, validationMessage)) return;
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -120,6 +128,7 @@ async function submitInfo() {
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
     addAchievementsFromContainer(); 
+    addProjectsFromContainer();
 
     const resumeInfo = {
         id: userId.value,
@@ -136,7 +145,8 @@ async function submitInfo() {
             }]
         }],
         skills: selectedSkills,
-        achievements: achievementList
+        achievements: achievementList,
+        projects: projectsList
     };
 
     console.log(resumeInfo);
@@ -278,10 +288,30 @@ function addAchievement(containerElement) {
     containerElement.appendChild(achievementClone);
 }
 
+function addProject(containerElement) {
+    const projectTemplate = document.getElementById("project-template");
+    const projectClone = projectTemplate.content.cloneNode(true);
+    const cloneRoot = projectClone.querySelector(".row");
+
+    // Add delete event listenor to project clone
+    projectClone.querySelector(".btn").addEventListener("click", () => {        
+        containerElement.removeChild(cloneRoot);
+    }, false);
+
+    containerElement.appendChild(projectClone);
+} 
+
 function clearAchievements(containerElement) {
     if (!confirm("Are you sure you want to clear all achievements?")) return;
 
     achievementList = [];
+    containerElement.innerHTML = "";
+}
+
+function clearProjects(containerElement) {
+    if (!confirm("Are you sure you want to clear all projects?")) return;
+
+    projectsList = [];
     containerElement.innerHTML = "";
 }
 
@@ -296,6 +326,18 @@ function addAchievementToList(achievementElement) {
     achievementList.push(achievement);
 }
 
+function addProjectsToList(projectElement) {
+    const projectName = projectElement.querySelector("#project-name").value;
+
+    if (!projectName) return;
+    const project = {
+        "name": projectName,
+        "summary": projectElement.querySelector("#project-summary").value,
+        "link": projectElement.querySelector("#project-link").value
+    }
+    projectsList.push(project);
+}
+
 function addAchievementsFromContainer() {
     const achievementContainer = document.getElementById("achievement-box");
 
@@ -303,3 +345,11 @@ function addAchievementsFromContainer() {
         addAchievementToList(child);
     });
 }
+
+function addProjectsFromContainer() {
+    const projectContainer = document.getElementById("project-box");
+
+    Array.from(projectContainer.children).forEach(child => {
+        addProjectsToList(child);
+    });
+}   

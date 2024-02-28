@@ -75,12 +75,16 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Employem__3214EC07D1EE8CA9");
 
+            entity.HasOne(d => d.Resume).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory Resume Id");
+
             entity.HasOne(d => d.UserInfo).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory UserInfo Id");
         });
 
         modelBuilder.Entity<Project>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Projects__3214EC07766EA47D");
+
+            entity.HasOne(d => d.Resume).WithMany(p => p.Projects).HasConstraintName("Fk Projects Resume Id");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Projects).HasConstraintName("Fk Projects UserInfo Id");
         });

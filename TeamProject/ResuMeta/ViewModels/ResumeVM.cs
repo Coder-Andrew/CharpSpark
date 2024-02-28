@@ -13,5 +13,6 @@
         public DegreeVM? Degree { get; set; }
         public List<SkillVM>? Skills { get; set; }
         public List<AchievementVM>? Achievements { get; set; }
+        public List<ProjectVM>? Projects { get; set; }
     }
 }

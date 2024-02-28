@@ -70,6 +70,22 @@
                             }
                         </ul>
                     </div>
+                    <br />
+                    <div>
+                        <h2 class="title">Projects</h2>
+                        <hr />
+                            @foreach (var project in Model.Projects!)
+                            {
+                                <div>
+                                    <h4><strong>@project.Name - </strong> <a href="@project.Link" target="">@project.Link</a></h4>
+                                    <ul>
+                                        <li>
+                                            <p>@project.Summary</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                    </div>
                 }
             </div>
         </div>

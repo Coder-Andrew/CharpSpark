@@ -11,7 +11,6 @@ function loadQuill() {
     }
 }
 
-
 function initializePage() {
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
