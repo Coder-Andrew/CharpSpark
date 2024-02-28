@@ -75,7 +75,7 @@ async function submitInfo() {
     if (validateAchievements(achievementContainer, validationArea, validationMessage)) return;
 
     const projectContainer = document.getElementById("project-box");
-    // if (validateProjects(projectContainer, validationArea, validationMessage)) return;
+    if (validateProjects(projectContainer, validationArea, validationMessage)) return;
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -270,6 +270,23 @@ function validateAchievements(achievementContainer, validationElement, validatio
 
     for (var i = 0; i < achievementTextAreas.length; i++) {
         if (checkForIllegalCharacters(achievementTextAreas[i], validationElement, validationMessageElement)) return true;
+    }
+
+    return false;
+}
+
+function validateProjects(projectContainer, validationElement, validationMessageElement) {
+    const projectInputs = projectContainer.querySelectorAll("input");
+    const projectTextAreas = projectContainer.querySelectorAll("textarea");
+
+
+    for (var i = 0; i < projectInputs.length; i++) {
+        if (checkForIllegalCharacters(projectInputs[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(projectInputs[i], validationElement, validationMessageElement, "Please fill out all project names")) return true;
+    }
+
+    for (var i = 0; i < projectTextAreas.length; i++) {
+        if (checkForIllegalCharacters(projectTextAreas[i], validationElement, validationMessageElement)) return true;
     }
 
     return false;
