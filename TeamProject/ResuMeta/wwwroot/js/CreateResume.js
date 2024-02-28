@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", initializePage, false);
 let selectedSkills = [];
 let achievementList = [];
 let projectsList = [];
+let educationList = [];
 let achievementNum = 0;
 
 
@@ -34,17 +35,22 @@ function initializePage() {
     }, false);
 
 
-    // get achievement & project boxes
+    // get info boxes
+    const educationBox = document.getElementById("education-box");
     const achievementBox = document.getElementById("achievement-box");
     const projectBox = document.getElementById("project-box");
 
-    // get and add event listener to add achievement & project buttons
+    // get and add event listener to add info section buttons
+    const addEducationBtn = document.getElementById("education-add-btn");
+    addEducationBtn.addEventListener('click', () => addEducation(educationBox), false);
     const addAchievementBtn = document.getElementById("achievement-add-btn");
     addAchievementBtn.addEventListener('click', () => addAchievement(achievementBox), false);
     const addProjectBtn = document.getElementById("project-add-btn");
     addProjectBtn.addEventListener('click', () => addProject(projectBox), false);
 
-    // get and add event listener to clear achievements & projects buttons
+    // get and add event listener to clear info section buttons
+    const clearEducationBtn = document.getElementById("education-clear-btn");
+    clearEducationBtn.addEventListener('click', () => clearEducation(educationBox), false);
     const clearAchievementBtn = document.getElementById("achievement-clear-btn");
     clearAchievementBtn.addEventListener('click', () => clearAchievements(achievementBox), false);
     const clearProjectBtn = document.getElementById("project-clear-btn");
@@ -63,13 +69,22 @@ function debounce(func, delay) {
 }
 
 async function submitInfo() {
-    const educationForm = document.getElementById("educationForm");
     const validationArea = document.getElementById("validationMessage");
     validationArea.style.display = "none";
     const validationMessage = document.getElementById("validationText");
     validationMessage.innerHTML = "";
-    var textInputs = educationForm.getElementsByTagName('input');
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
+
+    const educationContainer = document.getElementById("education-box");
+    if (educationContainer.children.length === 0) {
+        validationArea.style.display = "block";
+        validationMessage.innerHTML = "Please add at least one education entry";
+        return;
+    }
+    if (validateEducation(educationContainer, validationArea, validationMessage))
+    {
+        educationList = [];
+        return;
+    }
 
     const achievementContainer = document.getElementById("achievement-box");
     if (validateAchievements(achievementContainer, validationArea, validationMessage)) return;
@@ -77,73 +92,15 @@ async function submitInfo() {
     const projectContainer = document.getElementById("project-box");
     if (validateProjects(projectContainer, validationArea, validationMessage)) return;
 
-    for (var i = 0; i < textInputs.length; i++) {
-        if (textInputs[i].id === "skills") continue;
-        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
-            textInputs[i].value = "N/A";
-        }
-        if (textInputs[i].value === "") {
-            validationArea.style.display = "block";
-            validationMessage.innerHTML = "Please fill out all fields";
-            return;
-        }
-        if (textInputs[i].value.match(specialPattern)) {
-            validationArea.style.display = "block";
-            validationMessage.innerHTML = "Invalid character in form";
-            return;
-        }
-    }
-    const educationSummary = document.getElementById("educationSummary");
-    if (educationSummary.value === "") {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Please fill out all fields";
-        return;
-    }
-    if (educationSummary.value.match(specialPattern)) {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Invalid character in form";
-        return;
-    }
-    const userId = document.getElementById("userId");
-    const institution = document.getElementById("institutionName");
-    const startDate = document.getElementById("startDate");
-    const endDate = document.getElementById("endDate");
-    const completed = document.getElementById("completed");
-    if (completed.value === "Select a value" )
-    {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Please fill out all fields";
-        return;
-    }
-    const degreeType = document.getElementById("degreeType");
-    if (degreeType.value === "Select a type" )
-    {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Please fill out all fields";
-        return;
-    }
-    const major = document.getElementById("major");
-    const minor = document.getElementById("minor");
-
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
+    addEducationFromContainer();
     addAchievementsFromContainer(); 
     addProjectsFromContainer();
 
     const resumeInfo = {
         id: userId.value,
-        education: [{
-            institution: institution.value,
-            educationSummary: educationSummary.value,
-            startDate: startDate.value,
-            endDate: endDate.value,
-            complete: completed.value,
-            degree: [{
-                type: degreeType.value,
-                major: major.value,
-                minor: minor.value
-            }]
-        }],
+        education: educationList,
         skills: selectedSkills,
         achievements: achievementList,
         projects: projectsList
@@ -258,6 +215,60 @@ function validateNonEmptyInput(inputElement, validationElement, validationMessag
     return false;
 }
 
+function validateEducation(educationContainer, validationElement, validationMessageElement) {
+    var textInputs = educationContainer.querySelectorAll('input');
+    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
+    const educationSummaries = document.querySelectorAll("#educationSummary");
+    const completedList = document.querySelectorAll("#completed");
+    const degreeTypeList = document.querySelectorAll("#degreeType");
+
+    for (var i = 0; i < textInputs.length; i++) {
+        if (textInputs[i].id === "skills") continue;
+        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
+            textInputs[i].value = "N/A";
+        }
+        if (textInputs[i].value === "") {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Please fill out all fields";
+            return true;
+        }
+        if (textInputs[i].value.match(specialPattern)) {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Invalid character in form";
+            return true;
+        }
+    }
+    for (var i = 0; i < educationSummaries.length; i++) {
+        if (educationSummaries[i].value === "") {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Please fill out all fields";
+            return true;
+        }
+        if (educationSummaries[i].value.match(specialPattern)) {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Invalid character in form";
+            return true;
+        }
+    }
+    for (var i = 0; i < completedList.length; i++) {
+        if (completedList[i].value === "Select a value" )
+        {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Please fill out all fields";
+            return true;
+        }
+    }
+    for (var i = 0; i < degreeTypeList.length; i++) {
+        if (degreeType.value === "Select a type" )
+        {
+            validationElement.style.display = "block";
+            validationMessageElement.innerHTML = "Please fill out all fields";
+            return true;
+        }
+    }
+    return false;
+}    
+
 function validateAchievements(achievementContainer, validationElement, validationMessageElement) {
     const achievementInputs = achievementContainer.querySelectorAll("input");
     const achievementTextAreas = achievementContainer.querySelectorAll("textarea");
@@ -318,6 +329,20 @@ function addProject(containerElement) {
     containerElement.appendChild(projectClone);
 } 
 
+function addEducation(containerElement) {
+    const educationTemplate = document.getElementById("education-template");
+    const educationClone = educationTemplate.content.cloneNode(true);
+    const cloneRoot = educationClone.querySelector(".row");
+
+    // Add delete event listenor to education clone
+    educationClone.querySelector(".btn").addEventListener("click", () => {        
+        containerElement.removeChild(cloneRoot);
+    }, false);
+
+    containerElement.appendChild(educationClone);
+
+}
+
 function clearAchievements(containerElement) {
     if (!confirm("Are you sure you want to clear all achievements?")) return;
 
@@ -329,6 +354,13 @@ function clearProjects(containerElement) {
     if (!confirm("Are you sure you want to clear all projects?")) return;
 
     projectsList = [];
+    containerElement.innerHTML = "";
+}
+
+function clearEducation(containerElement) {
+    if (!confirm("Are you sure you want to clear all education?")) return;
+
+    educationList = [];
     containerElement.innerHTML = "";
 }
 
@@ -355,7 +387,34 @@ function addProjectsToList(projectElement) {
     projectsList.push(project);
 }
 
+function addEducationToList(educationElement) {
+    const institution = educationElement.querySelector("#institutionName").value;
+    const educationSummary = educationElement.querySelector("#educationSummary").value;
+    const startDate = educationElement.querySelector("#startDate").value;
+    const endDate = educationElement.querySelector("#endDate").value;
+    const complete = educationElement.querySelector("#completed").value;
+    const degreeType = educationElement.querySelector("#degreeType").value;
+    const major = educationElement.querySelector("#major").value;
+    const minor = educationElement.querySelector("#minor").value;
+
+    if (!institution || !educationSummary || !startDate || !endDate || !complete || !degreeType || !major) return;
+    const education = {
+        "institution": institution,
+        "educationSummary": educationSummary,
+        "startDate": startDate,
+        "endDate": endDate,
+        "complete": complete,
+        "degree": [{
+            "type": degreeType,
+            "major": major,
+            "minor": minor
+        }]
+    }
+    educationList.push(education);
+}
+
 function addAchievementsFromContainer() {
+    achievementList = [];
     const achievementContainer = document.getElementById("achievement-box");
 
     Array.from(achievementContainer.children).forEach(child => {
@@ -364,9 +423,19 @@ function addAchievementsFromContainer() {
 }
 
 function addProjectsFromContainer() {
+    projectsList = [];
     const projectContainer = document.getElementById("project-box");
 
     Array.from(projectContainer.children).forEach(child => {
         addProjectsToList(child);
     });
-}   
+}
+
+function addEducationFromContainer() {
+    educationList = [];
+    const educationContainer = document.getElementById("education-box");
+
+    Array.from(educationContainer.children).forEach(child => {
+        addEducationToList(child);
+    });
+}

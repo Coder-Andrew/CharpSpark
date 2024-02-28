@@ -134,43 +134,42 @@ namespace ResuMeta.Services.Concrete
                         };
                         _degree.AddOrUpdate(currDegree);
                     }
-                    foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                }
+                foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                {
+                    Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
+                    if (skill != null)
                     {
-                        Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
-                        if (skill != null)
+                        _userSkills.AddOrUpdate(new UserSkill
                         {
-                            _userSkills.AddOrUpdate(new UserSkill
-                            {
-                                UserInfoId = Int32.Parse(resumeInfo.id!),
-                                SkillId = skill.Id,
-                                Resume = resume
-                            });
-                        }
-                    }
-                    foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
-                    {
-                        _achievementRepository.AddOrUpdate(new Achievement
-                        {
-                            // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
-                            // string length restriction. Potential vulnerability down the line
                             UserInfoId = Int32.Parse(resumeInfo.id!),
-                            Achievement1 = jsonAch.title,
-                            Summary = jsonAch.body,
+                            SkillId = skill.Id,
                             Resume = resume
                         });
                     }
-                    foreach (JsonProject jsonProj in resumeInfo.projects!)
+                }
+                foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
+                {
+                    _achievementRepository.AddOrUpdate(new Achievement
                     {
-                        _projectRepository.AddOrUpdate(new Project
-                        {
-                            UserInfoId = Int32.Parse(resumeInfo.id!),
-                            Name = jsonProj.name,
-                            Link = jsonProj.link,
-                            Summary = jsonProj.summary,
-                            Resume = resume
-                        });
-                    }
-                    
+                        // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
+                        // string length restriction. Potential vulnerability down the line
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Achievement1 = jsonAch.title,
+                        Summary = jsonAch.body,
+                        Resume = resume
+                    });
+                }
+                foreach (JsonProject jsonProj in resumeInfo.projects!)
+                {
+                    _projectRepository.AddOrUpdate(new Project
+                    {
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Name = jsonProj.name,
+                        Link = jsonProj.link,
+                        Summary = jsonProj.summary,
+                        Resume = resume
+                    });
                 }
                 return resume.Id;
             }
@@ -201,22 +200,31 @@ namespace ResuMeta.Services.Concrete
 
             try
             {
+                var education = userResume.Educations.Select(e => e.Degrees).ToList();
+                var degrees = new List<DegreeVM>();
+                foreach (var ed in userResume.Educations)
+                {
+                    foreach (var d in ed.Degrees)
+                    {
+                        degrees.Add(new DegreeVM
+                        {
+                            Type = d.Type,
+                            Major = d.Major,
+                            Minor = d.Minor
+                        });
+                    }
+                }
                 return new ResumeVM
                 {
-                    Degree = userResume.Educations.FirstOrDefault()?.Degrees.Select(d => new DegreeVM
+                    Degree = degrees,
+                    Education = userResume.Educations.Select(e => new EducationVM
                     {
-                        Type = d.Type,
-                        Major = d.Major,
-                        Minor = d.Minor
-                    }).FirstOrDefault(),
-                    Education = new EducationVM
-                    {
-                        EducationSummary = userResume.Educations.FirstOrDefault()?.EducationSummary,
-                        Institution = userResume.Educations.FirstOrDefault()?.Institution,
-                        StartDate = userResume.Educations.FirstOrDefault()?.StartDate,
-                        EndDate = userResume.Educations.FirstOrDefault()?.EndDate,
-                        Completion = userResume.Educations.FirstOrDefault()?.Completion
-                    },
+                        EducationSummary = e.EducationSummary,
+                        Institution = e.Institution,
+                        StartDate = e.StartDate,
+                        EndDate = e.EndDate,
+                        Completion = e.Completion
+                    }).ToList(),
                     ResumeId = resumeId,
                     FirstName = userResume.UserInfo?.FirstName,
                     LastName = userResume.UserInfo?.LastName,
