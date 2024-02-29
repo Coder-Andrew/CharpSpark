@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,14 @@ var connectionString = builder.Configuration.GetConnectionString("AuthConnection
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
 var chatGPTApiKey = builder.Configuration.GetConnectionString("ChatGPTAPIKey") ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
 
+string chatGPTUrl = "https://api.openai.com/v1/chat/completions";
+
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
-
+    httpClient.BaseAddress = new Uri(chatGPTUrl);
+    httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
+    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chatGPTApiKey);
+    return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
