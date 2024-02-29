@@ -35,12 +35,18 @@ namespace ResuMeta.Services.Concrete
         public string? complete { get; set; }
         public List<JsonDegree>? degree { get; set; }
     }
+    class JsonAchievement
+    {
+        public string? title { get; set; }
+        public string? body { get; set; }
+    }
     class Root
     {
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
+        public List<JsonAchievement>? achievements { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -53,6 +59,7 @@ namespace ResuMeta.Services.Concrete
         private readonly ISkillsRepository _skillsRepository;
         private readonly IRepository<Resume> _resumeRepository;
         private readonly IResumeRepository _resumeRepo;
+        private readonly IRepository<Achievement> _achievementRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<IdentityUser> userManager,
@@ -62,7 +69,8 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
-            IResumeRepository resumeRepo
+            IResumeRepository resumeRepo,
+            IRepository<Achievement> achievementRepository
             )
         {
             _logger = logger;
@@ -74,6 +82,7 @@ namespace ResuMeta.Services.Concrete
             _skillsRepository = skillsRepository;
             _resumeRepository = resumeRepository;
             _resumeRepo = resumeRepo;
+            _achievementRepository = achievementRepository;
         }
 
         public int AddResumeInfo(JsonElement response)
@@ -131,6 +140,19 @@ namespace ResuMeta.Services.Concrete
                             });
                         }
                     }
+                    foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
+                    {
+                        _achievementRepository.AddOrUpdate(new Achievement
+                        {
+                            // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
+                            // string length restriction. Potential vulnerability down the line
+                            UserInfoId = Int32.Parse(resumeInfo.id!),
+                            Achievement1 = jsonAch.title,
+                            Summary = jsonAch.body,
+                            Resume = resume
+                        });
+                    }
+                    
                 }
                 return resume.Id;
             }

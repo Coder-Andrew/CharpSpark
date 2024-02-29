@@ -59,6 +59,17 @@
                             }
                         </ul>
                     </div>
+                    <br />
+                    <div>
+                        <h2 class="title">Achievements</h2>
+                        <hr />
+                        <ul>
+                            @foreach (var achievement in Model.Achievements!)
+                            {
+                                <li>@achievement.title - @achievement.summary</li>
+                            }
+                        </ul>
+                    </div>
                 }
             </div>
         </div>

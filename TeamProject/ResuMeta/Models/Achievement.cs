@@ -13,12 +13,18 @@ public partial class Achievement
 
     public int? UserInfoId { get; set; }
 
+    public int? ResumeId { get; set; }
+
     [Column("Achievement")]
     [StringLength(100)]
     public string? Achievement1 { get; set; }
 
     [StringLength(250)]
     public string? Summary { get; set; }
+
+    [ForeignKey("ResumeId")]
+    [InverseProperty("Achievements")]
+    public virtual Resume? Resume { get; set; }
 
     [ForeignKey("UserInfoId")]
     [InverseProperty("Achievements")]
