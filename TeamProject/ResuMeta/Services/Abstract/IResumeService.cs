@@ -11,6 +11,7 @@ namespace ResuMeta.Services.Abstract
         ResumeVM GetResume(int resumeId, string email);
         void SaveResumeById(JsonElement content);
         ResumeVM GetResumeHtml(int resumeId);
-        List<KeyValuePair<int, string>> GetResumeIdList(int userId);
+        // List<KeyValuePair<int, string>> GetResumeIdList(int userId);
+        List<ResumeVM> GetAllResumes(int userId);
     }
 }

@@ -16,6 +16,12 @@ namespace ResuMeta.Services.Concrete
         public string? title { get; set; }
         public string? htmlContent { get; set; }
     }
+    class JsonProject
+    {
+        public string? name { get; set; }
+        public string? link { get; set; }
+        public string? summary { get; set; }
+    }
     class JsonSkill
     {
         public int skillId { get; set; }
@@ -47,6 +53,7 @@ namespace ResuMeta.Services.Concrete
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
         public List<JsonAchievement>? achievements { get; set; }
+        public List<JsonProject>? projects { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -58,7 +65,9 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<UserSkill> _userSkills;
         private readonly ISkillsRepository _skillsRepository;
         private readonly IRepository<Resume> _resumeRepository;
+        private readonly IResumeRepository _resumeRepo;
         private readonly IRepository<Achievement> _achievementRepository;
+        private readonly IRepository<Project> _projectRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<IdentityUser> userManager,
@@ -68,7 +77,9 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
-            IRepository<Achievement> achievementRepository
+            IResumeRepository resumeRepo,
+            IRepository<Achievement> achievementRepository,
+            IRepository<Project> projectRepository
             )
         {
             _logger = logger;
@@ -79,7 +90,9 @@ namespace ResuMeta.Services.Concrete
             _userSkills = userSkills;
             _skillsRepository = skillsRepository;
             _resumeRepository = resumeRepository;
+            _resumeRepo = resumeRepo;
             _achievementRepository = achievementRepository;
+            _projectRepository = projectRepository;
         }
 
         public int AddResumeInfo(JsonElement response)
@@ -124,32 +137,42 @@ namespace ResuMeta.Services.Concrete
                         };
                         _degree.AddOrUpdate(currDegree);
                     }
-                    foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                }
+                foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                {
+                    Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
+                    if (skill != null)
                     {
-                        Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
-                        if (skill != null)
+                        _userSkills.AddOrUpdate(new UserSkill
                         {
-                            _userSkills.AddOrUpdate(new UserSkill
-                            {
-                                UserInfoId = Int32.Parse(resumeInfo.id!),
-                                SkillId = skill.Id,
-                                Resume = resume
-                            });
-                        }
-                    }
-                    foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
-                    {
-                        _achievementRepository.AddOrUpdate(new Achievement
-                        {
-                            // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
-                            // string length restriction. Potential vulnerability down the line
                             UserInfoId = Int32.Parse(resumeInfo.id!),
-                            Achievement1 = jsonAch.title,
-                            Summary = jsonAch.body,
+                            SkillId = skill.Id,
                             Resume = resume
                         });
                     }
-                    
+                }
+                foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
+                {
+                    _achievementRepository.AddOrUpdate(new Achievement
+                    {
+                        // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
+                        // string length restriction. Potential vulnerability down the line
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Achievement1 = jsonAch.title,
+                        Summary = jsonAch.body,
+                        Resume = resume
+                    });
+                }
+                foreach (JsonProject jsonProj in resumeInfo.projects!)
+                {
+                    _projectRepository.AddOrUpdate(new Project
+                    {
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Name = jsonProj.name,
+                        Link = jsonProj.link,
+                        Summary = jsonProj.summary,
+                        Resume = resume
+                    });
                 }
                 return resume.Id;
             }
@@ -172,50 +195,7 @@ namespace ResuMeta.Services.Concrete
 
         public ResumeVM GetResume(int resumeId, string userEmail)
         {
-            Resume userResume = _resumeRepository.FindById(resumeId);
-            if (userResume == null)
-            {
-                throw new Exception("Resume not found");
-            }
-
-            try
-            {
-                return new ResumeVM
-                {
-                    Degree = userResume.Educations.FirstOrDefault()?.Degrees.Select(d => new DegreeVM
-                    {
-                        Type = d.Type,
-                        Major = d.Major,
-                        Minor = d.Minor
-                    }).FirstOrDefault(),
-                    Education = new EducationVM
-                    {
-                        EducationSummary = userResume.Educations.FirstOrDefault()?.EducationSummary,
-                        Institution = userResume.Educations.FirstOrDefault()?.Institution,
-                        StartDate = userResume.Educations.FirstOrDefault()?.StartDate,
-                        EndDate = userResume.Educations.FirstOrDefault()?.EndDate,
-                        Completion = userResume.Educations.FirstOrDefault()?.Completion
-                    },
-                    ResumeId = resumeId,
-                    FirstName = userResume.UserInfo?.FirstName,
-                    LastName = userResume.UserInfo?.LastName,
-                    Email = userEmail,
-                    Phone = userResume.UserInfo?.PhoneNumber,
-                    Skills = userResume.UserSkills.Select(s => new SkillVM
-                    {
-                        SkillName = s.Skill?.SkillName
-                    }).ToList(),
-                    Achievements = userResume.Achievements.Select(a => new AchievementVM
-                    {
-                        title = a.Achievement1,
-                        summary = a.Summary
-                    }).ToList(),
-                };
-            }
-            catch
-            {
-                throw new Exception("Error getting resume");
-            }
+            return _resumeRepo.GetResume(resumeId, userEmail);
         }
 
         public void SaveResumeById(JsonElement content)
@@ -249,28 +229,17 @@ namespace ResuMeta.Services.Concrete
 
         public ResumeVM GetResumeHtml(int resumeId)
         {
-            Resume resume = _resumeRepository.FindById(resumeId);
-            if (resume == null)
-            {
-                throw new Exception("Resume not found");
-            }
-            ResumeVM resumeVM = new ResumeVM
-            {
-                ResumeId = resumeId,
-                Title = resume.Title,
-                HtmlContent = resume.Resume1
-            };
-            return resumeVM;
+            return _resumeRepo.GetResumeHtml(resumeId);
         }
 
-        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        // public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        // {
+        //     return _resumeRepo.GetResumeIdList(userId);
+        // }
+
+        public List<ResumeVM> GetAllResumes(int userId)
         {
-            var resumeIdList = _resumeRepository.GetAll()
-            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
-            .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
-            .ToList();
-            
-            return resumeIdList;
+            return _resumeRepo.GetAllResumes(userId);
         }
     }
 }

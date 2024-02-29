@@ -21,6 +21,10 @@ public partial class Project
 
     [StringLength(250)]
     public string? Summary { get; set; }
+        
+    [ForeignKey("ResumeId")]
+    [InverseProperty("Projects")]
+    public virtual Resume? Resume { get; set; }
 
     [ForeignKey("UserInfoId")]
     [InverseProperty("Projects")]

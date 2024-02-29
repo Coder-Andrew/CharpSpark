@@ -51,6 +51,22 @@ public class ResumeController : Controller
         return View(userVM);
     }
 
+    public IActionResult YourDashboard()
+    {
+        string currUserId = _userManager.GetUserId(User)!;
+        if (currUserId == null)
+        {
+            return View();
+        }    
+        var user = _userInfo.GetAll().Where(x => x.AspnetIdentityId == currUserId).FirstOrDefault();
+        if (user == null)
+        {
+            return View();
+        }
+        List<ResumeVM> resumeList = _resumeService.GetAllResumes(user.Id);
+        return resumeList.Any() ? View(resumeList) : View();
+    }
+
     [HttpGet("Resume/ViewResume/{resumeId}")]
     public IActionResult ViewResume(int resumeId)
     {
