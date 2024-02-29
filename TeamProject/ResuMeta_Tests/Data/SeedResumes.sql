@@ -12,3 +12,43 @@ INSERT INTO [Resume] ([Id], [UserInfoId], [Title], [Resume]) VALUES
     (6, 2, 'Resume 6', NULL),
     (7, 3, NULL, NULL),
     (8, 3, 'Resume 8', NULL);
+
+INSERT INTO [Education] ([Id], [UserInfoId], [ResumeId], [Institution], [EducationSummary], [StartDate], [EndDate], [Completion]) VALUES
+    (1, 1, 1, 'WOU', 'Summary Here', '2024-01-01', '2024-03-01', 1),
+    (2, 1, 2, 'WOU', 'Summary Here', '2024-01-01', '2024-03-01', 1),
+    (3, 2, 4, 'WOU', 'Summary Here', '2024-01-01', '2024-03-01', 1),
+    (4, 2, 5, 'WOU', 'Summary Here', '2024-01-01', '2024-03-01', 1);
+
+INSERT INTO [Degree] ([Id], [EducationId], [Type], [Major], [Minor]) VALUES
+    (1, 1, 'Bachelor', 'CS', 'IS'),
+    (2, 2, 'Bachelor', 'Computer Science', 'Information Systems'),
+    (3, 3, 'Master', 'Computer Science', 'N/A'),
+    (4, 4, 'Bachelor', 'Computer Science', 'Mathematics');
+
+INSERT INTO [Skills] ([Id], [SkillName]) VALUES
+    (1, "Python"),
+    (2, "Java"),
+    (3, "C#"),
+    (4, "C++"),
+    (5, "JavaScript");
+
+INSERT INTO [UserSkill] ([Id], [UserInfoId], [ResumeId], [SkillId]) VALUES
+    (1, 1, 1, 1),
+    (2, 1, 1, 2),
+    (3, 1, 2, 5),
+    (4, 2, 4, 1),
+    (5, 2, 5, 1);
+
+INSERT INTO [Achievements] ([Id], [UserInfoId], [ResumeId], [Achievement], [Summary]) VALUES
+    (1, 1, 1, "Honor Roll", "4.0 GPA"),
+    (2, 1, 2, "Honor Roll", "4.0 GPA"),
+    (3, 2, 4, "Honor Roll", "4.0 GPA"),
+    (4, 2, 5, "Honor Roll", "4.0 GPA");
+
+INSERT INTO [Projects] ([Id], [UserInfoId], [ResumeId], [Name], [Link], [Summary]) VALUES
+    (1, 1, 1, "resuMeta", "https://www.github.com/Coder-Andrew/CharpSpark", "Senior Sequence Project"),
+    (2, 1, 2, "DD&BB", "localhost:xxxx", "Testing"),
+    (3, 2, 4, "resuMeta", "https://www.github.com/Coder-Andrew/CharpSpark", "Senior Sequence Project"),
+    (4, 2, 5, "DD&BB", "localhost:xxxx", "Testing");
+
+

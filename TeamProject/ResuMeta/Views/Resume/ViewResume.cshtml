@@ -32,21 +32,29 @@
                         <hr />
                         <h2 class="title">Education</h2>
                         <hr />
-                        <p><strong>Institution:</strong> @Model.Education!.Institution</p>
-                        <p><strong>Summary:</strong> @Model.Education.EducationSummary</p>
-                        <p>
-                            <strong>Dates:</strong>
-                            @Model.Education.StartDate?.ToString("MMM yyyy") -
-                            @(Model.Education.Completion ?? false ? Model.Education.EndDate?.ToString("MMM yyyy") : "Present")
-                        </p>
+                        @foreach (var education in Model.Education!)
+                        {
+                            <p><strong>Institution:</strong> @education.Institution</p>
+                            <p><strong>Summary:</strong> @education.EducationSummary</p>
+                            <p>
+                                <strong>Dates:</strong>
+                                @education.StartDate?.ToString("MMM yyyy") -
+                                @(education.Completion ?? false ? education.EndDate?.ToString("MMM yyyy") : "Present")
+                            </p>
+                            <br />
+                        }
                     </div>
                     <br />
                     <div>
                         <h2 class="title">Degree</h2>
                         <hr />
-                        <p><strong>Type:</strong> @Model.Degree!.Type</p>
-                        <p><strong>Major:</strong> @Model.Degree.Major</p>
-                        <p><strong>Minor:</strong> @Model.Degree.Minor</p>
+                        @foreach (var degree in Model.Degree!)
+                        {
+                            <p><strong>Type:</strong> @degree.Type</p>
+                            <p><strong>Major:</strong> @degree.Major</p>
+                            <p><strong>Minor:</strong> @degree.Minor</p>
+                            <br />
+                        }
                     </div>
                     <br />
                     <div>
@@ -69,6 +77,22 @@
                                 <li>@achievement.title - @achievement.summary</li>
                             }
                         </ul>
+                    </div>
+                    <br />
+                    <div>
+                        <h2 class="title">Projects</h2>
+                        <hr />
+                            @foreach (var project in Model.Projects!)
+                            {
+                                <div>
+                                    <h4><strong>@project.Name - </strong> <a href="@project.Link" target="">@project.Link</a></h4>
+                                    <ul>
+                                        <li>
+                                            <p>@project.Summary</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
                     </div>
                 }
             </div>

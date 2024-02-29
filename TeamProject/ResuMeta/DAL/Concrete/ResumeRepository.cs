@@ -26,43 +26,51 @@ namespace ResuMeta.DAL.Concrete
             return resumeList;
         }
 
-        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
-         {
-            var resumeIdList = _resumes
-            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
-            .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
-            .ToList();
+        // public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        //  {
+        //     var resumeIdList = _resumes
+        //     .Where(x => x.UserInfoId == userId && x.Resume1 != null)
+        //     .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
+        //     .ToList();
             
-            return resumeIdList;
-         }
+        //     return resumeIdList;
+        //  }
 
         public ResumeVM GetResume(int resumeId, string userEmail)
         {
             Resume? userResume = _resumes.FirstOrDefault(r => r.Id == resumeId);
-
-            if(userResume == null)
+            if (userResume == null)
             {
                 throw new Exception("Resume not found");
             }
 
             try
             {
+                var education = userResume.Educations.Select(e => e.Degrees).ToList();
+                var degrees = new List<DegreeVM>();
+                foreach (var ed in userResume.Educations)
+                {
+                    foreach (var d in ed.Degrees)
+                    {
+                        degrees.Add(new DegreeVM
+                        {
+                            Type = d.Type,
+                            Major = d.Major,
+                            Minor = d.Minor
+                        });
+                    }
+                }
                 return new ResumeVM
                 {
-                    Degree = userResume.Educations.FirstOrDefault()?.Degrees.Select(d => new DegreeVM
+                    Degree = degrees,
+                    Education = userResume.Educations.Select(e => new EducationVM
                     {
-                        Type = d.Type,
-                        Major = d.Major,
-                        Minor = d.Minor
-                    }).FirstOrDefault(),
-                    Education = new EducationVM
-                    {
-                        EducationSummary = userResume.Educations.FirstOrDefault()?.EducationSummary,
-                        Institution = userResume.Educations.FirstOrDefault()?.Institution,
-                        StartDate = userResume.Educations.FirstOrDefault()?.StartDate,
-                        EndDate = userResume.Educations.FirstOrDefault()?.EndDate,
-                        Completion = userResume.Educations.FirstOrDefault()?.Completion
-                    },
+                        EducationSummary = e.EducationSummary,
+                        Institution = e.Institution,
+                        StartDate = e.StartDate,
+                        EndDate = e.EndDate,
+                        Completion = e.Completion
+                    }).ToList(),
                     ResumeId = resumeId,
                     FirstName = userResume.UserInfo?.FirstName,
                     LastName = userResume.UserInfo?.LastName,
@@ -71,6 +79,17 @@ namespace ResuMeta.DAL.Concrete
                     Skills = userResume.UserSkills.Select(s => new SkillVM
                     {
                         SkillName = s.Skill?.SkillName
+                    }).ToList(),
+                    Achievements = userResume.Achievements.Select(a => new AchievementVM
+                    {
+                        title = a.Achievement1,
+                        summary = a.Summary
+                    }).ToList(),
+                    Projects = userResume.Projects.Select(p => new ProjectVM
+                    {
+                        Name = p.Name,
+                        Link = p.Link,
+                        Summary = p.Summary
                     }).ToList()
                 };
             }

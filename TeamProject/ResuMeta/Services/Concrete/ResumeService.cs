@@ -16,6 +16,12 @@ namespace ResuMeta.Services.Concrete
         public string? title { get; set; }
         public string? htmlContent { get; set; }
     }
+    class JsonProject
+    {
+        public string? name { get; set; }
+        public string? link { get; set; }
+        public string? summary { get; set; }
+    }
     class JsonSkill
     {
         public int skillId { get; set; }
@@ -47,6 +53,7 @@ namespace ResuMeta.Services.Concrete
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
         public List<JsonAchievement>? achievements { get; set; }
+        public List<JsonProject>? projects { get; set; }
     }
     public class ResumeService : IResumeService
     {
@@ -60,6 +67,7 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<Resume> _resumeRepository;
         private readonly IResumeRepository _resumeRepo;
         private readonly IRepository<Achievement> _achievementRepository;
+        private readonly IRepository<Project> _projectRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<IdentityUser> userManager,
@@ -70,7 +78,8 @@ namespace ResuMeta.Services.Concrete
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
             IResumeRepository resumeRepo,
-            IRepository<Achievement> achievementRepository
+            IRepository<Achievement> achievementRepository,
+            IRepository<Project> projectRepository
             )
         {
             _logger = logger;
@@ -83,6 +92,7 @@ namespace ResuMeta.Services.Concrete
             _resumeRepository = resumeRepository;
             _resumeRepo = resumeRepo;
             _achievementRepository = achievementRepository;
+            _projectRepository = projectRepository;
         }
 
         public int AddResumeInfo(JsonElement response)
@@ -127,32 +137,42 @@ namespace ResuMeta.Services.Concrete
                         };
                         _degree.AddOrUpdate(currDegree);
                     }
-                    foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                }
+                foreach (JsonSkill jsonSkill in resumeInfo.skills!)
+                {
+                    Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
+                    if (skill != null)
                     {
-                        Skill skill = _skillsRepository.FindById(jsonSkill.skillId);
-                        if (skill != null)
+                        _userSkills.AddOrUpdate(new UserSkill
                         {
-                            _userSkills.AddOrUpdate(new UserSkill
-                            {
-                                UserInfoId = Int32.Parse(resumeInfo.id!),
-                                SkillId = skill.Id,
-                                Resume = resume
-                            });
-                        }
-                    }
-                    foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
-                    {
-                        _achievementRepository.AddOrUpdate(new Achievement
-                        {
-                            // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
-                            // string length restriction. Potential vulnerability down the line
                             UserInfoId = Int32.Parse(resumeInfo.id!),
-                            Achievement1 = jsonAch.title,
-                            Summary = jsonAch.body,
+                            SkillId = skill.Id,
                             Resume = resume
                         });
                     }
-                    
+                }
+                foreach (JsonAchievement jsonAch in resumeInfo.achievements!)
+                {
+                    _achievementRepository.AddOrUpdate(new Achievement
+                    {
+                        // IMPORTANT: there will be an error if a user enters a string which is longer than the model's
+                        // string length restriction. Potential vulnerability down the line
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Achievement1 = jsonAch.title,
+                        Summary = jsonAch.body,
+                        Resume = resume
+                    });
+                }
+                foreach (JsonProject jsonProj in resumeInfo.projects!)
+                {
+                    _projectRepository.AddOrUpdate(new Project
+                    {
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Name = jsonProj.name,
+                        Link = jsonProj.link,
+                        Summary = jsonProj.summary,
+                        Resume = resume
+                    });
                 }
                 return resume.Id;
             }
@@ -212,10 +232,10 @@ namespace ResuMeta.Services.Concrete
             return _resumeRepo.GetResumeHtml(resumeId);
         }
 
-        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
-        {
-            return _resumeRepo.GetResumeIdList(userId);
-        }
+        // public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        // {
+        //     return _resumeRepo.GetResumeIdList(userId);
+        // }
 
         public List<ResumeVM> GetAllResumes(int userId)
         {
