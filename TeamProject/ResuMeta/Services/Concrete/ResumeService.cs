@@ -232,10 +232,10 @@ namespace ResuMeta.Services.Concrete
             return _resumeRepo.GetResumeHtml(resumeId);
         }
 
-        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
-        {
-            return _resumeRepo.GetResumeIdList(userId);
-        }
+        // public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        // {
+        //     return _resumeRepo.GetResumeIdList(userId);
+        // }
 
         public List<ResumeVM> GetAllResumes(int userId)
         {

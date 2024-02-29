@@ -26,15 +26,15 @@ namespace ResuMeta.DAL.Concrete
             return resumeList;
         }
 
-        public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
-         {
-            var resumeIdList = _resumes
-            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
-            .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
-            .ToList();
+        // public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
+        //  {
+        //     var resumeIdList = _resumes
+        //     .Where(x => x.UserInfoId == userId && x.Resume1 != null)
+        //     .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
+        //     .ToList();
             
-            return resumeIdList;
-         }
+        //     return resumeIdList;
+        //  }
 
         public ResumeVM GetResume(int resumeId, string userEmail)
         {
