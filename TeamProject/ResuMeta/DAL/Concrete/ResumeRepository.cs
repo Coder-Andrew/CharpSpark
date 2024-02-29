@@ -38,7 +38,7 @@ namespace ResuMeta.DAL.Concrete
 
         public ResumeVM GetResume(int resumeId, string userEmail)
         {
-            Resume userResume = _resumeRepository.FindById(resumeId);
+            Resume? userResume = _resumes.FirstOrDefault(r => r.Id == resumeId);
             if (userResume == null)
             {
                 throw new Exception("Resume not found");
