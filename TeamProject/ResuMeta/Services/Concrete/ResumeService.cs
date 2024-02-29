@@ -58,6 +58,7 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<UserSkill> _userSkills;
         private readonly ISkillsRepository _skillsRepository;
         private readonly IRepository<Resume> _resumeRepository;
+        private readonly IResumeRepository _resumeRepo;
         private readonly IRepository<Achievement> _achievementRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
@@ -68,6 +69,7 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
+            IResumeRepository resumeRepo,
             IRepository<Achievement> achievementRepository
             )
         {
@@ -79,6 +81,7 @@ namespace ResuMeta.Services.Concrete
             _userSkills = userSkills;
             _skillsRepository = skillsRepository;
             _resumeRepository = resumeRepository;
+            _resumeRepo = resumeRepo;
             _achievementRepository = achievementRepository;
         }
 
@@ -172,50 +175,7 @@ namespace ResuMeta.Services.Concrete
 
         public ResumeVM GetResume(int resumeId, string userEmail)
         {
-            Resume userResume = _resumeRepository.FindById(resumeId);
-            if (userResume == null)
-            {
-                throw new Exception("Resume not found");
-            }
-
-            try
-            {
-                return new ResumeVM
-                {
-                    Degree = userResume.Educations.FirstOrDefault()?.Degrees.Select(d => new DegreeVM
-                    {
-                        Type = d.Type,
-                        Major = d.Major,
-                        Minor = d.Minor
-                    }).FirstOrDefault(),
-                    Education = new EducationVM
-                    {
-                        EducationSummary = userResume.Educations.FirstOrDefault()?.EducationSummary,
-                        Institution = userResume.Educations.FirstOrDefault()?.Institution,
-                        StartDate = userResume.Educations.FirstOrDefault()?.StartDate,
-                        EndDate = userResume.Educations.FirstOrDefault()?.EndDate,
-                        Completion = userResume.Educations.FirstOrDefault()?.Completion
-                    },
-                    ResumeId = resumeId,
-                    FirstName = userResume.UserInfo?.FirstName,
-                    LastName = userResume.UserInfo?.LastName,
-                    Email = userEmail,
-                    Phone = userResume.UserInfo?.PhoneNumber,
-                    Skills = userResume.UserSkills.Select(s => new SkillVM
-                    {
-                        SkillName = s.Skill?.SkillName
-                    }).ToList(),
-                    Achievements = userResume.Achievements.Select(a => new AchievementVM
-                    {
-                        title = a.Achievement1,
-                        summary = a.Summary
-                    }).ToList(),
-                };
-            }
-            catch
-            {
-                throw new Exception("Error getting resume");
-            }
+            return _resumeRepo.GetResume(resumeId, userEmail);
         }
 
         public void SaveResumeById(JsonElement content)
@@ -249,28 +209,17 @@ namespace ResuMeta.Services.Concrete
 
         public ResumeVM GetResumeHtml(int resumeId)
         {
-            Resume resume = _resumeRepository.FindById(resumeId);
-            if (resume == null)
-            {
-                throw new Exception("Resume not found");
-            }
-            ResumeVM resumeVM = new ResumeVM
-            {
-                ResumeId = resumeId,
-                Title = resume.Title,
-                HtmlContent = resume.Resume1
-            };
-            return resumeVM;
+            return _resumeRepo.GetResumeHtml(resumeId);
         }
 
         public List<KeyValuePair<int, string>> GetResumeIdList(int userId)
         {
-            var resumeIdList = _resumeRepository.GetAll()
-            .Where(x => x.UserInfoId == userId && x.Resume1 != null)
-            .Select(x => new KeyValuePair<int, string>(x.Id, x.Title!))
-            .ToList();
-            
-            return resumeIdList;
+            return _resumeRepo.GetResumeIdList(userId);
+        }
+
+        public List<ResumeVM> GetAllResumes(int userId)
+        {
+            return _resumeRepo.GetAllResumes(userId);
         }
     }
 }
