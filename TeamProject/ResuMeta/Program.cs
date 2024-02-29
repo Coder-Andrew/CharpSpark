@@ -16,6 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
+var chatGPTApiKey = builder.Configuration.GetConnectionString("ChatGPTAPIKey") ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
+
+builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
+{
+
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
