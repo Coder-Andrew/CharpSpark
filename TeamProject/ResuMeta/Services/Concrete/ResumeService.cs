@@ -46,6 +46,7 @@ namespace ResuMeta.Services.Concrete
         public string? title { get; set; }
         public string? body { get; set; }
     }
+
     class Root
     {
         public string? id { get; set; }
@@ -54,7 +55,9 @@ namespace ResuMeta.Services.Concrete
         public List<JsonResume>? resume { get; set; }
         public List<JsonAchievement>? achievements { get; set; }
         public List<JsonProject>? projects { get; set; }
+        public string? personalSummary { get; set; }
     }
+
     public class ResumeService : IResumeService
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -174,6 +177,18 @@ namespace ResuMeta.Services.Concrete
                         Resume = resume
                     });
                 }
+
+                UserInfo userInfo = _userInfo.FindById(Int32.Parse(resumeInfo.id!));
+
+                // Check if personalSummary is not an empty string
+                if (!string.IsNullOrEmpty(resumeInfo.personalSummary.ToString())) {
+                    // Update the Summary field
+                    userInfo.Summary = resumeInfo.personalSummary.ToString();
+
+                    // Save the changes to userInfo
+                    _userInfo.AddOrUpdate(userInfo);
+                }
+
                 return resume.Id;
             }
             catch (Exception e)
