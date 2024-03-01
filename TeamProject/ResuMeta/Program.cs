@@ -17,14 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
-var chatGPTApiKey = builder.Configuration.GetConnectionString("ChatGPTAPIKey") ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
+var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
 
-string chatGPTUrl = "https://api.openai.com/v1/chat/completions";
+string chatGPTUrl = "https://api.openai.com/";
 
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(chatGPTUrl);
-    httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chatGPTApiKey);
     return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
 });

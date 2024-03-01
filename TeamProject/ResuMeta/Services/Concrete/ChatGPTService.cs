@@ -1,19 +1,29 @@
 ﻿using ResuMeta.Models;
 using ResuMeta.Services.Abstract;
+using System.Text;
 using System.Text.Json;
 
 namespace ResuMeta.Services.Concrete
 {
     class JsonMessage
     {
-        public string Model { get; set; }
-        public List<Message> Messages { get; set; }
+        public string model { get; set; }
+        public List<Message> messages { get; set; }
     }
 
     class Message
     {
-        public string Role { get; set; }
-        public string Content { get; set; }
+        public string role { get; set; }
+        public string content { get; set; }
+    }
+
+    class Choice
+    {
+        public Message message { get; set; }
+    }
+    class CGPTResponse
+    {
+        public List<Choice> choices { get; set; }
     }
 
     public class ChatGPTService : IChatGPTService
@@ -26,22 +36,27 @@ namespace ResuMeta.Services.Concrete
             _logger = logger;
         }
 
-        public Task<ChatGPTResponse> AskQuestion(string question)
+        public async Task<ChatGPTResponse> AskQuestion(string question)
         {
             JsonMessage jsonMessage = new JsonMessage
             {
-                Model = "gpt-3.5-turbo",
-                Messages = new List<Message>
+                model = "gpt-3.5-turbo",
+                messages = new List<Message>
                 {
                     new Message
                     {
-                        Role = "system",
-                        Content = "You are to translate prompts from any language to French. Follow the format: (Original Langauage name): (user message)\nFrench Translation: (french translation)"
+                        role = "system",
+                        content = "You are here to answer questions about ResuMeta, an AI-enabled platform for resume creation and career advice. " +
+                            "ResuMeta is a web application developed by the CharpSpark team at Western Oregon University. " +
+                            "It uses ASP.NET Core MVC, SQL Server, Azure, C#, JavaScript, HTML/CSS, and other technologies. " +
+                            "Our goal is to simplify the resume creation process and help users get their resumes noticed by employers. " +
+                            "We offer a free resume enhancement suite that allows users to submit their current resume for feedback, build new resumes based on AI and industry standards, and edit them as needed. " +
+                            "Please ONLY answer questions related to careers, resume creation, and our project."
                     },
                     new Message
                     {
-                        Role = "user",
-                        Content = question
+                        role = "user",
+                        content = question
                     }
                 }
             };
@@ -50,7 +65,26 @@ namespace ResuMeta.Services.Concrete
                 PropertyNameCaseInsensitive = true
             };
 
-            string message = JsonSerializer.Serialize<string>(jsonMessage, options);
+            string message = JsonSerializer.Serialize<JsonMessage>(jsonMessage, options);
+
+            
+            StringContent postContent = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("v1/chat/completions", postContent);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error: {response.StatusCode} - {content}");
+                throw new Exception($"Error: {response.StatusCode} - {content}");
+            }
+
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+
+            return new ChatGPTResponse
+            {
+                Response = cGPTResponse.choices[0].message.content
+            };
+
         }
     }
 }
