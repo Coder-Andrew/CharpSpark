@@ -321,6 +321,7 @@ function validatePersonalSummary(personalSummaryContainer, validationElement, va
 
     for (var i = 0; i < personalSummaryTextArea.length; i++) {
         if (checkForIllegalCharacters(personalSummaryTextArea[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
     }
     return false;
 }
@@ -343,7 +344,6 @@ function addProject(containerElement) {
     const projectClone = projectTemplate.content.cloneNode(true);
     const cloneRoot = projectClone.querySelector(".row");
 
-    // Add delete event listenor to project clone
     projectClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
@@ -355,10 +355,11 @@ function addPersonalSummary() {
     const personalSummaryTemplate = document.getElementById("personal-summary-template");
     const personalSummaryClone = personalSummaryTemplate.content.cloneNode(true);
     const cloneRoot = personalSummaryClone.querySelector(".row");
+    document.getElementById('personal-summary-btn').style.display = 'none';
 
-    // Add delete event listener to personal summary clone
     personalSummaryClone.querySelector(".btn").addEventListener("click", () => {
         document.getElementById("personal-summary-box").removeChild(cloneRoot);
+        document.getElementById('personal-summary-btn').style.display = 'flex';
     }, false);
 
     document.getElementById("personal-summary-box").appendChild(personalSummaryClone);
@@ -478,5 +479,6 @@ function addEducationFromContainer() {
 
 function addPersonalSummaryFromContainer() {
     const personalSummaryContainer = document.getElementById("personal-summary-box");
-    personalSummary = personalSummaryContainer.querySelector("textarea").value;
+    let textareaElement = personalSummaryContainer.querySelector("textarea");
+    personalSummary = textareaElement ? textareaElement.value : "";
 }

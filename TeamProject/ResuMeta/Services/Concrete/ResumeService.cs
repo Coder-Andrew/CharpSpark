@@ -180,12 +180,9 @@ namespace ResuMeta.Services.Concrete
 
                 UserInfo userInfo = _userInfo.FindById(Int32.Parse(resumeInfo.id!));
 
-                // Check if personalSummary is not an empty string
-                if (!string.IsNullOrEmpty(resumeInfo.personalSummary.ToString())) {
-                    // Update the Summary field
+                
+                if (!string.IsNullOrWhiteSpace(resumeInfo.personalSummary.ToString())) {
                     userInfo.Summary = resumeInfo.personalSummary.ToString();
-
-                    // Save the changes to userInfo
                     _userInfo.AddOrUpdate(userInfo);
                 }
 
