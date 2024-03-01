@@ -98,6 +98,7 @@ public class ResumeRepository_Tests
             Assert.That(resume.FirstName, Is.EqualTo("Adrian"));
             Assert.That(resume.LastName, Is.EqualTo("Reynolds"));
             Assert.That(resume.Phone, Is.EqualTo("555-628-1234"));
+            Assert.That(resume.Summary, Is.EqualTo("A personal summary for Adrian"));
             Assert.That(resume.Education.Count, Is.EqualTo(1));
             Assert.That(resume.Education[0].Institution, Is.EqualTo("WOU"));
             Assert.That(resume.Education[0].EducationSummary, Is.EqualTo("Summary Here"));
@@ -136,6 +137,7 @@ public class ResumeRepository_Tests
             Assert.That(resume.FirstName, Is.EqualTo("Adrian"));
             Assert.That(resume.LastName, Is.EqualTo("Reynolds"));
             Assert.That(resume.Phone, Is.EqualTo("555-628-1234"));
+            Assert.That(resume.Summary, Is.EqualTo("A personal summary for Adrian"));
             Assert.That(resume.Education.Count, Is.EqualTo(1));
             Assert.That(resume.Education[0].Institution, Is.EqualTo("WOU"));
             Assert.That(resume.Education[0].EducationSummary, Is.EqualTo("Summary Here"));
@@ -173,6 +175,7 @@ public class ResumeRepository_Tests
             Assert.That(resume.FirstName, Is.EqualTo("Jasmine"));
             Assert.That(resume.LastName, Is.EqualTo("Patel"));
             Assert.That(resume.Phone, Is.EqualTo("555-628-1234"));
+            Assert.That(resume.Summary, Is.EqualTo("A personal summary"));
             Assert.That(resume.Education.Count, Is.EqualTo(1));
             Assert.That(resume.Education[0].Institution, Is.EqualTo("WOU"));
             Assert.That(resume.Education[0].EducationSummary, Is.EqualTo("Summary Here"));
@@ -210,6 +213,7 @@ public class ResumeRepository_Tests
             Assert.That(resume.FirstName, Is.EqualTo("Jasmine"));
             Assert.That(resume.LastName, Is.EqualTo("Patel"));
             Assert.That(resume.Phone, Is.EqualTo("555-628-1234"));
+            Assert.That(resume.Summary, Is.EqualTo("A personal summary"));
             Assert.That(resume.Education.Count, Is.EqualTo(1));
             Assert.That(resume.Education[0].Institution, Is.EqualTo("WOU"));
             Assert.That(resume.Education[0].EducationSummary, Is.EqualTo("Summary Here"));
