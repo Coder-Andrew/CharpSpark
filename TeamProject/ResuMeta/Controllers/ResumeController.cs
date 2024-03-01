@@ -46,8 +46,10 @@ public class ResumeController : Controller
         {
             return RedirectToAction("Index", "Home");
         }
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
         UserVM userVM = new UserVM(); 
         userVM.UserId = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!.Id;
+        userVM.Summary = currUser.Summary;
         return View(userVM);
     }
 

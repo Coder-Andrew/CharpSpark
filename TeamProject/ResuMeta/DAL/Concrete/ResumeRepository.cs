@@ -76,6 +76,7 @@ namespace ResuMeta.DAL.Concrete
                     LastName = userResume.UserInfo?.LastName,
                     Email = userEmail,
                     Phone = userResume.UserInfo?.PhoneNumber,
+                    Summary = userResume.UserInfo?.Summary,
                     Skills = userResume.UserSkills.Select(s => new SkillVM
                     {
                         SkillName = s.Skill?.SkillName

@@ -5,6 +5,7 @@ let achievementList = [];
 let projectsList = [];
 let educationList = [];
 let achievementNum = 0;
+let personalSummary = "";
 
 
 function initializePage() {
@@ -47,6 +48,7 @@ function initializePage() {
     addAchievementBtn.addEventListener('click', () => addAchievement(achievementBox), false);
     const addProjectBtn = document.getElementById("project-add-btn");
     addProjectBtn.addEventListener('click', () => addProject(projectBox), false);
+    document.getElementById('personal-summary-add-btn').addEventListener('click', addPersonalSummary);
 
     // get and add event listener to clear info section buttons
     const clearEducationBtn = document.getElementById("education-clear-btn");
@@ -92,18 +94,23 @@ async function submitInfo() {
     const projectContainer = document.getElementById("project-box");
     if (validateProjects(projectContainer, validationArea, validationMessage)) return;
 
+    const personalSummaryContainer = document.getElementById("personal-summary-box");
+    if (validatePersonalSummary(personalSummaryContainer, validationArea, validationMessage)) return;
+
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
     addEducationFromContainer();
     addAchievementsFromContainer(); 
     addProjectsFromContainer();
+    addPersonalSummaryFromContainer();
 
     const resumeInfo = {
         id: userId.value,
         education: educationList,
         skills: selectedSkills,
         achievements: achievementList,
-        projects: projectsList
+        projects: projectsList,
+        personalSummary: personalSummary
     };
 
     console.log(resumeInfo);
@@ -303,6 +310,22 @@ function validateProjects(projectContainer, validationElement, validationMessage
     return false;
 }
 
+function validatePersonalSummary(personalSummaryContainer, validationElement, validationMessageElement) {
+    var personalSummaryInputs = personalSummaryContainer.querySelectorAll('input');
+    var personalSummaryTextArea = personalSummaryContainer.querySelectorAll('textarea');
+
+    for (var i = 0; i < personalSummaryInputs.length; i++) {
+        if (checkForIllegalCharacters(personalSummaryInputs[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(personalSummaryInputs[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
+    }
+
+    for (var i = 0; i < personalSummaryTextArea.length; i++) {
+        if (checkForIllegalCharacters(personalSummaryTextArea[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
+    }
+    return false;
+}
+
 function addAchievement(containerElement) {
     const achievementTemplate = document.getElementById("achievement-template");
     const achievementClone = achievementTemplate.content.cloneNode(true);
@@ -321,13 +344,26 @@ function addProject(containerElement) {
     const projectClone = projectTemplate.content.cloneNode(true);
     const cloneRoot = projectClone.querySelector(".row");
 
-    // Add delete event listenor to project clone
     projectClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
 
     containerElement.appendChild(projectClone);
 } 
+
+function addPersonalSummary() {
+    const personalSummaryTemplate = document.getElementById("personal-summary-template");
+    const personalSummaryClone = personalSummaryTemplate.content.cloneNode(true);
+    const cloneRoot = personalSummaryClone.querySelector(".row");
+    document.getElementById('personal-summary-btn').style.display = 'none';
+
+    personalSummaryClone.querySelector(".btn").addEventListener("click", () => {
+        document.getElementById("personal-summary-box").removeChild(cloneRoot);
+        document.getElementById('personal-summary-btn').style.display = 'flex';
+    }, false);
+
+    document.getElementById("personal-summary-box").appendChild(personalSummaryClone);
+}
 
 function addEducation(containerElement) {
     const educationTemplate = document.getElementById("education-template");
@@ -431,6 +467,7 @@ function addProjectsFromContainer() {
     });
 }
 
+
 function addEducationFromContainer() {
     educationList = [];
     const educationContainer = document.getElementById("education-box");
@@ -438,4 +475,10 @@ function addEducationFromContainer() {
     Array.from(educationContainer.children).forEach(child => {
         addEducationToList(child);
     });
+}
+
+function addPersonalSummaryFromContainer() {
+    const personalSummaryContainer = document.getElementById("personal-summary-box");
+    let textareaElement = personalSummaryContainer.querySelector("textarea");
+    personalSummary = textareaElement ? textareaElement.value : "";
 }
