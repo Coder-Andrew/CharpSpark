@@ -183,3 +183,8 @@ option:hover {
   white-space: pre-wrap;
   font-size: 1.3em;
 }
+
+.chatbox-align {
+    height: 40px;
+    vertical-align: middle;
+}
