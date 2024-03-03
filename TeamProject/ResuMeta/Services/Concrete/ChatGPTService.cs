@@ -51,6 +51,7 @@ namespace ResuMeta.Services.Concrete
                             "It uses ASP.NET Core MVC, SQL Server, Azure, C#, JavaScript, HTML/CSS, and other technologies. " +
                             "Our goal is to simplify the resume creation process and help users get their resumes noticed by employers. " +
                             "We offer a free resume enhancement suite that allows users to submit their current resume for feedback, build new resumes based on AI and industry standards, and edit them as needed. " +
+                            "There are pages for creating resumes (tab named Resumes), viewing resumes (Your dashboard), and learning about the project accessable in the nav bar (about)" +
                             "Please ONLY answer questions related to careers, resume creation, and our project."
                     },
                     new Message

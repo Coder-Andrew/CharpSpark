@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using ResuMeta.Models;
 using ResuMeta.Services.Abstract;
+using System.Text.Json;
 
 namespace ResuMeta.Controllers
 {
@@ -18,10 +20,13 @@ namespace ResuMeta.Controllers
         // POST: api/cgpt/ask
         [HttpPost("ask")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ChatGPTResponse>> AskQuestion([FromBody] string question)
+        public async Task<ActionResult<ChatGPTResponse>> AskQuestion([FromBody] JsonElement jsonQuestion)
         {
             try
-            {
+            {   
+                string question = jsonQuestion.GetProperty("question").GetString();
+                if (question.IsNullOrEmpty()) return BadRequest();
+
                 var response = await _chatGPTService.AskQuestion(question);
                 return Ok(response);
             }

@@ -50,6 +50,9 @@ builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddSwaggerGen();
 
+// Used for testing the service without using the Chatgpt API, uncomment to use
+//builder.Services.AddScoped<IChatGPTService, FakeChatGPTService>();
+
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
