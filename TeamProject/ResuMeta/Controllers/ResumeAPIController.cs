@@ -6,6 +6,7 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using System.Text.Json;
 using ResuMeta.Models.DTO;
+using ResuMeta.ViewModels;
 
 namespace ResuMeta.Controllers
 {
@@ -67,7 +68,6 @@ namespace ResuMeta.Controllers
             {
                 return BadRequest();
             }
-        }
-
+        } 
     }
 }

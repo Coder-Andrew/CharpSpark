@@ -1,5 +1,4 @@
-﻿@model IEnumerable<int>;
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -23,17 +22,4 @@
     <p class="body-paragraph">
         To get started, create an account or log in. Next, click on "Create Resume" and answer the questions to see your resume come to life!
     </p>
-    @if (User.Identity!.IsAuthenticated)
-    {
-        @if(Model != null && Model.Count() > 0)
-        {
-            <div>
-            <h2>Your Saved Resumes</h2>
-            @foreach(var resume in Model)
-            {
-                <a class="btn btn-primary" id="@resume" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume})'" >Saved Resume</a>
-            }
-            </div>
-        }
-    }
 </div>

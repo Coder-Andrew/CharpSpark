@@ -8,9 +8,10 @@ namespace ResuMeta.Services.Abstract
     {
         int AddResumeInfo(JsonElement resumeInfo);
         IEnumerable<SkillDTO> GetSkillsBySubstring(string skillsSubstring);
-        ResumeVM GetResume(int resumeId);
+        ResumeVM GetResume(int resumeId, string email);
         void SaveResumeById(JsonElement content);
         ResumeVM GetResumeHtml(int resumeId);
-        List<int> GetResumeIdList(int userId);
+        // List<KeyValuePair<int, string>> GetResumeIdList(int userId);
+        List<ResumeVM> GetAllResumes(int userId);
     }
 }

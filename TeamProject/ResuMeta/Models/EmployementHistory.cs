@@ -27,6 +27,10 @@ public partial class EmployementHistory
     [InverseProperty("EmployementHistory")]
     public virtual ICollection<ReferenceContactInfo> ReferenceContactInfos { get; set; } = new List<ReferenceContactInfo>();
 
+    [ForeignKey("ResumeId")]
+    [InverseProperty("EmployementHistories")]
+    public virtual Resume? Resume { get; set; }
+
     [ForeignKey("UserInfoId")]
     [InverseProperty("EmployementHistories")]
     public virtual UserInfo? UserInfo { get; set; }

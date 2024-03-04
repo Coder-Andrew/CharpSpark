@@ -7,7 +7,9 @@ namespace ResuMeta_Tests;
 
 public class SkillsRepository_Tests
 {
-    private static readonly string _seedFile = @"..\..\..\Data\SeedSkills.sql";
+    // NOTE: Windows use line 11, Mac use line 12
+    // private static readonly string _seedFile = @"..\..\..\Data\SeedSkills.sql";
+    private static readonly string _seedFile = "../../../Data/SeedSkills.sql";
     private InMemoryDbHelper<ResuMetaDbContext> _dbHelper = new InMemoryDbHelper<ResuMetaDbContext>(_seedFile, DbPersistence.OneDbPerTest);
 
     // These tests feel wrong... 

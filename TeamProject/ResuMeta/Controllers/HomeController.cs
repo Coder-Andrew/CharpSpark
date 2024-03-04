@@ -31,18 +31,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        string currUserId = _userManager.GetUserId(User);
-        if (currUserId == null)
-        {
-            return View();
-        }    
-        var user = _userInfo.GetAll().Where(x => x.AspnetIdentityId == currUserId).FirstOrDefault();
-        if (user == null)
-        {
-            return View();
-        }
-        List<int> resumeIdList = _resumeService.GetResumeIdList(user.Id);
-        return resumeIdList.Any() ? View(resumeIdList) : View();
+        return View();
     }
 
     public IActionResult Privacy()

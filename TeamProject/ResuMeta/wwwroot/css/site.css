@@ -172,3 +172,14 @@ option:hover {
   color: white !important;
   border: none;
 }
+
+.bg-success{
+    background-color: green !important;
+    color: white;
+    border: none;
+}
+
+.ql-editor {
+  white-space: pre-wrap;
+  font-size: 1.3em;
+}
