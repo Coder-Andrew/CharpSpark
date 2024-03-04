@@ -1,9 +1,14 @@
-﻿@{
+﻿@model bool
+@{
     ViewData["Title"] = "Home Page";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/HomeIndex.css" asp-append-version="true" />
+}
+
+@section Scripts {
+    <script src="~/js/HomeIndex.js" asp-append-version="true"></script>
 }
 
 <section>
@@ -22,4 +27,39 @@
     <p class="body-paragraph">
         To get started, create an account or log in. Next, click on "Create Resume" and answer the questions to see your resume come to life!
     </p>
-</div>
+
+@if (Model)
+{
+    <div class="text-center">   
+        <button class="btn bg-info body-paragraph text-white border-0" id="show-hide-chat">Show/Hide Chat</button>
+    </div>
+    <div id="chat-body" class="body-paragraph invisible">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-dark">
+                        <div class="card-header bg-dark text-center">Chat</div>
+                        <div class="card-body" id="chat-box" style="height: 400px; overflow-y: auto;">
+                            <!-- Chat messages will go here -->
+                            <div class="d-flex flex-column align-items-start mb-4">
+                                <div class="bg-primary text-white rounded p-2">Hello! I am a chatbot here to answer questions about the resume creation process and about the website! Ask questions in the text box below!</div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="input-group">
+                                <input type="text" id="message-input" class="form-control chatbox-align" style="flex-grow: 9; " placeholder="Type a message...">
+                                <button id="send" class="btn form-control btn-primary chatbox-align" style="">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<template id="chat-template">
+        <div class="d-flex flex-column mb-4">
+            <div class="rounded p-2 text-white rounded p-2">test</div>
+        </div>
+</template>
