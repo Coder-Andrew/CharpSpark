@@ -8,6 +8,7 @@ using ResuMeta.ViewModels;
 using System.Linq;
 using ResuMeta.Services.Concrete;
 using ResuMeta.Services.Abstract;
+using ResuMeta.Data;
 
 namespace ResuMeta.Controllers;
 
@@ -15,14 +16,14 @@ public class ResumeController : Controller
 {
     private readonly ILogger<ResumeController> _logger;
     private readonly IRepository<UserInfo> _userInfo;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
 
     public ResumeController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
-        UserManager<IdentityUser> userManager,
+        UserManager<ApplicationUser> userManager,
         IRepository<Resume> resumeRepo,
         IResumeService resumeService
         )

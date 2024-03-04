@@ -12,13 +12,16 @@ namespace ResuMeta.Utilities
 {
     public static class SeedUsers
     {
+        
         public static async Task Initialize(IServiceProvider serviceProvider, SeedUserInfo[] seedData, string seedUserPw)
         {
             try
             {
                 using (var context = new ResuMetaDbContext(serviceProvider.GetRequiredService<DbContextOptions<ResuMetaDbContext>>()))
                 {
-                    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    //var passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher<ApplicationUser>>();
+
 
                     foreach(var u in seedData)
                     {
@@ -38,16 +41,22 @@ namespace ResuMeta.Utilities
             }
         }
 
-        private static async Task<string> EnsureUser(UserManager<IdentityUser> userManager, string password, string username, string email, bool emailConfirmed)
+        private static async Task<string> EnsureUser(UserManager<ApplicationUser> userManager, string password, string username, string email, bool emailConfirmed)
         {
             var user = await userManager.FindByNameAsync(username);
             if (user == null)
             {
-                user = new IdentityUser 
+                user = new ApplicationUser 
                 { 
                     UserName = username, 
                     Email = email, 
-                    EmailConfirmed = emailConfirmed 
+                    EmailConfirmed = emailConfirmed
+                    // SecurityQuestion1 = u.SecurityQuestion1,
+                    // SecurityAnswer1 = passwordHasher.HashPassword(user, u.SecurityAnswer1),
+                    // SecurityQuestion2 = u.SecurityQuestion2,
+                    // SecurityAnswer2 = passwordHasher.HashPassword(user, u.SecurityAnswer2),
+                    // SecurityQuestion3 = u.SecurityQuestion3,
+                    // SecurityAnswer3 = passwordHasher.HashPassword(user, u.SecurityAnswer3)
                 };
                 await userManager.CreateAsync(user, password);
             }

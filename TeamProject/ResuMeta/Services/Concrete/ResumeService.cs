@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using ResuMeta.Models.DTO;
 using ResuMeta.ViewModels;
+using ResuMeta.Data;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -43,7 +44,7 @@ namespace ResuMeta.Services.Concrete
     }
     public class ResumeService : IResumeService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<ResumeService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IRepository<Education> _education;
@@ -53,7 +54,7 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<Resume> _resumeRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
             IRepository<Education> education,
             IRepository<Degree> degree,
