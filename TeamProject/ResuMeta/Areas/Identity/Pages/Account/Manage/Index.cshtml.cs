@@ -12,19 +12,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ResuMeta.Models;
+using ResuMeta.Data;
 
 namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ResuMetaDbContext _ResuMetaDbContext;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ResuMetaDbContext context,
             IWebHostEnvironment hostingEnvironment)
         {
@@ -90,7 +91,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             public IFormFile NewProfilePicture { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(ApplicationUser user)
         {
             var userId = await _userManager.GetUserIdAsync(user);
             var currentUser = await _ResuMetaDbContext.UserInfos.FirstOrDefaultAsync(u => u.AspnetIdentityId == userId);

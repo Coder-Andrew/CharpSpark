@@ -19,27 +19,30 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ResuMeta.Models;
+using ResuMeta.Data;
 
 namespace ResuMeta.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ResuMetaDbContext _ResuMetaDbContext;
+        private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ResuMetaDbContext context)
+            ResuMetaDbContext context,
+            IPasswordHasher<ApplicationUser> passwordHasher)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,6 +51,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _ResuMetaDbContext = context;
+            _passwordHasher = passwordHasher;
         }
 
         /// <summary>
@@ -73,6 +77,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        public string HashAnswer(string answer)
+        {
+            return _passwordHasher.HashPassword(null, answer);
+        }
         public class InputModel
         {
             /// <summary>
@@ -116,6 +125,19 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            
+            [Required]
+            public string SecurityQuestion1 { get; set; }
+            [Required]
+            public string SecurityAnswer1 { get; set; }
+            [Required]
+            public string SecurityQuestion2 { get; set; }
+            [Required]
+            public string SecurityAnswer2 { get; set; }
+            [Required]
+            public string SecurityQuestion3 { get; set; }
+            [Required]
+            public string SecurityAnswer3 { get; set; }
         }
 
 
@@ -132,7 +154,12 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
+                user.SecurityQuestion1 = Input.SecurityQuestion1;
+                 user.SecurityAnswer1 = HashAnswer(Input.SecurityAnswer1);
+                 user.SecurityQuestion2 = Input.SecurityQuestion2;
+                 user.SecurityAnswer2 = HashAnswer(Input.SecurityAnswer2);
+                 user.SecurityQuestion3 = Input.SecurityQuestion3;
+                 user.SecurityAnswer3 = HashAnswer(Input.SecurityAnswer3);
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -186,27 +213,27 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }
