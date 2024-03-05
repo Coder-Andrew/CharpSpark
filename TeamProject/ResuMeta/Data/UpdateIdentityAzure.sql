@@ -117,3 +117,41 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240229070053_addSecurityQuestions', N'8.0.1');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityAnswer1] nvarchar(max) NULL;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityAnswer2] nvarchar(max) NULL;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityAnswer3] nvarchar(max) NULL;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityQuestion1] nvarchar(max) NULL;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityQuestion2] nvarchar(max) NULL;
+GO
+
+ALTER TABLE [AspNetUsers] ADD [SecurityQuestion3] nvarchar(max) NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240229071748_addSecurityQuestionsAndAnswers', N'8.0.1');
+GO
+
+COMMIT;
+GO
+
