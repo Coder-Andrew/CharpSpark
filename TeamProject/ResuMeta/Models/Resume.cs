@@ -27,7 +27,7 @@ public partial class Resume
     public virtual ICollection<Education> Educations { get; set; } = new List<Education>();
 
     [InverseProperty("Resume")]
-    public virtual ICollection<EmployementHistory> EmployementHistories { get; set; } = new List<EmployementHistory>();
+    public virtual ICollection<EmploymentHistory> EmploymentHistories { get; set; } = new List<EmploymentHistory>();
 
     [InverseProperty("Resume")]
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();

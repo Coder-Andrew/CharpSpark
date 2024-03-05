@@ -27,6 +27,22 @@
 
             </div>
         </div>
+
+
+      <div class="row mt-3 d-flex form-group" id="employmentForm">
+            <h4>Employment</h4>
+            <hr \>
+             <div class="d-flex justify-content-center">
+                <button class="btn bg-success border-0 d-flex mx-1 text-center" id="employment-add-btn" style="width: 50px;">Add</button>
+                <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="employment-clear-btn" style="width: 60px;">Clear</button>
+            </div>
+            <div id="employment-box">
+
+            </div>
+        </div>
+
+
+
         <div class="row mt-3 d-flex form-group" id="skill-achievements-form">
             <h4 class="h4 mt-4">Skills & Achievements</h4>
             <hr />
@@ -168,6 +184,58 @@
         <button class="btn bg-danger text-white border-0">Delete</button>
     </div>
 </template>
+
+
+
+<template id="employment-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <div class="col col-md-6">
+            <label for="company" class="col-form-label title">Company Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="company" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="description" class="col-form-label title">Job Summary:</label>
+            <div class="d-flex justify-content-center">
+                <textarea class="form-control" id="description" rows="5" maxlength="400"
+                    style="width: 80%;"></textarea>
+            </div>
+           <label for="location" class="col-form-label title">Location:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="location" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="jobTitle" class="col-form-label title">Job Title:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="jobTitle" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="startDate" class="col-form-label title">Start Date:</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="startDate" style="width: 80%;" />
+            </div>
+            <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="endDate" style="width: 80%;" />
+            </div>
+            </div>
+            <div class="col col-md-6">
+            <label for="FirstName" class="col-form-label title">Reference First Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="firstName" maxlength="50" style="width: 80%;" />
+            </div>
+            <label for="LastName" class="col-form-label title">Reference Last Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="lastName" maxlength="50" style="width: 80%;" />
+            </div>
+            <label for="phoneNumber" class="col-form-label title">Reference Phone Number:</label>
+            <div class="d-flex justify-content-center">
+                <input type="tel" id="phoneNumber" maxlength="15" style="width: 80%;" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890"/>
+            </div>
+            <button class="btn bg-danger text-white border-0 mt-3" style="width: 50%;">Delete</button>
+        </div>
+        <hr class="mt-3" />
+    </div>
+</template>
+
+
 
 @section Scripts {
     <script type="text/javascript" src="~/js/CreateResume.js"></script>
