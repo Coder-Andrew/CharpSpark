@@ -119,6 +119,13 @@ public class ResumeRepository_Tests
             Assert.That(resume.Projects[0].Name, Is.EqualTo("resuMeta"));
             Assert.That(resume.Projects[0].Link, Is.EqualTo("https://www.github.com/Coder-Andrew/CharpSpark"));
             Assert.That(resume.Projects[0].Summary, Is.EqualTo("Senior Sequence Project"));
+            Assert.That(resume.EmploymentHistory.Count, Is.EqualTo(1));
+            Assert.That(resume.EmploymentHistory[0].Company, Is.EqualTo("WOU"));
+            Assert.That(resume.EmploymentHistory[0].JobTitle, Is.EqualTo("Worker"));
+            Assert.That(resume.EmploymentHistory[0].Description, Is.EqualTo("Description Here"));
+            Assert.That(resume.EmploymentHistory[0].Location, Is.EqualTo("monmouth, or"));
+            Assert.That(resume.EmploymentHistory[0].StartDate, Is.EqualTo(DateOnly.Parse("2024-01-01")));
+            Assert.That(resume.EmploymentHistory[0].EndDate, Is.EqualTo(DateOnly.Parse("2024-03-01")));
         });
     }
 
@@ -157,6 +164,13 @@ public class ResumeRepository_Tests
             Assert.That(resume.Projects[0].Name, Is.EqualTo("DD&BB"));
             Assert.That(resume.Projects[0].Link, Is.EqualTo("localhost:xxxx"));
             Assert.That(resume.Projects[0].Summary, Is.EqualTo("Testing"));
+            Assert.That(resume.EmploymentHistory.Count, Is.EqualTo(1));
+            Assert.That(resume.EmploymentHistory[0].Company, Is.EqualTo("WOU"));
+            Assert.That(resume.EmploymentHistory[0].JobTitle, Is.EqualTo("Worker"));
+            Assert.That(resume.EmploymentHistory[0].Description, Is.EqualTo("Description Here"));
+            Assert.That(resume.EmploymentHistory[0].Location, Is.EqualTo("monmouth, or"));
+            Assert.That(resume.EmploymentHistory[0].StartDate, Is.EqualTo(DateOnly.Parse("2024-01-01")));
+            Assert.That(resume.EmploymentHistory[0].EndDate, Is.EqualTo(DateOnly.Parse("2024-03-01")));
         });
     }
 
@@ -195,6 +209,13 @@ public class ResumeRepository_Tests
             Assert.That(resume.Projects[0].Name, Is.EqualTo("resuMeta"));
             Assert.That(resume.Projects[0].Link, Is.EqualTo("https://www.github.com/Coder-Andrew/CharpSpark"));
             Assert.That(resume.Projects[0].Summary, Is.EqualTo("Senior Sequence Project"));
+            Assert.That(resume.EmploymentHistory.Count, Is.EqualTo(1));
+            Assert.That(resume.EmploymentHistory[0].Company, Is.EqualTo("WOU"));
+            Assert.That(resume.EmploymentHistory[0].JobTitle, Is.EqualTo("Worker"));
+            Assert.That(resume.EmploymentHistory[0].Description, Is.EqualTo("Description Here"));
+            Assert.That(resume.EmploymentHistory[0].Location, Is.EqualTo("monmouth, or"));
+            Assert.That(resume.EmploymentHistory[0].StartDate, Is.EqualTo(DateOnly.Parse("2024-01-01")));
+            Assert.That(resume.EmploymentHistory[0].EndDate, Is.EqualTo(DateOnly.Parse("2024-03-01")));
         });
     }
 
@@ -233,6 +254,13 @@ public class ResumeRepository_Tests
             Assert.That(resume.Projects[0].Name, Is.EqualTo("DD&BB"));
             Assert.That(resume.Projects[0].Link, Is.EqualTo("localhost:xxxx"));
             Assert.That(resume.Projects[0].Summary, Is.EqualTo("Testing"));
+            Assert.That(resume.EmploymentHistory.Count, Is.EqualTo(1));
+            Assert.That(resume.EmploymentHistory[0].Company, Is.EqualTo("WOU"));
+            Assert.That(resume.EmploymentHistory[0].JobTitle, Is.EqualTo("Worker"));
+            Assert.That(resume.EmploymentHistory[0].Description, Is.EqualTo("Description Here"));
+            Assert.That(resume.EmploymentHistory[0].Location, Is.EqualTo("monmouth, or"));
+            Assert.That(resume.EmploymentHistory[0].StartDate, Is.EqualTo(DateOnly.Parse("2024-01-01")));
+            Assert.That(resume.EmploymentHistory[0].EndDate, Is.EqualTo(DateOnly.Parse("2024-03-01")));
         });
     }
 
