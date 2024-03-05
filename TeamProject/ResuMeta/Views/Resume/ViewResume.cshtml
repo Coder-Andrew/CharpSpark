@@ -57,6 +57,46 @@
                         }
                     </div>
                     <br />
+
+
+
+
+                    <div>
+                        <h2 class="title">Employment History</h2>
+                        <hr />
+                        @foreach (var employmentHistory in Model.EmploymentHistory!)
+                        {
+                            <p><strong>Institution:</strong> @employmentHistory.Company</p>
+                            <p><strong>Summary:</strong> @employmentHistory.Description</p>
+                            <p><strong>Location:</strong> @employmentHistory.Location</p>
+                            <p><strong>Job Title:</strong> @employmentHistory.JobTitle</p>
+
+                            <p>
+                                <strong>Dates:</strong>
+                                @employmentHistory.StartDate?.ToString("MMM yyyy") -
+                                @employmentHistory.EndDate?.ToString("MMM yyyy")
+                            </p>
+                            <br />
+                        }
+                    </div>
+                    <br />
+                    <div>
+                        <h2 class="title">Reference</h2>
+                        <hr />
+                        @foreach (var referenceContactInfo in Model.ReferenceContactInfo!)
+                        {
+                            <p><strong>First Name:</strong> @referenceContactInfo.FirstName</p>
+                            <p><strong>Last Name:</strong> @referenceContactInfo.LastName</p>
+                            <p><strong>Phone:</strong> @referenceContactInfo.PhoneNumber</p>
+                            <br />
+                        }
+                    </div>
+                    <br />
+
+
+
+
+
                     <div>
                         <h2 class="title">Skills</h2>
                         <hr />

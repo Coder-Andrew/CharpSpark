@@ -21,7 +21,7 @@ public partial class ResuMetaDbContext : DbContext
 
     public virtual DbSet<Education> Educations { get; set; }
 
-    public virtual DbSet<EmployementHistory> EmployementHistories { get; set; }
+    public virtual DbSet<EmploymentHistory> EmploymentHistories { get; set; }
 
     public virtual DbSet<Project> Projects { get; set; }
 
@@ -71,13 +71,13 @@ public partial class ResuMetaDbContext : DbContext
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Educations).HasConstraintName("Fk Education UserInfo Id");
         });
 
-        modelBuilder.Entity<EmployementHistory>(entity =>
+        modelBuilder.Entity<EmploymentHistory>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Employem__3214EC07D1EE8CA9");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.EmploymentHistories).HasConstraintName("Fk EmploymentHistory Resume Id");
 
-            entity.HasOne(d => d.UserInfo).WithMany(p => p.EmployementHistories).HasConstraintName("Fk EmployementHistory UserInfo Id");
+            entity.HasOne(d => d.UserInfo).WithMany(p => p.EmploymentHistories).HasConstraintName("Fk EmploymentHistory UserInfo Id");
         });
 
         modelBuilder.Entity<Project>(entity =>
@@ -93,7 +93,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Referenc__3214EC0733FBEFF1");
 
-            entity.HasOne(d => d.EmployementHistory).WithMany(p => p.ReferenceContactInfos).HasConstraintName("Fk ReferenceContactInfo EmployementHistory Id");
+            entity.HasOne(d => d.EmploymentHistory).WithMany(p => p.ReferenceContactInfos).HasConstraintName("Fk ReferenceContactInfo EmploymentHistory Id");
         });
 
         modelBuilder.Entity<Resume>(entity =>

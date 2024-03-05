@@ -15,5 +15,8 @@
         public List<SkillVM>? Skills { get; set; }
         public List<AchievementVM>? Achievements { get; set; }
         public List<ProjectVM>? Projects { get; set; }
+        public List<EmploymentHistoryVM>? EmploymentHistory { get; set; }
+        public List<ReferenceContactInfoVM>? ReferenceContactInfo { get; set; }
+
     }
 }

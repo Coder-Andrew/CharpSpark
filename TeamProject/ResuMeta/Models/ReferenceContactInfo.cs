@@ -12,7 +12,7 @@ public partial class ReferenceContactInfo
     [Key]
     public int Id { get; set; }
 
-    public int? EmployementHistoryId { get; set; }
+    public int? EmploymentHistoryId { get; set; }
 
     [StringLength(50)]
     public string? FirstName { get; set; }
@@ -23,7 +23,7 @@ public partial class ReferenceContactInfo
     [StringLength(12)]
     public string? PhoneNumber { get; set; }
 
-    [ForeignKey("EmployementHistoryId")]
+    [ForeignKey("EmploymentHistoryId")]
     [InverseProperty("ReferenceContactInfos")]
-    public virtual EmployementHistory? EmployementHistory { get; set; }
+    public virtual EmploymentHistory? EmploymentHistory { get; set; }
 }

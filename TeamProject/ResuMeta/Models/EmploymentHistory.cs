@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ResuMeta.Models;
 
-[Table("EmployementHistory")]
-public partial class EmployementHistory
+[Table("EmploymentHistory")]
+public partial class EmploymentHistory
 {
     [Key]
     public int Id { get; set; }
@@ -20,18 +20,24 @@ public partial class EmployementHistory
     [StringLength(250)]
     public string? Description { get; set; }
 
+    [StringLength(100)]
+    public string? Location { get; set; }
+
+    [StringLength(100)]
+    public string? JobTitle { get; set; }
+
     public DateOnly? StartDate { get; set; }
 
     public DateOnly? EndDate { get; set; }
 
-    [InverseProperty("EmployementHistory")]
+    [InverseProperty("EmploymentHistory")]
     public virtual ICollection<ReferenceContactInfo> ReferenceContactInfos { get; set; } = new List<ReferenceContactInfo>();
 
     [ForeignKey("ResumeId")]
-    [InverseProperty("EmployementHistories")]
+    [InverseProperty("EmploymentHistories")]
     public virtual Resume? Resume { get; set; }
 
     [ForeignKey("UserInfoId")]
-    [InverseProperty("EmployementHistories")]
+    [InverseProperty("EmploymentHistories")]
     public virtual UserInfo? UserInfo { get; set; }
 }

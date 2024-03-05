@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ResuMeta.DAL.Abstract;
 using ResuMeta.Models;
@@ -60,6 +62,24 @@ namespace ResuMeta.DAL.Concrete
                         });
                     }
                 }
+
+
+                var employmentHistory = userResume.EmploymentHistories.Select(e => e.ReferenceContactInfos).ToList();
+                var referenceContactInfos = new List<ReferenceContactInfoVM>();
+                foreach (var eh in userResume.EmploymentHistories)
+                {
+                    foreach (var r in eh.ReferenceContactInfos)
+                    {
+                        referenceContactInfos.Add(new ReferenceContactInfoVM
+                        {
+                            FirstName = r.FirstName,
+                            LastName = r.LastName,
+                            PhoneNumber = r.PhoneNumber
+                        });
+                    }
+                }
+
+
                 return new ResumeVM
                 {
                     Degree = degrees,
@@ -71,6 +91,20 @@ namespace ResuMeta.DAL.Concrete
                         EndDate = e.EndDate,
                         Completion = e.Completion
                     }).ToList(),
+
+
+                    ReferenceContactInfo = referenceContactInfos,
+                    EmploymentHistory = userResume.EmploymentHistories.Select(e => new EmploymentHistoryVM
+                    {
+                        Company = e.Company,
+                        Description = e.Description,
+                        Location = e.Location,
+                        JobTitle = e.JobTitle,
+                        StartDate = e.StartDate,
+                        EndDate = e.EndDate
+                    }).ToList(),
+
+
                     ResumeId = resumeId,
                     FirstName = userResume.UserInfo?.FirstName,
                     LastName = userResume.UserInfo?.LastName,

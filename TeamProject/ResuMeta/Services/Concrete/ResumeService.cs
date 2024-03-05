@@ -42,6 +42,22 @@ namespace ResuMeta.Services.Concrete
         public string? complete { get; set; }
         public List<JsonDegree>? degree { get; set; }
     }
+    class JsonReferenceContactInfo
+    {
+        public string? firstName { get; set; }
+        public string? lastName { get; set; }
+        public string? phoneNumber { get; set; }
+    }
+    class JsonEmploymentHistory
+    {
+        public string? company { get; set; }
+        public string? description { get; set; }
+        public string? location { get; set; }
+        public string? jobTitle { get; set; }
+        public string? startDate { get; set; }
+        public string? endDate { get; set; }
+        public List<JsonReferenceContactInfo>? referenceContactInfo { get; set; }
+    }
     class JsonAchievement
     {
         public string? title { get; set; }
@@ -52,6 +68,7 @@ namespace ResuMeta.Services.Concrete
     {
         public string? id { get; set; }
         public List<JsonEducation>? education { get; set; }
+        public List<JsonEmploymentHistory>? employment { get; set; }
         public List<JsonSkill>? skills { get; set; }
         public List<JsonResume>? resume { get; set; }
         public List<JsonAchievement>? achievements { get; set; }
@@ -66,6 +83,8 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IRepository<Education> _education;
         private readonly IRepository<Degree> _degree;
+        private readonly IRepository<EmploymentHistory> _employmentHistory;
+        private readonly IRepository<ReferenceContactInfo> _referenceContactInfo;
         private readonly IRepository<UserSkill> _userSkills;
         private readonly ISkillsRepository _skillsRepository;
         private readonly IRepository<Resume> _resumeRepository;
@@ -78,6 +97,8 @@ namespace ResuMeta.Services.Concrete
             IRepository<UserInfo> userInfo,
             IRepository<Education> education,
             IRepository<Degree> degree,
+            IRepository<EmploymentHistory> employmentHistory,
+            IRepository<ReferenceContactInfo> referenceContactInfo,
             IRepository<UserSkill> userSkills,
             ISkillsRepository skillsRepository,
             IRepository<Resume> resumeRepository,
@@ -91,6 +112,8 @@ namespace ResuMeta.Services.Concrete
             _userInfo = userInfo;
             _education = education;
             _degree = degree;
+            _employmentHistory = employmentHistory;
+            _referenceContactInfo = referenceContactInfo;
             _userSkills = userSkills;
             _skillsRepository = skillsRepository;
             _resumeRepository = resumeRepository;
@@ -142,6 +165,44 @@ namespace ResuMeta.Services.Concrete
                         _degree.AddOrUpdate(currDegree);
                     }
                 }
+
+            // if(resumeInfo.EmploymentHistory != null)
+            // {
+                foreach (JsonEmploymentHistory eh in resumeInfo.employment!)
+                {
+                    if (eh.referenceContactInfo == null)
+                    {
+                        throw new Exception("Invalid input");
+                    }
+                    EmploymentHistory currEmployment = new EmploymentHistory
+                    {
+                        UserInfoId = Int32.Parse(resumeInfo.id!),
+                        Company = eh.company,
+                        Description = eh.description,
+                        Location = eh.location,
+                        JobTitle = eh.jobTitle,
+                        StartDate = DateOnly.Parse(eh.startDate!),
+                        EndDate = DateOnly.Parse(eh.endDate!),
+                        Resume = resume
+                    };
+                    EmploymentHistory newUserEmployment = _employmentHistory.AddOrUpdate(currEmployment);
+                    _logger.LogInformation("Added or updated EmploymentHistory");
+                    foreach (JsonReferenceContactInfo referenceContactInfo in eh.referenceContactInfo!)
+                    {
+                        ReferenceContactInfo currReference = new ReferenceContactInfo
+                        {
+                            EmploymentHistoryId = newUserEmployment.Id,
+                            FirstName = referenceContactInfo.firstName,
+                            LastName = referenceContactInfo.lastName,
+                            PhoneNumber = referenceContactInfo.phoneNumber
+                        };
+                        ReferenceContactInfo newReferenceContactInfo = _referenceContactInfo.AddOrUpdate(currReference);
+                        _logger.LogInformation("Added or updated ReferenceContactInfo with ID" );
+                    }
+                }
+           // }
+            
+
                 foreach (JsonSkill jsonSkill in resumeInfo.skills!)
                 {
                     Skill skill = _skillsRepository.FindById(jsonSkill.skillId);

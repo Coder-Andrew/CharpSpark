@@ -25,6 +25,18 @@ INSERT INTO [Degree] ([Id], [EducationId], [Type], [Major], [Minor]) VALUES
     (3, 3, 'Master', 'Computer Science', 'N/A'),
     (4, 4, 'Bachelor', 'Computer Science', 'Mathematics');
 
+INSERT INTO [EmploymentHistory] ([Id], [UserInfoId], [ResumeId], [Company], [Description], [Location], [JobTitle], [StartDate], [EndDate]) VALUES
+    (1, 1, 1, 'WOU', 'Description Here', 'monmouth, or', 'Worker', '2024-01-01', '2024-03-01'),
+    (2, 1, 2, 'WOU', 'Description Here', 'monmouth, or','Worker', '2024-01-01', '2024-03-01'),
+    (3, 2, 4, 'WOU', 'Description Here', 'monmouth, or','Worker', '2024-01-01', '2024-03-01'),
+    (4, 2, 5, 'WOU', 'Description Here', 'monmouth, or','Worker', '2024-01-01', '2024-03-01');
+
+INSERT INTO [ReferenceContactInfo] ([Id], [EmploymentHistoryId], [FirstName], [LastName], [PhoneNumber]) VALUES
+    (1, 1, "John",  "Doe", "555-555-5555"),
+    (2, 2, "John",  "Doe", "555-555-5555"),
+    (3, 3, "John",  "Doe", "555-555-5555"),
+    (4, 4, "John",  "Doe", "555-555-5555");
+
 INSERT INTO [Skills] ([Id], [SkillName]) VALUES
     (1, "Python"),
     (2, "Java"),
