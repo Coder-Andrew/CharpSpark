@@ -9,74 +9,233 @@
 <div class="text-center">
     <h1 class="display-4 title">Create New Resume</h1>
     <div class="container">
+        <div id="validation">
+            <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
+                <strong>Validation Error</strong>
+                <p id="validationText"></p>
+            </div>
+        </div>
+        <input type="hidden" id="userId" value="@Model.UserId" />
         <div class="row mt-3 d-flex form-group" id="educationForm">
             <h4>Education</h4>
             <hr \>
-            <div id="validation">
-                <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
-                    <strong>Validation Error</strong>
-                    <p id="validationText"></p>
+             <div class="d-flex justify-content-center">
+                <button class="btn bg-success border-0 d-flex mx-1 text-center" id="education-add-btn" style="width: 50px;">Add</button>
+                <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="education-clear-btn" style="width: 60px;">Clear</button>
+            </div>
+            <div id="education-box">
+
+            </div>
+        </div>
+
+
+      <div class="row mt-3 d-flex form-group" id="employmentForm">
+            <h4>Employment</h4>
+            <hr \>
+             <div class="d-flex justify-content-center">
+                <button class="btn bg-success border-0 d-flex mx-1 text-center" id="employment-add-btn" style="width: 50px;">Add</button>
+                <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="employment-clear-btn" style="width: 60px;">Clear</button>
+            </div>
+            <div id="employment-box">
+
+            </div>
+        </div>
+
+
+
+        <div class="row mt-3 d-flex form-group" id="skill-achievements-form">
+            <h4 class="h4 mt-4">Skills & Achievements</h4>
+            <hr />
+            <div class="col col-md-6 justify-content-center">
+                <label class="col-form-label title">Achievements:</label>
+                <div class="d-flex justify-content-center">
+                    <!-- Achievement Add and Clear buttons -->
+                    <button class="btn bg-success border-0 d-flex mx-1" id="achievement-add-btn">Add</button>
+                    <button class="btn bg-danger border-0 text-white d-flex mx-1"
+                        id="achievement-clear-btn">Clear</button>
+                </div>
+                <div id="achievement-box" class="justify-content-center">
+                    <!-- Achievement box -->
                 </div>
             </div>
-            <input type="hidden" id="userId" value="@Model.UserId" />
             <div class="col col-md-6">
-                <label for="institutionName" class="col-form-label title">Institution Name:</label>
-                <div class="d-flex justify-content-center">
-                    <input type="text" class="form-control" id="institutionName" maxlength="100" style="width: 80%;"/>
-                </div>
-                <label for="educationSummary" class="col-form-label title">Education Summary:</label>
-                <div class="d-flex justify-content-center">
-                    <textarea class="form-control" id="educationSummary" rows="5" maxlength="250" style="width: 80%;"></textarea>
-                </div>
-                <label for="startDate" class="col-form-label title">Start Date:</label>
-                <div class="d-flex justify-content-center">
-                    <input type="date" class="form-control" id="startDate" style="width: 80%;"/>
-                </div>
-                <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
-                <div class="d-flex justify-content-center">
-                    <input type="date" class="form-control" id="endDate" style="width: 80%;"/>
-                </div>
-                <label for="completed" class="col-form-label title">Education Completed:</label>
-                <div class="d-flex justify-content-center">
-                    <select class="form-control" id="completed" style="width: 80%;">
-                        <option selected disabled>Select a value</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col col-md-6">
-                <label for="degreeType" class="col-form-label title">Degree Type:</label>
-                <div class="d-flex justify-content-center">
-                    <select class="form-control" id="degreeType" style="width: 80%;">
-                        <option selected disabled>Select a type</option>
-                        <option value="associate">Associate Degree</option>
-                        <option value="bachelor">Bachelor's Degree</option>
-                        <option value="master">Master's Degree</option>
-                        <option value="doctoral">Doctoral Degree</option>
-                    </select>
-                </div>
-                <label for="major" class="col-form-label title">Major:</label>
-                <div class="d-flex justify-content-center">
-                    <input type="text" id="major" maxlength="50" style="width: 80%;" />
-                </div>
-                <label for="minor" class="col-form-label title">Minor:</label>
-                <div class="d-flex justify-content-center">
-                    <input type="text" id="minor" maxlength="50" style="width: 80%;" />
-                </div>
                 <label class="col-form-label title">Skills:</label>
                 <div class="d-flex justify-content-center">
                     <input type="text" id="skills" maxlength="100" style="width: 80%;" />
-                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown"> <!-- inline styling :| -->
+                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown">
+                        <!-- inline styling :| -->
                     </div>
                 </div>
                 <div class="col" id="skill-col">
                 </div>
             </div>
         </div>
-        <button id="submitInfo" class="btn btn-primary">Submit</button>
+        <div class="row mt-3 d-flex form-group" id="projects-form">
+            <h4 class="h4 mt-4">Projects</h4>
+            <hr />
+            <div class="col col-md-6 justify-content-center">
+                <label class="col-form-label title">Projects:</label>
+                <div class="d-flex justify-content-center">
+                    <!-- Project Add and Clear buttons -->
+                    <button class="btn bg-success border-0 d-flex mx-1" id="project-add-btn">Add</button>
+                    <button class="btn bg-danger border-0 text-white d-flex mx-1" id="project-clear-btn">Clear</button>
+                </div>
+                <div id="project-box" class="justify-content-center">
+                    <!-- Project box -->
+                </div>
+            </div>
+            <div class="col col-md-6">
+
+            </div>
+        </div>
+        <div class="row mt-3 d-flex form-group">
+            <h4 class="h4 mt-4">Personal Summary</h4>
+            <hr />
+            <div id='personal-summary-btn'>
+                <button class="btn bg-success border-0 d-flex mx-1" id="personal-summary-add-btn">Add</button>
+            </div>
+            <div id="personal-summary-box" class="justify-content-center">
+                <!-- Personal Summary box -->
+            </div>
+        </div>
+
+        <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>
     </div>
 </div>
+
+<template id="achievement-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <input type="text" class="achievement-title text-center" maxlength="100" placeholder="Achievement" />
+        <textarea cols="60" rows="3" placeholder="Achievement Description" style="resize: none;"
+            maxlength="250"></textarea>
+        <button class="btn bg-danger text-white border-0">Delete</button>
+    </div>
+</template>
+
+<template id="project-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <input type="text" class="project-name text-center" id="project-name" maxlength="100" placeholder="Project" />
+        <input type="text" class="project-link text-center" id="project-link" maxlength="250"
+            placeholder="Project Link" />
+        <textarea cols="60" rows="3" placeholder="Project Summary" id="project-summary" style="resize: none;"
+            maxlength="250"></textarea>
+        <button class="btn bg-danger text-white border-0">Delete</button>
+    </div>
+</template>
+
+<template id="education-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <div class="col col-md-6">
+            <label for="institutionName" class="col-form-label title">Institution Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="institutionName" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="educationSummary" class="col-form-label title">Education Summary:</label>
+            <div class="d-flex justify-content-center">
+                <textarea class="form-control" id="educationSummary" rows="5" maxlength="250"
+                    style="width: 80%;"></textarea>
+            </div>
+            <label for="startDate" class="col-form-label title">Start Date:</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="startDate" style="width: 80%;" />
+            </div>
+            <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="endDate" style="width: 80%;" />
+            </div>
+            <label for="completed" class="col-form-label title">Education Completed:</label>
+            <div class="d-flex justify-content-center">
+                <select class="form-control" id="completed" style="width: 80%;">
+                    <option selected disabled>Select a value</option>
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <label for="degreeType" class="col-form-label title">Degree Type:</label>
+            <div class="d-flex justify-content-center">
+                <select class="form-control" id="degreeType" style="width: 80%;">
+                    <option selected disabled>Select a type</option>
+                    <option value="Associate">Associate Degree</option>
+                    <option value="Bachelor">Bachelor's Degree</option>
+                    <option value="Master">Master's Degree</option>
+                    <option value="Doctoral">Doctoral Degree</option>
+                </select>
+            </div>
+            <label for="major" class="col-form-label title">Major:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="major" maxlength="50" style="width: 80%;" />
+            </div>
+            <label for="minor" class="col-form-label title">Minor:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="minor" maxlength="50" style="width: 80%;" />
+            </div>
+            <button class="btn bg-danger text-white border-0 mt-3" style="width: 50%;">Delete</button>
+        </div>
+        <hr class="mt-3" />
+    </div>
+</template>
+
+<template id="personal-summary-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <textarea cols="60" rows="3" placeholder="Personal Summary" id="personal-summary" style="resize: none;"
+            maxlength="250">@Model.Summary</textarea>
+        <button class="btn bg-danger text-white border-0">Delete</button>
+    </div>
+</template>
+
+
+
+<template id="employment-template">
+    <div class="row justify-content-center mx-auto" style="width: 80%;">
+        <div class="col col-md-6">
+            <label for="company" class="col-form-label title">Company Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="company" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="description" class="col-form-label title">Job Summary:</label>
+            <div class="d-flex justify-content-center">
+                <textarea class="form-control" id="description" rows="5" maxlength="400"
+                    style="width: 80%;"></textarea>
+            </div>
+           <label for="location" class="col-form-label title">Location:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="location" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="jobTitle" class="col-form-label title">Job Title:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" class="form-control" id="jobTitle" maxlength="100" style="width: 80%;" />
+            </div>
+            <label for="startDate" class="col-form-label title">Start Date:</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="startDate" style="width: 80%;" />
+            </div>
+            <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
+            <div class="d-flex justify-content-center">
+                <input type="date" class="form-control" id="endDate" style="width: 80%;" />
+            </div>
+            </div>
+            <div class="col col-md-6">
+            <label for="FirstName" class="col-form-label title">Reference First Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="firstName" maxlength="50" style="width: 80%;" />
+            </div>
+            <label for="LastName" class="col-form-label title">Reference Last Name:</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" id="lastName" maxlength="50" style="width: 80%;" />
+            </div>
+            <label for="phoneNumber" class="col-form-label title">Reference Phone Number:</label>
+            <div class="d-flex justify-content-center">
+                <input type="tel" id="phoneNumber" maxlength="15" style="width: 80%;" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-456-7890"/>
+            </div>
+            <button class="btn bg-danger text-white border-0 mt-3" style="width: 50%;">Delete</button>
+        </div>
+        <hr class="mt-3" />
+    </div>
+</template>
+
+
 
 @section Scripts {
     <script type="text/javascript" src="~/js/CreateResume.js"></script>

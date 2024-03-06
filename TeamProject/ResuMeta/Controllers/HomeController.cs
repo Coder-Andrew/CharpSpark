@@ -9,16 +9,17 @@ using ResuMeta.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using ResuMeta.Services.Abstract;
+using ResuMeta.Data;
 namespace ResuMeta.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IRepository<UserInfo> _userInfo;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
-    public HomeController(ILogger<HomeController> logger, IRepository<UserInfo> userInfo, UserManager<IdentityUser> userManager, IRepository<Resume> resumeRepo, IResumeService resumeService)
+    public HomeController(ILogger<HomeController> logger, IRepository<UserInfo> userInfo, UserManager<ApplicationUser> userManager, IRepository<Resume> resumeRepo, IResumeService resumeService)
     {
         _logger = logger;
         _userInfo = userInfo;
@@ -30,18 +31,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        string currUserId = _userManager.GetUserId(User);
-        if (currUserId == null)
-        {
-            return View();
-        }    
-        var user = _userInfo.GetAll().Where(x => x.AspnetIdentityId == currUserId).FirstOrDefault();
-        if (user == null)
-        {
-            return View();
-        }
-        List<int> resumeIdList = _resumeService.GetResumeIdList(user.Id);
-        return resumeIdList.Any() ? View(resumeIdList) : View();
+        return View("Index",User.Identity.IsAuthenticated);
     }
 
     public IActionResult Privacy()
