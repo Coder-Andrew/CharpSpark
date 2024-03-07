@@ -86,6 +86,7 @@ async function submitInfo() {
     if (educationContainer.children.length === 0) {
         validationArea.style.display = "block";
         validationMessage.innerHTML = "Please add at least one education entry";
+        window.scrollTo(0, 0);
         return;
     }
     if (validateEducation(educationContainer, validationArea, validationMessage))
@@ -216,6 +217,7 @@ function checkForIllegalCharacters(inputElement, validationElement, validationMe
     if (inputElement.value.match(specialPattern)) {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = "Invalid character in form";
+        window.scrollTo(0, 0);
         return true;
     }
     return false;
@@ -228,6 +230,7 @@ function validateNonEmptyInput(inputElement, validationElement, validationMessag
     if (inputElement.value === "") {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = message;
+        window.scrollTo(0, 0);
         return true;
     }
     return false;
@@ -248,11 +251,13 @@ function validateEducation(educationContainer, validationElement, validationMess
         if (textInputs[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (textInputs[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -260,11 +265,13 @@ function validateEducation(educationContainer, validationElement, validationMess
         if (educationSummaries[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (educationSummaries[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -273,6 +280,7 @@ function validateEducation(educationContainer, validationElement, validationMess
         {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -281,6 +289,7 @@ function validateEducation(educationContainer, validationElement, validationMess
         {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -302,11 +311,13 @@ function validateEmployment(employmentContainer, validationElement, validationMe
         if (textInputs[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (textInputs[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -314,11 +325,13 @@ function validateEmployment(employmentContainer, validationElement, validationMe
         if (employmentSummaries[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (employmentSummaries[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
