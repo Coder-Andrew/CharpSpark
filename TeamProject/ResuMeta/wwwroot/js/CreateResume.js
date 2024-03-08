@@ -118,6 +118,12 @@ async function submitInfo() {
     const personalSummaryContainer = document.getElementById("personal-summary-box");
     if (validatePersonalSummary(personalSummaryContainer, validationArea, validationMessage)) return;
 
+
+    // Validate all dates
+    var startDateInputs = Array.from(document.querySelectorAll('#startDate'));
+    var endDateInputs = Array.from(document.querySelectorAll('#endDate'));
+    if (validateDates(startDateInputs, endDateInputs, validationArea, validationMessage)) return;
+
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
     addEducationFromContainer();
@@ -414,6 +420,25 @@ function validatePersonalSummary(personalSummaryContainer, validationElement, va
         if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
     }
     return false;
+}
+
+function validateDates(startDateInputs, endDateInputs, validationElement, validationMessageElement) {
+    return startDateInputs.some(function(startDateInput, index) {
+        var endDateInput = endDateInputs[index];
+
+        if(startDateInput && endDateInput) {
+            var startDate = new Date(startDateInput.value);
+            var endDate = new Date(endDateInput.value);
+
+            if(startDate > endDate) {
+                validationElement.style.display = "block";
+                validationMessageElement.innerHTML = "Start date must be before end date";
+                window.scrollTo(0, 0);
+                return true;
+            }
+        }
+        return false;
+    });
 }
 
 function addAchievement(containerElement) {
