@@ -46,7 +46,18 @@
         <div class="row mt-3 d-flex form-group" id="skill-achievements-form">
             <h4 class="h4 mt-4">Skills & Achievements</h4>
             <hr />
-            <div class="col col-md-6 justify-content-center">
+            <div class="col col-md-12">
+                <label class="col-form-label title">Skills:</label>
+                <div class="d-flex justify-content-center">
+                    <input type="text" id="skills" maxlength="100" style="width: 50%;" placeholder="Enter a skill..."/>
+                    <div class="dropdown-menu" style="margin-top: 27px; width: 26%;" id="skills-dropdown"> <!-- 26% -->
+                        <!-- inline styling :| -->
+                    </div>
+                </div>
+                <div class="col" id="skill-col">
+                </div>
+            </div>
+            <div class="col col-md-12 justify-content-center">
                 <label class="col-form-label title">Achievements:</label>
                 <div class="d-flex justify-content-center">
                     <!-- Achievement Add and Clear buttons -->
@@ -58,22 +69,11 @@
                     <!-- Achievement box -->
                 </div>
             </div>
-            <div class="col col-md-6">
-                <label class="col-form-label title">Skills:</label>
-                <div class="d-flex justify-content-center">
-                    <input type="text" id="skills" maxlength="100" style="width: 80%;" />
-                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown">
-                        <!-- inline styling :| -->
-                    </div>
-                </div>
-                <div class="col" id="skill-col">
-                </div>
-            </div>
         </div>
         <div class="row mt-3 d-flex form-group" id="projects-form">
             <h4 class="h4 mt-4">Projects</h4>
             <hr />
-            <div class="col col-md-6 justify-content-center">
+            <div class="col col-md-12 justify-content-center">
                 <label class="col-form-label title">Projects:</label>
                 <div class="d-flex justify-content-center">
                     <!-- Project Add and Clear buttons -->

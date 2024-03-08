@@ -29,13 +29,24 @@ function initializePage() {
 
     }, 350), false);
 
+    // Add focus/unfocus event listener to skills
+    skillInput.addEventListener('focus', () => {
+        if (!skillsDropdown.firstElementChild | !skillInput.value) return;
+        skillsDropdown.classList.add("show")
+    });
+    skillInput.addEventListener('blur', (event) => {
+        console.log(event);
+        setTimeout(() => {
+            skillsDropdown.classList.remove("show")
+        }, 100);
+    });
+
     // Add event listener to dropdown
     skillsDropdown.addEventListener('click', (event) => {
-        skillInput.value = "";
+        skillInput.value = "";    
         skillsDropdown.classList.remove("show");
         addSkillToSkillList(event);
     }, false);
-
 
     // get info boxes
     const educationBox = document.getElementById("education-box");
@@ -161,7 +172,8 @@ async function getSkills(subString) {
     const skillsDropdown = document.getElementById('skills-dropdown');
     skillsDropdown.innerHTML = "";
 
-    result.slice(0,10).forEach(skill => {
+    result.slice(0, 10).forEach(skill => {
+        if (selectedSkills.some(s => s.skillId == skill.id)) return;
         const anchor = document.createElement('a');
 
         anchor.classList.add('dropdown-item');
@@ -197,7 +209,7 @@ function addSkillToSkillList(event) {
         skillCol.removeChild(skillPill);
     });
 
-    if (!selectedSkills.includes(skillId)) {
+    if (!selectedSkills.some(s => s.skillId == skillId)) {
         skillCol.appendChild(skillPill);
         selectedSkills.push({ 'skillId': skillId });
     }
