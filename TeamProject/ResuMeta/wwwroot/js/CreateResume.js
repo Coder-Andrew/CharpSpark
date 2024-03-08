@@ -118,6 +118,12 @@ async function submitInfo() {
     const personalSummaryContainer = document.getElementById("personal-summary-box");
     if (validatePersonalSummary(personalSummaryContainer, validationArea, validationMessage)) return;
 
+
+    // Validate all dates
+    var startDateInputs = Array.from(document.querySelectorAll('#startDate'));
+    var endDateInputs = Array.from(document.querySelectorAll('#endDate'));
+    if (validateDates(startDateInputs, endDateInputs, validationArea, validationMessage)) return;
+
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
     addEducationFromContainer();
@@ -254,16 +260,6 @@ function validateEducation(educationContainer, validationElement, validationMess
     const educationSummaries = document.querySelectorAll("#educationSummary");
     const completedList = document.querySelectorAll("#completed");
     const degreeTypeList = document.querySelectorAll("#degreeType");
-    var startDateInput = educationContainer.querySelector('#startDate');
-    var endDateInput = educationContainer.querySelector('#endDate');
-
-    if(!validateDates(startDateInput.id, endDateInput.id))
-    {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = "Start date must be before end date";
-        window.scrollTo(0, 0);
-        return true;
-    }
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -324,16 +320,6 @@ function validateEmployment(employmentContainer, validationElement, validationMe
     const employmentSummaries = document.querySelectorAll("#description");
     // const completedList = document.querySelectorAll("#completed");
     // const degreeTypeList = document.querySelectorAll("#degreeType");
-    var startDateInput = employmentContainer.querySelector('#startDateEmployment');
-    var endDateInput = employmentContainer.querySelector('#endDateEmployment');
-
-    if(!validateDates(startDateInput.id, endDateInput.id))
-    {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = "Start date must be before end date";
-        window.scrollTo(0, 0);
-        return true;
-    }
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -436,14 +422,23 @@ function validatePersonalSummary(personalSummaryContainer, validationElement, va
     return false;
 }
 
-function validateDates(startDateId, endDateId) {
-    const startDate = document.getElementById(startDateId).value;
-    const endDate = document.getElementById(endDateId).value;
+function validateDates(startDateInputs, endDateInputs, validationElement, validationMessageElement) {
+    return startDateInputs.some(function(startDateInput, index) {
+        var endDateInput = endDateInputs[index];
 
-    if (startDate > endDate) {
+        if(startDateInput && endDateInput) {
+            var startDate = new Date(startDateInput.value);
+            var endDate = new Date(endDateInput.value);
+
+            if(startDate > endDate) {
+                validationElement.style.display = "block";
+                validationMessageElement.innerHTML = "Start date must be before end date";
+                window.scrollTo(0, 0);
+                return true;
+            }
+        }
         return false;
-    }
-    return true;
+    });
 }
 
 function addAchievement(containerElement) {
