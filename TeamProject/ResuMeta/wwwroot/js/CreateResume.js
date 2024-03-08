@@ -254,6 +254,16 @@ function validateEducation(educationContainer, validationElement, validationMess
     const educationSummaries = document.querySelectorAll("#educationSummary");
     const completedList = document.querySelectorAll("#completed");
     const degreeTypeList = document.querySelectorAll("#degreeType");
+    var startDateInput = educationContainer.querySelector('#startDate');
+    var endDateInput = educationContainer.querySelector('#endDate');
+
+    if(!validateDates(startDateInput.id, endDateInput.id))
+    {
+        validationElement.style.display = "block";
+        validationMessageElement.innerHTML = "Start date must be before end date";
+        window.scrollTo(0, 0);
+        return true;
+    }
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -314,6 +324,16 @@ function validateEmployment(employmentContainer, validationElement, validationMe
     const employmentSummaries = document.querySelectorAll("#description");
     // const completedList = document.querySelectorAll("#completed");
     // const degreeTypeList = document.querySelectorAll("#degreeType");
+    var startDateInput = employmentContainer.querySelector('#startDateEmployment');
+    var endDateInput = employmentContainer.querySelector('#endDateEmployment');
+
+    if(!validateDates(startDateInput.id, endDateInput.id))
+    {
+        validationElement.style.display = "block";
+        validationMessageElement.innerHTML = "Start date must be before end date";
+        window.scrollTo(0, 0);
+        return true;
+    }
 
     for (var i = 0; i < textInputs.length; i++) {
         if (textInputs[i].id === "skills") continue;
@@ -414,6 +434,16 @@ function validatePersonalSummary(personalSummaryContainer, validationElement, va
         if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
     }
     return false;
+}
+
+function validateDates(startDateId, endDateId) {
+    const startDate = document.getElementById(startDateId).value;
+    const endDate = document.getElementById(endDateId).value;
+
+    if (startDate > endDate) {
+        return false;
+    }
+    return true;
 }
 
 function addAchievement(containerElement) {
