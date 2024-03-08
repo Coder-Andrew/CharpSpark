@@ -29,13 +29,24 @@ function initializePage() {
 
     }, 350), false);
 
+    // Add focus/unfocus event listener to skills
+    skillInput.addEventListener('focus', () => {
+        if (!skillsDropdown.firstElementChild | !skillInput.value) return;
+        skillsDropdown.classList.add("show")
+    });
+    skillInput.addEventListener('blur', (event) => {
+        console.log(event);
+        setTimeout(() => {
+            skillsDropdown.classList.remove("show")
+        }, 100);
+    });
+
     // Add event listener to dropdown
     skillsDropdown.addEventListener('click', (event) => {
-        skillInput.value = "";
+        skillInput.value = "";    
         skillsDropdown.classList.remove("show");
         addSkillToSkillList(event);
     }, false);
-
 
     // get info boxes
     const educationBox = document.getElementById("education-box");
@@ -86,6 +97,7 @@ async function submitInfo() {
     if (educationContainer.children.length === 0) {
         validationArea.style.display = "block";
         validationMessage.innerHTML = "Please add at least one education entry";
+        window.scrollTo(0, 0);
         return;
     }
     if (validateEducation(educationContainer, validationArea, validationMessage))
@@ -160,7 +172,8 @@ async function getSkills(subString) {
     const skillsDropdown = document.getElementById('skills-dropdown');
     skillsDropdown.innerHTML = "";
 
-    result.slice(0,10).forEach(skill => {
+    result.slice(0, 10).forEach(skill => {
+        if (selectedSkills.some(s => s.skillId == skill.id)) return;
         const anchor = document.createElement('a');
 
         anchor.classList.add('dropdown-item');
@@ -196,7 +209,7 @@ function addSkillToSkillList(event) {
         skillCol.removeChild(skillPill);
     });
 
-    if (!selectedSkills.includes(skillId)) {
+    if (!selectedSkills.some(s => s.skillId == skillId)) {
         skillCol.appendChild(skillPill);
         selectedSkills.push({ 'skillId': skillId });
     }
@@ -216,6 +229,7 @@ function checkForIllegalCharacters(inputElement, validationElement, validationMe
     if (inputElement.value.match(specialPattern)) {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = "Invalid character in form";
+        window.scrollTo(0, 0);
         return true;
     }
     return false;
@@ -228,6 +242,7 @@ function validateNonEmptyInput(inputElement, validationElement, validationMessag
     if (inputElement.value === "") {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = message;
+        window.scrollTo(0, 0);
         return true;
     }
     return false;
@@ -248,11 +263,13 @@ function validateEducation(educationContainer, validationElement, validationMess
         if (textInputs[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (textInputs[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -260,11 +277,13 @@ function validateEducation(educationContainer, validationElement, validationMess
         if (educationSummaries[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (educationSummaries[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -273,6 +292,7 @@ function validateEducation(educationContainer, validationElement, validationMess
         {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -281,6 +301,7 @@ function validateEducation(educationContainer, validationElement, validationMess
         {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -302,11 +323,13 @@ function validateEmployment(employmentContainer, validationElement, validationMe
         if (textInputs[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (textInputs[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
@@ -314,11 +337,13 @@ function validateEmployment(employmentContainer, validationElement, validationMe
         if (employmentSummaries[i].value === "") {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Please fill out all fields";
+            window.scrollTo(0, 0);
             return true;
         }
         if (employmentSummaries[i].value.match(specialPattern)) {
             validationElement.style.display = "block";
             validationMessageElement.innerHTML = "Invalid character in form";
+            window.scrollTo(0, 0);
             return true;
         }
     }
