@@ -39,6 +39,17 @@ function initializePage() {
 
 async function exportPdf(quill) {
     console.log("Export PDF button clicked");
+    const validationArea = document.getElementById('validation-area');
+    const errorValidation = document.getElementById('validation-error');
+    var title = document.getElementById('resume-title').value;
+    if (title === "" || title === null || title === "Resume Title") {
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please enter a valid title for your resume. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
+        return;
+    }
 
     const html = quill.root.innerHTML;
     const htmlCoded = encodeURIComponent(html);
@@ -70,11 +81,10 @@ async function exportPdf(quill) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        var title = document.getElementById('resume-title').value;
         link.download = `${title}.pdf`;
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link); // Optional: remove the link from the DOM
+        document.body.removeChild(link); 
         return;
     }
     else {
