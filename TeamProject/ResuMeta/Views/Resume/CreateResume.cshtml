@@ -128,24 +128,24 @@
         <div class="col col-md-6">
             <label for="institutionName" class="col-form-label title">Institution Name:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" class="form-control" id="institutionName" maxlength="100" style="width: 80%;" />
+                <input type="text" class="form-control" id="institutionName" name="institutionName" maxlength="100" style="width: 80%;" />
             </div>
             <label for="educationSummary" class="col-form-label title">Education Summary:</label>
             <div class="d-flex justify-content-center">
-                <textarea class="form-control" id="educationSummary" rows="5" maxlength="250"
+                <textarea class="form-control" id="educationSummary" name="educationSummary" rows="5" maxlength="250"
                     style="width: 80%;"></textarea>
             </div>
             <label for="startDate" class="col-form-label title">Start Date:</label>
             <div class="d-flex justify-content-center">
-                <input type="date" class="form-control" id="startDate" style="width: 80%;" />
+                <input type="date" class="form-control" id="startDate" name="startDate" style="width: 80%;" />
             </div>
             <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
             <div class="d-flex justify-content-center">
-                <input type="date" class="form-control" id="endDate" style="width: 80%;" />
+                <input type="date" class="form-control" id="endDate" name="endDate" style="width: 80%;" />
             </div>
             <label for="completed" class="col-form-label title">Education Completed:</label>
             <div class="d-flex justify-content-center">
-                <select class="form-control" id="completed" style="width: 80%;">
+                <select class="form-control" id="completed" name="completed" style="width: 80%;">
                     <option selected disabled>Select a value</option>
                     <option value="true">True</option>
                     <option value="false">False</option>
@@ -155,7 +155,7 @@
         <div class="col col-md-6">
             <label for="degreeType" class="col-form-label title">Degree Type:</label>
             <div class="d-flex justify-content-center">
-                <select class="form-control" id="degreeType" style="width: 80%;">
+                <select class="form-control" id="degreeType" name="degreeType" style="width: 80%;">
                     <option selected disabled>Select a type</option>
                     <option value="Associate">Associate Degree</option>
                     <option value="Bachelor">Bachelor's Degree</option>
@@ -165,11 +165,11 @@
             </div>
             <label for="major" class="col-form-label title">Major:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" id="major" maxlength="50" style="width: 80%;" />
+                <input type="text" id="major" name="major" maxlength="50" style="width: 80%;" />
             </div>
             <label for="minor" class="col-form-label title">Minor:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" id="minor" maxlength="50" style="width: 80%;" />
+                <input type="text" id="minor" name="minor" maxlength="50" style="width: 80%;" />
             </div>
             <button class="btn bg-danger text-white border-0 mt-3" style="width: 50%;">Delete</button>
         </div>
@@ -238,5 +238,5 @@
 
 
 @section Scripts {
-    <script type="text/javascript" src="~/js/CreateResume.js"></script>
+    <script type="module" src="~/js/CSRefactor.js"></script>
 }

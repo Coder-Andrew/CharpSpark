@@ -65,7 +65,10 @@
                         {
                             <p><strong>Type:</strong> @degree.Type</p>
                             <p><strong>Major:</strong> @degree.Major</p>
-                            <p><strong>Minor:</strong> @degree.Minor</p>
+                            @if (degree.Minor != "N/A")
+                            {
+                                <p><strong>Minor:</strong> @degree.Minor</p>
+                            }
                             <br />
                         }
                         </div>
