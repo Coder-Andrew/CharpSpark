@@ -29,6 +29,13 @@ builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, ser
     return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
 });
 
+builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services) =>
+{
+    httpClient.BaseAddress = new Uri("http://localhost:8080/");
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+    return new NodeService(httpClient);
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -48,6 +55,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
 
 // Used for testing the service without using the Chatgpt API, uncomment to use
