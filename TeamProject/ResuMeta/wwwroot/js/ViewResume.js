@@ -67,8 +67,6 @@ async function exportPdf(quill) {
     if (response.ok) {
         console.log("PDF generated successfully");
         let jsonString = await response.text();
-        console.log(jsonString);
-
         let base64Pdf = jsonString
         let pdfBytes = atob(base64Pdf);
         let pdfArray = new Uint8Array(new ArrayBuffer(pdfBytes.length));
