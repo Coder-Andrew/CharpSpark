@@ -132,7 +132,15 @@ async function submitInfo() {
     achievementList = addAchievementsFromContainer(achievementContainer); 
     projectsList = addProjectsFromContainer(projectContainer);
     personalSummary = addPersonalSummaryFromContainer(personalSummaryContainer);
-   
+    
+    // Ensure form has at least some information inputted
+    if (educationList.length === 0 && employmentList.length === 0 && achievementList.length === 0 && projectsList.length === 0 && selectedSkills.length === 0) {
+        validationArea.style.display = "block";
+        validationMessage.innerHTML = "Please fill out at least one section";
+        window.scrollTo(0, 0);
+        return;
+    }
+
     // Set and Send info
     const resumeInfo = {
         id: userId.value,
