@@ -35,6 +35,23 @@ public class CoverLetterController : Controller
 
     public IActionResult CreateCoverLetter()
     {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        return View();
+    }
+
+    public IActionResult ViewCoverLetter()
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
         return View();
     }
 }
