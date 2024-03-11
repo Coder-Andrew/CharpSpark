@@ -1,3 +1,11 @@
+import {addEducationFromContainer, validateEducation} from './CreateResume_Modules/education-mod.js';
+import {addProjectsFromContainer, validateProjects} from './CreateResume_Modules/project-mod.js';
+import {addPersonalSummaryFromContainer, validatePersonalSummary} from './CreateResume_Modules/personalSummary-mod.js';
+import {addEmploymentFromContainer, validateEmployment} from './CreateResume_Modules/employment-mod.js';
+import {addAchievementsFromContainer, validateAchievements} from './CreateResume_Modules/achievement-mod.js';
+import {validateDates} from './CreateResume_Modules/utility-mod.js';
+
+
 document.addEventListener("DOMContentLoaded", initializePage, false);
 
 let selectedSkills = [];
@@ -5,7 +13,6 @@ let achievementList = [];
 let projectsList = [];
 let educationList = [];
 let employmentList = [];
-let achievementNum = 0;
 let personalSummary = "";
 
 
@@ -93,13 +100,8 @@ async function submitInfo() {
     const validationMessage = document.getElementById("validationText");
     validationMessage.innerHTML = "";
 
+    // Validate all containers
     const educationContainer = document.getElementById("education-box");
-    if (educationContainer.children.length === 0) {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Please add at least one education entry";
-        window.scrollTo(0, 0);
-        return;
-    }
     if (validateEducation(educationContainer, validationArea, validationMessage))
     {
         educationList = [];
@@ -118,7 +120,6 @@ async function submitInfo() {
     const personalSummaryContainer = document.getElementById("personal-summary-box");
     if (validatePersonalSummary(personalSummaryContainer, validationArea, validationMessage)) return;
 
-
     // Validate all dates
     var startDateInputs = Array.from(document.querySelectorAll('#startDate'));
     var endDateInputs = Array.from(document.querySelectorAll('#endDate'));
@@ -126,12 +127,21 @@ async function submitInfo() {
 
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
-    addEducationFromContainer();
-    addEmploymentFromContainer();
-    addAchievementsFromContainer(); 
-    addProjectsFromContainer();
-    addPersonalSummaryFromContainer();
-   
+    educationList = addEducationFromContainer(educationContainer);
+    employmentList = addEmploymentFromContainer(employmentContainer);
+    achievementList = addAchievementsFromContainer(achievementContainer); 
+    projectsList = addProjectsFromContainer(projectContainer);
+    personalSummary = addPersonalSummaryFromContainer(personalSummaryContainer);
+    
+    // Ensure form has at least some information inputted
+    if (educationList.length === 0 && employmentList.length === 0 && achievementList.length === 0 && projectsList.length === 0 && selectedSkills.length === 0) {
+        validationArea.style.display = "block";
+        validationMessage.innerHTML = "Please fill out at least one section";
+        window.scrollTo(0, 0);
+        return;
+    }
+
+    // Set and Send info
     const resumeInfo = {
         id: userId.value,
         education: educationList,
@@ -141,9 +151,7 @@ async function submitInfo() {
         projects: projectsList,
         personalSummary: personalSummary
     };
-
     console.log(resumeInfo);
-
     const response = await fetch(`/api/resume/info`, {
         method: 'PUT',
         headers: {
@@ -156,7 +164,6 @@ async function submitInfo() {
     {
         const responseJson = await response.json();
         const url = responseJson.redirectUrl
-        console.log(url);
         window.location.href = url;
     }
     else
@@ -224,223 +231,6 @@ function addSkillToSkillList(event) {
      console.log(selectedSkills);
 }
 
-function checkForIllegalCharacters(inputElement, validationElement, validationMessageElement) {
-    // Might be better to move this so it finds from the document itself instead of being passed in
-    // because it gets redundant to pass this many parameters in everytime...
-    if (!inputElement | !validationElement | !validationMessageElement) {
-        throw new Error("Elements cannot be null");
-    }
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-
-    if (inputElement.value.match(specialPattern)) {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = "Invalid character in form";
-        window.scrollTo(0, 0);
-        return true;
-    }
-    return false;
-}
-function validateNonEmptyInput(inputElement, validationElement, validationMessageElement, message = "Please fill out all fields") {
-    if (!inputElement | !validationElement | !validationMessageElement) {
-        throw new Error("Elements cannot be null");
-    }
-
-    if (inputElement.value === "") {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = message;
-        window.scrollTo(0, 0);
-        return true;
-    }
-    return false;
-}
-
-function validateEducation(educationContainer, validationElement, validationMessageElement) {
-    var textInputs = educationContainer.querySelectorAll('input');
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-    const educationSummaries = document.querySelectorAll("#educationSummary");
-    const completedList = document.querySelectorAll("#completed");
-    const degreeTypeList = document.querySelectorAll("#degreeType");
-
-    for (var i = 0; i < textInputs.length; i++) {
-        if (textInputs[i].id === "skills") continue;
-        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
-            textInputs[i].value = "N/A";
-        }
-        if (textInputs[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-        if (textInputs[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    for (var i = 0; i < educationSummaries.length; i++) {
-        if (educationSummaries[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-        if (educationSummaries[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    for (var i = 0; i < completedList.length; i++) {
-        if (completedList[i].value === "Select a value" )
-        {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    for (var i = 0; i < degreeTypeList.length; i++) {
-        if (degreeType.value === "Select a type" )
-        {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    return false;
-}  
-
-function validateEmployment(employmentContainer, validationElement, validationMessageElement) {
-    var textInputs = employmentContainer.querySelectorAll('input');
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-    const employmentSummaries = document.querySelectorAll("#description");
-    // const completedList = document.querySelectorAll("#completed");
-    // const degreeTypeList = document.querySelectorAll("#degreeType");
-
-    for (var i = 0; i < textInputs.length; i++) {
-        if (textInputs[i].id === "skills") continue;
-        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
-            textInputs[i].value = "N/A";
-        }
-        if (textInputs[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-        if (textInputs[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    for (var i = 0; i < employmentSummaries.length; i++) {
-        if (employmentSummaries[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            window.scrollTo(0, 0);
-            return true;
-        }
-        if (employmentSummaries[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            window.scrollTo(0, 0);
-            return true;
-        }
-    }
-    // for (var i = 0; i < completedList.length; i++) {
-    //     if (completedList[i].value === "Select a value" )
-    //     {
-    //         validationElement.style.display = "block";
-    //         validationMessageElement.innerHTML = "Please fill out all fields";
-    //         return true;
-    //     }
-    // }
-    // for (var i = 0; i < degreeTypeList.length; i++) {
-    //     if (degreeType.value === "Select a type" )
-    //     {
-    //         validationElement.style.display = "block";
-    //         validationMessageElement.innerHTML = "Please fill out all fields";
-    //         return true;
-    //     }
-    // }
-    return false;
-}    
-
-function validateAchievements(achievementContainer, validationElement, validationMessageElement) {
-    const achievementInputs = achievementContainer.querySelectorAll("input");
-    const achievementTextAreas = achievementContainer.querySelectorAll("textarea");
-
-    // ForEach loop does not respect return statements... so I had to use a regular for loop here
-    for (var i = 0; i < achievementInputs.length; i++) {
-        if (checkForIllegalCharacters(achievementInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(achievementInputs[i], validationElement, validationMessageElement, "Please fill out all achievement titles")) return true;
-    }
-
-    for (var i = 0; i < achievementTextAreas.length; i++) {
-        if (checkForIllegalCharacters(achievementTextAreas[i], validationElement, validationMessageElement)) return true;
-    }
-
-    return false;
-}
-
-function validateProjects(projectContainer, validationElement, validationMessageElement) {
-    const projectInputs = projectContainer.querySelectorAll("input");
-    const projectTextAreas = projectContainer.querySelectorAll("textarea");
-
-
-    for (var i = 0; i < projectInputs.length; i++) {
-        if (checkForIllegalCharacters(projectInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(projectInputs[i], validationElement, validationMessageElement, "Please fill out all project names")) return true;
-    }
-
-    for (var i = 0; i < projectTextAreas.length; i++) {
-        if (checkForIllegalCharacters(projectTextAreas[i], validationElement, validationMessageElement)) return true;
-    }
-
-    return false;
-}
-
-function validatePersonalSummary(personalSummaryContainer, validationElement, validationMessageElement) {
-    var personalSummaryInputs = personalSummaryContainer.querySelectorAll('input');
-    var personalSummaryTextArea = personalSummaryContainer.querySelectorAll('textarea');
-
-    for (var i = 0; i < personalSummaryInputs.length; i++) {
-        if (checkForIllegalCharacters(personalSummaryInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(personalSummaryInputs[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
-    }
-
-    for (var i = 0; i < personalSummaryTextArea.length; i++) {
-        if (checkForIllegalCharacters(personalSummaryTextArea[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
-    }
-    return false;
-}
-
-function validateDates(startDateInputs, endDateInputs, validationElement, validationMessageElement) {
-    return startDateInputs.some(function(startDateInput, index) {
-        var endDateInput = endDateInputs[index];
-
-        if(startDateInput && endDateInput) {
-            var startDate = new Date(startDateInput.value);
-            var endDate = new Date(endDateInput.value);
-
-            if(startDate > endDate) {
-                validationElement.style.display = "block";
-                validationMessageElement.innerHTML = "Start date must be before end date";
-                window.scrollTo(0, 0);
-                return true;
-            }
-        }
-        return false;
-    });
-}
-
 function addAchievement(containerElement) {
     const achievementTemplate = document.getElementById("achievement-template");
     const achievementClone = achievementTemplate.content.cloneNode(true);
@@ -491,21 +281,18 @@ function addEducation(containerElement) {
     }, false);
 
     containerElement.appendChild(educationClone);
-
 }
 
 function addEmployment(containerElement) {
     const employmentTemplate = document.getElementById("employment-template");
     const employmentClone = employmentTemplate.content.cloneNode(true);
     const cloneRoot = employmentClone.querySelector(".row");
-
-    // Add delete event listenor to employment clone
+    // Add delete event listener to employment clone
     employmentClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
 
     containerElement.appendChild(employmentClone);
-
 }
 
 function clearAchievements(containerElement) {
@@ -534,124 +321,4 @@ function clearEmployment(containerElement) {
 
     employmentList = [];
     containerElement.innerHTML = "";
-}
-
-function addAchievementToList(achievementElement) {
-    const achievementTitle = achievementElement.querySelector("input").value;
-
-    if (!achievementTitle) return;
-    const achievement = {
-        "title": achievementTitle,
-        "body": achievementElement.querySelector("textarea").value
-    }
-    achievementList.push(achievement);
-}
-
-function addProjectsToList(projectElement) {
-    const projectName = projectElement.querySelector("#project-name").value;
-
-    if (!projectName) return;
-    const project = {
-        "name": projectName,
-        "summary": projectElement.querySelector("#project-summary").value,
-        "link": projectElement.querySelector("#project-link").value
-    }
-    projectsList.push(project);
-}
-
-function addEducationToList(educationElement) {
-    const institution = educationElement.querySelector("#institutionName").value;
-    const educationSummary = educationElement.querySelector("#educationSummary").value;
-    const startDate = educationElement.querySelector("#startDate").value;
-    const endDate = educationElement.querySelector("#endDate").value;
-    const complete = educationElement.querySelector("#completed").value;
-    const degreeType = educationElement.querySelector("#degreeType").value;
-    const major = educationElement.querySelector("#major").value;
-    const minor = educationElement.querySelector("#minor").value;
-
-    if (!institution || !educationSummary || !startDate || !endDate || !complete || !degreeType || !major) return;
-    const education = {
-        "institution": institution,
-        "educationSummary": educationSummary,
-        "startDate": startDate,
-        "endDate": endDate,
-        "complete": complete,
-        "degree": [{
-            "type": degreeType,
-            "major": major,
-            "minor": minor
-        }]
-    }
-    educationList.push(education);
-}
-
-function addEmploymentToList(employmentElement) {
-    const company = employmentElement.querySelector("#company").value;
-    const description = employmentElement.querySelector("#description").value;
-    const location = employmentElement.querySelector("#location").value;
-    const jobTitle = employmentElement.querySelector("#jobTitle").value;
-    const startDate = employmentElement.querySelector("#startDate").value;
-    const endDate = employmentElement.querySelector("#endDate").value;
-    const firstName = employmentElement.querySelector("#firstName").value;
-    const lastName = employmentElement.querySelector("#lastName").value;
-    const phoneNumber = employmentElement.querySelector("#phoneNumber").value;
-
-    if (!company || !description || !location || !jobTitle || !startDate || !endDate || !firstName || !lastName || !phoneNumber) return;
-    const employmentHistory = {
-        "company": company,
-        "description": description,
-        "location": location,
-        "jobTitle": jobTitle,
-        "startDate": startDate,
-        "endDate": endDate,
-        "referenceContactInfo": [{
-            "firstName": firstName,
-            "lastName": lastName,
-            "phoneNumber": phoneNumber
-        }]
-    }
-    employmentList.push(employmentHistory);
-}
-
-function addAchievementsFromContainer() {
-    achievementList = [];
-    const achievementContainer = document.getElementById("achievement-box");
-
-    Array.from(achievementContainer.children).forEach(child => {
-        addAchievementToList(child);
-    });
-}
-
-function addProjectsFromContainer() {
-    projectsList = [];
-    const projectContainer = document.getElementById("project-box");
-
-    Array.from(projectContainer.children).forEach(child => {
-        addProjectsToList(child);
-    });
-}
-
-
-function addEducationFromContainer() {
-    educationList = [];
-    const educationContainer = document.getElementById("education-box");
-
-    Array.from(educationContainer.children).forEach(child => {
-        addEducationToList(child);
-    });
-}
-
-function addEmploymentFromContainer() {
-    employmentList = [];
-    const employmentContainer = document.getElementById("employment-box");
-
-    Array.from(employmentContainer.children).forEach(child => {
-        addEmploymentToList(child);
-    });
-}
-
-function addPersonalSummaryFromContainer() {
-    const personalSummaryContainer = document.getElementById("personal-summary-box");
-    let textareaElement = personalSummaryContainer.querySelector("textarea");
-    personalSummary = textareaElement ? textareaElement.value : "";
 }
