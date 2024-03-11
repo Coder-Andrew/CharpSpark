@@ -1,0 +1,32 @@
+@model ResuMeta.ViewModels.UserVM;
+@{
+    ViewData["Title"] = "Cover Letter - Info";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/CreateResume.css" asp-append-version="true" />
+}
+
+<div class="text-center">
+    <h1 class="display-4 title">Create New Cover Letter</h1>
+    <div class="container">
+        <div id="validation">
+            <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
+                <strong>Validation Error</strong>
+                <p id="validationText"></p>
+            </div>
+        </div>
+            <div class="row mt-3 d-flex form-group">
+                <h4>Who is this letter addressed to?</h4>
+                <hr />
+                <p>Please write the hiring manager's name here</p>
+                <input type="text" maxlength="100" style="width: 50%;" placeholder="Enter a name..."/>
+                <button class="btn btn-primary">I don't know the name</button>
+                <h4>Cover Letter Body</h4>
+                <hr />
+                <p>Write a few short paragraphs about why you're interested in working here and why you're a great fit</p>
+                <div class="row justify-content-center mx-auto" style="width: 80%;">
+                    <textarea cols="60" rows="3" placeholder="I would like to apply here because... I'm perfect for this position because..." id="cover-letter-body" style="resize: none;" maxlength="400"></textarea>
+                </div>
+            </div>
+    </div>
+</div>
