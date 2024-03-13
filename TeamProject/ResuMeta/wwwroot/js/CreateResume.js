@@ -382,6 +382,8 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
                         educationElement.querySelector("#minor").value = education.degree.minor;
                     }
                     listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
                     vmList.appendChild(listItem);
                 });
             });
@@ -418,6 +420,8 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
                         employmentElement.querySelector("#phoneNumber").value = employment.referenceContactInfo.phoneNumber;
                     }
                     listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
                     vmList.appendChild(listItem);
                 });
             });
@@ -447,6 +451,8 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
                         achievementElement.querySelector("#ach-summary").value = achievement.summary;
                     }
                     listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
                     vmList.appendChild(listItem);
                 });
             });
@@ -478,6 +484,8 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
                         projectElement.querySelector("#project-summary").value = project.summary;
                     }
                     listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
                     vmList.appendChild(listItem);
                 });
             });
