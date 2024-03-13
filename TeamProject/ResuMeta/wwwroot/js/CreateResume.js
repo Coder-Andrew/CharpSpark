@@ -342,8 +342,9 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
     const modalType = button.getAttribute("name");
     const userId = document.getElementById("userId").value;
     const modalLabel = document.getElementById("modal-label");
+    modalLabel.textContent = "";
     const vmList = document.getElementById("vm-list");
-    const modal = document.getElementById("modal");
+    vmList.textContent = "";
     modalLabel.textContent = modalType;
     if (modalType === "Education") {
         const response = fetch(`/api/resume/education/${userId}`);
@@ -351,8 +352,7 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
             response.then(res => res.json()).then(data => {
                 console.log(data);
                 if (data.length === 0) {
-                    validationArea.style.display = "block";
-                    validationMessage.innerHTML = "No education found";
+                    vmList.textContent = "No education entries found";
                     return;
                 }
                 data.forEach(education => {
@@ -399,8 +399,7 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
             response.then(res => res.json()).then(data => {
                 console.log(data);
                 if (data.length === 0) {
-                    validationArea.style.display = "block";
-                    validationMessage.innerHTML = "No employment found";
+                    vmList.textContent = "No employment history found";
                     return;
                 }
                 data.forEach(employment => {
@@ -437,8 +436,7 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
             response.then(res => res.json()).then(data => {
                 console.log(data);
                 if (data.length === 0) {
-                    validationArea.style.display = "block";
-                    validationMessage.innerHTML = "No achievements found";
+                    vmList.textContent = "No achievements found";
                     return;
                 }
                 data.forEach(achievement => {
@@ -469,8 +467,7 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
             response.then(res => res.json()).then(data => {
                 console.log(data);
                 if (data.length === 0) {
-                    validationArea.style.display = "block";
-                    validationMessage.innerHTML = "No projects found";
+                    vmList.textContent = "No projects found";
                     return;
                 }
                 data.forEach(project => {
