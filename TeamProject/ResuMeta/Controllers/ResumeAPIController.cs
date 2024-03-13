@@ -15,9 +15,11 @@ namespace ResuMeta.Controllers
     public class ResumeApiController : ControllerBase
     {
         private readonly IResumeService _resumeService;
-        public ResumeApiController(IResumeService resumeService)
+        private readonly IRepository<UserInfo> _userInfo;
+        public ResumeApiController(IResumeService resumeService, IRepository<UserInfo> userInfo)
         {
             _resumeService = resumeService;
+            _userInfo = userInfo;
         }
 
         // PUT: api/resume/info
@@ -68,6 +70,44 @@ namespace ResuMeta.Controllers
             {
                 return BadRequest();
             }
-        } 
+        }
+
+        // GET: api/resume/education/{userInfoId} 
+        [HttpGet("education/{userInfoId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<EducationVM>> GetEducation(int userInfoId)
+        {
+            // string currUserId =  _userManager.GetUserId(User)!;
+            // var currUserInfo = _userInfo.FirstOrDefault(x => x.Id == userInfoId);
+            // if (currUserInfo == null || currUserInfo.AspnetIdentityId != currUserId)
+            // {
+            //     return BadRequest();
+            // }
+            try
+            {
+                var education = _resumeService.GetEducationByUserInfoId(userInfoId);
+                return Ok(education);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET: api/resume/employment/{userInfoId}
+        [HttpGet("employment/{userInfoId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<EmploymentHistoryVM>> GetEmployment(int userInfoId)
+        {
+            try
+            {
+                var employment = _resumeService.GetEmploymentByUserInfoId(userInfoId);
+                return Ok(employment);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
