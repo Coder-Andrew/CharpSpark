@@ -66,6 +66,7 @@
                     <button class="btn bg-success border-0 d-flex mx-1" id="achievement-add-btn">Add</button>
                     <button class="btn bg-danger border-0 text-white d-flex mx-1"
                         id="achievement-clear-btn">Clear</button>
+                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Achievements" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
                 </div>
                 <div id="achievement-box" class="justify-content-center">
                     <!-- Achievement box -->
@@ -81,6 +82,7 @@
                     <!-- Project Add and Clear buttons -->
                     <button class="btn bg-success border-0 d-flex mx-1" id="project-add-btn">Add</button>
                     <button class="btn bg-danger border-0 text-white d-flex mx-1" id="project-clear-btn">Clear</button>
+                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Projects" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
                 </div>
                 <div id="project-box" class="justify-content-center">
                     <!-- Project box -->
@@ -130,9 +132,9 @@
 
 <template id="achievement-template">
     <div class="row justify-content-center mx-auto" style="width: 80%;">
-        <input type="text" class="achievement-title text-center" maxlength="100" placeholder="Achievement" />
+        <input type="text" class="achievement-title text-center" maxlength="100" placeholder="Achievement" id="ach-title"/>
         <textarea cols="60" rows="3" placeholder="Achievement Description" style="resize: none;"
-            maxlength="250"></textarea>
+            maxlength="250" id="ach-summary"></textarea>
         <button class="btn bg-danger text-white border-0">Delete</button>
     </div>
 </template>

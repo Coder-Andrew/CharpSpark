@@ -15,5 +15,7 @@ namespace ResuMeta.Services.Abstract
         List<ResumeVM> GetAllResumes(int userId);
         List<EducationVM> GetEducationByUserInfoId(int userInfoId);
         List<EmploymentHistoryVM> GetEmploymentByUserInfoId(int userInfoId);
+        List<AchievementVM> GetAchievementsByUserInfoId(int userInfoId);
+        List<ProjectVM> GetProjectsByUserInfoId(int userInfoId);
     }
 }

@@ -431,7 +431,71 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
             console.log("Error fetching employment");
         }
     }
+    if (modalType === "Achievements") {
+        const response = fetch(`/api/resume/achievements/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                console.log(data);
+                if (data.length === 0) {
+                    validationArea.style.display = "block";
+                    validationMessage.innerHTML = "No achievements found";
+                    return;
+                }
+                data.forEach(achievement => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${achievement.title}</p><p>Summary: ${achievement.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addAchievement(achievementBox);
+                        const achievementElement = achievementBox.lastElementChild;
+                        achievementElement.querySelector("#ach-title").value = achievement.title;
+                        achievementElement.querySelector("#ach-summary").value = achievement.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching achievements";
+            console.log("Error fetching achievements");
+        }
     
+    }
+    if (modalType === "Projects") {
+        const response = fetch(`/api/resume/projects/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                console.log(data);
+                if (data.length === 0) {
+                    validationArea.style.display = "block";
+                    validationMessage.innerHTML = "No projects found";
+                    return;
+                }
+                data.forEach(project => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${project.name}</p><p>Link: ${project.link}</p><p>Summary: ${project.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addProject(projectBox);
+                        const projectElement = projectBox.lastElementChild;
+                        projectElement.querySelector("#project-name").value = project.name;
+                        projectElement.querySelector("#project-link").value = project.link;
+                        projectElement.querySelector("#project-summary").value = project.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching projects";
+            console.log("Error fetching projects");
+        }
+    
+    }
 }
 
 function closeModal() {

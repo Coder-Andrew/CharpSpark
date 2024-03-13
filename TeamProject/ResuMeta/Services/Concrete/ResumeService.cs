@@ -374,5 +374,40 @@ namespace ResuMeta.Services.Concrete
             }
             return employmentList;
         }
+
+        public List<AchievementVM> GetAchievementsByUserInfoId(int userInfoId){
+            var achievements = _achievementRepository.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Achievement1, x.Summary })
+            .Select(g => g.First())
+            .ToList();
+            var achievementList = new List<AchievementVM>();
+            foreach(var ach in achievements)
+            {
+                achievementList.Add(new AchievementVM
+                {
+                    title = ach.Achievement1,
+                    summary = ach.Summary
+                });
+            }
+            return achievementList;
+        }
+
+        public List<ProjectVM> GetProjectsByUserInfoId(int userInfoId){
+            var projects = _projectRepository.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Name, x.Link, x.Summary })
+            .Select(g => g.First())
+            .ToList();
+            var projectList = new List<ProjectVM>();
+            foreach(var proj in projects)
+            {
+                projectList.Add(new ProjectVM
+                {
+                    Name = proj.Name,
+                    Link = proj.Link,
+                    Summary = proj.Summary
+                });
+            }
+            return projectList;
+        }
     }
 }

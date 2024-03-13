@@ -109,5 +109,37 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
+        // GET: api/resume/achievements/{userInfoId}
+        [HttpGet("achievements/{userInfoId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<AchievementVM>> GetAchievements(int userInfoId)
+        {
+            try
+            {
+                var achievements = _resumeService.GetAchievementsByUserInfoId(userInfoId);
+                return Ok(achievements);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // GET: api/resume/projects/{userInfoId}
+        [HttpGet("projects/{userInfoId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<IEnumerable<ProjectVM>> GetProjects(int userInfoId)
+        {
+            try
+            {
+                var projects = _resumeService.GetProjectsByUserInfoId(userInfoId);
+                return Ok(projects);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
