@@ -285,7 +285,7 @@ function addEducation(containerElement) {
     const educationClone = educationTemplate.content.cloneNode(true);
     const cloneRoot = educationClone.querySelector(".row");
 
-    // Add delete event listenor to education clone
+    // Add delete event listener to education clone
     educationClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
@@ -350,7 +350,6 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
         const response = fetch(`/api/resume/education/${userId}`);
         try {
             response.then(res => res.json()).then(data => {
-                console.log(data);
                 if (data.length === 0) {
                     vmList.textContent = "No education entries found";
                     return;
@@ -397,7 +396,6 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
         const response = fetch(`/api/resume/employment/${userId}`);
         try {
             response.then(res => res.json()).then(data => {
-                console.log(data);
                 if (data.length === 0) {
                     vmList.textContent = "No employment history found";
                     return;
@@ -434,7 +432,6 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
         const response = fetch(`/api/resume/achievements/${userId}`);
         try {
             response.then(res => res.json()).then(data => {
-                console.log(data);
                 if (data.length === 0) {
                     vmList.textContent = "No achievements found";
                     return;
@@ -465,7 +462,6 @@ function openModal(button, educationBox, employmentBox, achievementBox, projectB
         const response = fetch(`/api/resume/projects/${userId}`);
         try {
             response.then(res => res.json()).then(data => {
-                console.log(data);
                 if (data.length === 0) {
                     vmList.textContent = "No projects found";
                     return;
