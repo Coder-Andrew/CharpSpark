@@ -1,7 +1,12 @@
-import express from 'express';
-import multer from 'multer';
-import PDFParser from 'pdf2json';
-import { extractTextByLines } from './extractText.js';
+// import express from 'express';
+// import multer from 'multer';
+// import PDFParser from 'pdf2json';
+// import { extractTextByLines } from './extractText.js';
+
+const express = require('express');
+const multer = require('multer');
+const PDFParser = require('pdf2json');
+const { extractTextByLines } = require('./extractText.js');
 
 const app = express();
 const port = 9090;

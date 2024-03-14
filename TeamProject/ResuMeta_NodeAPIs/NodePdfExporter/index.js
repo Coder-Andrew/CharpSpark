@@ -1,8 +1,15 @@
-
+const multer = require('multer');
+const PDFParser = require('pdf2json');
+const { extractTextByLines } = require('./extractText.js');
 const puppeteer = require('puppeteer');
 const express = require('express');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+// Set up temp multipart form storage for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use(express.json());
 
@@ -23,6 +30,27 @@ app.post('/pdfgenerator', async (req, res) => {
         res.status(500).send('Error generating PDF');
     }
 });
+
+app.post('/importPdf', upload.single('pdfFile'), async (req, res) => {
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+    }
+  
+    const pdfParser = new PDFParser();
+    pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError));
+    pdfParser.on("pdfParser_dataReady", pdfData => {
+      const parsedData = extractTextByLines(pdfData);
+  
+      const response = {
+          filename: req.file.originalname,
+          content: parsedData
+      }
+      res.send(response);
+    });
+  
+    // Load the PDF file from the uploaded buffer
+    pdfParser.parseBuffer(req.file.buffer);
+  });
 
 async function genPDFWithPuppeteer(delta) {
     const browser = await puppeteer.launch();
