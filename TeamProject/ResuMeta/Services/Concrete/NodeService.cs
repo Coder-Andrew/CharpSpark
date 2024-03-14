@@ -6,6 +6,7 @@ using ResuMeta.Services.Abstract;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Humanizer.Bytes;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -49,6 +50,11 @@ namespace ResuMeta.Services.Concrete
             {
                 throw new Exception("Error exporting PDF");
             }
+        }
+
+        public async Task<string> ImportPdfAsync(BinaryData pdf)
+        {
+
         }
     }
 }
