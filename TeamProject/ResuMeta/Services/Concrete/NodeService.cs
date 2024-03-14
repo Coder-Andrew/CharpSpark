@@ -5,6 +5,7 @@ using System.Net.Http;
 using ResuMeta.Services.Abstract;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -16,9 +17,11 @@ namespace ResuMeta.Services.Concrete
     public class NodeService : INodeService
     {
         private readonly HttpClient _httpClient;
-        public NodeService(HttpClient httpClient)
+        private readonly string _nodeUrl;
+        public NodeService(HttpClient httpClient, IOptions<NodeServiceOptions> options)
         {
             _httpClient = httpClient;
+            _nodeUrl = options.Value.NodeUrl;
         }
         public async Task<string> ExportPdfAsync(string html)
         {
@@ -28,7 +31,7 @@ namespace ResuMeta.Services.Concrete
             };
             var json = JsonSerializer.Serialize(content);
             var stringContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("http://localhost:8080/pdfgenerator", stringContent);
+            var response = await _httpClient.PostAsync(_nodeUrl + "pdfgenerator", stringContent);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseString = await response.Content.ReadAsStringAsync();

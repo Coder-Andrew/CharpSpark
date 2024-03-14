@@ -315,5 +315,99 @@ namespace ResuMeta.Services.Concrete
         {
             return _resumeRepo.GetAllResumes(userId);
         }
+
+        public List<EducationVM> GetEducationByUserInfoId(int userInfoId)
+        {
+            var educations = _education.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Institution, x.EducationSummary, x.StartDate, x.EndDate, x.Completion })
+            .Select(g => g.First())
+            .ToList();
+            var educationList = new List<EducationVM>();
+            foreach(var ed in educations)
+            {
+                var degree = _degree.GetAll(x => x.EducationId == ed.Id).FirstOrDefault();
+                var degreeVM = new DegreeVM
+                {
+                    Type = degree.Type,
+                    Major = degree.Major,
+                    Minor = degree.Minor
+                };
+                educationList.Add(new EducationVM
+                {
+                    Institution = ed.Institution,
+                    EducationSummary = ed.EducationSummary,
+                    StartDate = ed.StartDate,
+                    EndDate = ed.EndDate,
+                    Completion = ed.Completion,
+                    Degree = degreeVM
+                });
+            }
+            return educationList;
+        }
+
+        public List<EmploymentHistoryVM> GetEmploymentByUserInfoId(int userInfoId)
+        {
+            var employments = _employmentHistory.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Company, x.Description, x.Location, x.JobTitle, x.StartDate, x.EndDate })
+            .Select(g => g.First())
+            .ToList();
+            var employmentList = new List<EmploymentHistoryVM>();
+            foreach(var eh in employments)
+            {
+                var referenceContactInfo = _referenceContactInfo.GetAll(x => x.EmploymentHistoryId == eh.Id).FirstOrDefault();
+                var referenceVM = new ReferenceContactInfoVM
+                {
+                    FirstName = referenceContactInfo.FirstName,
+                    LastName = referenceContactInfo.LastName,
+                    PhoneNumber = referenceContactInfo.PhoneNumber
+                };
+                employmentList.Add(new EmploymentHistoryVM
+                {
+                    Company = eh.Company,
+                    Description = eh.Description,
+                    Location = eh.Location,
+                    JobTitle = eh.JobTitle,
+                    StartDate = eh.StartDate,
+                    EndDate = eh.EndDate,
+                    ReferenceContactInfo = referenceVM
+                });
+            }
+            return employmentList;
+        }
+
+        public List<AchievementVM> GetAchievementsByUserInfoId(int userInfoId){
+            var achievements = _achievementRepository.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Achievement1, x.Summary })
+            .Select(g => g.First())
+            .ToList();
+            var achievementList = new List<AchievementVM>();
+            foreach(var ach in achievements)
+            {
+                achievementList.Add(new AchievementVM
+                {
+                    title = ach.Achievement1,
+                    summary = ach.Summary
+                });
+            }
+            return achievementList;
+        }
+
+        public List<ProjectVM> GetProjectsByUserInfoId(int userInfoId){
+            var projects = _projectRepository.GetAll(x => x.UserInfoId == userInfoId)
+            .GroupBy(x => new { x.Name, x.Link, x.Summary })
+            .Select(g => g.First())
+            .ToList();
+            var projectList = new List<ProjectVM>();
+            foreach(var proj in projects)
+            {
+                projectList.Add(new ProjectVM
+                {
+                    Name = proj.Name,
+                    Link = proj.Link,
+                    Summary = proj.Summary
+                });
+            }
+            return projectList;
+        }
     }
 }

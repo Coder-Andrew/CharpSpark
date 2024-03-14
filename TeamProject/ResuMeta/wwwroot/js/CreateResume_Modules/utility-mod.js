@@ -4,9 +4,8 @@ export function checkForIllegalCharacters(inputElement, validationElement, valid
     if (!inputElement | !validationElement | !validationMessageElement) {
         throw new Error("Elements cannot be null");
     }
-    const specialPattern = /[\\_\|\^%=+\(\)*\[\]\<\>\~\`]+/;
 
-    if (inputElement.value.match(specialPattern)) {
+    if (containsIllegalCharacter(inputElement.value)) {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = "Invalid character in form";
         window.scrollTo(0, 0);
@@ -15,12 +14,16 @@ export function checkForIllegalCharacters(inputElement, validationElement, valid
     return false;
 }
 
+export function containsIllegalCharacter(inputValue) {
+    return /[\\_\|\^%=\(\)*\[\]\<\>\~\`;]+/.test(inputValue);
+}
+
 export function validateNonEmptyInput(inputElement, validationElement, validationMessageElement, message = "Please fill out all fields") {
     if (!inputElement | !validationElement | !validationMessageElement) {
         throw new Error("Elements cannot be null");
     }
 
-    if (inputElement.value === "") {
+    if (containsEmptyInput(inputElement.value)) {
         validationElement.style.display = "block";
         validationMessageElement.innerHTML = message;
         window.scrollTo(0, 0);
@@ -29,15 +32,16 @@ export function validateNonEmptyInput(inputElement, validationElement, validatio
     return false;
 }
 
+export function containsEmptyInput(inputValue) {
+    return inputValue === "";
+}
+
 export function validateDates(startDateInputs, endDateInputs, validationElement, validationMessageElement) {
     return startDateInputs.some(function(startDateInput, index) {
         var endDateInput = endDateInputs[index];
 
         if(startDateInput && endDateInput) {
-            var startDate = new Date(startDateInput.value);
-            var endDate = new Date(endDateInput.value);
-
-            if(startDate > endDate) {
+            if(containsInvalidDate(startDateInput.value, endDateInput.value)) {
                 validationElement.style.display = "block";
                 validationMessageElement.innerHTML = "Start date must be before end date";
                 window.scrollTo(0, 0);
@@ -46,4 +50,8 @@ export function validateDates(startDateInputs, endDateInputs, validationElement,
         }
         return false;
     });
+}
+
+export function containsInvalidDate(startDate, endDate) {
+    return new Date(startDate) > new Date(endDate);
 }

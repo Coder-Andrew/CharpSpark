@@ -25,6 +25,11 @@ function initializePage() {
     const skillInput = document.getElementById("skills");
     const skillCol = document.getElementById("skill-col");
 
+    const closeModal1 = document.getElementById("close-modal1");
+    closeModal1.addEventListener('click', () => closeModal(), false);
+    const closeModal2 = document.getElementById("close-modal2");
+    closeModal2.addEventListener('click', () => closeModal(), false);
+
     // Add debounce to event listener
     skillInput.addEventListener('input', debounce(() => {
         if (skillInput.value) {
@@ -82,6 +87,11 @@ function initializePage() {
     const clearProjectBtn = document.getElementById("project-clear-btn");
     clearProjectBtn.addEventListener('click', () => clearProjects(projectBox), false);
 
+
+    var modalButtons = Array.from(document.querySelectorAll('#open-modal'));
+    modalButtons.forEach(button => {
+        button.addEventListener('click', () => openModal(button, educationBox, employmentBox, achievementBox, projectBox), false);
+    });
 }
 
 function debounce(func, delay) {
@@ -275,7 +285,7 @@ function addEducation(containerElement) {
     const educationClone = educationTemplate.content.cloneNode(true);
     const cloneRoot = educationClone.querySelector(".row");
 
-    // Add delete event listenor to education clone
+    // Add delete event listener to education clone
     educationClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
@@ -321,4 +331,177 @@ function clearEmployment(containerElement) {
 
     employmentList = [];
     containerElement.innerHTML = "";
+}
+
+function openModal(button, educationBox, employmentBox, achievementBox, projectBox) {
+    console.log("Opening Modal...");
+    const validationArea = document.getElementById("validationMessage");
+    validationArea.style.display = "none";
+    const validationMessage = document.getElementById("validationText");
+    validationMessage.innerHTML = "";
+    const modalType = button.getAttribute("name");
+    const userId = document.getElementById("userId").value;
+    const modalLabel = document.getElementById("modal-label");
+    modalLabel.textContent = "";
+    const vmList = document.getElementById("vm-list");
+    vmList.textContent = "";
+    modalLabel.textContent = modalType;
+    if (modalType === "Education") {
+        const response = fetch(`/api/resume/education/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No education entries found";
+                    return;
+                }
+                data.forEach(education => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    if (education.degree.minor === "N/A") {
+                        listItemText.innerHTML = `<p>Institution: ${education.institution}</p><p>Summary: ${education.educationSummary}</p><p>Dates: ${education.startDate} to ${education.endDate}</p><p>Degree: ${education.degree.type} in ${education.degree.major}</p><hr />`;
+                    } else {
+                        listItemText.innerHTML = `<p>Institution: ${education.institution}</p><p>Summary: ${education.educationSummary}</p><p>Dates: ${education.startDate} to ${education.endDate}</p><p>Degree: ${education.degree.type} in ${education.degree.major} with a minor in ${education.degree.minor}</p><hr />`;
+                    }
+                    listItemText.onclick = () => {
+                        addEducation(educationBox);
+                        const educationElement = educationBox.lastElementChild;
+                        educationElement.querySelector("#institutionName").value = education.institution;
+                        educationElement.querySelector("#educationSummary").value = education.educationSummary;
+                        educationElement.querySelector("#startDate").value = education.startDate;
+                        educationElement.querySelector("#endDate").value = education.endDate;
+                        if (education.completion == true)
+                        {
+                            educationElement.querySelector("#completed").value = "true";
+                        }
+                        else
+                        {
+                            educationElement.querySelector("#completed").value = "false";
+                        }
+                        educationElement.querySelector("#degreeType").value = education.degree.type;
+                        educationElement.querySelector("#major").value = education.degree.major;
+                        educationElement.querySelector("#minor").value = education.degree.minor;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching education";
+            console.log("Error fetching education");
+        }   
+    }
+    if (modalType === "Employment") {
+        const response = fetch(`/api/resume/employment/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No employment history found";
+                    return;
+                }
+                data.forEach(employment => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Company: ${employment.company}</p><p>Summary: ${employment.description}</p><p>Location: ${employment.location}</p><p>Job Title: ${employment.jobTitle}</p><p>Dates: ${employment.startDate} to ${employment.endDate}</p><p>Reference: ${employment.referenceContactInfo.firstName} ${employment.referenceContactInfo.lastName} ${employment.referenceContactInfo.phoneNumber}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addEmployment(employmentBox);
+                        const employmentElement = employmentBox.lastElementChild;
+                        employmentElement.querySelector("#company").value = employment.company;
+                        employmentElement.querySelector("#description").value = employment.description;
+                        employmentElement.querySelector("#location").value = employment.location;
+                        employmentElement.querySelector("#jobTitle").value = employment.jobTitle;
+                        employmentElement.querySelector("#startDate").value = employment.startDate;
+                        employmentElement.querySelector("#endDate").value = employment.endDate;
+                        employmentElement.querySelector("#firstName").value = employment.referenceContactInfo.firstName;
+                        employmentElement.querySelector("#lastName").value = employment.referenceContactInfo.lastName;
+                        employmentElement.querySelector("#phoneNumber").value = employment.referenceContactInfo.phoneNumber;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching employment";
+            console.log("Error fetching employment");
+        }
+    }
+    if (modalType === "Achievements") {
+        const response = fetch(`/api/resume/achievements/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No achievements found";
+                    return;
+                }
+                data.forEach(achievement => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${achievement.title}</p><p>Summary: ${achievement.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addAchievement(achievementBox);
+                        const achievementElement = achievementBox.lastElementChild;
+                        achievementElement.querySelector("#ach-title").value = achievement.title;
+                        achievementElement.querySelector("#ach-summary").value = achievement.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching achievements";
+            console.log("Error fetching achievements");
+        }
+    
+    }
+    if (modalType === "Projects") {
+        const response = fetch(`/api/resume/projects/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No projects found";
+                    return;
+                }
+                data.forEach(project => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${project.name}</p><p>Link: ${project.link}</p><p>Summary: ${project.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addProject(projectBox);
+                        const projectElement = projectBox.lastElementChild;
+                        projectElement.querySelector("#project-name").value = project.name;
+                        projectElement.querySelector("#project-link").value = project.link;
+                        projectElement.querySelector("#project-summary").value = project.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching projects";
+            console.log("Error fetching projects");
+        }
+    
+    }
+}
+
+function closeModal() {
+    const modalName = document.getElementById("modal-label");
+    modalName.textContent = "";
+    const vmList = document.getElementById("vm-list");
+    vmList.textContent = "";
 }
