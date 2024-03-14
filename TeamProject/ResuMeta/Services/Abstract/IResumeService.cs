@@ -13,5 +13,9 @@ namespace ResuMeta.Services.Abstract
         ResumeVM GetResumeHtml(int resumeId);
         // List<KeyValuePair<int, string>> GetResumeIdList(int userId);
         List<ResumeVM> GetAllResumes(int userId);
+        List<EducationVM> GetEducationByUserInfoId(int userInfoId);
+        List<EmploymentHistoryVM> GetEmploymentByUserInfoId(int userInfoId);
+        List<AchievementVM> GetAchievementsByUserInfoId(int userInfoId);
+        List<ProjectVM> GetProjectsByUserInfoId(int userInfoId);
     }
 }

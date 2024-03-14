@@ -11,6 +11,7 @@ using ResuMeta.DAL.Concrete;
 using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using ResuMeta.Services.Concrete;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,12 +30,17 @@ builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, ser
     return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
 });
 
-var nodeUrl = builder.Configuration["NodeUrl"] ?? throw new InvalidOperationException("Connection string 'NodeUrl' not found.");
+string nodeUrl = builder.Configuration["NodeUrl"] ?? throw new InvalidOperationException("Connection string 'NodeUrl' not found.");
+builder.Services.Configure<NodeServiceOptions>(options =>
+{
+    options.NodeUrl = nodeUrl;
+});
+
 builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(nodeUrl);
     httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-    return new NodeService(httpClient);
+    return new NodeService(httpClient, services.GetRequiredService<IOptions<NodeServiceOptions>>());
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
