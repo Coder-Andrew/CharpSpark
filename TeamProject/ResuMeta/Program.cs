@@ -48,6 +48,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
+builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
 builder.Services.AddSwaggerGen();
 
 // Used for testing the service without using the Chatgpt API, uncomment to use

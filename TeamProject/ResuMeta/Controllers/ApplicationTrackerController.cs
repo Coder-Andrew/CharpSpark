@@ -17,27 +17,38 @@ public class ApplicationTrackerController : Controller
     private readonly ILogger<ApplicationTrackerController> _logger;
     private readonly IRepository<UserInfo> _userInfo;
     private readonly UserManager<ApplicationUser> _userManager;
-    // private readonly IRepository<Resume> _resumeRepository;
-    // private readonly IResumeService _resumeService;
+    private readonly IRepository<ApplicationTracker> _applicationTrackerRepository;
+    private readonly IApplicationTrackerService _applicationTrackerService;
 
     public ApplicationTrackerController(
         ILogger<ApplicationTrackerController> logger,
         IRepository<UserInfo> userInfo,
-        UserManager<ApplicationUser> userManager
-        // IRepository<Resume> resumeRepo,
-        // IResumeService resumeService
+        UserManager<ApplicationUser> userManager,
+        IRepository<ApplicationTracker> appTrackerRepo,
+        IApplicationTrackerService applicationTrackerService
         )
     {
         _logger = logger;
         _userInfo = userInfo;
         _userManager = userManager;
-        // _resumeRepository = resumeRepo;
-        // _resumeService = resumeService;
+        _applicationTrackerRepository = appTrackerRepo;
+        _applicationTrackerService = applicationTrackerService;
     }
 
     public IActionResult Index()
     {
-        return View();
+        string currUserId = _userManager.GetUserId(User)!;
+        if (currUserId == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        var user = _userInfo.GetAll().Where(x => x.AspnetIdentityId == currUserId).FirstOrDefault();
+        if (user == null)
+        {
+            return View();
+        }
+        List<ApplicationTrackerVM> appTrackList = _applicationTrackerService.GetApplicationsByUserId(user.Id);
+        return appTrackList.Any() ? View(appTrackList) : View();
     }
 
 

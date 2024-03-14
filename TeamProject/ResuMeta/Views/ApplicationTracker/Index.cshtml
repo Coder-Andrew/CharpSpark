@@ -1,3 +1,4 @@
+@model List<ResuMeta.ViewModels.ApplicationTrackerVM>
 @{
     ViewData["Title"] = "Application Tracker";
 }
@@ -5,4 +6,80 @@
 <div class="text-center">
     <h1 class="display-4 title">Application Tracker</h1>
     <hr />
+</div>
+
+
+
+<div class="container">
+
+        <form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="jobTitle">Job Title</label>
+                <input type="text" class="form-control" id="jobTitle" placeholder="Job Title">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="companyName">Company Name</label>
+                <input type="text" class="form-control" id="companyName" placeholder="Company Name">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="jobListingUrl">Job Listing URL</label>
+                <input type="text" class="form-control" id="jobListingUrl" placeholder="Job Listing URL">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="appliedDate">Applied Date</label>
+                <input type="date" class="form-control" id="appliedDate" placeholder="Applied Date">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="applicationDeadline">Application Deadline</label>
+                <input type="date" class="form-control" id="applicationDeadline" placeholder="Application Deadline">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="status">Status</label>
+                <input type="text" class="form-control" id="status" placeholder="Status">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="notes">Notes</label>
+                <input type="text" class="form-control" id="notes" placeholder="Notes">
+            </div>
+        <!-- Add more input fields for other properties -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+        <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Job Title</th>
+                <th>Company Name</th>
+                <th>Job Listing URL</th>
+                <th>Applied Date</th>
+                <th>Application Deadline</th>
+                <th>Status</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ApplicationTrackerId</td>
+                    <td>@item.JobTitle</td>
+                    <td>@item.CompanyName</td>
+                    <td>@item.JobListingUrl</td>
+                    <td>@item.AppliedDate</td>
+                    <td>@item.ApplicationDeadline</td>
+                    <td>@item.Status</td>
+                    <td>@item.Notes</td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+
+    <hr />
+
+
 </div>
