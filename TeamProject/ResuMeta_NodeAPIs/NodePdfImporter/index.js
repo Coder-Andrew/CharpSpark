@@ -27,7 +27,12 @@ app.post('/api/importPdf', upload.single('pdfFile'), async (req, res) => {
   pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError));
   pdfParser.on("pdfParser_dataReady", pdfData => {
     const parsedData = extractTextByLines(pdfData);
-    res.send(parsedData);
+
+    const response = {
+        filename: req.file.originalname,
+        content: parsedData
+    }
+    res.send(response);
   });
 
   // Load the PDF file from the uploaded buffer
@@ -63,3 +68,5 @@ function extractTextByLines(pdfData) {
     style: textObject.style.map(style => Math.floor(style))
   })));
 }
+
+export { extractTextByLines };
