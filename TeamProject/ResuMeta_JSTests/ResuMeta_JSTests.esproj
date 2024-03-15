@@ -9,7 +9,4 @@
     <CleanCommand>
     </CleanCommand>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="tests\" />
-  </ItemGroup>
 </Project>

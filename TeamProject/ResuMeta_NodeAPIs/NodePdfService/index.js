@@ -32,6 +32,7 @@ app.post('/pdfgenerator', async (req, res) => {
 });
 
 app.post('/importPdf', upload.single('pdfFile'), async (req, res) => {
+    console.log("received file");
     if (!req.file) {
       return res.status(400).send('No file uploaded.');
     }

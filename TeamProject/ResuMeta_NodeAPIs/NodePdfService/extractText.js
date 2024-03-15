@@ -28,4 +28,4 @@ function extractTextByLines(pdfData) {
     })));
   }
   
-  module.exports =  { extractTextByLines };
+  module.exports = { extractTextByLines };

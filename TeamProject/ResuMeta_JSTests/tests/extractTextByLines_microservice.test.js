@@ -1,4 +1,4 @@
-const et = require('../../ResuMeta_NodeAPIs/NodePdfExporter/extractText.js')
+const et = require('../../ResuMeta_NodeAPIs/NodePdfService/extractText.js');
 
 test('extractTextByLines correctly extracts text from NewExample.pdf', () => {
     // Arrange

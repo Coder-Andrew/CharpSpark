@@ -22,6 +22,8 @@ var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidO
 
 string chatGPTUrl = "https://api.openai.com/";
 
+//builder.Services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(chatGPTUrl);
@@ -40,7 +42,12 @@ builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services)
 {
     httpClient.BaseAddress = new Uri(nodeUrl);
     httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-    return new NodeService(httpClient, services.GetRequiredService<IOptions<NodeServiceOptions>>());
+    return new NodeService(
+        httpClient, 
+        services.GetRequiredService<IOptions<NodeServiceOptions>>(), 
+        services.GetRequiredService<IRepository<Resume>>(),
+        services.GetRequiredService<IRepository<UserInfo>>()
+        );
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -62,7 +69,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
-builder.Services.AddScoped<INodeService, NodeService>();
+
+//builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
 
 // Used for testing the service without using the Chatgpt API, uncomment to use
