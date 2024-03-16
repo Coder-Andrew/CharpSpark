@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ResuMeta.Models;
 using ResuMeta.Data;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.Net;
 
 namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 {
@@ -22,17 +25,20 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ResuMetaDbContext _ResuMetaDbContext;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ResuMetaDbContext context,
-            IWebHostEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment,
+            ILogger<IndexModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _ResuMetaDbContext = context;
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
         }
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
         public string PhoneNumber { get; set; }
 
-        public string ProfilePicturePath { get; set; }
+        public byte[] ProfilePicturePath { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -86,7 +92,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "New Username")]
             public string NewUsername { get; set; }
-            
+
             [Display(Name = "Profile Picture")]
             public IFormFile NewProfilePicture { get; set; }
         }
@@ -101,7 +107,13 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             var firstName = currentUser.FirstName;
             var lastName = currentUser.LastName;
             var summary = currentUser.Summary;
-            var profilePicturePath = currentUser.ProfilePicturePath ?? "https://placeholder.pics/svg/300";
+            byte[] profilePicturePath = null;
+            _logger.LogInformation("Profile Picture Path is null: " + (currentUser.ProfilePicturePath == null));
+            _logger.LogInformation("Profile Picture Path length: " + (currentUser.ProfilePicturePath?.Length ?? 0));
+            if (currentUser.ProfilePicturePath != null)
+            {
+                profilePicturePath = currentUser.ProfilePicturePath;
+            }
 
             Username = userName;
             PhoneNumber = phoneNumber;
@@ -178,7 +190,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             var firstName = FirstName;
             var lastName = LastName;
             var summary = Summary;
-            
+
             if (Input.NewFirstName != firstName && !string.IsNullOrEmpty(Input.NewFirstName))
             {
                 currentUser.FirstName = Input.NewFirstName;
@@ -214,24 +226,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             if (Input.NewProfilePicture != null)
             {
-                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.NewProfilePicture.FileName);
-
-                 var uploadsDirectoryPath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads");
-                var filePath = Path.Combine(uploadsDirectoryPath, fileName);
-
-                 if (!Directory.Exists(uploadsDirectoryPath))
+                using (var memoryStream = new MemoryStream())
                 {
-                    Directory.CreateDirectory(uploadsDirectoryPath);
+                    await Input.NewProfilePicture.CopyToAsync(memoryStream);
+                    currentUser.ProfilePicturePath = memoryStream.ToArray();
                 }
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await Input.NewProfilePicture.CopyToAsync(fileStream);
-                }
-
-                var fileUrl = $"{Request.Scheme}://{Request.Host}/uploads/{fileName}";
-
-                currentUser.ProfilePicturePath = fileUrl;
                 var changes = await _ResuMetaDbContext.SaveChangesAsync();
 
                 if (changes < 0)
