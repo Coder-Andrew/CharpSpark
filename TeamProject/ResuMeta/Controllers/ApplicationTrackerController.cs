@@ -47,8 +47,8 @@ public class ApplicationTrackerController : Controller
         {
             return View();
         }
-        List<ApplicationTrackerVM> appTrackList = _applicationTrackerService.GetApplicationsByUserId(user.Id);
-        return appTrackList.Any() ? View(appTrackList) : View();
+        ViewBag.UserId = user.Id;
+        return View();
     }
 
 

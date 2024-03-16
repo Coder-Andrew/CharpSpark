@@ -23,7 +23,7 @@ namespace ResuMeta.Controllers
         }
 
 
-        // GET: api/applicationtracker
+        // GET: api/applicationtracker/{userId}
         [HttpGet("{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<IEnumerable<ApplicationTrackerVM>> GetApplicationsByUserId(int userId)
@@ -36,24 +36,24 @@ namespace ResuMeta.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error in GetAllApplications");
-                return BadRequest("Error in GetAllApplications");
+                return BadRequest("Error Retrieving Applications");
             }
         }
 
         //POST: api/applicationtracker/applicationInfo
         [HttpPost("applicationInfo")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AddApplication(ApplicationTrackerVM applicationTrackerVM)
+        public IActionResult AddApplication(JsonElement content)
         {
             try
             {
-                _applicationTrackerService.AddApplication(applicationTrackerVM);
+                _applicationTrackerService.AddApplication(content);
                 return Ok();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error in AddApplication");
-                return BadRequest("Error in AddApplication");
+                return BadRequest("Error Adding Application");
             }
         }
 
@@ -70,7 +70,7 @@ namespace ResuMeta.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error in DeleteApplication");
-                return BadRequest("Error in DeleteApplication");
+                return BadRequest("Error Deleting Application");
             }
         }
     }

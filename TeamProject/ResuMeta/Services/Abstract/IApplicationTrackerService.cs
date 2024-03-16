@@ -7,7 +7,7 @@ namespace ResuMeta.Services.Abstract
     public interface IApplicationTrackerService
     {
         List<ApplicationTrackerVM> GetApplicationsByUserId(int userId);
-        void AddApplication(ApplicationTrackerVM applicationTrackerVM);
+        void AddApplication(JsonElement content);
         void DeleteApplication(int applicationId);
     }
 }

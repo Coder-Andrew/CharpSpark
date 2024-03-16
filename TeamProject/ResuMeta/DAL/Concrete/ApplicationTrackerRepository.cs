@@ -32,7 +32,5 @@ namespace ResuMeta.DAL.Concrete
                 })
                 .ToList();
         }
-
-
     }
 }

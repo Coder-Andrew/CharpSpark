@@ -14,12 +14,12 @@ namespace ResuMeta.Services.Concrete
 {
     class JsonApplicationTracker
     {
-        public string? id { get; set; }
+        public int? userInfoId { get; set; }
         public string? jobTitle { get; set; }
         public string? companyName { get; set; }
         public string? jobListingUrl { get; set; }
-        public DateOnly? appliedDate { get; set; }
-        public DateOnly? applicationDeadline { get; set; }
+        public string? appliedDate { get; set; }
+        public string? applicationDeadline { get; set; }
         public string? status { get; set; }
         public string? notes { get; set; }
     }
@@ -53,37 +53,48 @@ namespace ResuMeta.Services.Concrete
             return _appTrackerRepo.GetApplicationsByUserId(userId);
         }
 
-        public void AddApplication(ApplicationTrackerVM applicationTrackerVM)
+        public void AddApplication(JsonElement content)
         {
+            //_logger.LogInformation($"Incoming JSON: {content}");
             try
             {
-                if (applicationTrackerVM == null)
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
-                    _logger.LogError("ApplicationTrackerVM is null");
-                    throw new Exception("ApplicationTrackerVM is null");
-                }
-                ApplicationTracker applicationTracker = new ApplicationTracker
-                {
-                    Id = applicationTrackerVM.ApplicationTrackerId,
-                    JobTitle = applicationTrackerVM.JobTitle,
-                    CompanyName = applicationTrackerVM.CompanyName,
-                    JobListingUrl = applicationTrackerVM.JobListingUrl,
-                    AppliedDate = applicationTrackerVM.AppliedDate,
-                    ApplicationDeadline = applicationTrackerVM.ApplicationDeadline,
-                    Status = applicationTrackerVM.Status,
-                    Notes = applicationTrackerVM.Notes,
-                    UserInfoId = applicationTrackerVM.UserInfoId
+                    PropertyNameCaseInsensitive = true,
                 };
+                try
+                {
+                    JsonApplicationTracker applicationInfo = JsonSerializer.Deserialize<JsonApplicationTracker>(content, options)!;
+                    if (applicationInfo.jobTitle == null)
+                    {
+                        throw new Exception("Invalid input");
+                    }
+                    ApplicationTracker applicationTracker = new ApplicationTracker
+                    {
+                        JobTitle = applicationInfo.jobTitle,
+                        CompanyName = applicationInfo.companyName,
+                        JobListingUrl = applicationInfo.jobListingUrl,
+                        AppliedDate = DateOnly.Parse(applicationInfo.appliedDate!),
+                        ApplicationDeadline = DateOnly.Parse(applicationInfo.applicationDeadline!),
+                        Status = applicationInfo.status,
+                        Notes = applicationInfo.notes,
+                        UserInfoId = applicationInfo.userInfoId
+                    };
 
-                _appTrackerRepo.AddOrUpdate(applicationTracker);
+                    _appTrackerRepo.AddOrUpdate(applicationTracker);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error deserializing json");
+                    throw new Exception("Error deserializing json");
+                }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError(e, "Error deserializing json");
-                throw new Exception("Error deserializing json");
+                _logger.LogError(ex, "An error occurred in AddApplication method");
+                throw;
             }
         }
-
 
         public void DeleteApplication(int applicationId)
         {
