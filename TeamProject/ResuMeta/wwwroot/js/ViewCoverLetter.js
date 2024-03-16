@@ -31,8 +31,4 @@ function initializePage() {
     var htmlContent = document.getElementById('cover-letter-container').outerHTML;
     const delta = quill.clipboard.convert(htmlContent);
     quill.setContents(delta);
-    const saveBtn = document.getElementById("save-resume");
-    saveBtn.addEventListener('click', () => getHtmlInfo(), false);
-    const exportBtn = document.getElementById("export-pdf");
-    exportBtn.addEventListener('click', () => exportPdf(quill), false);
 }
