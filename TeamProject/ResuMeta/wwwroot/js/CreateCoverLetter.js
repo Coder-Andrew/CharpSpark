@@ -1,5 +1,8 @@
+import { checkForIllegalCharacters, validateNonEmptyInput } from "./CreateResume_Modules/utility-mod.js";
+
 document.addEventListener("DOMContentLoaded", initializePage, false);
 var coverLetterId = 1; 
+var hiringManagerKnown = true;
 
 function initializePage()
 {
@@ -23,9 +26,30 @@ async function submitInfo() {
     validationArea.style.display = "none";
     const validationMessage = document.getElementById("validationText");
     validationMessage.innerHTML = "";
-    var title = document.querySelector('.cover-letter-drop-down').value;
-    var lastName = document.querySelector('.cover-letter-address-inputs input').value;
-    var hiringManager = title + " " + lastName;
+    var hiringManager = "";
+
+    //Validate fields
+    const coverLetterContainer = document.getElementById('cover-letter-box');
+    if (validateCoverLetter(coverLetterContainer, validationArea, validationMessage)) return;
+
+
+    if(hiringManagerKnown)
+    {
+        var title = document.querySelector('.cover-letter-drop-down').value;
+        if(!title)
+        {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Please select a title for the hiring manager";
+            window.scrollTo(0, 0);
+            return;
+        }
+        var lastName = document.querySelector('.cover-letter-address-inputs input').value;
+        hiringManager = title + " " + lastName;
+    }
+    else
+    {
+        hiringManager = "Hiring Manager";
+    }
     var coverLetterBody = document.querySelector('#cover-letter-body').value;
 
     const coverLetterInfo = {
@@ -54,9 +78,27 @@ async function submitInfo() {
 function nameUnknown() {
     document.querySelector('.cover-letter-address-form').style.display = 'none';
     document.querySelector('.cover-letter-address-form-name-unknown').style.display = 'block';
+    hiringManagerKnown = false;
 }
 
 function nameFound() {
     document.querySelector('.cover-letter-address-form').style.display = 'flex';
     document.querySelector('.cover-letter-address-form-name-unknown').style.display = 'none';
+    hiringManagerKnown = true;
+}
+
+function validateCoverLetter(coverLetterContainer, validationElement, validationMessageElement) {
+    var coverLetterInputs = coverLetterContainer.querySelectorAll('input');
+    var coverLetterTextArea = coverLetterContainer.querySelectorAll('textarea');
+
+    for (var i = 0; i < coverLetterInputs.length; i++) {
+        if (checkForIllegalCharacters(coverLetterInputs[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(coverLetterInputs[i], validationElement, validationMessageElement, "Please fill out all fields")) return true;
+    }
+
+    for (var i = 0; i < coverLetterTextArea.length; i++) {
+        if (checkForIllegalCharacters(coverLetterTextArea[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(coverLetterTextArea[i], validationElement, validationMessageElement, "Please fill out all fields")) return true;
+    }
+    return false;
 }

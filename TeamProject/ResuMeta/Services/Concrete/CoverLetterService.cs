@@ -24,16 +24,18 @@ namespace ResuMeta.Services.Concrete
          private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<CoverLetterService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
-        private CoverLetterVM coverLetter;
+       private readonly CoverLetterStore _coverLetterStore;
         public CoverLetterService(
             ILogger<CoverLetterService> logger,
             UserManager<ApplicationUser> userManager,
-            IRepository<UserInfo> userInfo
+            IRepository<UserInfo> userInfo,
+             CoverLetterStore coverLetterStore
             )
         {
             _logger = logger;
             _userManager = userManager;
             _userInfo = userInfo;
+            _coverLetterStore = coverLetterStore;
         }
         
         public CoverLetterVM AddCoverLetterInfo(JsonElement response)
@@ -45,13 +47,14 @@ namespace ResuMeta.Services.Concrete
             try
             {
                 JsonCoverLetter coverLetterInfo = JsonSerializer.Deserialize<JsonCoverLetter>(response, options)!;
-                this.coverLetter = new CoverLetterVM
+                CoverLetterVM coverLetter = new CoverLetterVM
                 {
                     UserInfoId = coverLetterInfo.UserInfoId,
                     CoverLetterId = coverLetterInfo.CoverLetterId,
                     HiringManager = coverLetterInfo.HiringManager,
                     Body = coverLetterInfo.Body
                 };
+                _coverLetterStore.CoverLetter = coverLetter;
 
                 return coverLetter;
             }
@@ -64,7 +67,7 @@ namespace ResuMeta.Services.Concrete
 
         public CoverLetterVM GetCoverLetter()
         {
-            return this.coverLetter;
+            return _coverLetterStore.CoverLetter;
         }
     }
 }

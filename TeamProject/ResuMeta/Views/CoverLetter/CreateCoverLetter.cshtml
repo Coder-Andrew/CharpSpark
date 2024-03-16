@@ -16,7 +16,7 @@
             </div>
         </div>
         <input type="hidden" id="userId" value="@Model.UserId" />
-        <div class="row mt-3 d-flex form-group">
+        <div class="row mt-3 d-flex form-group" id="cover-letter-box">
             <h4>Who is this letter addressed to?</h4>
             <hr />
             <div class="cover-letter-address-form">
@@ -32,12 +32,12 @@
                         </select>
                     </div>
                     <div class="col-md-7">
-                        <input type="text" maxlength="100" class="form-control" placeholder="Enter a last name..."/>
+                        <input type="text" maxlength="100" class="form-control" id="last-name" placeholder="Enter a last name..."/>
                     </div>
                 </div>
                 <button class="btn btn-primary cover-letter-button">I don't know the name</button>
             </div>
-            <div class="cover-letter-address-form-name-unknown" style="display: none;">
+            <div class="cover-letter-address-form-name-unknown"style="display: none;">
                 <p>Don't worry! We can still help you write a great cover letter.</p>
                 <button class="btn btn-primary name-unknown-button">I found the name</button>
             </div>
@@ -45,7 +45,7 @@
             <hr />
             <p>Write a few short paragraphs about why you're interested in working here and why you're a great fit!</p>
             <div class="row justify-content-center mx-auto" style="width: 80%;">
-                <textarea cols="60" rows="3" placeholder="I would like to apply here because... I'm perfect for this position because..." id="cover-letter-body" style="resize: none;" maxlength="400"></textarea>
+                <textarea cols="60" rows="3" id="cover-letter-body" placeholder="I would like to apply here because... I'm perfect for this position because..." id="cover-letter-body" style="resize: none;" maxlength="400"></textarea>
             </div>
         </div>
         <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>
