@@ -11,6 +11,7 @@ using ResuMeta.DAL.Concrete;
 using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using ResuMeta.Services.Concrete;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +22,32 @@ var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidO
 
 string chatGPTUrl = "https://api.openai.com/";
 
+//builder.Services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(chatGPTUrl);
     httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chatGPTApiKey);
     return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
+});
+
+string nodeUrl = builder.Configuration["NodeUrl"] ?? throw new InvalidOperationException("Connection string 'NodeUrl' not found.");
+builder.Services.Configure<NodeServiceOptions>(options =>
+{
+    options.NodeUrl = nodeUrl;
+});
+
+builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services) =>
+{
+    httpClient.BaseAddress = new Uri(nodeUrl);
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+    return new NodeService(
+        httpClient, 
+        services.GetRequiredService<IOptions<NodeServiceOptions>>(), 
+        services.GetRequiredService<IRepository<Resume>>(),
+        services.GetRequiredService<IRepository<UserInfo>>()
+        );
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -46,10 +67,14 @@ builder.Services.AddDbContext<ResuMetaDbContext>(options => options
 builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
+builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
+builder.Services.AddSingleton<CoverLetterStore>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+
+//builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
 
 // Used for testing the service without using the Chatgpt API, uncomment to use

@@ -8,5 +8,6 @@ namespace ResuMeta.ViewModels
         public string? JobTitle { get; set; }
         public DateOnly? StartDate { get; set; } 
         public DateOnly? EndDate { get; set; }
+        public ReferenceContactInfoVM? ReferenceContactInfo { get; set; }
     }
 }
