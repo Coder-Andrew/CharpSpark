@@ -11,16 +11,6 @@ function initializePage()
     document.querySelector('.name-unknown-button').addEventListener('click', nameFound);
 }
 
-function debounce(func, delay) {
-    let timeoutdId;
-    return function () {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeoutdId);
-        timeoutdId = setTimeout(() => func.apply(context, args), delay);
-    }
-}
-
 async function submitInfo() {
     const validationArea = document.getElementById('validationMessage');
     validationArea.style.display = "none";
@@ -29,20 +19,19 @@ async function submitInfo() {
     var hiringManager = "";
 
     //Validate fields
-    const coverLetterContainer = document.getElementById('cover-letter-box');
-    if (validateCoverLetter(coverLetterContainer, validationArea, validationMessage)) return;
+    if(hiringManagerKnown)
+    {
+        const hiringManagerContainer = document.getElementById('hiring-manager-box');
+        if (validateHiringManager(hiringManagerContainer, validationArea, validationMessage)) return;
+    }
+
+    const coverLetterBodyContainer = document.getElementById('cover-letter-body-box');
+    if (validateCoverLetterBody(coverLetterBodyContainer, validationArea, validationMessage)) return;
 
 
     if(hiringManagerKnown)
     {
         var title = document.querySelector('.cover-letter-drop-down').value;
-        if(!title)
-        {
-            validationArea.style.display = "block";
-            validationMessage.innerHTML = "Please select a title for the hiring manager";
-            window.scrollTo(0, 0);
-            return;
-        }
         var lastName = document.querySelector('.cover-letter-address-inputs input').value;
         hiringManager = title + " " + lastName;
     }
@@ -87,7 +76,22 @@ function nameFound() {
     hiringManagerKnown = true;
 }
 
-function validateCoverLetter(coverLetterContainer, validationElement, validationMessageElement) {
+function validateHiringManager(hiringManagerContainer, validationElement, validationMessageElement) {
+    var hiringManagerInputs = hiringManagerContainer.querySelectorAll('input');
+    var hiringManagerDropDown = hiringManagerContainer.querySelectorAll('select');
+
+    for (var i = 0; i < hiringManagerInputs.length; i++) {
+        if (checkForIllegalCharacters(hiringManagerInputs[i], validationElement, validationMessageElement)) return true;
+        if (validateNonEmptyInput(hiringManagerInputs[i], validationElement, validationMessageElement, "Please fill out all fields")) return true;
+    }
+
+    for (var i = 0; i < hiringManagerDropDown.length; i++) {
+        if (validateNonEmptyInput(hiringManagerDropDown[i], validationElement, validationMessageElement, "Please fill out all fields")) return true;
+    }
+    return false;
+}
+
+function validateCoverLetterBody(coverLetterContainer, validationElement, validationMessageElement) {
     var coverLetterInputs = coverLetterContainer.querySelectorAll('input');
     var coverLetterTextArea = coverLetterContainer.querySelectorAll('textarea');
 
