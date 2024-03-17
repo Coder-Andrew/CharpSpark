@@ -5,7 +5,7 @@ CREATE TABLE [UserInfo] (
   [LastName] nvarchar(50),
   [PhoneNumber] nvarchar(12),
   [Summary] nvarchar(250),
-  [ProfilePicturePath] nvarchar(2048),
+  [ProfilePicturePath] VARBINARY(MAX),
 );
 
 CREATE TABLE [Education] (
