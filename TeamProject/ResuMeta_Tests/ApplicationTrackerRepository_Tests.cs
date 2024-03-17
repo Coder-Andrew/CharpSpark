@@ -8,7 +8,7 @@ namespace ResuMeta_Tests
 {
     public class ApplicationTrackerRepository_Tests
     {
-        private static readonly string _seedFile = @"../../../Data/SeedApplications.sql";
+        private static readonly string _seedFile = @"../../../Data/SeedApplicationTracker.sql";
         private InMemoryDbHelper<ResuMetaDbContext> _dbHelper = new InMemoryDbHelper<ResuMetaDbContext>(_seedFile, DbPersistence.OneDbPerTest);
 
         [TestCase(1, 2)]
