@@ -58,23 +58,47 @@
 </div>
 @if (User.Identity!.IsAuthenticated)
 {
-    <div class="table-responsive">
-    <table id="app-table" class="table text-center ">
-    <thead>
-        <tr>
-            <th class="wrap-text">Job Title</th>
-            <th class="wrap-text">Company Name</th>
-            <th class="wrap-text">Job Listing URL</th>
-            <th class="wrap-text">Applied Date</th>
-            <th class="wrap-text">Application Deadline</th>
-            <th class="wrap-text">Status</th>
-            <th class="wrap-text">Notes</th>
-            <th class="wrap-text"> </th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="filter-section">
+                <h4>Filters</h4>
+                <hr />
+                <label for="sort-option">Sort by:</label>
+                <select id="sort-option">
+                    <option value="applied-date">Date Created</option>
+                    <option value="application-deadline">Application Deadline</option>
+                </select>
+
+                <label for="sort-order">Order:</label>
+                <select id="sort-order">
+                    <option value="ascending">Ascending</option>
+                    <option value="descending">Descending</option>
+                </select>
+
+                <button class="btn btn-primary" id="apply-filters">Apply Filters</button>
+                 <button class="btn btn-primary" id="reset-filters">Reset Filters</button>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="table-responsive">
+            <table id="app-table" class="table text-center ">
+            <thead>
+                <tr>
+                    <th class="wrap-text">Job Title</th>
+                    <th class="wrap-text">Company Name</th>
+                    <th class="wrap-text">Job Listing URL</th>
+                    <th class="wrap-text">Applied Date</th>
+                    <th class="wrap-text">Application Deadline</th>
+                    <th class="wrap-text">Status</th>
+                    <th class="wrap-text">Notes</th>
+                    <th class="wrap-text"> </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
     <hr />

@@ -15,6 +15,10 @@
     border-bottom: 1px solid #ddd; /* Add a border to the bottom of each cell */
 }
 
+#add-application-button {
+    margin-top: 3%;
+}
+
 .wrap-text {
     word-wrap: break-word;
     max-width: 200px; /* Adjust this value according to your needs */
@@ -23,4 +27,30 @@
 .table-responsive {
     display: flex;
     justify-content: center;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-section h4 {
+    color: #e9912c;
+    margin-bottom: 0px;
+}
+
+.filter-section hr {
+    width: 100%;
+}
+.filter-section label {
+    margin: 3px 0;
+    color: #e9912c;
+}
+
+.filter-section select {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 3px;
 }
