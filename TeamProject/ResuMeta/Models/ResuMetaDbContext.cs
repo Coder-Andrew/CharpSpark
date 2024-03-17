@@ -38,7 +38,13 @@ public partial class ResuMetaDbContext : DbContext
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ResuMetaConnection");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Name=ResuMetaConnection");
+        }
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
