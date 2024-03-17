@@ -71,6 +71,8 @@ builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
 builder.Services.AddSingleton<CoverLetterStore>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
+builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
 
 //builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();

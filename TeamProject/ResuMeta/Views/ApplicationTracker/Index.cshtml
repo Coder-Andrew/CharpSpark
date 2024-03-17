@@ -1,0 +1,87 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/ApplicationTracker.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+}
+<div class="text-center">
+    <h1 class="display-4 title">Application Tracker</h1>
+    <hr />
+</div>
+
+
+
+<div class="container">
+
+    <div id="validation">
+        <div class="alert alert-danger" role="alert" id="validationMessage" style="display: none;">
+            <strong>Validation Error</strong>
+            <p id="validationText"></p>
+        </div>
+    </div>
+
+    <form id="application-form" class="row justify-content-center mx-auto" style="width: 80%;">
+        <div class="form-group col-md-6 text-center">
+            <input type="hidden" name="UserId" id="userId" value="@ViewBag.UserId" />
+            <label for="jobTitle">Job Title</label>
+            <input type="text" class="form-control" id="jobTitle" maxlength="100" placeholder="Job Title" required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="companyName">Company Name</label>
+            <input type="text" class="form-control" id="companyName" maxlength="100" placeholder="Company Name"
+                required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="jobListingUrl">Job Listing URL</label>
+            <input type="text" class="form-control" id="jobListingUrl" placeholder="Job Listing URL" required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="appliedDate">Applied Date</label>
+            <input type="date" class="form-control" id="appliedDate" placeholder="Applied Date" required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="applicationDeadline">Application Deadline</label>
+            <input type="date" class="form-control" id="applicationDeadline" placeholder="Application Deadline"
+                required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="status">Status</label>
+            <input type="text" class="form-control" id="status" maxlength="100" placeholder="Status" required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <label for="notes">Notes</label>
+            <input type="text" class="form-control" id="notes" maxlength="100" placeholder="Notes" required>
+        </div>
+        <div class="form-group col-md-6 text-center">
+            <button type="submit" id="add-application-button" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    <hr />
+</div>
+@if (User.Identity!.IsAuthenticated)
+{
+    <div class="table-responsive">
+    <table id="app-table" class="table text-center ">
+    <thead>
+        <tr>
+            <th class="wrap-text">Job Title</th>
+            <th class="wrap-text">Company Name</th>
+            <th class="wrap-text">Job Listing URL</th>
+            <th class="wrap-text">Applied Date</th>
+            <th class="wrap-text">Application Deadline</th>
+            <th class="wrap-text">Status</th>
+            <th class="wrap-text">Notes</th>
+            <th class="wrap-text"> </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</div>
+
+    <hr />
+}
+
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/AppTracker.js"></script>
+}

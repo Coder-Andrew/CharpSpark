@@ -1,0 +1,26 @@
+#app-table {
+    color: #e9912c; 
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%; 
+    table-layout: fixed; 
+}
+#app-table th, #app-table td {
+    /* justify-content: center; */
+    
+    /* background-color: aqua; */
+    font-size: small;
+    padding: 10px; /* Add some padding to cells */
+    text-align: left; /* Align text to the left */
+    border-bottom: 1px solid #ddd; /* Add a border to the bottom of each cell */
+}
+
+.wrap-text {
+    word-wrap: break-word;
+    max-width: 200px; /* Adjust this value according to your needs */
+}
+
+.table-responsive {
+    display: flex;
+    justify-content: center;
+}
