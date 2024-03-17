@@ -4,6 +4,10 @@ function initializePage() {
     refreshTable();
     const applicationForm = document.getElementById('application-form');
     applicationForm.addEventListener('submit', addApplication, false);
+    const sortButton = document.getElementById('apply-filters');
+    sortButton.addEventListener('click', sortTable, false);
+    const resetButton = document.getElementById('reset-filters');
+    resetButton.addEventListener('click', refreshTable, false);
 }
 
 function addApplication(event) {
@@ -74,7 +78,7 @@ function deleteApplication(applicationInfoId) {
         .catch(error => console.error('Error:', error));
 }
 
-function refreshTable() {
+function refreshTable(sortOption, sortOrder) {
     const userId = document.getElementById('userId').value;
     // console.log(userId);
     fetch(`/api/applicationtracker/${userId}`)
@@ -85,6 +89,25 @@ function refreshTable() {
             return response.json();
         })
         .then(data => {
+            if (sortOption && sortOrder) {
+                data.sort(function(a, b) {
+                    var dateA, dateB;
+        
+                    if (sortOption === 'applied-date') {
+                        dateA = new Date(a.appliedDate);
+                        dateB = new Date(b.appliedDate);
+                    } else if (sortOption === 'application-deadline') {
+                        dateA = new Date(a.applicationDeadline);
+                        dateB = new Date(b.applicationDeadline);
+                    }
+        
+                    if (sortOrder === 'ascending') {
+                        return dateA - dateB;
+                    } else if (sortOrder === 'descending') {
+                        return dateB - dateA;
+                    }
+                });
+            }
             const appTable = document.getElementById('app-table');
 
             while (appTable.rows.length > 1) {
@@ -134,4 +157,10 @@ function refreshTable() {
             }
         })
         .catch(error => console.error('Error:', error));
+}
+
+function sortTable() {
+    var sortOption = document.getElementById('sort-option').value;
+    var sortOrder = document.getElementById('sort-order').value;
+    refreshTable(sortOption, sortOrder);
 }
