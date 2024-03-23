@@ -5,7 +5,7 @@ CREATE TABLE [UserInfo] (
   [LastName] nvarchar(50),
   [PhoneNumber] nvarchar(12),
   [Summary] nvarchar(250),
-  [ProfilePicturePath] nvarchar(2048),
+  [ProfilePicturePath] VARBINARY(MAX),
 );
 
 CREATE TABLE [Education] (
@@ -84,6 +84,18 @@ CREATE TABLE [Resume] (
   [Resume] nvarchar(MAX)
 );
 
+CREATE TABLE [ApplicationTracker] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [UserInfoId] integer,
+  [JobTitle] nvarchar(100),
+  [CompanyName] nvarchar(100),
+  [JobListingURL] nvarchar(250),
+  [AppliedDate] date,
+  [ApplicationDeadline] date,
+  [Status] nvarchar(100),
+  [Notes] nvarchar(250)
+);
+
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -125,3 +137,6 @@ ALTER TABLE [Degree] ADD CONSTRAINT [Fk Degree Education Id]
 
 ALTER TABLE [ReferenceContactInfo] ADD CONSTRAINT [Fk ReferenceContactInfo EmploymentHistory Id] 
   FOREIGN KEY ([EmploymentHistoryId]) REFERENCES [EmploymentHistory] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [ApplicationTracker] ADD CONSTRAINT [Fk ApplicationTracker UserInfo Id]
+  FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;

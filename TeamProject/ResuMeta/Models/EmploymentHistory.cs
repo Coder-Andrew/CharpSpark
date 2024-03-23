@@ -14,6 +14,8 @@ public partial class EmploymentHistory
 
     public int? UserInfoId { get; set; }
 
+    public int? ResumeId { get; set; }
+
     [StringLength(100)]
     public string? Company { get; set; }
 

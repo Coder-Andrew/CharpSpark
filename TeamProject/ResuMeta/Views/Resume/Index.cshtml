@@ -1,20 +1,30 @@
 @{
     ViewData["Title"] = "Resume - Home";
 }
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/ResumeIndex.css" asp-append-version="true" />
+}
 <div class="text-center">
     <h1 class="display-4 title">Resume Center</h1>
     <hr />
     <div class="container">
         <div class="row">
+            <h1 class="rounded-pill bg-success invisible" id="success-msg">PDF Import Successful Redirecting...</h1>
             <div class="col-md-6">
                 <h4>Create Resume from Scratch</h4>
                 <a asp-controller="Resume" asp-action="CreateResume" class="btn btn-primary">Create Resume</a>      
             </div>
             <div class="col-md-6">
                 <h4>Upload a Resume</h4>
-                <p>Coming soon...</p>
+                @* <form enctype="multipart/form-data"> *@
+                    <input class="input-group" type="file" name="pdfFile" accept=".pdf" id="pdf-upload"/>
+                    <button class="btn btn-primary" id="upload-btn">Upload Resume</button>
+                @* </form> *@
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script type="module" src="~/js/ResumeIndex.js"></script>
+}
