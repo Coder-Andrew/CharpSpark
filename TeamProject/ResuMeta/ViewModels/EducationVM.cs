@@ -7,5 +7,6 @@
         public DateOnly? StartDate { get; set; } 
         public DateOnly? EndDate { get; set; }
         public bool? Completion { get; set; }
+        public DegreeVM? Degree { get; set; }
     }
 }
