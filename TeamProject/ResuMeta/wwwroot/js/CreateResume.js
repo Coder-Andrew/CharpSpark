@@ -1,3 +1,11 @@
+import {addEducationFromContainer, validateEducation} from './CreateResume_Modules/education-mod.js';
+import {addProjectsFromContainer, validateProjects} from './CreateResume_Modules/project-mod.js';
+import {addPersonalSummaryFromContainer, validatePersonalSummary} from './CreateResume_Modules/personalSummary-mod.js';
+import {addEmploymentFromContainer, validateEmployment} from './CreateResume_Modules/employment-mod.js';
+import {addAchievementsFromContainer, validateAchievements} from './CreateResume_Modules/achievement-mod.js';
+import {validateDates} from './CreateResume_Modules/utility-mod.js';
+
+
 document.addEventListener("DOMContentLoaded", initializePage, false);
 
 let selectedSkills = [];
@@ -5,7 +13,6 @@ let achievementList = [];
 let projectsList = [];
 let educationList = [];
 let employmentList = [];
-let achievementNum = 0;
 let personalSummary = "";
 
 
@@ -18,6 +25,11 @@ function initializePage() {
     const skillInput = document.getElementById("skills");
     const skillCol = document.getElementById("skill-col");
 
+    const closeModal1 = document.getElementById("close-modal1");
+    closeModal1.addEventListener('click', () => closeModal(), false);
+    const closeModal2 = document.getElementById("close-modal2");
+    closeModal2.addEventListener('click', () => closeModal(), false);
+
     // Add debounce to event listener
     skillInput.addEventListener('input', debounce(() => {
         if (skillInput.value) {
@@ -29,13 +41,24 @@ function initializePage() {
 
     }, 350), false);
 
+    // Add focus/unfocus event listener to skills
+    skillInput.addEventListener('focus', () => {
+        if (!skillsDropdown.firstElementChild | !skillInput.value) return;
+        skillsDropdown.classList.add("show")
+    });
+    skillInput.addEventListener('blur', (event) => {
+        console.log(event);
+        setTimeout(() => {
+            skillsDropdown.classList.remove("show")
+        }, 100);
+    });
+
     // Add event listener to dropdown
     skillsDropdown.addEventListener('click', (event) => {
-        skillInput.value = "";
+        skillInput.value = "";    
         skillsDropdown.classList.remove("show");
         addSkillToSkillList(event);
     }, false);
-
 
     // get info boxes
     const educationBox = document.getElementById("education-box");
@@ -64,6 +87,11 @@ function initializePage() {
     const clearProjectBtn = document.getElementById("project-clear-btn");
     clearProjectBtn.addEventListener('click', () => clearProjects(projectBox), false);
 
+
+    var modalButtons = Array.from(document.querySelectorAll('#open-modal'));
+    modalButtons.forEach(button => {
+        button.addEventListener('click', () => openModal(button, educationBox, employmentBox, achievementBox, projectBox), false);
+    });
 }
 
 function debounce(func, delay) {
@@ -82,12 +110,8 @@ async function submitInfo() {
     const validationMessage = document.getElementById("validationText");
     validationMessage.innerHTML = "";
 
+    // Validate all containers
     const educationContainer = document.getElementById("education-box");
-    if (educationContainer.children.length === 0) {
-        validationArea.style.display = "block";
-        validationMessage.innerHTML = "Please add at least one education entry";
-        return;
-    }
     if (validateEducation(educationContainer, validationArea, validationMessage))
     {
         educationList = [];
@@ -106,14 +130,28 @@ async function submitInfo() {
     const personalSummaryContainer = document.getElementById("personal-summary-box");
     if (validatePersonalSummary(personalSummaryContainer, validationArea, validationMessage)) return;
 
+    // Validate all dates
+    var startDateInputs = Array.from(document.querySelectorAll('#startDate'));
+    var endDateInputs = Array.from(document.querySelectorAll('#endDate'));
+    if (validateDates(startDateInputs, endDateInputs, validationArea, validationMessage)) return;
+
     // This function will add all achievements to the achievementList array, this probably should have it's own validation
     // instead of relying on the validation above and the validateachievements function...
-    addEducationFromContainer();
-    addEmploymentFromContainer();
-    addAchievementsFromContainer(); 
-    addProjectsFromContainer();
-    addPersonalSummaryFromContainer();
-   
+    educationList = addEducationFromContainer(educationContainer);
+    employmentList = addEmploymentFromContainer(employmentContainer);
+    achievementList = addAchievementsFromContainer(achievementContainer); 
+    projectsList = addProjectsFromContainer(projectContainer);
+    personalSummary = addPersonalSummaryFromContainer(personalSummaryContainer);
+    
+    // Ensure form has at least some information inputted
+    if (educationList.length === 0 && employmentList.length === 0 && achievementList.length === 0 && projectsList.length === 0 && selectedSkills.length === 0) {
+        validationArea.style.display = "block";
+        validationMessage.innerHTML = "Please fill out at least one section";
+        window.scrollTo(0, 0);
+        return;
+    }
+
+    // Set and Send info
     const resumeInfo = {
         id: userId.value,
         education: educationList,
@@ -123,9 +161,7 @@ async function submitInfo() {
         projects: projectsList,
         personalSummary: personalSummary
     };
-
     console.log(resumeInfo);
-
     const response = await fetch(`/api/resume/info`, {
         method: 'PUT',
         headers: {
@@ -138,7 +174,6 @@ async function submitInfo() {
     {
         const responseJson = await response.json();
         const url = responseJson.redirectUrl
-        console.log(url);
         window.location.href = url;
     }
     else
@@ -160,7 +195,8 @@ async function getSkills(subString) {
     const skillsDropdown = document.getElementById('skills-dropdown');
     skillsDropdown.innerHTML = "";
 
-    result.slice(0,10).forEach(skill => {
+    result.slice(0, 10).forEach(skill => {
+        if (selectedSkills.some(s => s.skillId == skill.id)) return;
         const anchor = document.createElement('a');
 
         anchor.classList.add('dropdown-item');
@@ -196,199 +232,13 @@ function addSkillToSkillList(event) {
         skillCol.removeChild(skillPill);
     });
 
-    if (!selectedSkills.includes(skillId)) {
+    if (!selectedSkills.some(s => s.skillId == skillId)) {
         skillCol.appendChild(skillPill);
         selectedSkills.push({ 'skillId': skillId });
     }
 
 
      console.log(selectedSkills);
-}
-
-function checkForIllegalCharacters(inputElement, validationElement, validationMessageElement) {
-    // Might be better to move this so it finds from the document itself instead of being passed in
-    // because it gets redundant to pass this many parameters in everytime...
-    if (!inputElement | !validationElement | !validationMessageElement) {
-        throw new Error("Elements cannot be null");
-    }
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-
-    if (inputElement.value.match(specialPattern)) {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = "Invalid character in form";
-        return true;
-    }
-    return false;
-}
-function validateNonEmptyInput(inputElement, validationElement, validationMessageElement, message = "Please fill out all fields") {
-    if (!inputElement | !validationElement | !validationMessageElement) {
-        throw new Error("Elements cannot be null");
-    }
-
-    if (inputElement.value === "") {
-        validationElement.style.display = "block";
-        validationMessageElement.innerHTML = message;
-        return true;
-    }
-    return false;
-}
-
-function validateEducation(educationContainer, validationElement, validationMessageElement) {
-    var textInputs = educationContainer.querySelectorAll('input');
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-    const educationSummaries = document.querySelectorAll("#educationSummary");
-    const completedList = document.querySelectorAll("#completed");
-    const degreeTypeList = document.querySelectorAll("#degreeType");
-
-    for (var i = 0; i < textInputs.length; i++) {
-        if (textInputs[i].id === "skills") continue;
-        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
-            textInputs[i].value = "N/A";
-        }
-        if (textInputs[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-        if (textInputs[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            return true;
-        }
-    }
-    for (var i = 0; i < educationSummaries.length; i++) {
-        if (educationSummaries[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-        if (educationSummaries[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            return true;
-        }
-    }
-    for (var i = 0; i < completedList.length; i++) {
-        if (completedList[i].value === "Select a value" )
-        {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-    }
-    for (var i = 0; i < degreeTypeList.length; i++) {
-        if (degreeType.value === "Select a type" )
-        {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-    }
-    return false;
-}  
-
-function validateEmployment(employmentContainer, validationElement, validationMessageElement) {
-    var textInputs = employmentContainer.querySelectorAll('input');
-    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
-    const employmentSummaries = document.querySelectorAll("#description");
-    // const completedList = document.querySelectorAll("#completed");
-    // const degreeTypeList = document.querySelectorAll("#degreeType");
-
-    for (var i = 0; i < textInputs.length; i++) {
-        if (textInputs[i].id === "skills") continue;
-        if (textInputs[i].id === "minor" && textInputs[i].value === "") {
-            textInputs[i].value = "N/A";
-        }
-        if (textInputs[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-        if (textInputs[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            return true;
-        }
-    }
-    for (var i = 0; i < employmentSummaries.length; i++) {
-        if (employmentSummaries[i].value === "") {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Please fill out all fields";
-            return true;
-        }
-        if (employmentSummaries[i].value.match(specialPattern)) {
-            validationElement.style.display = "block";
-            validationMessageElement.innerHTML = "Invalid character in form";
-            return true;
-        }
-    }
-    // for (var i = 0; i < completedList.length; i++) {
-    //     if (completedList[i].value === "Select a value" )
-    //     {
-    //         validationElement.style.display = "block";
-    //         validationMessageElement.innerHTML = "Please fill out all fields";
-    //         return true;
-    //     }
-    // }
-    // for (var i = 0; i < degreeTypeList.length; i++) {
-    //     if (degreeType.value === "Select a type" )
-    //     {
-    //         validationElement.style.display = "block";
-    //         validationMessageElement.innerHTML = "Please fill out all fields";
-    //         return true;
-    //     }
-    // }
-    return false;
-}    
-
-function validateAchievements(achievementContainer, validationElement, validationMessageElement) {
-    const achievementInputs = achievementContainer.querySelectorAll("input");
-    const achievementTextAreas = achievementContainer.querySelectorAll("textarea");
-
-    // ForEach loop does not respect return statements... so I had to use a regular for loop here
-    for (var i = 0; i < achievementInputs.length; i++) {
-        if (checkForIllegalCharacters(achievementInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(achievementInputs[i], validationElement, validationMessageElement, "Please fill out all achievement titles")) return true;
-    }
-
-    for (var i = 0; i < achievementTextAreas.length; i++) {
-        if (checkForIllegalCharacters(achievementTextAreas[i], validationElement, validationMessageElement)) return true;
-    }
-
-    return false;
-}
-
-function validateProjects(projectContainer, validationElement, validationMessageElement) {
-    const projectInputs = projectContainer.querySelectorAll("input");
-    const projectTextAreas = projectContainer.querySelectorAll("textarea");
-
-
-    for (var i = 0; i < projectInputs.length; i++) {
-        if (checkForIllegalCharacters(projectInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(projectInputs[i], validationElement, validationMessageElement, "Please fill out all project names")) return true;
-    }
-
-    for (var i = 0; i < projectTextAreas.length; i++) {
-        if (checkForIllegalCharacters(projectTextAreas[i], validationElement, validationMessageElement)) return true;
-    }
-
-    return false;
-}
-
-function validatePersonalSummary(personalSummaryContainer, validationElement, validationMessageElement) {
-    var personalSummaryInputs = personalSummaryContainer.querySelectorAll('input');
-    var personalSummaryTextArea = personalSummaryContainer.querySelectorAll('textarea');
-
-    for (var i = 0; i < personalSummaryInputs.length; i++) {
-        if (checkForIllegalCharacters(personalSummaryInputs[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(personalSummaryInputs[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
-    }
-
-    for (var i = 0; i < personalSummaryTextArea.length; i++) {
-        if (checkForIllegalCharacters(personalSummaryTextArea[i], validationElement, validationMessageElement)) return true;
-        if (validateNonEmptyInput(personalSummaryTextArea[i], validationElement, validationMessageElement, "Please fill out the personal summary or remove it")) return true;
-    }
-    return false;
 }
 
 function addAchievement(containerElement) {
@@ -435,27 +285,24 @@ function addEducation(containerElement) {
     const educationClone = educationTemplate.content.cloneNode(true);
     const cloneRoot = educationClone.querySelector(".row");
 
-    // Add delete event listenor to education clone
+    // Add delete event listener to education clone
     educationClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
 
     containerElement.appendChild(educationClone);
-
 }
 
 function addEmployment(containerElement) {
     const employmentTemplate = document.getElementById("employment-template");
     const employmentClone = employmentTemplate.content.cloneNode(true);
     const cloneRoot = employmentClone.querySelector(".row");
-
-    // Add delete event listenor to employment clone
+    // Add delete event listener to employment clone
     employmentClone.querySelector(".btn").addEventListener("click", () => {        
         containerElement.removeChild(cloneRoot);
     }, false);
 
     containerElement.appendChild(employmentClone);
-
 }
 
 function clearAchievements(containerElement) {
@@ -486,122 +333,175 @@ function clearEmployment(containerElement) {
     containerElement.innerHTML = "";
 }
 
-function addAchievementToList(achievementElement) {
-    const achievementTitle = achievementElement.querySelector("input").value;
-
-    if (!achievementTitle) return;
-    const achievement = {
-        "title": achievementTitle,
-        "body": achievementElement.querySelector("textarea").value
+function openModal(button, educationBox, employmentBox, achievementBox, projectBox) {
+    console.log("Opening Modal...");
+    const validationArea = document.getElementById("validationMessage");
+    validationArea.style.display = "none";
+    const validationMessage = document.getElementById("validationText");
+    validationMessage.innerHTML = "";
+    const modalType = button.getAttribute("name");
+    const userId = document.getElementById("userId").value;
+    const modalLabel = document.getElementById("modal-label");
+    modalLabel.textContent = "";
+    const vmList = document.getElementById("vm-list");
+    vmList.textContent = "";
+    modalLabel.textContent = modalType;
+    if (modalType === "Education") {
+        const response = fetch(`/api/resume/education/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No education entries found";
+                    return;
+                }
+                data.forEach(education => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    if (education.degree.minor === "N/A") {
+                        listItemText.innerHTML = `<p>Institution: ${education.institution}</p><p>Summary: ${education.educationSummary}</p><p>Dates: ${education.startDate} to ${education.endDate}</p><p>Degree: ${education.degree.type} in ${education.degree.major}</p><hr />`;
+                    } else {
+                        listItemText.innerHTML = `<p>Institution: ${education.institution}</p><p>Summary: ${education.educationSummary}</p><p>Dates: ${education.startDate} to ${education.endDate}</p><p>Degree: ${education.degree.type} in ${education.degree.major} with a minor in ${education.degree.minor}</p><hr />`;
+                    }
+                    listItemText.onclick = () => {
+                        addEducation(educationBox);
+                        const educationElement = educationBox.lastElementChild;
+                        educationElement.querySelector("#institutionName").value = education.institution;
+                        educationElement.querySelector("#educationSummary").value = education.educationSummary;
+                        educationElement.querySelector("#startDate").value = education.startDate;
+                        educationElement.querySelector("#endDate").value = education.endDate;
+                        if (education.completion == true)
+                        {
+                            educationElement.querySelector("#completed").value = "true";
+                        }
+                        else
+                        {
+                            educationElement.querySelector("#completed").value = "false";
+                        }
+                        educationElement.querySelector("#degreeType").value = education.degree.type;
+                        educationElement.querySelector("#major").value = education.degree.major;
+                        educationElement.querySelector("#minor").value = education.degree.minor;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching education";
+            console.log("Error fetching education");
+        }   
     }
-    achievementList.push(achievement);
-}
-
-function addProjectsToList(projectElement) {
-    const projectName = projectElement.querySelector("#project-name").value;
-
-    if (!projectName) return;
-    const project = {
-        "name": projectName,
-        "summary": projectElement.querySelector("#project-summary").value,
-        "link": projectElement.querySelector("#project-link").value
+    if (modalType === "Employment") {
+        const response = fetch(`/api/resume/employment/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No employment history found";
+                    return;
+                }
+                data.forEach(employment => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Company: ${employment.company}</p><p>Summary: ${employment.description}</p><p>Location: ${employment.location}</p><p>Job Title: ${employment.jobTitle}</p><p>Dates: ${employment.startDate} to ${employment.endDate}</p><p>Reference: ${employment.referenceContactInfo.firstName} ${employment.referenceContactInfo.lastName} ${employment.referenceContactInfo.phoneNumber}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addEmployment(employmentBox);
+                        const employmentElement = employmentBox.lastElementChild;
+                        employmentElement.querySelector("#company").value = employment.company;
+                        employmentElement.querySelector("#description").value = employment.description;
+                        employmentElement.querySelector("#location").value = employment.location;
+                        employmentElement.querySelector("#jobTitle").value = employment.jobTitle;
+                        employmentElement.querySelector("#startDate").value = employment.startDate;
+                        employmentElement.querySelector("#endDate").value = employment.endDate;
+                        employmentElement.querySelector("#firstName").value = employment.referenceContactInfo.firstName;
+                        employmentElement.querySelector("#lastName").value = employment.referenceContactInfo.lastName;
+                        employmentElement.querySelector("#phoneNumber").value = employment.referenceContactInfo.phoneNumber;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching employment";
+            console.log("Error fetching employment");
+        }
     }
-    projectsList.push(project);
-}
-
-function addEducationToList(educationElement) {
-    const institution = educationElement.querySelector("#institutionName").value;
-    const educationSummary = educationElement.querySelector("#educationSummary").value;
-    const startDate = educationElement.querySelector("#startDate").value;
-    const endDate = educationElement.querySelector("#endDate").value;
-    const complete = educationElement.querySelector("#completed").value;
-    const degreeType = educationElement.querySelector("#degreeType").value;
-    const major = educationElement.querySelector("#major").value;
-    const minor = educationElement.querySelector("#minor").value;
-
-    if (!institution || !educationSummary || !startDate || !endDate || !complete || !degreeType || !major) return;
-    const education = {
-        "institution": institution,
-        "educationSummary": educationSummary,
-        "startDate": startDate,
-        "endDate": endDate,
-        "complete": complete,
-        "degree": [{
-            "type": degreeType,
-            "major": major,
-            "minor": minor
-        }]
+    if (modalType === "Achievements") {
+        const response = fetch(`/api/resume/achievements/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No achievements found";
+                    return;
+                }
+                data.forEach(achievement => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${achievement.title}</p><p>Summary: ${achievement.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addAchievement(achievementBox);
+                        const achievementElement = achievementBox.lastElementChild;
+                        achievementElement.querySelector("#ach-title").value = achievement.title;
+                        achievementElement.querySelector("#ach-summary").value = achievement.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching achievements";
+            console.log("Error fetching achievements");
+        }
+    
     }
-    educationList.push(education);
-}
-
-function addEmploymentToList(employmentElement) {
-    const company = employmentElement.querySelector("#company").value;
-    const description = employmentElement.querySelector("#description").value;
-    const location = employmentElement.querySelector("#location").value;
-    const jobTitle = employmentElement.querySelector("#jobTitle").value;
-    const startDate = employmentElement.querySelector("#startDate").value;
-    const endDate = employmentElement.querySelector("#endDate").value;
-    const firstName = employmentElement.querySelector("#firstName").value;
-    const lastName = employmentElement.querySelector("#lastName").value;
-    const phoneNumber = employmentElement.querySelector("#phoneNumber").value;
-
-    if (!company || !description || !location || !jobTitle || !startDate || !endDate || !firstName || !lastName || !phoneNumber) return;
-    const employmentHistory = {
-        "company": company,
-        "description": description,
-        "location": location,
-        "jobTitle": jobTitle,
-        "startDate": startDate,
-        "endDate": endDate,
-        "referenceContactInfo": [{
-            "firstName": firstName,
-            "lastName": lastName,
-            "phoneNumber": phoneNumber
-        }]
+    if (modalType === "Projects") {
+        const response = fetch(`/api/resume/projects/${userId}`);
+        try {
+            response.then(res => res.json()).then(data => {
+                if (data.length === 0) {
+                    vmList.textContent = "No projects found";
+                    return;
+                }
+                data.forEach(project => {
+                    const listItem = document.createElement("li");
+                    const listItemText = document.createElement("div");
+                    listItemText.innerHTML = `<p>Title: ${project.name}</p><p>Link: ${project.link}</p><p>Summary: ${project.summary}</p><hr />`;
+                    listItemText.onclick = () => {
+                        addProject(projectBox);
+                        const projectElement = projectBox.lastElementChild;
+                        projectElement.querySelector("#project-name").value = project.name;
+                        projectElement.querySelector("#project-link").value = project.link;
+                        projectElement.querySelector("#project-summary").value = project.summary;
+                    }
+                    listItem.appendChild(listItemText);
+                    listItem.style.cursor = "pointer";
+                    listItem.id = "modal-list-item";
+                    vmList.appendChild(listItem);
+                });
+            });
+        }
+        catch {
+            validationArea.style.display = "block";
+            validationMessage.innerHTML = "Error fetching projects";
+            console.log("Error fetching projects");
+        }
+    
     }
-    employmentList.push(employmentHistory);
 }
 
-function addAchievementsFromContainer() {
-    achievementList = [];
-    const achievementContainer = document.getElementById("achievement-box");
-
-    Array.from(achievementContainer.children).forEach(child => {
-        addAchievementToList(child);
-    });
-}
-
-function addProjectsFromContainer() {
-    projectsList = [];
-    const projectContainer = document.getElementById("project-box");
-
-    Array.from(projectContainer.children).forEach(child => {
-        addProjectsToList(child);
-    });
-}
-
-
-function addEducationFromContainer() {
-    educationList = [];
-    const educationContainer = document.getElementById("education-box");
-
-    Array.from(educationContainer.children).forEach(child => {
-        addEducationToList(child);
-    });
-}
-
-function addEmploymentFromContainer() {
-    employmentList = [];
-    const employmentContainer = document.getElementById("employment-box");
-
-    Array.from(employmentContainer.children).forEach(child => {
-        addEmploymentToList(child);
-    });
-}
-
-function addPersonalSummaryFromContainer() {
-    const personalSummaryContainer = document.getElementById("personal-summary-box");
-    let textareaElement = personalSummaryContainer.querySelector("textarea");
-    personalSummary = textareaElement ? textareaElement.value : "";
+function closeModal() {
+    const modalName = document.getElementById("modal-label");
+    modalName.textContent = "";
+    const vmList = document.getElementById("vm-list");
+    vmList.textContent = "";
 }

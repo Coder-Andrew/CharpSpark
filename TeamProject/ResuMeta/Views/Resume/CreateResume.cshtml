@@ -22,6 +22,7 @@
              <div class="d-flex justify-content-center">
                 <button class="btn bg-success border-0 d-flex mx-1 text-center" id="education-add-btn" style="width: 50px;">Add</button>
                 <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="education-clear-btn" style="width: 60px;">Clear</button>
+                <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Education" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
             </div>
             <div id="education-box">
 
@@ -35,6 +36,7 @@
              <div class="d-flex justify-content-center">
                 <button class="btn bg-success border-0 d-flex mx-1 text-center" id="employment-add-btn" style="width: 50px;">Add</button>
                 <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="employment-clear-btn" style="width: 60px;">Clear</button>
+                <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Employment" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
             </div>
             <div id="employment-box">
 
@@ -46,39 +48,41 @@
         <div class="row mt-3 d-flex form-group" id="skill-achievements-form">
             <h4 class="h4 mt-4">Skills & Achievements</h4>
             <hr />
-            <div class="col col-md-6 justify-content-center">
-                <label class="col-form-label title">Achievements:</label>
-                <div class="d-flex justify-content-center">
-                    <!-- Achievement Add and Clear buttons -->
-                    <button class="btn bg-success border-0 d-flex mx-1" id="achievement-add-btn">Add</button>
-                    <button class="btn bg-danger border-0 text-white d-flex mx-1"
-                        id="achievement-clear-btn">Clear</button>
-                </div>
-                <div id="achievement-box" class="justify-content-center">
-                    <!-- Achievement box -->
-                </div>
-            </div>
-            <div class="col col-md-6">
+            <div class="col col-md-12">
                 <label class="col-form-label title">Skills:</label>
                 <div class="d-flex justify-content-center">
-                    <input type="text" id="skills" maxlength="100" style="width: 80%;" />
-                    <div class="dropdown-menu" style="margin-top: 29px; width: 26%;" id="skills-dropdown">
+                    <input type="text" id="skills" maxlength="100" style="width: 50%;" placeholder="Enter a skill..."/>
+                    <div class="dropdown-menu" style="margin-top: 27px; width: 26%;" id="skills-dropdown"> <!-- 26% -->
                         <!-- inline styling :| -->
                     </div>
                 </div>
                 <div class="col" id="skill-col">
                 </div>
             </div>
+            <div class="col col-md-12 justify-content-center">
+                <label class="col-form-label title">Achievements:</label>
+                <div class="d-flex justify-content-center">
+                    <!-- Achievement Add and Clear buttons -->
+                    <button class="btn bg-success border-0 d-flex mx-1" id="achievement-add-btn">Add</button>
+                    <button class="btn bg-danger border-0 text-white d-flex mx-1"
+                        id="achievement-clear-btn">Clear</button>
+                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Achievements" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
+                </div>
+                <div id="achievement-box" class="justify-content-center">
+                    <!-- Achievement box -->
+                </div>
+            </div>
         </div>
         <div class="row mt-3 d-flex form-group" id="projects-form">
             <h4 class="h4 mt-4">Projects</h4>
             <hr />
-            <div class="col col-md-6 justify-content-center">
+            <div class="col col-md-12 justify-content-center">
                 <label class="col-form-label title">Projects:</label>
                 <div class="d-flex justify-content-center">
                     <!-- Project Add and Clear buttons -->
                     <button class="btn bg-success border-0 d-flex mx-1" id="project-add-btn">Add</button>
                     <button class="btn bg-danger border-0 text-white d-flex mx-1" id="project-clear-btn">Clear</button>
+                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal" name="Projects" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
                 </div>
                 <div id="project-box" class="justify-content-center">
                     <!-- Project box -->
@@ -101,13 +105,38 @@
 
         <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 shadowText" id="modal-label"></h1>
+                    <button id="close-modal1" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <ul class="list-unstyled text-left" id="vm-list">
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="close-modal2" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+@* Any template containing a start date must be followed by an end date, or it will break the date validation *@
 
 <template id="achievement-template">
     <div class="row justify-content-center mx-auto" style="width: 80%;">
-        <input type="text" class="achievement-title text-center" maxlength="100" placeholder="Achievement" />
+        <input type="text" class="achievement-title text-center" maxlength="100" placeholder="Achievement" id="ach-title"/>
         <textarea cols="60" rows="3" placeholder="Achievement Description" style="resize: none;"
-            maxlength="250"></textarea>
+            maxlength="250" id="ach-summary"></textarea>
         <button class="btn bg-danger text-white border-0">Delete</button>
     </div>
 </template>
@@ -128,24 +157,24 @@
         <div class="col col-md-6">
             <label for="institutionName" class="col-form-label title">Institution Name:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" class="form-control" id="institutionName" maxlength="100" style="width: 80%;" />
+                <input type="text" class="form-control" id="institutionName" name="institutionName" maxlength="100" style="width: 80%;" />
             </div>
             <label for="educationSummary" class="col-form-label title">Education Summary:</label>
             <div class="d-flex justify-content-center">
-                <textarea class="form-control" id="educationSummary" rows="5" maxlength="250"
+                <textarea class="form-control" id="educationSummary" name="educationSummary" rows="5" maxlength="250"
                     style="width: 80%;"></textarea>
             </div>
             <label for="startDate" class="col-form-label title">Start Date:</label>
             <div class="d-flex justify-content-center">
-                <input type="date" class="form-control" id="startDate" style="width: 80%;" />
+                <input type="date" class="form-control" id="startDate" name="startDate" style="width: 80%;" />
             </div>
             <label for="endDate" class="col-form-label title">End Date: (Or Expected)</label>
             <div class="d-flex justify-content-center">
-                <input type="date" class="form-control" id="endDate" style="width: 80%;" />
+                <input type="date" class="form-control" id="endDate" name="endDate" style="width: 80%;" />
             </div>
             <label for="completed" class="col-form-label title">Education Completed:</label>
             <div class="d-flex justify-content-center">
-                <select class="form-control" id="completed" style="width: 80%;">
+                <select class="form-control" id="completed" name="completed" style="width: 80%;">
                     <option selected disabled>Select a value</option>
                     <option value="true">True</option>
                     <option value="false">False</option>
@@ -155,7 +184,7 @@
         <div class="col col-md-6">
             <label for="degreeType" class="col-form-label title">Degree Type:</label>
             <div class="d-flex justify-content-center">
-                <select class="form-control" id="degreeType" style="width: 80%;">
+                <select class="form-control" id="degreeType" name="degreeType" style="width: 80%;">
                     <option selected disabled>Select a type</option>
                     <option value="Associate">Associate Degree</option>
                     <option value="Bachelor">Bachelor's Degree</option>
@@ -165,11 +194,11 @@
             </div>
             <label for="major" class="col-form-label title">Major:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" id="major" maxlength="50" style="width: 80%;" />
+                <input type="text" id="major" name="major" maxlength="50" style="width: 80%;" />
             </div>
             <label for="minor" class="col-form-label title">Minor:</label>
             <div class="d-flex justify-content-center">
-                <input type="text" id="minor" maxlength="50" style="width: 80%;" />
+                <input type="text" id="minor" name="minor" maxlength="50" style="width: 80%;" />
             </div>
             <button class="btn bg-danger text-white border-0 mt-3" style="width: 50%;">Delete</button>
         </div>
@@ -238,5 +267,13 @@
 
 
 @section Scripts {
-    <script type="text/javascript" src="~/js/CreateResume.js"></script>
+    <script type="module" src="~/js/CreateResume.js"></script>
+    <style>
+        #modal-list-item:hover {
+            background: linear-gradient(to right, rgba(255, 0, 0, 0.5), rgba(255, 165, 0, 0.5));
+            padding: 1px;
+            margin: -1px;
+            border-radius: 5px;
+        }
+    </style>
 }
