@@ -1,12 +1,13 @@
 using ResuMeta.Models.DTO;
-using ResuMeta.ViewModels;
+using ResuMeta.Models;
 using System.Text.Json;
+using ResuMeta.ViewModels;
 
 namespace ResuMeta.Services.Abstract
 {
     public interface ICoverLetterService
     {
-        CoverLetterVM AddCoverLetterInfo(JsonElement coverLetterInfo);
-        CoverLetterVM GetCoverLetter();
+        int AddCoverLetterInfo(JsonElement coverLetterInfo);
+        CoverLetterVM GetCoverLetter(int coverLetterId);
     }
 }
