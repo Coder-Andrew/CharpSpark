@@ -11,9 +11,9 @@
     <hr />
         @if (User.Identity!.IsAuthenticated)
         {
+            <h4>Your Resumes</h4>
             @if(Model != null && Model.Resumes?.Count() > 0)
             {
-                <h4>Your Resumes</h4>
                 <section id="resume-section">
                 @foreach(var resume in Model.Resumes)
                 {
@@ -33,6 +33,33 @@
                 <div class="no-resume">
                     <p>You have not created any resumes yet.</p>
                     <a asp-controller="Resume" asp-action="CreateResume" class="btn btn-primary">Create Resume</a>
+                </div>
+            }
+            <br />
+            <br />
+            <hr />
+            <h4>Your Cover Letters</h4>
+            @if(Model != null && Model.CoverLetters?.Count() > 0)
+            {
+                <section id="cover-letter-section">
+                @foreach(var coverLetter in Model.CoverLetters)
+                {
+                    <div class="thumbnail" onclick="location.href='@Url.Action("YourCoverLetter", "CoverLetter", new {coverLetterId = @coverLetter.CoverLetterId})'">
+                        <div id="content-@coverLetter.CoverLetterId"></div>
+                        <div class="thumbnail-title">@coverLetter.Title</div>
+                    </div>
+                    <script type="text/javascript">
+                        var contentDiv = document.getElementById('content-@coverLetter.CoverLetterId');
+                        contentDiv.innerHTML = decodeURIComponent("@Html.Raw(coverLetter.HtmlContent)");
+                    </script>
+                }
+                </section>
+            }
+            else
+            {
+                <div class="no-cover-letter">
+                    <p>You have not created any cover letters yet.</p>
+                    <a asp-controller="CoverLetter" asp-action="CreateCoverLetter" class="btn btn-primary">Create Cover Letter</a>
                 </div>
             }
         }
