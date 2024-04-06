@@ -73,4 +73,28 @@ public class CoverLetterController : Controller
         
         return View(coverLetterVM);
     }
+
+    [HttpGet("CoverLetter/YourCoverLetter/{coverLetterId}")]
+    public IActionResult YourCoverLetter(int coverLetterId)
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        CoverLetter coverLetter =  _coverLetterRepository.GetAll().Where(x => x.Id == coverLetterId).FirstOrDefault()!;
+        if(coverLetter == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        if(coverLetter.UserInfoId != currUser.Id)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetter(coverLetterId);
+        return View(coverLetterVM);
+    }
+
 }
