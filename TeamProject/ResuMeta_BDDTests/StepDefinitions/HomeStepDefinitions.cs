@@ -27,7 +27,10 @@ namespace ResuMeta_BDDTests.StepDefinitions
         public void WhenIAmOnThePage(string pageName)
         {
             _homePage.GoTo(pageName);
-            Thread.Sleep(3000);
+            if (pageName == "Home")
+            {
+                Thread.Sleep(3000);
+            }
         }
 
         [Then(@"The page title contains ""([^""]*)""")]
@@ -52,6 +55,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         public void GivenILogout()
         {
             _homePage.GoTo();
+            Thread.Sleep(3000);
             _homePage.Logout();
         }
 

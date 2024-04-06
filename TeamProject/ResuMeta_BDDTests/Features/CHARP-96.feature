@@ -13,10 +13,21 @@ Users can save their WYSIWYG content to the applications DB
 Will be using the Quill library for implementation
 Resumes created will be required to have a title before they can be saved
 
+Background:
+    Given the following users exist
+	  | UserName               | Email                  | FirstName  | LastName    | Password     |
+	  | reynoldsa@mail.com     | reynoldsa@mail.com     | Adrian     | Reynolds    | Password123! |
+    And I am a user with the first name 'Adrian'
+    And I login
+    And I am on the "Home" page
+    And I logout
+
 
 Scenario: User can create a resume and view it in a WYSIWYG editor
-Given I am a logged in user
-When I submit my information in the "Create Resume" page form
+Given I am a user with the first name 'Adrian'
+     And I login
+     And I am on the "CreateResume" page
+When I submit my information in the CreateResume page form
 Then I will be redirected to the "ViewResume" page with a WYSIWYG editor
 
 Scenario: User can edit their resume in the WYSIWYG editor

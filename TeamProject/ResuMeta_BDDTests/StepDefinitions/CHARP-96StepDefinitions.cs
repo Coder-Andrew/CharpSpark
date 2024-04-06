@@ -1,19 +1,41 @@
-global using FluentAssertions;
-global using NUnit;
-using Reqnroll;
+using ResuMeta_BDDTests.Drivers;
+using ResuMeta_BDDTests.PageObjects;
+using ResuMeta_BDDTests.Shared;
+using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Threading;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium;
+using System;
 
 namespace ResuMeta_BDDTests.StepDefinitions
 {
     [Binding]
     public class CHARP96StepDefinitions
     {
-        // private Calculator calculator = new Calculator();
-        private int _result;
+        private readonly ScenarioContext _scenarioContext;
+        private readonly CreateResumePageObject _createResumePage;
+        private readonly ViewResumePageObject _viewResumePage;
 
-        // [Given("I am a logged in user")]
-        // public void GivenIAmALoggedInUser()
-        // {
-        //     _scenarioContext.Pending();
-        // }
+        public CHARP96StepDefinitions(ScenarioContext scenarioContext, BrowserDriver browserDriver)
+        {
+            _scenarioContext = scenarioContext;
+            _createResumePage = new CreateResumePageObject(browserDriver.Current);
+            _viewResumePage = new ViewResumePageObject(browserDriver.Current);
+        }
+
+        [When("I submit my information in the CreateResume page form")]
+        public void WhenISubmitMyInformationInTheCreateResumePageForm()
+        {
+            _createResumePage.FillOutForm();
+            _createResumePage.SubmitForm();
+            Thread.Sleep(9000);
+        }
+
+        [Then("I will be redirected to the {string} page with a WYSIWYG editor")]
+        public void ThenIWillBeRedirectedToThePageWithAWYSIWYGEditor(string viewResume)
+        {
+            _viewResumePage.GetQuillToolBar().Should().BeTrue();
+        }
     }
 }

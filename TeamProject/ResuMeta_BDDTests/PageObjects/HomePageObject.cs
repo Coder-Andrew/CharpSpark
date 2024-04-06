@@ -15,7 +15,11 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public IWebElement RegisterButton => _webDriver.FindElement(By.Id("register"));
         public IWebElement LoginButton => _webDriver.FindElement(By.Id("login"));
-
+        public IWebElement NavBarHelloLink => _webDriver.FindElement(By.CssSelector("a[title=\"Manage\"]"));
+        public string NavbarWelcomeText()
+        {
+            return NavBarHelloLink.Text;
+        }
         public void Logout()
         {
             IWebElement navbarLogoutButton = _webDriver.FindElement(By.Id("logout"));
