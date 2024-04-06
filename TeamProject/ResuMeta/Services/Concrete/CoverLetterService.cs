@@ -11,6 +11,12 @@ using ResuMeta.Data;
 
 namespace ResuMeta.Services.Concrete
 {
+    class JsonCoverLetterContent
+    {
+        public string? coverLetterId { get; set; }
+        public string? title { get; set; }
+        public string? htmlContent { get; set; }
+    }
     class JsonCoverLetter
     {
         public string? Id { get; set; }
@@ -70,6 +76,42 @@ namespace ResuMeta.Services.Concrete
         public CoverLetterVM GetCoverLetter(int coverLetterId)
         {
             return _coverLetterRepo.GetCoverLetter(coverLetterId);
+        }
+
+        public void SaveCoverLetterById(JsonElement content)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            try
+            {
+                JsonCoverLetterContent coverLetterContent = JsonSerializer.Deserialize<JsonCoverLetterContent>(content, options)!;
+                if (coverLetterContent.htmlContent == null)
+                {
+                    throw new Exception("Invalid input");
+                }
+
+                CoverLetter coverLetter = _coverLetterRepository.FindById(Int32.Parse(coverLetterContent.coverLetterId!));
+                coverLetter.CoverLetter1 = coverLetterContent.htmlContent;
+                coverLetter.Title = coverLetterContent.title;
+                _coverLetterRepository.AddOrUpdate(coverLetter);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deserializing json");
+                throw new Exception("Error deserializing json");
+            }
+        }
+
+        public CoverLetterVM GetCoverLetterHtml(int coverLetterId)
+        {
+            return _coverLetterRepo.GetCoverLetterHtml(coverLetterId);
+        }
+
+        public List<CoverLetterVM> GetAllCoverLetters(int userId)
+        {
+            return _coverLetterRepo.GetAllCoverLetters(userId);
         }
     }
 }

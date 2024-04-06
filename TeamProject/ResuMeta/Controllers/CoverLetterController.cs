@@ -18,17 +18,20 @@ public class CoverLetterController : Controller
     private readonly IRepository<UserInfo> _userInfo;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICoverLetterService _coverLetterService;
+    private readonly IRepository<CoverLetter> _coverLetterRepository;
     public CoverLetterController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
-        ICoverLetterService coverLetterService
+        ICoverLetterService coverLetterService,
+        IRepository<CoverLetter> coverLetterRepository
         )
     {
         _logger = logger;
         _userInfo = userInfo;
         _userManager = userManager;
         _coverLetterService = coverLetterService;
+        _coverLetterRepository = coverLetterRepository;
 
     }
 
@@ -60,12 +63,13 @@ public class CoverLetterController : Controller
         }
 
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-        CoverLetterVM coverLetterVM =  _coverLetterService.GetCoverLetter(coverLetterId);
-
-        if(coverLetterVM.UserInfoId != currUser.Id)
+        CoverLetter coverLetter =  _coverLetterRepository.GetAll().Where(x => x.Id == coverLetterId).FirstOrDefault()!;
+        if(coverLetter.UserInfoId != currUser.Id)
         {
             return RedirectToAction("Index", "Home");
         }
+
+        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetter(coverLetterId);
         
         return View(coverLetterVM);
     }

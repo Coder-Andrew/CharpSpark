@@ -40,5 +40,36 @@ namespace ResuMeta.DAL.Concrete
                 throw new Exception("Error getting cover letter", ex);
             }
         }
+
+        public CoverLetterVM GetCoverLetterHtml(int coverLetterId)
+        {
+            CoverLetter? coverLetter = _coverLetters.FirstOrDefault(r => r.Id == coverLetterId);
+            if(coverLetter == null)
+            {
+                throw new Exception("Cover Letter not found");
+            }
+
+            CoverLetterVM coverLetterVM = new CoverLetterVM
+            {
+                CoverLetterId = coverLetter.Id,
+                Title = coverLetter.Title,
+                HtmlContent = coverLetter.CoverLetter1
+            };
+            return coverLetterVM;
+        }
+
+        public List<CoverLetterVM> GetAllCoverLetters(int userId)
+        {
+            var coverLetterList = _coverLetters
+            .Where(x => x.UserInfoId == userId && x.CoverLetter1 != null)
+            .Select(x => new CoverLetterVM
+            {
+                CoverLetterId = x.Id,
+                Title = x.Title,
+                HtmlContent = x.CoverLetter1
+            })
+            .ToList();
+            return coverLetterList;
+        }
     }
 }
