@@ -171,20 +171,34 @@ namespace ResuMeta_BDDTests.PageObjects
                 Actions builder = new Actions(_webDriver);
                 builder.MoveToElement(element, 0, 0).Perform();
             }
-            _webDriver.FindElement(By.Id("project-name")).Click();
-            _webDriver.FindElement(By.Id("project-name")).SendKeys("resuMeta");
+            
+            var projectNameElement = _webDriver.FindElement(By.Id("project-name"));
+            js.ExecuteScript(string.Format("window.scrollTo({0},{1})", projectNameElement.Location.X, projectNameElement.Location.Y));
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", projectNameElement);
+            Thread.Sleep(500);
+            projectNameElement.Click();
+            projectNameElement.SendKeys("resuMeta");
+            var projectLinkElement = _webDriver.FindElement(By.Id("project-link"));
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", projectLinkElement);
+            Thread.Sleep(500);
             _webDriver.FindElement(By.Id("project-link")).Click();
             _webDriver.FindElement(By.Id("project-link")).SendKeys("https://resumeta.azurewebsites.net");
+            var projectSummaryElement = _webDriver.FindElement(By.Id("project-summary"));
             _webDriver.FindElement(By.Id("project-summary")).Click();
             _webDriver.FindElement(By.Id("project-summary")).SendKeys("Senior Sequence Project created with team members of CharpSpark");
-            _webDriver.FindElement(By.CssSelector("#projects-form > .col:nth-child(4)")).Click();
+            //_webDriver.FindElement(By.CssSelector("#projects-form > .col:nth-child(4)")).Click();
             var personalSummaryElement = _webDriver.FindElement(By.Id("personal-summary-add-btn"));
             js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement);
             Thread.Sleep(500);
             personalSummaryElement.Click();
-            _webDriver.FindElement(By.Id("personal-summary")).Click();
-            _webDriver.FindElement(By.Id("personal-summary")).Click();
-            _webDriver.FindElement(By.Id("personal-summary")).SendKeys("Hard working and reliable member of a team, great communication skills and motivated to achieve success.");
+            var personalSummaryElement2 = _webDriver.FindElement(By.Id("personal-summary"));
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement2);
+            Thread.Sleep(500);
+            personalSummaryElement2.Click();
+            var personalSummaryElement3 = _webDriver.FindElement(By.Id("personal-summary"));
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement3);
+            Thread.Sleep(500);
+            personalSummaryElement3.SendKeys("Hard working and reliable member of a team, great communication skills and motivated to achieve success.");
         }
 
     }
