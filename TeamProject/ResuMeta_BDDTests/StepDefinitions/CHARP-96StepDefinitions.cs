@@ -30,9 +30,8 @@ namespace ResuMeta_BDDTests.StepDefinitions
         {
             _createResumePage.FillOutForm();
             _createResumePage.SubmitForm();
-            string viewResumeUrlId = _createResumePage.GetViewResumeUrl();
-            Common.Paths["ViewResume"] = Common.Paths["ViewResume"] + viewResumeUrlId;
-
+            _viewResumeUrl = _createResumePage.GetViewResumeUrl();
+            Common.Paths["ViewResume"] = Common.Paths["ViewResume"] + _viewResumeUrl;
         }
 
         [Then("I will be redirected to the {string} page with a WYSIWYG editor")]
@@ -40,6 +39,54 @@ namespace ResuMeta_BDDTests.StepDefinitions
         {
             Thread.Sleep(1000);
             _viewResumePage.GetEditor().Should().BeTrue();
+        }
+
+        [Given("have been redirected to the \"ViewResume\" page")]
+        public void GivenHaveBeenRedirectedToThePage()
+        {
+            _viewResumePage.GoTo("ViewResume");
+        }
+
+        [When("I type into the WYSIWYG editor")]
+        public void WhenITypeIntoTheWYSIWYGEditor()
+        {
+            _viewResumePage.TypeIntoEditor();
+        }
+
+        [Then("I will be able to see the editor modify the content")]
+        public void ThenIWillBeAbleToSeeTheEditorModifyTheContent()
+        {
+            _viewResumePage.QuillEditor.Text.Should().Contain("Hello, World!");
+        }
+
+        [When("I click on the \"Save Resume\" button")]
+        public void WhenIClickOnTheSaveResumeButton()
+        {
+            _viewResumePage.SaveResume();
+        }
+
+        [Then("I will be able to see a confirmation message letting me know the resume saved successfully")]
+        public void ThenIWillBeAbleToSeeAConfirmationMessageLettingMeKnowTheResumeSavedSuccessfully()
+        {
+            _viewResumePage.GetSaveMessage().Should().Contain("Resume saved successfully.");
+        }
+
+        [Given("I have saved my resume")]
+        public void GivenIHaveSavedMyResume()
+        {
+            _viewResumePage.SaveResume();
+        }
+
+        [When("I click on the \"Export Resume\" button")]
+        public void WhenIClickOnTheExportResumeButton()
+        {
+            _viewResumePage.ExportPdf();
+        }
+
+        [Then("I will be able to see a confirmation message letting me know the resume exported successfully")]
+        public void ThenIWillBeAbleToSeeAConfirmationMessageLettingMeKnowTheResumeExportedSuccessfully()
+        {
+            _viewResumePage.GetSaveMessage().Should().Contain("Resume exported successfully.");
         }
     }
 }

@@ -20,7 +20,10 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [Given(@"I am a visitor")]
         public void GivenIAmAVisitor()
         {
-            // nothing to do!!
+            if (_homePage.IsLoggedIn())
+            {
+                _homePage.Logout();
+            }
         }
 
         [Given(@"I am on the ""([^""]*)"" page"),When(@"I am on the ""([^""]*)"" page")]

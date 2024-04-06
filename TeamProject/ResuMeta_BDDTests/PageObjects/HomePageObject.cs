@@ -26,5 +26,10 @@ namespace ResuMeta_BDDTests.PageObjects
             navbarLogoutButton.Click();
         }
 
+        public bool IsLoggedIn()
+        {
+            var logoutElements = _webDriver.FindElements(By.Id("logout"));
+            return logoutElements.Count > 0;
+        }
     }
 }
