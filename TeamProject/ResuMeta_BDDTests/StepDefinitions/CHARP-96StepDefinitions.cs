@@ -16,6 +16,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         private readonly ScenarioContext _scenarioContext;
         private readonly CreateResumePageObject _createResumePage;
         private readonly ViewResumePageObject _viewResumePage;
+        public string _viewResumeUrl;
 
         public CHARP96StepDefinitions(ScenarioContext scenarioContext, BrowserDriver browserDriver)
         {
@@ -29,13 +30,16 @@ namespace ResuMeta_BDDTests.StepDefinitions
         {
             _createResumePage.FillOutForm();
             _createResumePage.SubmitForm();
-            Thread.Sleep(9000);
+            string viewResumeUrlId = _createResumePage.GetViewResumeUrl();
+            Common.Paths["ViewResume"] = Common.Paths["ViewResume"] + viewResumeUrlId;
+
         }
 
         [Then("I will be redirected to the {string} page with a WYSIWYG editor")]
         public void ThenIWillBeRedirectedToThePageWithAWYSIWYGEditor(string viewResume)
         {
-            _viewResumePage.GetQuillToolBar().Should().BeTrue();
+            Thread.Sleep(1000);
+            _viewResumePage.GetEditor().Should().BeTrue();
         }
     }
 }

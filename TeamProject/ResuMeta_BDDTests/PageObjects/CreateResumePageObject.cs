@@ -22,6 +22,14 @@ namespace ResuMeta_BDDTests.PageObjects
             // using a named page (in Common.cs)
             _pageName = "CreateResume";
         }
+
+        public string GetViewResumeUrl()
+        {
+            string fullUrl = _webDriver.Url;
+            int lastIndex = fullUrl.LastIndexOf("/") + 1;
+            string urlId = fullUrl.Substring(lastIndex);
+            return urlId;
+        }
         public void SubmitForm()
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
@@ -30,16 +38,9 @@ namespace ResuMeta_BDDTests.PageObjects
             string currentUrl = _webDriver.Url;
             Thread.Sleep(500);
             submitElement.Click();
-            Thread.Sleep(5000);
+            Thread.Sleep(1000);
             WebDriverWait wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(10));
             wait.Until(driver => driver.Url != currentUrl);
-            
-            // Console.WriteLine(window_after);
-            // _webDriver.SwitchTo().Window(window_after);
-            // Thread.Sleep(5000);
-            // // Wait for up to 10 seconds for a specific element to be present
-            // WebDriverWait wait = new WebDriverWait(_webDriver, );
-            // wait.Until(_webDriver => _webDriver.FindElement(By.Id("ql-editor")).Displayed);
         }
         public void FillOutForm()
         {
@@ -186,19 +187,6 @@ namespace ResuMeta_BDDTests.PageObjects
             var projectSummaryElement = _webDriver.FindElement(By.Id("project-summary"));
             _webDriver.FindElement(By.Id("project-summary")).Click();
             _webDriver.FindElement(By.Id("project-summary")).SendKeys("Senior Sequence Project created with team members of CharpSpark");
-            //_webDriver.FindElement(By.CssSelector("#projects-form > .col:nth-child(4)")).Click();
-            var personalSummaryElement = _webDriver.FindElement(By.Id("personal-summary-add-btn"));
-            js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement);
-            Thread.Sleep(500);
-            personalSummaryElement.Click();
-            var personalSummaryElement2 = _webDriver.FindElement(By.Id("personal-summary"));
-            js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement2);
-            Thread.Sleep(500);
-            personalSummaryElement2.Click();
-            var personalSummaryElement3 = _webDriver.FindElement(By.Id("personal-summary"));
-            js.ExecuteScript("arguments[0].scrollIntoView(true);", personalSummaryElement3);
-            Thread.Sleep(500);
-            personalSummaryElement3.SendKeys("Hard working and reliable member of a team, great communication skills and motivated to achieve success.");
         }
 
     }

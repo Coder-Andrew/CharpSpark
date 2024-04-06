@@ -17,7 +17,7 @@ namespace ResuMeta_BDDTests.Shared
 
         // Page names that everyone should use
         // A handy way to look these up
-        public static readonly Dictionary<string, string> Paths = new()
+        public static Dictionary<string, string> Paths = new()
         {
             { "Home" , "/" },
             { "Login", "/Identity/Account/Login" },
@@ -26,7 +26,7 @@ namespace ResuMeta_BDDTests.Shared
             { "YourResume", "/Resume/YourResume/" }
         };
 
-        public static string PathFor(string pathName) => Paths[pathName];
-        public static string UrlFor(string pathName) => BaseUrl + Paths[pathName];
+        public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
+        public static string UrlFor(string pathName, string id = "") => BaseUrl + Paths[pathName] + id;
     }
 }

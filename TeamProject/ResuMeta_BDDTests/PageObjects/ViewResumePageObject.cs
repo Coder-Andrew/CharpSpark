@@ -2,6 +2,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using ResuMeta_BDDTests.Shared;
 using System.Collections.ObjectModel;
+using System;
+using System.Threading;
 
 namespace ResuMeta_BDDTests.PageObjects
 {
@@ -14,9 +16,10 @@ namespace ResuMeta_BDDTests.PageObjects
         }
 
         public IWebElement QuillEditor => _webDriver.FindElement(By.Id("ql-editor"));
-        public IWebElement QuillToolBar => _webDriver.FindElement(By.Id("ql-toolbar"));
-        public bool GetQuillToolBar()
+        public IWebElement QuillToolBar => _webDriver.FindElement(By.CssSelector("div[class=\"ql-toolbar ql-snow\"]"));
+        public bool GetEditor()
         {
+            Thread.Sleep(1000);
             if (QuillToolBar.Displayed)
             {
                 return true;
@@ -25,11 +28,6 @@ namespace ResuMeta_BDDTests.PageObjects
             {
                 return false;
             }
-        }
-        public void Logout()
-        {
-            IWebElement navbarLogoutButton = _webDriver.FindElement(By.Id("logout"));
-            navbarLogoutButton.Click();
         }
 
     }
