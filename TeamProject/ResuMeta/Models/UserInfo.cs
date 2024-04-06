@@ -51,4 +51,7 @@ public partial class UserInfo
 
     [InverseProperty("UserInfo")]
     public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
+
+    [InverseProperty("UserInfo")]
+    public virtual ICollection<CoverLetter> CoverLetters { get; set; } = new List<CoverLetter>();
 }

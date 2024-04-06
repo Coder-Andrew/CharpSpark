@@ -96,6 +96,15 @@ CREATE TABLE [ApplicationTracker] (
   [Notes] nvarchar(250)
 );
 
+CREATE TABLE [CoverLetter] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [UserInfoId] integer,
+  [Title] nvarchar(100),
+  [HiringManager] nvarchar(100),
+  [Body] nvarchar(500),
+  [CoverLetter] nvarchar(MAX)
+);
+
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -139,4 +148,7 @@ ALTER TABLE [ReferenceContactInfo] ADD CONSTRAINT [Fk ReferenceContactInfo Emplo
   FOREIGN KEY ([EmploymentHistoryId]) REFERENCES [EmploymentHistory] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE [ApplicationTracker] ADD CONSTRAINT [Fk ApplicationTracker UserInfo Id]
+  FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [CoverLetter] ADD CONSTRAINT [Fk CoverLetter UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
