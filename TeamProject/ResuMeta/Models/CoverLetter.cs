@@ -20,7 +20,7 @@ public partial class CoverLetter
     [StringLength(100)]
     public string? HiringManager { get; set; }
 
-    [StringLength(500)]
+    [StringLength(4000)]
     public string? Body { get; set; }
 
     [Column("CoverLetter")]

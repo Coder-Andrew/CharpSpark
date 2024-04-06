@@ -102,7 +102,7 @@ CREATE TABLE [CoverLetter] (
   [UserInfoId] integer,
   [Title] nvarchar(100),
   [HiringManager] nvarchar(100),
-  [Body] nvarchar(500),
+  [Body] nvarchar(4000),
   [CoverLetter] nvarchar(MAX)
 );
 
