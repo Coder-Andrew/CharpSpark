@@ -60,13 +60,13 @@ public class CoverLetterController : Controller
         }
 
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-        CoverLetterVM coverLetter =  _coverLetterService.GetCoverLetter();
+        CoverLetterVM coverLetterVM =  _coverLetterService.GetCoverLetter(coverLetterId);
 
-        if(coverLetter.UserInfoId != currUser.Id)
+        if(coverLetterVM.UserInfoId != currUser.Id)
         {
             return RedirectToAction("Index", "Home");
         }
         
-        return View(coverLetter);
+        return View(coverLetterVM);
     }
 }

@@ -13,32 +13,34 @@ namespace ResuMeta.Services.Concrete
 {
     class JsonCoverLetter
     {
-        public int? UserInfoId { get; set; }
-        public int? CoverLetterId { get; set; }
+        public string? Id { get; set; }
         public string? HiringManager { get; set; }
         public string? Body { get; set; }
     }
 
     public class CoverLetterService : ICoverLetterService
     {
-         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<CoverLetterService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
-       private readonly CoverLetterStore _coverLetterStore;
+        private readonly IRepository<CoverLetter> _coverLetterRepository;
+        private readonly ICoverLetterRepository _coverLetterRepo;
         public CoverLetterService(
             ILogger<CoverLetterService> logger,
             UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
-             CoverLetterStore coverLetterStore
+            IRepository<CoverLetter> coverLetterRepository,
+            ICoverLetterRepository coverLetterRepo
             )
         {
             _logger = logger;
             _userManager = userManager;
             _userInfo = userInfo;
-            _coverLetterStore = coverLetterStore;
+            _coverLetterRepository = coverLetterRepository;
+            _coverLetterRepo = coverLetterRepo;
         }
         
-        public CoverLetterVM AddCoverLetterInfo(JsonElement response)
+        public int AddCoverLetterInfo(JsonElement response)
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
@@ -47,16 +49,16 @@ namespace ResuMeta.Services.Concrete
             try
             {
                 JsonCoverLetter coverLetterInfo = JsonSerializer.Deserialize<JsonCoverLetter>(response, options)!;
-                CoverLetterVM coverLetter = new CoverLetterVM
+                CoverLetter coverLetter = new CoverLetter
                 {
-                    UserInfoId = coverLetterInfo.UserInfoId,
-                    CoverLetterId = coverLetterInfo.CoverLetterId,
+                    UserInfoId = Int32.Parse(coverLetterInfo.Id!),
                     HiringManager = coverLetterInfo.HiringManager,
                     Body = coverLetterInfo.Body
                 };
-                _coverLetterStore.CoverLetter = coverLetter;
 
-                return coverLetter;
+                _coverLetterRepository.AddOrUpdate(coverLetter);
+
+                return coverLetter.Id;
             }
             catch (Exception ex)
             {
@@ -65,9 +67,9 @@ namespace ResuMeta.Services.Concrete
             }
         }
 
-        public CoverLetterVM GetCoverLetter()
+        public CoverLetterVM GetCoverLetter(int coverLetterId)
         {
-            return _coverLetterStore.CoverLetter;
+            return _coverLetterRepo.GetCoverLetter(coverLetterId);
         }
     }
 }

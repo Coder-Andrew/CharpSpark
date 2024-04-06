@@ -28,8 +28,8 @@ namespace ResuMeta.Controllers
         {
             try
             {
-                CoverLetterVM coverLetter = _coverLetterService.AddCoverLetterInfo(response);
-                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetter.CoverLetterId;
+                int coverLetterId = _coverLetterService.AddCoverLetterInfo(response);
+                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetterId;
                 return Ok(new { Success = true, RedirectUrl = newUrl });
             }
             catch
