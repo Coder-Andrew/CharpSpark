@@ -1,6 +1,5 @@
-@model List<ResuMeta.ViewModels.ResumeVM>
-@{
-    ViewData["Title"] = "Resume - Your Dashboard";
+@model ResuMeta.ViewModels.DashboardVM
+@{    ViewData["Title"] = "Your Dashboard";
 }
 
 @section Styles {
@@ -10,13 +9,13 @@
 <div class="text-center">
     <h1 class="display-4 title">Your Dashboard</h1>
     <hr />
-    <h4>Your Resumes</h4>
         @if (User.Identity!.IsAuthenticated)
         {
-            @if(Model != null && Model.Count() > 0)
+            @if(Model != null && Model.Resumes?.Count() > 0)
             {
+                <h4>Your Resumes</h4>
                 <section id="resume-section">
-                @foreach(var resume in Model)
+                @foreach(var resume in Model.Resumes)
                 {
                     <div class="thumbnail" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})'">
                         <div id="content-@resume.ResumeId"></div>

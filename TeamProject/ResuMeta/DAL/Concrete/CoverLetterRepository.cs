@@ -28,6 +28,8 @@ namespace ResuMeta.DAL.Concrete
                 CoverLetterVM coverLetterVM = new CoverLetterVM
                 {
                     CoverLetterId = coverLetter.Id,
+                    FirstName = coverLetter.UserInfo?.FirstName,
+                    LastName = coverLetter.UserInfo?.LastName,
                     Title = coverLetter.Title,
                     HiringManager = coverLetter.HiringManager,
                     Body = coverLetter.Body
