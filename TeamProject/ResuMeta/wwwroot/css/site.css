@@ -181,7 +181,7 @@ li:not(.nav-login-item) > .nav-link:hover span {
   z-index: 1;
 }
 
-.nav-item a > span::before, .nav-login-item a > span::before {
+.nav-link > span::before{
   content: "";
   position: absolute;
   left: 0;
@@ -209,7 +209,7 @@ a {
 }
 
 a:hover{
-  color: #E91D1C;
+  color: #E91D1C !important;
   text-decoration: none;
 }
 

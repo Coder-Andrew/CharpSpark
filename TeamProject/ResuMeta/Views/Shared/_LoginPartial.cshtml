@@ -12,12 +12,12 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-login-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>Welcome back, <span class="red-text">@User.Identity?.Name!</span></span></a>
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>Welcome back, <span class="red-text">@User.Identity?.Name!</span></span></a>
     </li>
     <li class="nav-login-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn-logout btn-link text-dark"><span>Logout</span></button>
+        <form id="logoutForm" class="form-inline d-none" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         </form>
+        <a href="#" onclick="document.getElementById('logoutForm').submit();" class="nav-link text-dark"><span>Logout</span></a>
     </li>
 }
 else
