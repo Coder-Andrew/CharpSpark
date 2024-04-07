@@ -12,10 +12,31 @@ namespace ResuMeta_BDDTests.PageObjects
             // using a named page (in Common.cs)
             _pageName = "Home";
         }
-
         public IWebElement RegisterButton => _webDriver.FindElement(By.Id("register"));
         public IWebElement LoginButton => _webDriver.FindElement(By.Id("login"));
         public IWebElement NavBarHelloLink => _webDriver.FindElement(By.CssSelector("a[title=\"Manage\"]"));
+        public IWebElement ShowHideChatButton()
+        {
+            try
+            {
+                return _webDriver.FindElement(By.Id("show-hide-chat"));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        public IWebElement ChatBox()
+        {
+            try
+            {
+                return _webDriver.FindElement(By.Id("chatbox"));
+            }
+            catch
+            {
+                return null;
+            }
+        }
         public string NavbarWelcomeText()
         {
             return NavBarHelloLink.Text;

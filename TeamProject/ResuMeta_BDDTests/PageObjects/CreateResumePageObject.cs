@@ -44,6 +44,7 @@ namespace ResuMeta_BDDTests.PageObjects
         }
         public void FillOutForm()
         {
+            //_webDriver.Manage().Window.Size = new System.Drawing.Size(5120, 2880);
             _webDriver.Manage().Window.Maximize();
             IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
             _webDriver.FindElement(By.Id("education-add-btn")).Click();
