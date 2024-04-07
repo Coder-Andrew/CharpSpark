@@ -19,13 +19,15 @@ public class ResumeController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
+    private readonly ICoverLetterService _coverLetterService;
 
     public ResumeController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
         IRepository<Resume> resumeRepo,
-        IResumeService resumeService
+        IResumeService resumeService,
+        ICoverLetterService coverLetterService
         )
     {
         _logger = logger;
@@ -33,6 +35,7 @@ public class ResumeController : Controller
         _userManager = userManager;
         _resumeRepository = resumeRepo;
         _resumeService = resumeService;
+        _coverLetterService = coverLetterService;
     }
 
     public IActionResult Index()
@@ -67,7 +70,13 @@ public class ResumeController : Controller
             return View();
         }
         List<ResumeVM> resumeList = _resumeService.GetAllResumes(user.Id);
-        return resumeList.Any() ? View(resumeList) : View();
+        List<CoverLetterVM> coverLetterList = _coverLetterService.GetAllCoverLetters(user.Id);
+        DashboardVM dashboardVM = new DashboardVM
+        {
+            Resumes = resumeList,
+            CoverLetters = coverLetterList
+        };
+        return View(dashboardVM) ?? View();
     }
 
     [HttpGet("Resume/ViewResume/{resumeId}")]
