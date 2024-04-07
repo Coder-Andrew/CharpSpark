@@ -93,7 +93,7 @@ public class CoverLetterController : Controller
         {
             return RedirectToAction("Index", "Home");
         }
-        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetter(coverLetterId);
+        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetterHtml(coverLetterId);
         return View(coverLetterVM);
     }
 
