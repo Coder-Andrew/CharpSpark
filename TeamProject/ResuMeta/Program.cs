@@ -12,6 +12,8 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using ResuMeta.Services.Concrete;
 using Microsoft.Extensions.Options;
+using Hangfire;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
 var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
+var sendGridApiKey = builder.Configuration["SendGridApiKey"] ?? throw new InvalidOperationException("Connection string 'SendGridApiKey' not found.");
 
 string chatGPTUrl = "https://api.openai.com/";
 
@@ -50,6 +53,14 @@ builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services)
         );
 });
 
+builder.Services.AddHangfire(configuration => configuration
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseInMemoryStorage());
+
+builder.Services.AddHangfireServer();
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -73,6 +84,8 @@ builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+builder.Services.AddScoped<ISendGridService, SendGridService>();
+
 
 //builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
@@ -103,6 +116,9 @@ using (var scope = app.Services.CreateScope())
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred seeding the DB.");
     }
+    // var sendGridService = services.GetRequiredService<ISendGridService>();
+    // var recurringJobManager = services.GetRequiredService<IRecurringJobManager>();
+    // recurringJobManager.AddOrUpdate("TestReminder2", () => sendGridService.TestReminder2(), Cron.MinuteInterval(1));
 }
 
 // Configure the HTTP request pipeline.
@@ -118,6 +134,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.MapHangfireDashboard("/hangfire");
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
