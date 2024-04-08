@@ -49,3 +49,6 @@ def advanced_search(job_title: str, city: str, state: str):
         jobs.append(job_listing("indeed.com" + listing_link, listing_title, listing_company, listing_location))
 
     return jobs
+
+if __name__ == '__main__':
+    print(advanced_search("software engineer", "new york", "ny"))
