@@ -1,0 +1,26 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/ApplicationTracker.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+}
+<div class="text-center">
+    <h1 class="display-4 title">Job Listings</h1>
+    <hr />
+</div>
+
+
+
+<div class="container">
+    <button class="btn btn-primary" id="get-cached-listings">Cached Listings</button>
+    <button class="btn btn-primary" id="search-job-listings">Search Listings</button>
+    <div id="job-container">
+
+    </div>
+</div>
+@if (User.Identity!.IsAuthenticated)
+{
+    
+}
+
+@section Scripts {
+    <script src="~/js/JobListing.js"></script>
+}

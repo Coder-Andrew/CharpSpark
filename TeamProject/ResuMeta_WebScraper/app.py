@@ -12,14 +12,14 @@ from src.job_listing_repository import job_listing_repository
 app = Flask(__name__)
 
 # Schedule the job to run every 24 hours
-#schedule.every(24).hours.do(get_and_cache_listings)
+schedule.every(24).hours.do(get_and_cache_listings)
 
 def run_scheduled_jobs():
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-@app.route('/search_jobs')
+@app.route('/api/search_jobs')
 def search_jobs():
     job_title = request.args.get('job_title')
     city = request.args.get('city')
@@ -46,13 +46,10 @@ def get_cached_listings(page):
 
 if __name__ == '__main__':
     #run scheduled jobs on a separate thread
-    #get_and_cache_listings()
-    # t = threading.Thread(target=run_scheduled_jobs)
-    # t.start()
+    get_and_cache_listings()
+    t = threading.Thread(target=run_scheduled_jobs)
+    t.start()
 
 
 
     app.run(debug=True)
-
-
-# Left off trying to figure out why the scraper is running twice 
