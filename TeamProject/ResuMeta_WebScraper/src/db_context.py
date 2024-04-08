@@ -11,6 +11,8 @@ This could easily be split into multiple files/directories, but for the sake of 
 I left it here.
 '''
 
+# This global should probably be moved outside of the context and into the flask route
+# so that users can decide how many listings they want to see per page
 NUMBER_OF_LISTINGS_PER_PAGE = 10
 
 class IDbContext(ABC):
@@ -37,5 +39,18 @@ class mongo_db_context(IDbContext):
 
     def get_cached_listings(self, pageNumber: int) -> List[job_listing]:
         # Return the number of cached listing based on the number of listings per page (pagination)
-        return self.collection.find().skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE).limit(NUMBER_OF_LISTINGS_PER_PAGE)
+        if not isinstance(pageNumber, int):
+            return TypeError("Page number must be an integer")
+
+        if pageNumber <= 0:
+            raise ValueError("Page number must be greater than 0")
+        
+        if self.__get_number_of_listings() - ((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE) < 0:
+            raise ValueError("Page number is greater than the number of pages")
+        
+        return list(self.collection.find().skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE).limit(NUMBER_OF_LISTINGS_PER_PAGE))
+        
+    
+    def __get_number_of_listings(self):
+        return self.collection.count_documents({})
     

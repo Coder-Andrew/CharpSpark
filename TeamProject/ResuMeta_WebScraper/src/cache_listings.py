@@ -45,7 +45,7 @@ def get_cachable_listings() -> List[job_listing]:
         # print(listing_location)
         # print("indeed.com" + listing_link)
 
-        listed_job = job_listing(listing_title, listing_company, listing_location, "indeed.com" + listing_link)
+        listed_job = job_listing("indeed.com" + listing_link, listing_title, listing_company, listing_location)
         job_listings.append(listed_job)
 
     return job_listings
@@ -54,3 +54,8 @@ def cache_listing(listing, ip='localhost', port=27017, dbname='job_listings', co
     context = mongo_db_context(ip, port, dbname, collectionName)
     repo = job_listing_repository(context)
     repo.save(listing)
+
+def get_and_cache_listings():
+    jobs = get_cachable_listings()
+    for job in jobs:
+        cache_listing(job)

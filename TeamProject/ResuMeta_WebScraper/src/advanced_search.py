@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import urllib.parse
 
+from .job_listing_model import job_listing
+
 def advanced_search(job_title: str, city: str, state: str):
     location = city + " " + state
     q = urllib.parse.quote_plus(job_title)
@@ -24,6 +26,8 @@ def advanced_search(job_title: str, city: str, state: str):
 
     results = scraper.findAll('li', {'class': 'css-5lfssm eu4oa1w0'})
 
+    jobs = []
+
     for job in results:
         listing_link_section = job.find('a', {'class': 'jcs-JobTitle css-jspxzf eu4oa1w0'})
         if (listing_link_section == None):
@@ -36,8 +40,12 @@ def advanced_search(job_title: str, city: str, state: str):
 
         # This is for dev purposes to see if the function works, instead of print statements, we will pack these listings into 
         # a list and return it
-        print('-----------------')
-        print(listing_title)
-        print(listing_company)
-        print(listing_location)
-        print("indeed.com" + listing_link)
+        # print('-----------------')
+        # print(listing_title)
+        # print(listing_company)
+        # print(listing_location)
+        # print("indeed.com" + listing_link)
+
+        jobs.append(job_listing("indeed.com" + listing_link, listing_title, listing_company, listing_location))
+
+    return jobs
