@@ -50,6 +50,13 @@ builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services)
         );
 });
 
+builder.Services.AddHttpClient<IWebScraperService, WebScraperService>((httpClient, services) =>
+{
+    httpClient.BaseAddress = new Uri("http://localhost:5000/");
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+    return new WebScraperService(httpClient, services.GetRequiredService<IRepository<UserInfo>>());
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
