@@ -1,7 +1,12 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from typing import List
 
-def cache_listings():
+from .db_context import mongo_db_context
+from .job_listing_model import job_listing
+from .job_listing_repository import job_listing_repository
+
+def get_cachable_listings() -> List[job_listing]:
     # here we are using the Firefox browser, once I (RH) create the docker image, I'll change this code to chromium,
     # but for now, I'll leave it as is while we develop the chunk of this scraper.
     # Chromium will be downloaded outside of the project file within the docker image, code below will be used when container is created.
@@ -10,6 +15,8 @@ def cache_listings():
     # options = webdriver.ChromeOptions()
     # options.binary_location = chromium
     # driver = webdriver.Chrome(options=options)
+
+    # Set up mongo db context and prepare to cache listings
 
     driver = webdriver.Firefox()
     url = f"https://www.indeed.com/jobs?q=&l=remote"
@@ -20,6 +27,7 @@ def cache_listings():
 
     results = scraper.findAll('li', {'class': 'css-5lfssm eu4oa1w0'})
 
+    job_listings = []
     for job in results:
         listing_link_section = job.find('a', {'class': 'jcs-JobTitle css-jspxzf eu4oa1w0'})
         if (listing_link_section == None):
@@ -31,8 +39,23 @@ def cache_listings():
         listing_location = job.find('div', {'class': 'css-1p0sjhy eu4oa1w0'}).text
 
         # This is for dev purposes to see if the function works, instead of print statements, we will cache these listings
-        print('-----------------')
-        print(listing_title)
-        print(listing_company)
-        print(listing_location)
-        print("indeed.com" + listing_link)
+        # print('-----------------')
+        # print(listing_title)
+        # print(listing_company)
+        # print(listing_location)
+        # print("indeed.com" + listing_link)
+
+        listed_job = job_listing("indeed.com" + listing_link, listing_title, listing_company, listing_location)
+        job_listings.append(listed_job)
+
+    return job_listings
+
+def cache_listing(listing, ip='localhost', port=27017, dbname='job_listings', collectionName='job_listings'):
+    context = mongo_db_context(ip, port, dbname, collectionName)
+    repo = job_listing_repository(context)
+    repo.save(listing)
+
+def get_and_cache_listings():
+    jobs = get_cachable_listings()
+    for job in jobs:
+        cache_listing(job)

@@ -1,5 +1,5 @@
 from src.advanced_search import advanced_search
-from src.cache_listings import cache_listings
+from src.cache_listings import get_cachable_listings, cache_listing
 
 # This is for dev purposes to see if the two functions work
 # This will be removed once the functions are integrated into the Flask web app
@@ -16,6 +16,8 @@ if __name__ == "__main__":
         state = input("Enter the state: ")
         advanced_search(job_title, city, state)
     elif user_choice == "2":
-        cache_listings()
+        jobs = get_cachable_listings()
+        for job in jobs:
+            cache_listing(job)
     else:
         print("Invalid choice. Please run the program again.")

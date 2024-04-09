@@ -8,6 +8,8 @@ beautifulsoup4 = "*"
 flask = "*"
 pymongo = "*"
 selenium = "*"
+schedule = "*"
+pytest = "*"
 
 [dev-packages]
 
