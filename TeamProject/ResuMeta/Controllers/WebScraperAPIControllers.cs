@@ -19,17 +19,15 @@ namespace ResuMeta.Controllers
             _webScraperService = webScraperService;
         }
 
-        // GET: api/scraper/cached_listings
-        [HttpGet("cached_listings/{pageNum}")]
+        // PUT: api/scraper/cached_listings
+        [HttpPut("cached_listings/{pageNum}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetListings(int pageNum)
         {
             try
             {
-                await _webScraperService.GetCachedListings(pageNum);
-                // List<JobListingVM> listings = await _webScraperService.GetCachedListings(pageNum);
-                // return Ok(listings);
-                return Ok();
+                List<JobListingVM> listings = await _webScraperService.GetCachedListings(pageNum);
+                return Ok(listings);
             }
             catch (Exception e)
             {
@@ -37,8 +35,8 @@ namespace ResuMeta.Controllers
             }
         }
 
-        // GET: api/scraper/search_jobs
-        [HttpGet("search_jobs")]
+        // PUT: api/scraper/search_jobs
+        [HttpPut("search_jobs")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SearchListings([FromBody] JsonElement parameters)
         {
