@@ -37,17 +37,19 @@ namespace ResuMeta.Services.Concrete
     {
         private readonly HttpClient _httpClient;
         private readonly string _scraperUrl;
-        private readonly IRepository<UserInfo> _userInfoRepo;
-        public WebScraperService(HttpClient httpClient, IRepository<UserInfo> userInfoRepo)
+        public WebScraperService(HttpClient httpClient, IOptions<WebScraperServiceOptions> options)
         {
             _httpClient = httpClient;
-            _scraperUrl = "http://localhost:5000/";
-            _userInfoRepo = userInfoRepo;
+            _scraperUrl = options.Value.ScraperUrl;
+
         }
 
         public async Task<List<JobListingVM>> GetCachedListings(int pageNum)
         {
-            var response = await _httpClient.GetAsync(_scraperUrl + "api/cached_listings/" + pageNum);
+            Console.WriteLine("Getting cached listings");
+            var url = _scraperUrl + "api/cached_listings/1";
+            var response = await _httpClient.GetAsync(url);
+            Console.WriteLine(response.StatusCode);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseString = await response.Content.ReadAsStringAsync();
