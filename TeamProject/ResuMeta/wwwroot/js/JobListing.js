@@ -9,17 +9,18 @@ function initializePage() {
 
 async function getCachedJobListings() {
     console.log("Getting cached job listings");
+    var pageNum = document.getElementById('page-number').value;
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
-    const response = await fetch(`api/scraper/cached_listings/${1}`, {
+    const response = await fetch(`api/scraper/cached_listings/${pageNum}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
             'Content-Type': 'application/json; charset=utf-8'
         },
         body: JSON.stringify({
-            pageNum: 1
+            pageNum: pageNum
         })
     });
     if (response.ok) {
@@ -42,9 +43,9 @@ async function searchJobListings() {
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
-    const jobTitle = "Software Engineer";
-    const city = "Salem";
-    const state = "OR";
+    const jobTitle = document.getElementById('job-title').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
 
     const response = await fetch(`api/scraper/search_jobs`, {
         method: 'PUT',
@@ -76,15 +77,16 @@ async function searchJobListings() {
 function generateJobListingNode(job) {
     const jobListingNode = document.createElement('div');
     jobListingNode.className = 'job-listing';
+    var link = "https://www." + job.link;
     jobListingNode.innerHTML = `
         <div class="job-listing-title">
-            <a href="${job.Link}" target="_blank">${job.JobTitle}</a>
+            <a href="${link}" target="_blank">${job.jobTitle}</a>
         </div>
         <div class="job-listing-company">
-            ${job.Company}
+            ${job.company}
         </div>
         <div class="job-listing-location">
-            ${job.Location}
+            ${job.location}
         </div>
     `;
     return jobListingNode;

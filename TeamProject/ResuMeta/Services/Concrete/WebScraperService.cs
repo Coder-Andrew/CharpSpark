@@ -1,18 +1,12 @@
-using System.Globalization;
 using System.Text.Json;
-using System.Net;
-using System.Net.Http;
 using ResuMeta.Services.Abstract;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using ResuMeta.DAL.Abstract;
-using ResuMeta.Models;
 using ResuMeta.ViewModels;
-using System.Runtime.InteropServices;
-using Microsoft.Identity.Client;
-using System.Text.Encodings.Web;
-using System.Web;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using ResuMeta.Services.Concrete;
+using Microsoft.Extensions.Options;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -47,7 +41,7 @@ namespace ResuMeta.Services.Concrete
         public async Task<List<JobListingVM>> GetCachedListings(int pageNum)
         {
             Console.WriteLine("Getting cached listings");
-            var url = _scraperUrl + "api/cached_listings/1";
+            var url = _scraperUrl + "api/cached_listings/" + pageNum;
             var response = await _httpClient.GetAsync(url);
             Console.WriteLine(response.StatusCode);
             if (response.StatusCode == HttpStatusCode.OK)
