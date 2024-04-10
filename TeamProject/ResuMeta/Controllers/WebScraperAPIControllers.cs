@@ -14,31 +14,31 @@ namespace ResuMeta.Controllers
     public class WebScraperApiController : ControllerBase
     {
         private readonly IWebScraperService _webScraperService;
-        private readonly IRepository<UserInfo> _userInfo;
-        public WebScraperApiController(IWebScraperService webScraperService, IRepository<UserInfo> userInfo)
+        public WebScraperApiController(IWebScraperService webScraperService)
         {
             _webScraperService = webScraperService;
-            _userInfo = userInfo;
         }
 
-        // GET: api/resume/cached_listings
-        [HttpPut("cached_listings/{pageNum}")]
+        // GET: api/scraper/cached_listings
+        [HttpGet("cached_listings/{pageNum}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetListings(int pageNum)
         {
             try
             {
-                List<JobListingVM> listings = await _webScraperService.GetCachedListings(pageNum);
-                return Ok(listings);
+                await _webScraperService.GetCachedListings(pageNum);
+                // List<JobListingVM> listings = await _webScraperService.GetCachedListings(pageNum);
+                // return Ok(listings);
+                return Ok();
             }
-            catch
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
-        // GET: api/resume/search_jobs
-        [HttpPut("search_jobs")]
+        // GET: api/scraper/search_jobs
+        [HttpGet("search_jobs")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SearchListings([FromBody] JsonElement parameters)
         {

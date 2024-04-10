@@ -12,7 +12,7 @@ async function getCachedJobListings() {
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
-    const response = await fetch(`api/scraper/cached_listings`, {
+    const response = await fetch(`api/scraper/cached_listings/${1}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
