@@ -42,8 +42,7 @@ async function submitInfo() {
     var coverLetterBody = document.querySelector('#cover-letter-body').value;
 
     const coverLetterInfo = {
-        UserInfoId:  parseInt(document.getElementById('userId').value, 10),
-        CoverLetterId: coverLetterId++,
+        Id: document.getElementById('userId').value,
         HiringManager: hiringManager,
         Body: coverLetterBody
     };

@@ -28,8 +28,11 @@ function initializePage() {
             toolbar: toolbarOptions,
         }
     });
-    var htmlContent = document.getElementById('cover-letter-container').outerHTML;
-    const delta = quill.clipboard.convert(htmlContent);
+    console.log("Editor initialized");
+    const coverLetterContent = document.getElementById("cover-letter-content").value;
+    const coverLetterArea = document.getElementById("cover-letter-area");
+    coverLetterArea.innerHTML = decodeURIComponent(coverLetterContent);
+    const delta = quill.clipboard.convert(coverLetterArea.innerHTML);
     quill.setContents(delta);
     const saveBtn = document.getElementById("save-cover-letter");
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
