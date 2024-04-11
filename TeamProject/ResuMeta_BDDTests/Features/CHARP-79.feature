@@ -26,21 +26,35 @@ Scenario: A user should be able to see the show-hide-chat button
 	When I am on the "Home" page
 	Then I should see the show-hide-chat button
 
+Scenario: A user should be able to click the show-hide-chat button
+	Given I am a user with the first name 'Adrian'
+		And I login
+		And I am on the "Home" page
+	When I click the show-hide-chat button
+	Then I should see the chat box
+
 Scenario: A user should be able to type a message into the chat box
-	Given I am a user
-	When I am on the "Home" page
-	And I see the chat box
-	And I type "Hello" into the chat box
+	Given I am a user with the first name 'Adrian'
+		And I login
+		And I am on the "Home" page
+		And I see the chat box
+	When I type "Hello" into the chat box
 	Then I should see "Hello" in the chat box
 
 Scenario: A user should be able to recieve a response from ChatGPT when pressing enter
-	Given I am a user
+	Given I am a user with the first name 'Adrian'
+		And I login
+		And I am on the "Home" page
+		And I see the chat box
 		And I have typed "Hello" in the chat box
 	When I hit enter
 	Then I should see a response from ChatGPT
 
 Scenario: A user should be able to recieve a response from ChatGPT when clicking send
-	Given I am a user
+	Given I am a user with the first name 'Adrian'
+		And I login
+		And I am on the "Home" page
+		And I see the chat box
 		And I have typed "Hello" in the chat box
 	When I click the send button
 	Then I should see a response from ChatGPT
