@@ -7,7 +7,7 @@
 
 .thumbnail {
     position: relative;
-    background-color: #383737;
+    background-color: rgb(58, 57, 57);
     width: 230px;
     height: 330px;
     overflow: hidden;
@@ -50,4 +50,18 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+#dashboard-title{
+    text-align: left;
+    font-size: 2.4em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h4 {
+    font-size: 1.4em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: left;
 }

@@ -7,11 +7,11 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4 title">Your Dashboard</h1>
+    <h1 class="display-4 title" id="dashboard-title">Dashboard</h1>
     <hr />
         @if (User.Identity!.IsAuthenticated)
         {
-            <h4>Your Resumes</h4>
+            <h4>Resumes</h4>
             @if(Model != null && Model.Resumes?.Count() > 0)
             {
                 <section id="resume-section">
@@ -38,7 +38,7 @@
             <br />
             <br />
             <hr />
-            <h4>Your Cover Letters</h4>
+            <h4>Cover Letters</h4>
             @if(Model != null && Model.CoverLetters?.Count() > 0)
             {
                 <section id="cover-letter-section">
