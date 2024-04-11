@@ -1,0 +1,19 @@
+#github-button {
+    background-color: #29ADEB;
+    color: white;
+    border: 0px;
+}
+
+#github-button:hover {
+    background-color: #0860c4;
+    color: white !important;
+}
+
+#github-button:focus {
+    outline: 2px solid white !important;
+    box-shadow: none !important;
+}
+
+img {
+    width: 8%;
+}
