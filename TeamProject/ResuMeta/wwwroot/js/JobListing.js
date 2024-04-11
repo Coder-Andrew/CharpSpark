@@ -14,16 +14,13 @@ async function getCachedJobListings() {
     jobListingContainer.innerHTML = '';
 
     const response = await fetch(`api/scraper/cached_listings/${pageNum}`, {
-        method: 'PUT',
+        method: 'GET',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
             'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify({
-            pageNum: pageNum
-        })
+        }
     });
-    if (response.ok) {
+    if (response.ok) {        
         var jobs = await response.json();
         console.log(jobs);
         jobs.forEach(job => {
@@ -33,7 +30,10 @@ async function getCachedJobListings() {
     }
     else 
     {
-        console.log("Error fetching cached job listings");
+        var noResultsNode = document.createElement('div');
+        noResultsNode.className = 'no-results';
+        noResultsNode.innerHTML = 'No cached job listings found';
+        jobListingContainer.appendChild(noResultsNode);
         return;
     }
 }
@@ -46,30 +46,38 @@ async function searchJobListings() {
     const jobTitle = document.getElementById('job-title').value;
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
-
-    const response = await fetch(`api/scraper/search_jobs`, {
-        method: 'PUT',
+    const response = await fetch(`api/scraper/search_jobs/job_title=${jobTitle}&city=${city}&state=${state}`, {
+        method: 'GET',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
             'Content-Type': 'application/json; charset=utf-8'
-        },
-        body: JSON.stringify({
-            title: jobTitle,
-            city: city,
-            state: state
-        })
+        }
     });
     if (response.ok) {
-        var jobs = await response.json();
-        console.log(jobs);
-        jobs.forEach(job => {
-            const jobListingNode = generateJobListingNode(job);
-            jobListingContainer.appendChild(jobListingNode);
-        });
+        var contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            var jobs = await response.json();
+            console.log(jobs);
+            jobs.forEach(job => {
+                const jobListingNode = generateJobListingNode(job);
+                jobListingContainer.appendChild(jobListingNode);
+            });
+        }
+        else
+        {
+            var noResultsNode = document.createElement('div');
+            noResultsNode.className = 'no-results';
+            noResultsNode.innerHTML = 'No job listings found';
+            jobListingContainer.appendChild(noResultsNode);
+            return;
+        }
     }
     else 
     {
-        console.log("Error fetching job listings");
+        var noResultsNode = document.createElement('div');
+        noResultsNode.className = 'no-results';
+        noResultsNode.innerHTML = 'No job listings found';
+        jobListingContainer.appendChild(noResultsNode);
         return;
     }
 }

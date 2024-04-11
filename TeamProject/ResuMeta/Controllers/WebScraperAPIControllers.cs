@@ -6,6 +6,7 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using System.Text.Json;
 using ResuMeta.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResuMeta.Controllers
 {
@@ -19,8 +20,9 @@ namespace ResuMeta.Controllers
             _webScraperService = webScraperService;
         }
 
-        // PUT: api/scraper/cached_listings
-        [HttpPut("cached_listings/{pageNum}")]
+        // GET: api/scraper/cached_listings
+        [AllowAnonymous]
+        [HttpGet("cached_listings/{pageNum}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetListings(int pageNum)
         {
@@ -31,24 +33,21 @@ namespace ResuMeta.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest();
             }
         }
 
-        // PUT: api/scraper/search_jobs
-        [HttpPut("search_jobs")]
+        // GET: api/scraper/search_jobs
+        [HttpGet("search_jobs/job_title={jobTitle}&city={city}&state={state}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchListings([FromBody] JsonElement parameters)
+        public async Task<IActionResult> SearchListings(string jobTitle, string city, string state)
         {
             try
             {
-                var title = parameters.GetProperty("title");
-                var city = parameters.GetProperty("city");
-                var state = parameters.GetProperty("state");
-                List<JobListingVM> listings = await _webScraperService.SearchJobs(title.ToString(), city.ToString(), state.ToString());
+                List<JobListingVM> listings = await _webScraperService.SearchJobs(jobTitle, city, state);
                 return Ok(listings);
             }
-            catch
+            catch (Exception e)
             {
                 return BadRequest();
             }
