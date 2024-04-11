@@ -27,6 +27,15 @@ namespace ResuMeta_BDDTests.PageObjects
             _webDriver = webDriver;
         }
 
+        /// <summary>
+        /// Scroll the browser to a specific element, needed by some tests
+        /// </summary>
+        /// <param name="targetElement"></param>
+        public void ScrollIntoView(IWebElement targetElement)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
+            js.ExecuteScript("arguments[0].scrollIntoView();", targetElement);
+        }
         // Go to the previously set page name (convenience method for using derived classes)
         public void GoTo()
         {
