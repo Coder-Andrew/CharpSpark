@@ -4,9 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-    <img src="~/Images/CharpSparkLogo.png" alt="CharpSparkLogo"/>
-</a>
+<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"></a>
 
 <ul class="navbar-login">
 @if (SignInManager.IsSignedIn(User))

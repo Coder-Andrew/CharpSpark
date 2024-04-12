@@ -12,6 +12,10 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #E91D1C;
 }
 
+h1.title {
+    font-size: 4em;
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -60,12 +64,6 @@ li:not(.nav-login-item) > .nav-link:hover span {
   margin-top: 5.3%;
 }
 
-.navbar-brand {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 .navbar-login {
   position: absolute;
   top: 0;
@@ -82,10 +80,14 @@ li:not(.nav-login-item) > .nav-link:hover span {
   margin-left: 10px;
 }
 
-.navbar-brand img {
-  width: 11%;
-  height: 10%;
-  padding-left: 10px;
+.navbar-brand {
+  background: url('../Images/CharpSparkLogo.png');
+  background-size: 6.2vw 6.2vw;
+  position: absolute;
+  top: 0;
+  left: 2px;
+  width: 6.2vw;
+  height: 6.2vw;
 }
 
 .navbar {
@@ -135,10 +137,6 @@ li:not(.nav-login-item) > .nav-link:hover span {
 
 .navbar {
   background-color: #000B0E !important;
-}
-
-.navbar-brand {
-  order: -1 !important;
 }
 
 .login-partial {
@@ -234,6 +232,7 @@ a:hover{
 
 .btn:hover, .btn:active, .btn:focus {
   background-color: #E91D1C;
+  color: white !important;
   border-color: #E91D1C;
   outline: none;
   box-shadow: none;
@@ -336,6 +335,6 @@ option:hover {
 }
 
 .chatbox-align {
-    height: 40px;
-    vertical-align: middle;
+  height: 40px;
+  vertical-align: middle;
 }

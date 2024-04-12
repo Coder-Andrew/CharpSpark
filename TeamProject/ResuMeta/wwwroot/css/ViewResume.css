@@ -28,7 +28,7 @@ html {
 body {
     margin-bottom: 60px;
     background-color: #131414 !important;
-    background: linear-gradient(to bottom, #131414 65%, rgb(36, 22, 12)) !important;
+    background: linear-gradient(to bottom, #131414 65%, rgb(34, 18, 8)) !important;
     color: rgb(207, 207, 207);
     font-family: 'Open Sans', sans-serif;
 }
@@ -120,6 +120,7 @@ body {
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
+    margin-bottom: 3px;
     color: rgb(214, 214, 214);
 }
 
