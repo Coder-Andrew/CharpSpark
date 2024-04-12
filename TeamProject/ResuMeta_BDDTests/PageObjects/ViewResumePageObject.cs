@@ -23,7 +23,6 @@ namespace ResuMeta_BDDTests.PageObjects
         public IWebElement ExportPdfBtn => _webDriver.FindElement(By.Id("export-pdf"));
         public bool GetEditor()
         {
-            Thread.Sleep(1000);
             if (QuillToolBar.Displayed && QuillEditor.Displayed) 
             {
                 return true;
@@ -37,16 +36,16 @@ namespace ResuMeta_BDDTests.PageObjects
         public void TypeIntoEditor()
         {
             QuillEditor.Click();
-            if (CheckOperatingSystem() == "MacOS")
-            {
-                QuillEditor.SendKeys(Keys.Control + "a");
-                QuillEditor.SendKeys(Keys.Backspace);
-            }
-            else
-            {
-                QuillEditor.SendKeys(Keys.Control + "a");
-                QuillEditor.SendKeys(Keys.Delete);
-            }
+            //if (CheckOperatingSystem() == "MacOS")
+            //{
+            //    QuillEditor.SendKeys(Keys.Command + "a");
+            //    QuillEditor.SendKeys(Keys.Backspace);
+            //}
+            //else
+            //{
+            //    QuillEditor.SendKeys(Keys.Control + "a");
+            //    QuillEditor.SendKeys(Keys.Delete);
+            //}
             QuillEditor.SendKeys("Hello, World!");
             Thread.Sleep(1000);
         }   
@@ -73,6 +72,7 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public string GetSaveMessage()
         {
+            Thread.Sleep(1000);
             var saveStatus = _webDriver.FindElement(By.Id("validation-success"));
             return saveStatus.Text;
         }
