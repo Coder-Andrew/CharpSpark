@@ -11,12 +11,12 @@
     width: 10.2%;
     border-radius: 10px;
     box-shadow: 0 0 4px #ff941aef, 0 0 10px #f3711aef, 0 0 0px #f3711aef, 0 0 50px #5e351cef;
-    transition: box-shadow 0.3s ease-in-out; /* Adds a transition effect to the box-shadow property */
+    transition: box-shadow 0.3s ease-in-out;
     margin-right: 28px;
   }
   
   .title img:hover {
-    box-shadow: 0 0 8px #ff941aef, 0 0 20px #f3711aef, 0 0 0px #f3711aef, 0 0 100px #5e351cef; /* Makes the box-shadow glow brighter on hover */
+    box-shadow: 0 0 8px #ff941aef, 0 0 20px #f3711aef, 0 0 0px #f3711aef, 0 0 100px #5e351cef;
   }
 
 h1 {
@@ -91,6 +91,11 @@ hr {
     animation: slideInFromLeft 1s ease-out forwards;
     animation-delay: 1.4s;
     opacity: 0;
+}
+
+.btn:focus, .btn:active {
+    border-color: #2a1ce9 !important;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;
 }
 
 section .body-paragraph, .navbar *:not(.border-bottom), .footer *, section .title, section img, .navbar-brand, .nav-login-item{

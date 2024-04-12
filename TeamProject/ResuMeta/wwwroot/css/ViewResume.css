@@ -42,7 +42,7 @@ body {
 .ql-toolbar {
     width: 100%;
     position: sticky;
-    top: 68px;
+    top: 71px;
     background-color: #222424;
     border-bottom: 1px solid rgb(101, 104, 104) !important;
     border-top: none !important;

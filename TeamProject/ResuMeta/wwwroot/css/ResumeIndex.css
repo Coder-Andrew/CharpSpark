@@ -46,13 +46,27 @@ input[type="file"]::-webkit-file-upload-button:hover {
 
 
 input[type="file"]::-moz-file-upload-button {
-    height: 50px;
+    height: 100%;
     width: 120px;
-    border-radius: 25px;
-    background: #e9912c;
+    background: rgb(131, 131, 131);
     color: white;
+    border: none;
+    border-right: 1px solid #33322f;
     cursor: pointer;
-    position: absolute;
-    left: 0;
-    top: 0;
+}
+
+input[type="file"]::-moz-file-upload-button {
+    height: 100%;
+    width: 120px;
+    background: rgb(148, 148, 148);
+    color: white;
+    border: none;
+    border-right: 1px solid #33322f;
+    cursor: pointer;
+}
+
+.bg-success {
+    background-color: #e9912c !important;
+    padding: 10px !important;
+    color: white !important;
 }
