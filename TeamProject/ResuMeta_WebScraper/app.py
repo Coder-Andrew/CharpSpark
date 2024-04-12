@@ -2,6 +2,7 @@
 import time
 import threading
 import schedule
+import argparse
 from flask import Flask, request
 
 from src.advanced_search import advanced_search
@@ -35,7 +36,9 @@ def search_jobs():
 @app.route('/api/cached_listings/<int:page>')
 def get_cached_listings(page):
     print("test")
-    context = mongo_db_context(ip='localhost', port=27017, dbname='job_listings', collectionName='job_listings')
+    mongoDbConnection = args.mongoDbConnectionString
+    context = mongo_db_context(connectionString=mongoDbConnection, dbname='job_listings', collectionName='job_listings')
+    # context = mongo_db_context(ip='localhost', port=27017, dbname='job_listings', collectionName='job_listings')
     repo = job_listing_repository(context)
     
     listings = list(repo.get_cached_listings(page))
@@ -45,8 +48,13 @@ def get_cached_listings(page):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Scrape job listings')
+    parser.add_argument('mongoDbConnectionString', type=str, help='The connection string to the MongoDB database')
+    args = parser.parse_args()
+    mongoDbConnection = args.mongoDbConnectionString
+
     #run scheduled jobs on a separate thread
-    get_and_cache_listings()
+    get_and_cache_listings(mongoDbConnection)
     t = threading.Thread(target=run_scheduled_jobs)
     t.start()
 
