@@ -15,9 +15,16 @@ def advanced_search(job_title: str, city: str, state: str):
     # chromium = "/usr/bin/chromium"
     # options = webdriver.ChromeOptions()
     # options.binary_location = chromium
+    # options.add_argument("--headless")
     # driver = webdriver.Chrome(options=options)
 
-    driver = webdriver.Firefox()
+    firefox_profile = webdriver.FirefoxProfile()
+    firefox_profile.set_preference('permissions.default.image', 2)
+    options = webdriver.FirefoxOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--headless")
+    options.profile = firefox_profile
+    driver = webdriver.Firefox(options=options)
     url = f"https://www.indeed.com/jobs?q={q}&l={l}"
     driver.get(url)
 

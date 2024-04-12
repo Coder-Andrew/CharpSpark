@@ -12,13 +12,21 @@ def get_cachable_listings() -> List[job_listing]:
     # Chromium will be downloaded outside of the project file within the docker image, code below will be used when container is created.
     
     # chromium = "/usr/bin/chromium"
+    # chrome_driver = "/usr/bin/chromedriver"
     # options = webdriver.ChromeOptions()
-    # options.binary_location = chromium
+    # options.add_argument("--no-sandbox")
+    # options.add_argument("--headless")
     # driver = webdriver.Chrome(options=options)
 
     # Set up mongo db context and prepare to cache listings
 
-    driver = webdriver.Firefox()
+    firefox_profile = webdriver.FirefoxProfile()
+    firefox_profile.set_preference('permissions.default.image', 2)
+    options = webdriver.FirefoxOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--headless")
+    options.profile = firefox_profile
+    driver = webdriver.Firefox(options=options)
     url = f"https://www.indeed.com/jobs?q=&l=remote"
     driver.get(url)
 
