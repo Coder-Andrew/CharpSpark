@@ -111,3 +111,8 @@ section .body-paragraph, .navbar *:not(.border-bottom), .footer *, section .titl
 .btn {
     background-color: #29adeb !important;
 }
+
+.btn-lg, .checkbox {
+    padding: 0px !important;
+    margin: 0px! important;
+}
