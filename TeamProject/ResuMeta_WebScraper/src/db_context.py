@@ -26,8 +26,9 @@ class IDbContext(ABC):
 
 
 class mongo_db_context(IDbContext):
-    def __init__(self, ip: str, port: int, dbname: str, collectionName: str):
-        self.collection = MongoClient(ip, port, serverSelectionTimeoutMS=5000)[dbname][collectionName]
+    def __init__(self, connectionString: str, dbname: str, collectionName: str):
+        self.collection = MongoClient(connectionString)[dbname][collectionName]
+        # self.collection = MongoClient(ip, port, serverSelectionTimeoutMS=5000)[dbname][collectionName]
 
     def save(self, job_listing: job_listing) -> None:
         # If the listing already exists, (the scraper already scraped this listing), we will update it

@@ -50,12 +50,12 @@ def get_cachable_listings() -> List[job_listing]:
 
     return job_listings
 
-def cache_listing(listing, ip='localhost', port=27017, dbname='job_listings', collectionName='job_listings'):
-    context = mongo_db_context(ip, port, dbname, collectionName)
+def cache_listing(listing, connectionString, dbname='job_listings', collectionName='job_listings'):
+    context = mongo_db_context(connectionString, dbname, collectionName)
     repo = job_listing_repository(context)
     repo.save(listing)
 
-def get_and_cache_listings():
+def get_and_cache_listings(connectionString: str):
     jobs = get_cachable_listings()
     for job in jobs:
-        cache_listing(job)
+        cache_listing(job, connectionString)
