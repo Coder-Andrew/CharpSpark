@@ -17,12 +17,15 @@ Background:
 	  | reynoldsa@mail.com     | reynoldsa@mail.com     | Adrian     | Reynolds    | Password123! |
     And I am a user with the first name 'Adrian'
     And I login
-    And I am on the "Home" page
     And I logout
 
 Scenario: Users can view their saved resumes in a "Your Resume" section
 Given I am a user with the first name 'Adrian'
     And I login
+    And I am on the "CreateResume" page
+    And the following users creates at least one resume
+      | Email              | Resumes |
+      | reynoldsa@mail.com | 1       |
     And I am on the "YourDashboard" page
 Then I should see a Your Resumes section
     And I should see a list of my saved resumes with their titles
@@ -30,6 +33,10 @@ Then I should see a Your Resumes section
 Scenario: Users can view their saved cover letters in a "Your Cover Letters" section
 Given I am a user with the first name 'Adrian'
     And I login
+    And I am on the "CreateCoverLetter" page
+    And the following users creates at least one cover letter
+      | Email              | CoverLetters |
+      | reynoldsa@mail.com | 1            |
     And I am on the "YourDashboard" page
 Then I should see a Your Cover Letters section
     And I should see a list of my saved cover letters with their titles
