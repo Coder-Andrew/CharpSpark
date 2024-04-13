@@ -49,7 +49,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             Common.Paths["ViewResume"] = Common.Paths["ViewResume"] + _viewResumeUrl;
             Thread.Sleep(1000);
             _viewResumePage.SaveResume();
-            _viewResumePage.GoTo("Home");
+            _viewResumePage.GoTo("YourDashboard");
         }
 
         [Given("the following users creates at least one cover letter")]
@@ -68,7 +68,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             Common.Paths["ViewCoverLetter"] = Common.Paths["ViewCoverLetter"] + _viewCoverLetterUrl;
             Thread.Sleep(1000);
             _viewCoverLetterPage.SaveCoverLetter();
-            _viewCoverLetterPage.GoTo("Home");
+            _viewCoverLetterPage.GoTo("YourDashboard");
         }
 
         [Then("I should see a Your Resumes section")]
@@ -149,6 +149,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
                 _yourDashboardPage.GoTo("CreateCoverLetter");
                 GivenTheFollowingUsersCreatesAtLeastOneCoverLetter(null);
             }
+            
             _yourDashboardPage.ClickCoverLetter();
         }
 
