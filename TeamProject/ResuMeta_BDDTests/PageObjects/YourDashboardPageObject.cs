@@ -21,6 +21,7 @@ namespace ResuMeta_BDDTests.PageObjects
         {
             _pageName = "YourDashboard";
         }
+        
         public class ResumeVM
         {
             public string? Title { get; set; }
