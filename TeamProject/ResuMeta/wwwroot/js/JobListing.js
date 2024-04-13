@@ -52,6 +52,7 @@ async function getCachedJobListings() {
 }
 
 async function searchJobListings() {
+    showLoader();
     console.log("Searching job listings");
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
@@ -75,6 +76,7 @@ async function searchJobListings() {
                 const jobListingNode = generateJobListingNode(job);
                 jobListingContainer.appendChild(jobListingNode);
             });
+            hideLoader();
         }
         else
         {
@@ -82,6 +84,7 @@ async function searchJobListings() {
             noResultsNode.className = 'no-results';
             noResultsNode.innerHTML = 'No job listings found';
             jobListingContainer.appendChild(noResultsNode);
+            hideLoader();
             return;
         }
     }
@@ -91,8 +94,10 @@ async function searchJobListings() {
         noResultsNode.className = 'no-results';
         noResultsNode.innerHTML = 'No job listings found';
         jobListingContainer.appendChild(noResultsNode);
+        hideLoader();
         return;
     }
+    hideLoader();
 }
 
 function generateJobListingNode(job) {
