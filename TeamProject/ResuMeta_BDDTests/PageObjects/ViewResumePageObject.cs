@@ -16,6 +16,8 @@ namespace ResuMeta_BDDTests.PageObjects
             _pageName = "ViewResume";
         }
 
+        public bool resumeCreated = false;
+
         public IWebElement QuillEditor => _webDriver.FindElement(By.CssSelector("div[class=\"ql-editor\"]"));
         public IWebElement QuillToolBar => _webDriver.FindElement(By.CssSelector("div[class=\"ql-toolbar ql-snow\"]"));
         public IWebElement SaveResumeBtn => _webDriver.FindElement(By.Id("save-resume"));
@@ -68,6 +70,7 @@ namespace ResuMeta_BDDTests.PageObjects
             ResumeTitle.Click();
             ResumeTitle.SendKeys("Test Resume");
             SaveResumeBtn.Click();
+            resumeCreated = true;
         }
 
         public string GetSaveMessage()
