@@ -30,6 +30,7 @@ namespace ResuMeta_BDDTests.PageObjects
             string urlId = fullUrl.Substring(lastIndex);
             return urlId;
         }
+
         public void SubmitForm()
         {
             IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
