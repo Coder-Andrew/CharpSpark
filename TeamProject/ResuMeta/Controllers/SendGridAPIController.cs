@@ -12,6 +12,7 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
+using ResuMeta.Data;
 
 namespace ResuMeta.Controllers
 {
@@ -21,23 +22,53 @@ namespace ResuMeta.Controllers
     {
         private readonly ILogger<SendGridApiController> _logger;
         private readonly ISendGridService _sendGridService;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRecurringJobManager _recurringJobManager;
-        public SendGridApiController(ILogger<SendGridApiController> logger, ISendGridService sendGridService, IRecurringJobManager recurringJobManager)
+        private readonly IRepository<ApplicationTracker> _repository;
+        public SendGridApiController(ILogger<SendGridApiController> logger, ISendGridService sendGridService, IRecurringJobManager recurringJobManager, IRepository<ApplicationTracker> repository, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _sendGridService = sendGridService;
             _recurringJobManager = recurringJobManager;
+            _repository = repository;
+            _userManager = userManager;
         }
 
-        [HttpPost("{userid}")]
+        [HttpPost("apply")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SetReminder(string userid)
+        public async Task<IActionResult> SetReminder([FromBody] ReminderVM reminder)
         {
             try
             {
+                string currUserId = _userManager.GetUserId(User)!;
+                var application = _repository.FindById(reminder.applicationTrackerId);
+                if (application == null)
+                {
+                    return BadRequest("Application not found.");
+                }
 
-                //_recurringJobManager.AddOrUpdate("Job1", () => _sendGridService.TestReminder2(userid), "* * * * *");
-               _sendGridService.TestReminder2(userid);
+                if (!application.ApplicationDeadline.HasValue)
+                {
+                    return BadRequest("Application deadline not set.");
+                }
+
+                // Calculate the reminder date 
+                var reminderDate = application.ApplicationDeadline.Value.AddDays(-2);
+
+                // Calculate the time until the reminder date
+                TimeOnly currentTime = TimeOnly.FromTimeSpan(DateTime.Now.TimeOfDay);
+                DateTime reminderDateTime = reminderDate.ToDateTime(currentTime);
+
+                _logger.LogInformation($"Reminder DateTime: {reminderDateTime}");
+
+                if (reminderDateTime < DateTime.UtcNow)
+                {
+                    _logger.LogInformation($"Reminder date is in the past. Reminder not scheduled.");
+                    return BadRequest("Reminder date is in the past.");
+                }
+
+                BackgroundJob.Schedule(() => _sendGridService.SendEmailReminderToApply(reminder, currUserId), reminderDateTime);
+                _logger.LogInformation("Reminder has been Scheduled");
                 return Ok();
             }
             catch (Exception e)
@@ -45,13 +76,49 @@ namespace ResuMeta.Controllers
                 _logger.LogError(e, "Error in SetReminder");
                 return BadRequest("Error Setting Reminder");
             }
+        }
 
-            // Send application deadline reminder
-        // await SendGridService.SendApplicationDeadlineReminder(emailAddress, applicationDate);
-            
-            // Send follow up reminder
-        // await SendGridService.SendFollowUpReminder(emailAddress, appliedDate);
+        [HttpPost("followup")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SetFollowUp([FromBody] ReminderVM reminder)
+        {
+            try
+            {
+                string currUserId = _userManager.GetUserId(User)!;
+                var application = _repository.FindById(reminder.applicationTrackerId);
+                if (application == null)
+                {
+                    return BadRequest("Application not found.");
+                }
 
+                if (!application.AppliedDate.HasValue)
+                {
+                    return BadRequest("Applied date not set.");
+                }
+
+                var reminderDate = application.AppliedDate.Value.AddDays(7);
+
+                TimeOnly currentTime = TimeOnly.FromTimeSpan(DateTime.Now.TimeOfDay);
+                DateTime reminderDateTime = reminderDate.ToDateTime(currentTime);
+
+                _logger.LogInformation($"--------------------Reminder Follow Up DateTime: {reminderDateTime}");
+
+                if (reminderDateTime < DateTime.UtcNow)
+                {
+                    _logger.LogInformation($"--------------------Reminder Follow Up date is in the past. Reminder not scheduled.");
+                    return BadRequest("Reminder Follow Up date is in the past.");
+                }
+
+                BackgroundJob.Schedule(() => _sendGridService.SendEmailReminderToFollowUp(reminder, currUserId), reminderDateTime);
+                _logger.LogInformation("--------------------Follow Up Reminder has been Scheduled");
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in SetFollowUp");
+                return BadRequest("Error Setting Follow Up");
+            }
         }
     }
 }

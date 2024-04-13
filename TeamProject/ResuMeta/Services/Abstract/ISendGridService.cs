@@ -9,8 +9,7 @@ namespace ResuMeta.Services.Abstract
 {
     public interface ISendGridService
     {
-        // Task SendApplicationDeadlineReminder(EmailAddress to, DateTime applicationDate);
-        // Task SendFollowUpReminder(EmailAddress to, DateTime appliedDate);
-        Task TestReminder2(string userId);
+        Task SendEmailReminderToApply(ReminderVM reminder, string currUserId);
+        Task SendEmailReminderToFollowUp(ReminderVM reminder, string currUserId);
     }
 }
