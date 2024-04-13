@@ -38,6 +38,12 @@ builder.Services.Configure<NodeServiceOptions>(options =>
     options.NodeUrl = nodeUrl;
 });
 
+string scraperUrl = builder.Configuration["ScraperUrl"] ?? throw new InvalidOperationException("Connection string 'ScraperUrl' not found.");
+builder.Services.Configure<WebScraperServiceOptions>(options =>
+{
+    options.ScraperUrl = scraperUrl;
+});
+
 builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(nodeUrl);
@@ -47,6 +53,16 @@ builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services)
         services.GetRequiredService<IOptions<NodeServiceOptions>>(), 
         services.GetRequiredService<IRepository<Resume>>(),
         services.GetRequiredService<IRepository<UserInfo>>()
+        );
+});
+
+builder.Services.AddHttpClient<IWebScraperService, WebScraperService>((httpClient, services) =>
+{
+    httpClient.BaseAddress = new Uri(scraperUrl);
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+    return new WebScraperService(
+        httpClient,
+        services.GetRequiredService<IOptions<WebScraperServiceOptions>>()
         );
 });
 
