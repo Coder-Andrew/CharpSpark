@@ -53,7 +53,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         }
 
         [Given("the following users creates at least one cover letter")]
-        public void GivenTheFollowingUsersCreatesAtLeastOneCoverLetter(Table? table)
+        public void GivenTheFollowingUsersCreatesAtLeastOneCoverLetter(Table table)
         {
             if(_viewCoverLetterPage.coverLetterCreated)
             {

@@ -11,7 +11,6 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using System.Drawing;
 using System.Threading;
-using OpenQA.Selenium.Support.UI;
 
 namespace ResuMeta_BDDTests.PageObjects
 {
