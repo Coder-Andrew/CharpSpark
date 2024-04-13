@@ -18,7 +18,7 @@
                 @foreach(var resume in Model.Resumes)
                 {
                     <div class="thumbnail" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})'">
-                        <div id="resume-content-@resume.ResumeId"></div>
+                        <div class="resume-content-ids" id="resume-content-@resume.ResumeId"></div>
                         <div class="thumbnail-title">@resume.Title</div>
                     </div>
                     <script type="text/javascript">
@@ -45,7 +45,7 @@
                 @foreach(var coverLetter in Model.CoverLetters)
                 {
                     <div class="thumbnail" onclick="location.href='@Url.Action("YourCoverLetter", "CoverLetter", new {coverLetterId = @coverLetter.CoverLetterId})'">
-                        <div id="cover-letter-content-@coverLetter.CoverLetterId"></div>
+                        <div class="cover-letter-content-ids" id="cover-letter-content-@coverLetter.CoverLetterId"></div>
                         <div class="thumbnail-title">@coverLetter.Title</div>
                     </div>
                     <script type="text/javascript">
