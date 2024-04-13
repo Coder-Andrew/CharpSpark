@@ -172,7 +172,7 @@ function refreshTable(sortOption, sortOrder) {
                 let newRow = appTable.insertRow(-1);
                 let cell = newRow.insertCell(0);
                 cell.innerHTML = "No application trackers to display";
-                cell.colSpan = 8; 
+                cell.colSpan = 8;
             } else {
                 data.forEach(item => {
                     let newRow = appTable.insertRow(-1);
@@ -211,7 +211,7 @@ function refreshTable(sortOption, sortOrder) {
                     const reminderCell = newRow.insertCell(9);
                     const reminderDropdown = document.createElement('select');
                     const defaultOption = document.createElement('option');
-                    defaultOption.text = 'Set Reminder';
+                    defaultOption.text = 'Reminder?';
                     defaultOption.value = '';
                     reminderDropdown.add(defaultOption);
 

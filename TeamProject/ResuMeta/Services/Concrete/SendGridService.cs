@@ -86,7 +86,7 @@ namespace ResuMeta.Services.Concrete
             var applicationTrackerId = reminder.applicationTrackerId;
             var applications = _applicationTrackerService.GetApplicationsByUserId(userId);
             var id = currUserId;
-             var emailFromAddress = _configuration["SendFromEmail"];
+            var emailFromAddress = _configuration["SendFromEmail"];
             UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
             _logger.LogInformation($"User with email {currUser.Email}  found. ");
             string email = currUser.Email;

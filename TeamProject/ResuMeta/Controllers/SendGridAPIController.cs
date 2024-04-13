@@ -52,7 +52,7 @@ namespace ResuMeta.Controllers
                     return BadRequest("Application deadline not set.");
                 }
 
-                // Calculate the reminder date 
+                // Calculate the reminder date , if it is for the current day or the next day, it will not send reminder
                 var reminderDate = application.ApplicationDeadline.Value.AddDays(-2);
 
                 // Calculate the time until the reminder date
@@ -101,16 +101,16 @@ namespace ResuMeta.Controllers
                 TimeOnly currentTime = TimeOnly.FromTimeSpan(DateTime.Now.TimeOfDay);
                 DateTime reminderDateTime = reminderDate.ToDateTime(currentTime);
 
-                _logger.LogInformation($"--------------------Reminder Follow Up DateTime: {reminderDateTime}");
+                _logger.LogInformation($"Reminder Follow Up DateTime: {reminderDateTime}");
 
                 if (reminderDateTime < DateTime.UtcNow)
                 {
-                    _logger.LogInformation($"--------------------Reminder Follow Up date is in the past. Reminder not scheduled.");
+                    _logger.LogInformation($"Reminder Follow Up date is in the past. Reminder not scheduled.");
                     return BadRequest("Reminder Follow Up date is in the past.");
                 }
 
                 BackgroundJob.Schedule(() => _sendGridService.SendEmailReminderToFollowUp(reminder, currUserId), reminderDateTime);
-                _logger.LogInformation("--------------------Follow Up Reminder has been Scheduled");
+                _logger.LogInformation("Follow Up Reminder has been Scheduled");
                 return Ok();
 
             }
