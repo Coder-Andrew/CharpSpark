@@ -3,11 +3,23 @@ document.addEventListener('DOMContentLoaded', initializePage, false);
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
     const searchJobListingsBtn = document.getElementById('search-job-listings');
-    getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
-    searchJobListingsBtn.addEventListener('click', searchJobListings, false);
+
+    document.getElementById('page-number').addEventListener('change', getCachedJobListings);
+    getCachedJobListings();
+    //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
+    searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
+}
+function hideLoader() {
+    document.getElementById('page-number').classList.remove("invisible");
+    document.getElementById("loader").classList.add("invisible");
+}
+function showLoader() {
+    document.getElementById('page-number').classList.add("invisible");
+    document.getElementById("loader").classList.remove("invisible");
 }
 
 async function getCachedJobListings() {
+    showLoader();
     console.log("Getting cached job listings");
     var pageNum = document.getElementById('page-number').value;
     const jobListingContainer = document.getElementById('job-container');
@@ -34,8 +46,9 @@ async function getCachedJobListings() {
         noResultsNode.className = 'no-results';
         noResultsNode.innerHTML = 'No cached job listings found';
         jobListingContainer.appendChild(noResultsNode);
-        return;
     }
+    hideLoader();
+    return;
 }
 
 async function searchJobListings() {
@@ -83,19 +96,21 @@ async function searchJobListings() {
 }
 
 function generateJobListingNode(job) {
-    const jobListingNode = document.createElement('div');
-    jobListingNode.className = 'job-listing';
-    var link = "https://www." + job.link;
-    jobListingNode.innerHTML = `
-        <div class="job-listing-title">
-            <a href="${link}" target="_blank">${job.jobTitle}</a>
-        </div>
-        <div class="job-listing-company">
-            ${job.company}
-        </div>
-        <div class="job-listing-location">
-            ${job.location}
-        </div>
-    `;
-    return jobListingNode;
+    const jobListingTemplate = document.getElementById("job-listing-template");
+    const templateClone = jobListingTemplate.content.cloneNode(true);
+    const clone = templateClone.firstElementChild;
+
+    const jobLink = clone.querySelector("a");
+    const jobTitle = clone.querySelector(".job-listing-title");
+    const jobCompany = clone.querySelector(".job-listing-company");
+    const jobLocation = clone.querySelector(".job-listing-location"); 
+
+
+    jobLink.href = `https://www.${job.link}`;
+    jobTitle.textContent = job.jobTitle;
+    jobCompany.innerHTML = `<span class="fa fa-building"></span> ${job.company}`;
+    jobLocation.innerHTML = `<span class="fa fa-globe"></span> ${job.location}`;
+
+
+    return clone;
 }
