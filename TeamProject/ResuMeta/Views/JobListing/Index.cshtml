@@ -1,0 +1,53 @@
+@section Styles {
+    <link rel="stylesheet" href="~/css/ApplicationTracker.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/JobListings.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+}
+
+
+<div class="text-center">
+    <h1 class="display-4 title">Job Listings</h1>
+    <hr />
+</div>
+
+
+
+<div class="container">
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <div class="d-flex d-inline-block justify-content-center">
+                <input type="text" id="job-title" class="form-control" placeholder="Job Title" style="width: 300px;"/>
+                <input type="text" id="city" class="form-control" placeholder="City" style="width: 300px;"/>
+                <input type="text" id="state" class="form-control" placeholder="State" style="width: 300px;"/>    
+                <button class="" id="search-job-listings">Search Listings</button>
+            </div>
+        }
+    <div class="d-flex justify-content-center">
+        <div class="loader my-2" id="loader"></div>
+    </div>
+    <div id="job-container">
+
+    </div>
+</div>
+
+
+
+<template id="job-listing-template">
+    <div class="card border-secondary mb-3" style="width: 18rem;">
+        <a href="http://example.com" class="card-link" target="_blank">
+            <div class="card-body bg-secondary">
+                <h5 class="card-title job-listing-title">Online Data Analyst United States</h5>
+                <p class="card-text job-listing-company"><span class="fa fa-building"></span> TELUS International</p>
+                <p class="card-text job-listing-location"><span class="fa fa-globe"></span> Remote in Washington, DC 20001</p>
+            </div>
+        </a>
+    </div>
+</template>
+
+<div class="d-flex justify-content-center">
+    <input type="number" id="page-number" class="form-control" placeholder="Page Number" style="width: 100px;" value="1" min="1" />
+</div>
+
+@section Scripts {
+    <script src="~/js/JobListing.js"></script>
+}
