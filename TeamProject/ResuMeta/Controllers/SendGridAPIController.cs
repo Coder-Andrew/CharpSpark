@@ -1,5 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ResuMeta.Models;
 using ResuMeta.DAL.Abstract;
@@ -10,6 +11,7 @@ using ResuMeta.ViewModels;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Hangfire;
+using Microsoft.AspNetCore.Identity;
 
 namespace ResuMeta.Controllers
 {
@@ -27,20 +29,29 @@ namespace ResuMeta.Controllers
             _recurringJobManager = recurringJobManager;
         }
 
-        [HttpPost]
-        public IActionResult SetReminder(int userid)
+        [HttpPost("{userid}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SetReminder(string userid)
         {
-            
-            _recurringJobManager.AddOrUpdate("Job1", () => _sendGridService.TestReminder2(userid), "* * * * *");
+            try
+            {
 
+                //_recurringJobManager.AddOrUpdate("Job1", () => _sendGridService.TestReminder2(userid), "* * * * *");
+               _sendGridService.TestReminder2(userid);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in SetReminder");
+                return BadRequest("Error Setting Reminder");
+            }
 
             // Send application deadline reminder
         // await SendGridService.SendApplicationDeadlineReminder(emailAddress, applicationDate);
             
             // Send follow up reminder
         // await SendGridService.SendFollowUpReminder(emailAddress, appliedDate);
-            
-            return Ok();
+
         }
     }
 }

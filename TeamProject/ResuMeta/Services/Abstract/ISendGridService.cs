@@ -11,6 +11,6 @@ namespace ResuMeta.Services.Abstract
     {
         // Task SendApplicationDeadlineReminder(EmailAddress to, DateTime applicationDate);
         // Task SendFollowUpReminder(EmailAddress to, DateTime appliedDate);
-        Task TestReminder2(int userId);
+        Task TestReminder2(string userId);
     }
 }

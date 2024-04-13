@@ -13,6 +13,7 @@ using ResuMeta.Services.Abstract;
 using ResuMeta.Services.Concrete;
 using Microsoft.Extensions.Options;
 using Hangfire;
+using SendGrid;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,7 @@ builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
 builder.Services.AddScoped<ISendGridService, SendGridService>();
 
 

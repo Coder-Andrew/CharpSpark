@@ -8,6 +8,33 @@ function initializePage() {
     sortButton.addEventListener('click', sortTable, false);
     const resetButton = document.getElementById('reset-filters');
     resetButton.addEventListener('click', refreshTable, false);
+    const setReminderButton = document.getElementById('set-reminder-button');
+    setReminderButton.addEventListener('click', setReminder, false);
+    
+}
+
+function setReminder() {
+    console.log("Setting reminder");
+    const userId = document.getElementById('userId').value;
+    console.log(userId);
+    
+    fetch(`/api/sendgrid/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Reminder set successfully!");
+        } else {
+            throw new Error('Failed to set reminder');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Failed to set reminder. Please try again.");
+    });
 }
 
 function addApplication(event) {
