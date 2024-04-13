@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
+using System.Linq;
 using System;
 
 namespace ResuMeta_BDDTests.StepDefinitions
@@ -24,52 +25,72 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _yourDashboardPage = new YourDashboardPageObject(browserDriver.Current);
         }
 
+
         [Then("I should see a Your Resumes section")]
         public void ThenIShouldSeeAYourResumesSection()
         {
-            _yourDashboardPage.YourResumesSection.Should().NotBeNull();
+            _yourDashboardPage.ResumeSection.Should().NotBeNull();
         }
 
-        [And("I should see a list of my saved resumes with their titles")]
-        public void AndIShouldSeeAListOfMySavedResumesWithTheirTitles()
+        [Then("I should see a list of my saved resumes with their titles")]
+        public void ThenIShouldSeeAListOfMySavedResumesWithTheirTitles()
         {
             _yourDashboardPage.SavedResumes.Should().NotBeNull();
             _yourDashboardPage.SavedResumes.Count.Should().BeGreaterThan(0);
+
+            foreach (var resume in _yourDashboardPage.SavedResumes)
+            {
+                resume.Title.Should().NotBeNullOrEmpty();
+            }
         }
 
         [Then("I should see a Your Cover Letters section")]
+        public void ThenIShouldSeeAYourCoverLettersSection()
         {
-            _yourDashboardPage.YourCoverLettersSection.Should().NotBeNull();
+            _yourDashboardPage.CoverLetterSection.Should().NotBeNull();
         }
 
-        [And("I should see a list of my saved cover letters with their titles")]
-        public void AndIShouldSeeAListOfMySavedCoverLettersWithTheirTitles()
+        [Then("I should see a list of my saved cover letters with their titles")]
+        public void ThenIShouldSeeAListOfMySavedCoverLettersWithTheirTitles()
         {
             _yourDashboardPage.SavedCoverLetters.Should().NotBeNull();
             _yourDashboardPage.SavedCoverLetters.Count.Should().BeGreaterThan(0);
+
+            foreach (var coverLetter in _yourDashboardPage.SavedCoverLetters)
+            {
+                coverLetter.Title.Should().NotBeNullOrEmpty();
+            }
         }
 
-        [When("When I click on a resume")]
+        [When("I click on a resume")]
         public void WhenIClickOnAResume()
         {
             _yourDashboardPage.ClickResume();
         }
 
-        [Then("Then I should be redirected to the \"YourResume\" page")]
+        [Then("I should be redirected to the \"YourResume\" page")]
         public void ThenIShouldBeRedirectedToTheYourResumePage()
         {
+            var resumeId = _yourDashboardPage.GetResumeIds().FirstOrDefault();
+
+            var yourResumeUrl = _yourDashboardPage.GetYourResumeUrl(resumeId);
+            Common.Paths["YourResume"] = Common.Paths["YourResume"] + yourResumeUrl;
             _yourDashboardPage.GoTo("YourResume");
         }
 
-        [When("When I click on a cover letter")]
+        [When("I click on a cover letter")]
         public void WhenIClickOnACoverLetter()
         {
             _yourDashboardPage.ClickCoverLetter();
         }
 
-        [Then("Then I should be redirected to the \"YourCoverLetter\" page")]
+        [Then("I should be redirected to the \"YourCoverLetter\" page")]
         public void ThenIShouldBeRedirectedToTheYourCoverLetterPage()
         {
+            var coverLetterId = _yourDashboardPage.GetCoverLetterIds().FirstOrDefault();
+
+            var yourCoverLetterUrl = _yourDashboardPage.GetYourCoverLetterUrl(coverLetterId);
+            Common.Paths["YourCoverLetter"] = Common.Paths["YourCoverLetter"] + yourCoverLetterUrl;
             _yourDashboardPage.GoTo("YourCoverLetter");
         }
     }

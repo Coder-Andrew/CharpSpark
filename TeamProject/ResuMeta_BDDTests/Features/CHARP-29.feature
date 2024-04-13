@@ -24,14 +24,14 @@ Scenario: Users can view their saved resumes in a "Your Resume" section
 Given I am a user with the first name 'Adrian'
     And I login
     And I am on the "YourDashboard" page
-Then I should see a "Your Resume" section
+Then I should see a Your Resumes section
     And I should see a list of my saved resumes with their titles
 
 Scenario: Users can view their saved cover letters in a "Your Cover Letters" section
 Given I am a user with the first name 'Adrian'
     And I login
     And I am on the "YourDashboard" page
-Then I should see a "Your Cover Letters" section
+Then I should see a Your Cover Letters section
     And I should see a list of my saved cover letters with their titles
 
 Scenario: Users can click on a resume and be redirected to view it
