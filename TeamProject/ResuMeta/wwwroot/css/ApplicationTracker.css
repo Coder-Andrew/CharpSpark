@@ -1,18 +1,44 @@
 #app-table {
     color: #e9912c; 
+    overflow-x: auto;
     margin-left: auto;
     margin-right: auto;
     width: 90%; 
-    table-layout: fixed; 
+    /* table-layout: fixed;  */
+}
+#app-table td:nth-child(8), #app-table th:nth-child(8) {
+    min-width: 30px;
+    max-width: 40px;
+}
+#app-table td:nth-child(9), #app-table th:nth-child(9) {
+    min-width: 200px;
+    max-width: 250px;
+}
+#app-table tr {
+    border-bottom: 1px solid #ddd; 
 }
 #app-table th, #app-table td {
-    /* justify-content: center; */
-    
-    /* background-color: aqua; */
+  
+    width: 100px; 
     font-size: small;
-    padding: 10px; /* Add some padding to cells */
-    text-align: left; /* Align text to the left */
-    border-bottom: 1px solid #ddd; /* Add a border to the bottom of each cell */
+    padding: 10px; 
+    text-align: left;
+}
+#app-table button {
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#app-table select {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    border: 1px solid #ddd;
 }
 
 #add-application-button {
@@ -21,7 +47,7 @@
 
 .wrap-text {
     word-wrap: break-word;
-    max-width: 200px; /* Adjust this value according to your needs */
+    max-width: 200px; 
 }
 
 .table-responsive {

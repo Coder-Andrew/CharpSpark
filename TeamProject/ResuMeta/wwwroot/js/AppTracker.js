@@ -11,7 +11,7 @@ function initializePage() {
 }
 
 function setApplyReminder(applicationTrackerId) {
-    console.log("Setting reminder to apply");
+    //console.log("Setting reminder to apply");
     const userId = document.getElementById('userId').value;
 
     fetch(`/api/sendgrid/apply`, {
@@ -26,19 +26,20 @@ function setApplyReminder(applicationTrackerId) {
     })
         .then(response => {
             if (response.ok) {
-                alert("Reminder set successfully!");
+                alert("Reminder set successfully! You will recieve an email 2 days before the application deadline.");
             } else {
-                throw new Error('Failed to set reminder');
+                alert("Sorry, something went wrong. Please try again.");
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            //console.error('Error:', error);
+            console.log("error");
             alert("Failed to set reminder. Please try again.");
         });
 }
 
 function setFollowupReminder(applicationTrackerId) {
-    console.log("Setting reminder to follow up");
+    //console.log("Setting reminder to follow up");
     const userId = document.getElementById('userId').value;
 
     fetch(`/api/sendgrid/followup`, {
@@ -53,13 +54,13 @@ function setFollowupReminder(applicationTrackerId) {
     })
         .then(response => {
             if (response.ok) {
-                alert("Follow up Reminder set successfully!");
+                alert("Follow up Reminder set successfully! You will recieve an email 7 days after the apply date.");
             } else {
-                throw new Error('Failed to set follow up reminder');
+                alert("Sorry, something went wrong. Please try again.");
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.log("error");
             alert("Failed to set follow up reminder. Please try again.");
         });
 }
@@ -183,7 +184,7 @@ function refreshTable(sortOption, sortOrder) {
                     let cell5 = newRow.insertCell(4);
                     let cell6 = newRow.insertCell(5);
                     let cell7 = newRow.insertCell(6);
-                    let cell8 = newRow.insertCell(7);
+                    //let cell8 = newRow.insertCell(7);
 
                     cell1.innerHTML = item.jobTitle;
                     cell1.className = 'wrap-text';
@@ -199,7 +200,7 @@ function refreshTable(sortOption, sortOrder) {
                     cell6.className = 'wrap-text';
                     cell7.innerHTML = item.notes;
                     cell7.className = 'wrap-text';
-                    const deleteCell = newRow.insertCell(8);
+                    const deleteCell = newRow.insertCell();
                     const deleteButton = document.createElement('button');
                     deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
                     deleteButton.addEventListener('click', function () {
@@ -208,7 +209,7 @@ function refreshTable(sortOption, sortOrder) {
                     });
                     deleteCell.appendChild(deleteButton);
 
-                    const reminderCell = newRow.insertCell(9);
+                   const reminderCell = newRow.insertCell();
                     const reminderDropdown = document.createElement('select');
                     const defaultOption = document.createElement('option');
                     defaultOption.text = 'Reminder?';

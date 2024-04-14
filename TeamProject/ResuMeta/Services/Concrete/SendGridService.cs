@@ -1,6 +1,7 @@
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using ResuMeta.Models;
 using System.Text.Json;
@@ -57,53 +58,82 @@ namespace ResuMeta.Services.Concrete
 
         public async Task SendEmailReminderToApply(ReminderVM reminder, string currUserId)
         {
-            var userId = reminder.userId;
-            var applicationTrackerId = reminder.applicationTrackerId;
-            var applications = _applicationTrackerService.GetApplicationsByUserId(userId);
-            var id = currUserId;
-            var emailFromAddress = _configuration["SendFromEmail"];
-            UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-            _logger.LogInformation($"User with email {currUser.Email}  found. ");
-            string email = currUser.Email;
-
-            var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
-            if (application != null && application.ApplicationDeadline.HasValue)
+            try
             {
-                var from = new EmailAddress(emailFromAddress, "ResuMeta");
-                var subject = $"Application for {application.CompanyName}";
-                var to = new EmailAddress(email, currUser.FirstName);
-                var plainTextContent = $"Don't forget to apply for the {application.JobTitle} position at {application.CompanyName} before {application.ApplicationDeadline}!";
-                var htmlContent = $"<strong>Don't forget to apply for the {application.JobTitle} position at {application.CompanyName} before {application.ApplicationDeadline}!</strong>";
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                var response = await _client.SendEmailAsync(msg);
-                _logger.LogInformation($"Email sent to {email}");
+                var userId = reminder.userId;
+                var applicationTrackerId = reminder.applicationTrackerId;
+                var applications = _applicationTrackerService.GetApplicationsByUserId(userId);
+                var id = currUserId;
+                var emailFromAddress = _configuration["SendFromEmail"];
+                UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+                _logger.LogInformation($"User with email {currUser.Email}  found. ");
+                string email = currUser.Email;
+
+                var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
+                if (application != null && application.ApplicationDeadline.HasValue)
+                {
+                    var from = new EmailAddress(emailFromAddress, "ResuMeta");
+                    var subject = $"Application for {application.CompanyName}";
+                    var to = new EmailAddress(email, currUser.FirstName);
+                    var plainTextContent = $"Don't forget to apply for the {application.JobTitle} position at {application.CompanyName} before {application.ApplicationDeadline}!";
+                    var htmlContent = $"<strong>Don't forget to apply for the {application.JobTitle} position at {application.CompanyName} before {application.ApplicationDeadline}!</strong>";
+                    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                    var response = await _client.SendEmailAsync(msg);
+                    if (response.StatusCode != HttpStatusCode.Accepted)
+                    {
+                        _logger.LogError($"Failed to send email");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Email sent");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while sending email");
             }
         }
 
         public async Task SendEmailReminderToFollowUp(ReminderVM reminder, string currUserId)
         {
-            var userId = reminder.userId;
-            var applicationTrackerId = reminder.applicationTrackerId;
-            var applications = _applicationTrackerService.GetApplicationsByUserId(userId);
-            var id = currUserId;
-            var emailFromAddress = _configuration["SendFromEmail"];
-            UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-            _logger.LogInformation($"User with email {currUser.Email}  found. ");
-            string email = currUser.Email;
-
-            var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
-
-            if (application != null && application.ApplicationDeadline.HasValue)
+            try
             {
-                var from = new EmailAddress(emailFromAddress, "ResuMeta");
-                var subject = $"Follow up for {application.CompanyName}";
-                var to = new EmailAddress(email, currUser.FirstName);
-                var plainTextContent = $"Don't forget to follow up with the hiring manager for the {application.JobTitle} position at {application.CompanyName}. As a reminder, you applied on {application.AppliedDate}.";
-                var htmlContent = $"<strong>Don't forget to follow up with the hiring manager for the {application.JobTitle} position at {application.CompanyName}. As a reminder, you applied on {application.AppliedDate}.</strong>";
-                var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-                var response = await _client.SendEmailAsync(msg);
-                _logger.LogInformation($"Email sent to {email}");
+                var userId = reminder.userId;
+                var applicationTrackerId = reminder.applicationTrackerId;
+                var applications = _applicationTrackerService.GetApplicationsByUserId(userId);
+                var id = currUserId;
+                var emailFromAddress = _configuration["SendFromEmail"];
+                UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+                _logger.LogInformation($"User with email {currUser.Email}  found. ");
+                string email = currUser.Email;
+
+                var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
+
+                if (application != null && application.ApplicationDeadline.HasValue)
+                {
+                    var from = new EmailAddress(emailFromAddress, "ResuMeta");
+                    var subject = $"Follow up for {application.CompanyName}";
+                    var to = new EmailAddress(email, currUser.FirstName);
+                    var plainTextContent = $"Don't forget to follow up with the hiring manager for the {application.JobTitle} position at {application.CompanyName}. As a reminder, you applied on {application.AppliedDate}.";
+                    var htmlContent = $"<strong>Don't forget to follow up with the hiring manager for the {application.JobTitle} position at {application.CompanyName}. As a reminder, you applied on {application.AppliedDate}.</strong>";
+                    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                    var response = await _client.SendEmailAsync(msg);
+                    if (response.StatusCode != HttpStatusCode.Accepted)
+                    {
+                        _logger.LogError($"Failed to send email");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Email sent");
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while sending email");
+            }
+
         }
     }
 }

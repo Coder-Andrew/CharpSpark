@@ -38,6 +38,14 @@ namespace ResuMeta.Controllers
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SetReminder([FromBody] ReminderVM reminder)
         {
+            if (reminder == null)
+            {
+                return BadRequest("Reminder is null.");
+            }
+            if (User == null)
+            {
+                return Unauthorized();
+            }
             try
             {
                 string currUserId = _userManager.GetUserId(User)!;
@@ -82,6 +90,14 @@ namespace ResuMeta.Controllers
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SetFollowUp([FromBody] ReminderVM reminder)
         {
+            if (reminder == null)
+            {
+                return BadRequest("Reminder is null.");
+            }
+            if (User == null)
+            {
+                return Unauthorized();
+            }
             try
             {
                 string currUserId = _userManager.GetUserId(User)!;
