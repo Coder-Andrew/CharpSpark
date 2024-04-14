@@ -35,6 +35,21 @@ function initializePage() {
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
+    const themeSwitcher = document.getElementById('theme-switcher');
+    themeSwitcher.addEventListener('click', SwitchTheme, false);
+}
+
+async function SwitchTheme() {
+    var themeStylesheet = document.getElementById('theme-stylesheet');
+    var themeSwitcher = document.getElementById('theme-switcher');
+    var themeLabel = document.getElementById('theme-label');
+    if (themeSwitcher.checked) {
+        themeStylesheet.setAttribute('href', '/css/ViewCoverLetterLight.css');
+        themeLabel.textContent = 'Switch to Dark Mode';
+    } else {
+        themeStylesheet.setAttribute('href', '/css/ViewCoverLetterDark.css');
+        themeLabel.textContent = 'Switch to Light Mode';
+    }
 }
 
 async function exportPdf(quill) {

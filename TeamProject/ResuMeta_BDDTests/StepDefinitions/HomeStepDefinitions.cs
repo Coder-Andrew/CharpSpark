@@ -45,7 +45,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [Then(@"The page presents a Register button")]
         public void ThenThePagePresentsARegisterButton()
         {
-
+            Thread.Sleep(3000);
             _homePage.RegisterButton.Should().NotBeNull();
             _homePage.RegisterButton.Displayed.Should().BeTrue();
 
