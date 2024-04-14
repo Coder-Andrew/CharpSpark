@@ -13,18 +13,18 @@
         <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>Welcome back, <span class="red-text">@User.Identity?.Name!</span></span></a>
     </li>
     <li class="nav-login-item">
-        <form id="logoutForm" class="form-inline d-none" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" id="logout" class="nav-link btn-logout btn-link text-dark"><span>Logout</span></button>
         </form>
-        <a href="#" onclick="document.getElementById('logoutForm').submit();" class="nav-link"><span>Logout</span></a>
     </li>
 }
 else
 {
     <li class="nav-login-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register"><span>Register</span></a>
+        <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register"><span>Register</span></a>
     </li>
     <li class="nav-login-item">
-        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><span>Login</span></a>
+        <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login"><span>Login</span></a>
     </li>
 }
 </ul>

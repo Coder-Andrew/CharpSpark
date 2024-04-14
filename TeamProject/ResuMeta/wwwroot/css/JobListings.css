@@ -4,19 +4,36 @@
 }
 
 .card-link:hover, .card-link:focus {
-    text-decoration: !important;
+    text-decoration: none !important;
 }
 
 .job-listing-title {
     color: #e9912c;
+    border-bottom: 1px solid #e9912c;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.job-listing-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(to right, #E91D1C, #FEB617);
 }
 
 .card-body:hover .job-listing-title {
     text-decoration: underline;
 }
 
-.fa {
-    color: #252525;
+.card-body .fa {
+    color: #868686;
+}
+
+.card-body {
+    background-color: #222424 !important;
 }
 
 .loader {
@@ -40,9 +57,37 @@
 
 .card {
     width: 35rem !important;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
 }
 
 #search-job-listings {
     background-color: #e9912c;
     border-color: #e9912c;
+    border-radius: 15px;
+    margin-left: 6px;
+}
+
+#search-job-listings:hover, #search-job-listings:active, #search-job-listings:focus {
+    background-color: #E91D1C;
+    color: white !important;
+    border-color: #E91D1C;
+    outline: none;
+    box-shadow: none;
+}
+
+input {
+    margin: 6px;
+}
+
+#job-container {
+    text-align: center;
+}
+
+#job-container .card{
+    width: 50%;
+    margin: auto;
 }
