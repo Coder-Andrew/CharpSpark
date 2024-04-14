@@ -13,8 +13,8 @@
         <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>Welcome back, <span class="red-text">@User.Identity?.Name!</span></span></a>
     </li>
     <li class="nav-login-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" id="logout" class="nav-link btn-logout btn-link text-dark"><span>Logout</span></button>
+        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" id="logout" class="nav-link"><span>Logout</span></button>
         </form>
     </li>
 }

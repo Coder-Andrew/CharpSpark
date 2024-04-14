@@ -114,7 +114,7 @@ display: flex !important;
 background-color: white !important;
 }
 
-.login-partial .nav-item {
+.login-partial .nav-login-item{
 display: flex !important;
 }
 
@@ -162,7 +162,7 @@ padding-right: 0px;
 margin-right: 0px;
 }
 
-.nav-item {
+.nav-item, .nov-login-item {
 width: 100% !important;
 }
 
@@ -170,7 +170,7 @@ width: 100% !important;
 flex-grow: 1 !important;
 }
 
-.navbar .navbar-nav .nav-item {
+.navbar .navbar-nav .nav-item, .nav-login-item {
 position: relative !important;
 }
 
@@ -179,7 +179,7 @@ position: relative;
 z-index: 1;
 }
 
-.nav-link > span::before{
+.nav-item > span::before{
 content: "";
 position: absolute;
 left: 0;
@@ -197,16 +197,16 @@ transition: transform 0.43s ease-in-out;
 transform: scaleX(1);
 }
 
-.nav-item:hover::after, .nav-login-item:hover::after {
-width: 100% !important;
+.nav-item:hover::after, .nav-login-item button:hover::after {
+width: 100%;
 }
 
-a {
+a, form button {
 color: #e9912c;
 text-decoration: none;
 }
 
-a:hover{
+a:hover, form button:hover {
 color: #E91D1C !important;
 text-decoration: none;
 }
@@ -236,11 +236,6 @@ color: white !important;
 border-color: #E91D1C;
 outline: none;
 box-shadow: none;
-}
-
-.btn-logout{
-background-color: transparent !important;
-border-color: transparent !important;
 }
 
 .title{
