@@ -26,8 +26,8 @@ namespace ResuMeta.Utilities
                     foreach(var u in seedData)
                     {
                         var identityID = await EnsureUser(userManager, seedUserPw, u.Email!, u.Email!, u.EmailConfirmed);
-                        UserInfo appUser = new UserInfo { AspnetIdentityId = identityID, FirstName = u.FirstName, LastName = u.LastName, PhoneNumber = u.PhoneNumber };
-                        if(!context.UserInfos.Any(x => x.AspnetIdentityId == appUser.AspnetIdentityId && x.FirstName == appUser.FirstName && x.LastName == appUser.LastName && x.PhoneNumber == appUser.PhoneNumber))
+                        UserInfo appUser = new UserInfo { AspnetIdentityId = identityID, FirstName = u.FirstName, LastName = u.LastName, PhoneNumber = u.PhoneNumber, Email = u.Email};
+                        if(!context.UserInfos.Any(x => x.AspnetIdentityId == appUser.AspnetIdentityId && x.FirstName == appUser.FirstName && x.LastName == appUser.LastName && x.PhoneNumber == appUser.PhoneNumber && x.Email == appUser.Email))
                         {
                             context.UserInfos.Add(appUser);
                             await context.SaveChangesAsync();

@@ -4,6 +4,7 @@ CREATE TABLE [UserInfo] (
   [FirstName] nvarchar(50),
   [LastName] nvarchar(50),
   [PhoneNumber] nvarchar(12),
+  [Email] nvarchar(100),
   [Summary] nvarchar(250),
   [ProfilePicturePath] VARBINARY(MAX),
 );

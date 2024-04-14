@@ -25,6 +25,9 @@ public partial class UserInfo
     [StringLength(12)]
     public string? PhoneNumber { get; set; }
 
+    [StringLength(100)]
+    public string? Email { get; set; }
+
     [StringLength(250)]
     public string? Summary { get; set; }
 
