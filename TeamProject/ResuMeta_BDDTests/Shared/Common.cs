@@ -23,7 +23,11 @@ namespace ResuMeta_BDDTests.Shared
             { "Login", "/Identity/Account/Login" },
             { "CreateResume", "/Resume/CreateResume" },
             { "ViewResume", "/Resume/ViewResume/" },
-            { "YourResume", "/Resume/YourResume/" }
+            { "YourResume", "/Resume/YourResume/" },
+            { "YourDashboard", "/Resume/YourDashboard" },
+            { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
+            { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
+            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" }
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
