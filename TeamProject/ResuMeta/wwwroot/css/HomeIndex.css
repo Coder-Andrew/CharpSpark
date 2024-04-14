@@ -99,7 +99,7 @@ hr {
 }
 
 section .body-paragraph, .navbar *:not(.border-bottom), .footer *, section .title, section img, .navbar-brand, .nav-login-item{
-    opacity: 0;
+    opacity: 1;
     animation: fadeInMoveUp 1s ease-out forwards;
     animation-delay: .6s;
 }

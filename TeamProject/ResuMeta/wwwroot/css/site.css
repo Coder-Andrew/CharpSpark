@@ -26,6 +26,8 @@ margin-bottom: 60px;
 background: linear-gradient(to bottom right, #000B0E 65%, rgb(134, 76, 29)) !important;
 color: rgb(207, 207, 207);
 font-family: 'Open Sans', sans-serif;
+padding-top: 6px;
+padding-right: 170px;
 }
 
 li:not(.nav-login-item) > .nav-link span {
@@ -96,7 +98,6 @@ margin-top: 4px;
 display: flex !important;
 justify-content: space-between !important;
 margin-left: 20px;
-margin-right: -170px;
 }
 
 .navbar::before {
