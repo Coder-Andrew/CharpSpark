@@ -9,8 +9,8 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/ViewResume.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
+        <link id="theme-stylesheet" rel="stylesheet" href="~/css/ViewResumeDark.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +44,11 @@
                         <div>
                             <button class="btn btn-primary" id="save-resume">Save Resume</button>
                             <button class="btn btn-primary" id="export-pdf">Export PDF</button>
+                            <label for="theme-switcher" id="theme-label">Switch Theme</label>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-switcher" onchange="SwitchTheme()">
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
