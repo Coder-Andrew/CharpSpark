@@ -12,6 +12,9 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Services.Abstract;
 using ResuMeta.Services.Concrete;
 using Microsoft.Extensions.Options;
+using Hangfire;
+using SendGrid;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
 var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
-
+var sendGridApiKey = builder.Configuration["SendGridApiKey"] ?? throw new InvalidOperationException("Connection string 'SendGridApiKey' not found.");
+var sendFromEmail = builder.Configuration["SendFromEmail"] ?? throw new InvalidOperationException("Connection string 'SendFromEmail' not found.");
 string chatGPTUrl = "https://api.openai.com/";
 
 //builder.Services.AddScoped<IUserInfoRepository, UserInfoRepository>();
@@ -38,6 +42,12 @@ builder.Services.Configure<NodeServiceOptions>(options =>
     options.NodeUrl = nodeUrl;
 });
 
+string scraperUrl = builder.Configuration["ScraperUrl"] ?? throw new InvalidOperationException("Connection string 'ScraperUrl' not found.");
+builder.Services.Configure<WebScraperServiceOptions>(options =>
+{
+    options.ScraperUrl = scraperUrl;
+});
+
 builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services) =>
 {
     httpClient.BaseAddress = new Uri(nodeUrl);
@@ -47,6 +57,23 @@ builder.Services.AddHttpClient<INodeService, NodeService>((httpClient, services)
         services.GetRequiredService<IOptions<NodeServiceOptions>>(), 
         services.GetRequiredService<IRepository<Resume>>(),
         services.GetRequiredService<IRepository<UserInfo>>()
+        );
+});
+
+builder.Services.AddHangfire(configuration => configuration
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseInMemoryStorage());
+
+builder.Services.AddHangfireServer();
+
+builder.Services.AddHttpClient<IWebScraperService, WebScraperService>((httpClient, services) =>
+{
+    httpClient.BaseAddress = new Uri(scraperUrl);
+    httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+    return new WebScraperService(
+        httpClient,
+        services.GetRequiredService<IOptions<WebScraperServiceOptions>>()
         );
 });
 
@@ -68,11 +95,14 @@ builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
-builder.Services.AddSingleton<CoverLetterStore>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
+builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
+builder.Services.AddScoped<ISendGridService, SendGridService>();
+
 
 //builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
@@ -111,6 +141,7 @@ if (app.Environment.IsDevelopment())
     // app.UseMigrationsEndPoint();
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapHangfireDashboard("/hangfire");
 }
 else
 {
@@ -118,6 +149,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

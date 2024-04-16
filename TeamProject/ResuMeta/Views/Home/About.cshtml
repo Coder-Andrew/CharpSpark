@@ -2,8 +2,12 @@
     ViewData["Title"] = "About";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/About.css" asp-append-version="true" />
+}
+
+<section>
 <div class="text-center">
- @* <h1 class="display-4">About</h1> *@
     <h1 class="title">CharpSpark</h1>
     <hr />
     <h5 class="red-text"><i>Sharper Code, Brighter Future</i></h5>
@@ -16,5 +20,9 @@
 
         This application utilizes ASP.NET Core MVC, SQL Server, Azure, C#, JavaScript, HTML/CSS, and other technologies. 
     </p>
-     <a href="https://github.com/Coder-Andrew/CharpSpark">CharpSpark Github <i class="fa fa-github"></i></a>
+    <div class="text-center">
+        <a href="https://github.com/Coder-Andrew/CharpSpark" class="btn btn-primary" id="github-button">
+            CharpSpark Github <i class="fa fa-github"></i>
+        </a>
+    </div>
 </div>

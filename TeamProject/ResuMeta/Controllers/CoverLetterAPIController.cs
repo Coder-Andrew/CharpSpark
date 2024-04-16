@@ -28,9 +28,25 @@ namespace ResuMeta.Controllers
         {
             try
             {
-                CoverLetterVM coverLetter = _coverLetterService.AddCoverLetterInfo(response);
-                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetter.CoverLetterId;
+                int coverLetterId = _coverLetterService.AddCoverLetterInfo(response);
+                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetterId;
                 return Ok(new { Success = true, RedirectUrl = newUrl });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // PUT: api/coverletter/{coverLetterId}
+        [HttpPut("{coverLetterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult SaveCoverLetter(JsonElement content)
+        {
+            try
+            {
+                _coverLetterService.SaveCoverLetterById(content);
+                return Ok();
             }
             catch
             {

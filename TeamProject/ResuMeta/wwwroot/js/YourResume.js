@@ -38,11 +38,27 @@ function initializePage() {
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
+    const themeSwitcher = document.getElementById('theme-switcher');
+    themeSwitcher.addEventListener('click', SwitchTheme, false);
+}
+
+async function SwitchTheme() {
+    var themeStylesheet = document.getElementById('theme-stylesheet');
+    var themeSwitcher = document.getElementById('theme-switcher');
+    var themeLabel = document.getElementById('theme-label');
+    if (themeSwitcher.checked) {
+        themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
+        themeLabel.textContent = 'Switch to Dark Mode';
+    } else {
+        themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
+        themeLabel.textContent = 'Switch to Light Mode';
+    }
 }
 
 async function exportPdf(quill) {
     console.log("Export PDF button clicked");
     const validationArea = document.getElementById('validation-area');
+    const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     var title = document.getElementById('resume-title').value;
     if (title === "" || title === null || title === "Resume Title") {
@@ -84,6 +100,11 @@ async function exportPdf(quill) {
         link.href = url;
         link.download = `${title}.pdf`;
         document.body.appendChild(link);
+        validationArea.innerHTML = "";
+        const cloneSuccess = successValidation.cloneNode(true);
+        cloneSuccess.style.display = "block";
+        cloneSuccess.innerHTML = `Resume exported successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneSuccess);
         link.click();
         document.body.removeChild(link); 
         return;

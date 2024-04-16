@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="~/css/CreateCoverLetter.css" asp-append-version="true" />
 }
 
+<section>
 <div class="text-center">
     <h1 class="display-4 title">Create New Cover Letter</h1>
     <div class="container">
@@ -35,7 +36,7 @@
                         <input type="text" maxlength="100" class="form-control" id="last-name" placeholder="Enter a last name..."/>
                     </div>
                 </div>
-                <button class="btn btn-primary cover-letter-button">I don't know the name</button>
+                <button class="btn btn-primary cover-letter-button" id="cover-letter-dont-know">I don't know the name</button>
             </div>
             <div class="cover-letter-address-form-name-unknown"style="display: none;">
                 <p>Don't worry! We can still help you write a great cover letter.</p>
@@ -45,7 +46,7 @@
             <hr />
             <p>Write a few short paragraphs about why you're interested in working here and why you're a great fit!</p>
             <div class="row justify-content-center mx-auto" style="width: 80%;" id="cover-letter-body-box">
-                <textarea cols="60" rows="3" id="cover-letter-body" placeholder="I would like to apply here because... I'm perfect for this position because..." id="cover-letter-body" style="resize: none;" maxlength="400"></textarea>
+                <textarea cols="60" rows="3" id="cover-letter-body" placeholder="I would like to apply here because... I'm perfect for this position because..." id="cover-letter-body" style="resize: none;" maxlength="4000"></textarea>
             </div>
         </div>
         <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>

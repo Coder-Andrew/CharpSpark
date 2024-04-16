@@ -10,6 +10,61 @@ function initializePage() {
     resetButton.addEventListener('click', refreshTable, false);
 }
 
+function setApplyReminder(applicationTrackerId) {
+    //console.log("Setting reminder to apply");
+    const userId = document.getElementById('userId').value;
+
+    fetch(`/api/sendgrid/apply`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId: userId,
+            applicationTrackerId: applicationTrackerId
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("Reminder set successfully! You will recieve an email 2 days before the application deadline.");
+            } else {
+                alert("Sorry, something went wrong. Please try again.");
+            }
+        })
+        .catch(error => {
+            //console.error('Error:', error);
+            console.log("error");
+            alert("Failed to set reminder. Please try again.");
+        });
+}
+
+function setFollowupReminder(applicationTrackerId) {
+    //console.log("Setting reminder to follow up");
+    const userId = document.getElementById('userId').value;
+
+    fetch(`/api/sendgrid/followup`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId: userId,
+            applicationTrackerId: applicationTrackerId
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("Follow up Reminder set successfully! You will recieve an email 7 days after the apply date.");
+            } else {
+                alert("Sorry, something went wrong. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.log("error");
+            alert("Failed to set follow up reminder. Please try again.");
+        });
+}
+
 function addApplication(event) {
     event.preventDefault();
     //console.log("Adding application tracker");
@@ -90,9 +145,9 @@ function refreshTable(sortOption, sortOrder) {
         })
         .then(data => {
             if (sortOption && sortOrder) {
-                data.sort(function(a, b) {
+                data.sort(function (a, b) {
                     var dateA, dateB;
-        
+
                     if (sortOption === 'applied-date') {
                         dateA = new Date(a.appliedDate);
                         dateB = new Date(b.appliedDate);
@@ -100,7 +155,7 @@ function refreshTable(sortOption, sortOrder) {
                         dateA = new Date(a.applicationDeadline);
                         dateB = new Date(b.applicationDeadline);
                     }
-        
+
                     if (sortOrder === 'ascending') {
                         return dateA - dateB;
                     } else if (sortOrder === 'descending') {
@@ -118,7 +173,7 @@ function refreshTable(sortOption, sortOrder) {
                 let newRow = appTable.insertRow(-1);
                 let cell = newRow.insertCell(0);
                 cell.innerHTML = "No application trackers to display";
-                cell.colSpan = 8; // or the number of columns in your table
+                cell.colSpan = 8;
             } else {
                 data.forEach(item => {
                     let newRow = appTable.insertRow(-1);
@@ -129,7 +184,7 @@ function refreshTable(sortOption, sortOrder) {
                     let cell5 = newRow.insertCell(4);
                     let cell6 = newRow.insertCell(5);
                     let cell7 = newRow.insertCell(6);
-                    let cell8 = newRow.insertCell(7);
+                    //let cell8 = newRow.insertCell(7);
 
                     cell1.innerHTML = item.jobTitle;
                     cell1.className = 'wrap-text';
@@ -145,14 +200,46 @@ function refreshTable(sortOption, sortOrder) {
                     cell6.className = 'wrap-text';
                     cell7.innerHTML = item.notes;
                     cell7.className = 'wrap-text';
-                    const deleteCell = newRow.insertCell(8);
+                    const deleteCell = newRow.insertCell();
                     const deleteButton = document.createElement('button');
-                    deleteButton.innerHTML = '<i class="fa fa-trash"></i>'; 
+                    deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
                     deleteButton.addEventListener('click', function () {
                         event.preventDefault();
                         deleteApplication(item.applicationTrackerId);
                     });
                     deleteCell.appendChild(deleteButton);
+
+                   const reminderCell = newRow.insertCell();
+                    const reminderDropdown = document.createElement('select');
+                    const defaultOption = document.createElement('option');
+                    defaultOption.text = 'Reminder?';
+                    defaultOption.value = '';
+                    reminderDropdown.add(defaultOption);
+
+                    const applyReminderOption = document.createElement('option');
+                    applyReminderOption.text = 'Set Apply Reminder';
+                    applyReminderOption.value = 'apply';
+                    reminderDropdown.add(applyReminderOption);
+
+                    const followupReminderOption = document.createElement('option');
+                    followupReminderOption.text = 'Set Followup Reminder';
+                    followupReminderOption.value = 'followup';
+                    reminderDropdown.add(followupReminderOption);
+
+                    reminderDropdown.addEventListener('change', function () {
+                        event.preventDefault();
+                        if (this.value === 'apply') {
+                            setApplyReminder(item.applicationTrackerId);
+                            applyReminderOption.text = 'Application Reminder scheduled';
+                            applyReminderOption.disabled = true;
+                        } else if (this.value === 'followup') {
+                            setFollowupReminder(item.applicationTrackerId);
+                            followupReminderOption.text = 'Follow Up Reminder scheduled';
+                            followupReminderOption.disabled = true;
+                        }
+                    });
+
+                    reminderCell.appendChild(reminderDropdown);
                 });
             }
         })
