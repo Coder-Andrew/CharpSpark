@@ -13,7 +13,6 @@ ALTER TABLE [Projects] DROP CONSTRAINT [Fk Projects Resume Id];
 ALTER TABLE [Education] DROP CONSTRAINT [Fk Education Resume Id];
 ALTER TABLE [UserSkill] DROP CONSTRAINT [Fk UserSkill Resume Id];
 ALTER TABLE [Resume] DROP CONSTRAINT [Fk Resume UserInfo Id];
-ALTER TABLE [CoverLetter] DROP CONSTRAINT [Fk CoverLetter UserInfo Id];
 
 DROP TABLE [ApplicationTracker];
 DROP TABLE [ReferenceContactInfo];
@@ -26,4 +25,3 @@ DROP TABLE [EmploymentHistory];
 DROP TABLE [Education];
 DROP TABLE [Resume];
 DROP TABLE [UserInfo];
-DROP TABLE [CoverLetter];

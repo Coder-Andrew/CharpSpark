@@ -176,8 +176,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                         AspnetIdentityId = userId,
                         FirstName = Input.FirstName,
                         LastName = Input.LastName,
-                        PhoneNumber = Input.PhoneNumber,
-                        Email = Input.Email
+                        PhoneNumber = Input.PhoneNumber
                     };
                     _ResuMetaDbContext.Add(ui);
                     await _ResuMetaDbContext.SaveChangesAsync();

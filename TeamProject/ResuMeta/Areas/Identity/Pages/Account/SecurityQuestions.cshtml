@@ -4,15 +4,15 @@
     ViewData["Title"] = "Security Questions";
 }
 
-<div class="text-center">
-    <h1 class="area-title">@ViewData["Title"]</h1>
-    <div class="text-danger" id="security-page">
-        <div asp-validation-summary="All"></div>
-    </div>
-    <div class="sign-page">
+<h1>@ViewData["Title"]</h1>
+<h2>Answer your security questions</h2>
+<hr />
+<div class="text-danger">
+    <div asp-validation-summary="All"></div>
+</div>
+<div class="row">
+    <div class="col-md-4">
         <form method="post">
-            <h2 class="area-h2">Answer your security questions</h2>
-            <hr />
             <div class="form-group">
                 <label>@Model.SecurityQuestion1</label>
                 <input asp-for="Input.Answer1" class="form-control" id="Answer1" />

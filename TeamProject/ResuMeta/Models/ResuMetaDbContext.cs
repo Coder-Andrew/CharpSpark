@@ -36,7 +36,6 @@ public partial class ResuMetaDbContext : DbContext
     public virtual DbSet<UserInfo> UserInfos { get; set; }
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
-    public virtual DbSet<CoverLetter> CoverLetters { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -132,13 +131,6 @@ public partial class ResuMetaDbContext : DbContext
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Skill Id");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill UserInfo Id");
-        });
-
-        modelBuilder.Entity<CoverLetter>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__CoverLet__3214EC07A3A3D3A3");
-
-            entity.HasOne(d => d.UserInfo).WithMany(p => p.CoverLetters).HasConstraintName("Fk CoverLetter UserInfo Id");
         });
 
         OnModelCreatingPartial(modelBuilder);

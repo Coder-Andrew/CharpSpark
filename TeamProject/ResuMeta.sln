@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta_Tests", "resuMeta_
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ResuMeta_JSTests", "ResuMeta_JSTests\ResuMeta_JSTests.esproj", "{B76FA403-1475-47A2-B384-BFDC54997935}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta_BDDTests", "ResuMeta_BDDTests\ResuMeta_BDDTests.csproj", "{6F47A833-80E1-4EF5-9470-2F54C72EADA5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,15 +29,8 @@ Global
 		{B76FA403-1475-47A2-B384-BFDC54997935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B76FA403-1475-47A2-B384-BFDC54997935}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B76FA403-1475-47A2-B384-BFDC54997935}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6F47A833-80E1-4EF5-9470-2F54C72EADA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F47A833-80E1-4EF5-9470-2F54C72EADA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F47A833-80E1-4EF5-9470-2F54C72EADA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F47A833-80E1-4EF5-9470-2F54C72EADA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {7271DB1F-D9B5-497C-97CC-19B7898E7A02}
 	EndGlobalSection
 EndGlobal

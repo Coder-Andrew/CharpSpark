@@ -1,30 +1,30 @@
-@model ResuMeta.ViewModels.DashboardVM
-@{    ViewData["Title"] = "Your Dashboard";
+@model List<ResuMeta.ViewModels.ResumeVM>
+@{
+    ViewData["Title"] = "Resume - Your Dashboard";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/YourDashboard.css" asp-append-version="true" />
 }
 
-<section>
 <div class="text-center">
-    <h1 class="display-4 title" id="dashboard-title">Dashboard</h1>
+    <h1 class="display-4 title">Your Dashboard</h1>
     <hr />
+    <h4>Your Resumes</h4>
         @if (User.Identity!.IsAuthenticated)
         {
-            <h4>Resumes</h4>
-            @if(Model != null && Model.Resumes?.Count() > 0)
+            @if(Model != null && Model.Count() > 0)
             {
                 <section id="resume-section">
-                @foreach(var resume in Model.Resumes)
+                @foreach(var resume in Model)
                 {
                     <div class="thumbnail" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})'">
-                        <div class="resume-content-ids" id="resume-content-@resume.ResumeId"></div>
+                        <div id="content-@resume.ResumeId"></div>
                         <div class="thumbnail-title">@resume.Title</div>
                     </div>
                     <script type="text/javascript">
-                        var resumeContentDiv = document.getElementById('resume-content-@resume.ResumeId');
-                        resumeContentDiv.innerHTML = decodeURIComponent("@Html.Raw(resume.HtmlContent)");
+                        var contentDiv = document.getElementById('content-@resume.ResumeId');
+                        contentDiv.innerHTML = decodeURIComponent("@Html.Raw(resume.HtmlContent)");
                     </script>
                 }
                 </section>
@@ -34,33 +34,6 @@
                 <div class="no-resume">
                     <p>You have not created any resumes yet.</p>
                     <a asp-controller="Resume" asp-action="CreateResume" class="btn btn-primary">Create Resume</a>
-                </div>
-            }
-            <br />
-            <br />
-            <hr />
-            <h4>Cover Letters</h4>
-            @if(Model != null && Model.CoverLetters?.Count() > 0)
-            {
-                <section id="cover-letter-section">
-                @foreach(var coverLetter in Model.CoverLetters)
-                {
-                    <div class="thumbnail" onclick="location.href='@Url.Action("YourCoverLetter", "CoverLetter", new {coverLetterId = @coverLetter.CoverLetterId})'">
-                        <div class="cover-letter-content-ids" id="cover-letter-content-@coverLetter.CoverLetterId"></div>
-                        <div class="thumbnail-title">@coverLetter.Title</div>
-                    </div>
-                    <script type="text/javascript">
-                        var coverLetterContentDiv = document.getElementById('cover-letter-content-@coverLetter.CoverLetterId');
-                        coverLetterContentDiv.innerHTML = decodeURIComponent("@Html.Raw(coverLetter.HtmlContent)");
-                    </script>
-                }
-                </section>
-            }
-            else
-            {
-                <div class="no-cover-letter">
-                    <p>You have not created any cover letters yet.</p>
-                    <a asp-controller="CoverLetter" asp-action="CreateCoverLetter" class="btn btn-primary">Create Cover Letter</a>
                 </div>
             }
         }
