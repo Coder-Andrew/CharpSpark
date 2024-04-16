@@ -18,20 +18,17 @@ public class CoverLetterController : Controller
     private readonly IRepository<UserInfo> _userInfo;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICoverLetterService _coverLetterService;
-    private readonly IRepository<CoverLetter> _coverLetterRepository;
     public CoverLetterController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
-        ICoverLetterService coverLetterService,
-        IRepository<CoverLetter> coverLetterRepository
+        ICoverLetterService coverLetterService
         )
     {
         _logger = logger;
         _userInfo = userInfo;
         _userManager = userManager;
         _coverLetterService = coverLetterService;
-        _coverLetterRepository = coverLetterRepository;
 
     }
 
@@ -63,38 +60,13 @@ public class CoverLetterController : Controller
         }
 
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-        CoverLetter coverLetter =  _coverLetterRepository.GetAll().Where(x => x.Id == coverLetterId).FirstOrDefault()!;
+        CoverLetterVM coverLetter =  _coverLetterService.GetCoverLetter();
+
         if(coverLetter.UserInfoId != currUser.Id)
         {
             return RedirectToAction("Index", "Home");
         }
-
-        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetter(coverLetterId);
         
-        return View(coverLetterVM);
+        return View(coverLetter);
     }
-
-    [HttpGet("CoverLetter/YourCoverLetter/{coverLetterId}")]
-    public IActionResult YourCoverLetter(int coverLetterId)
-    {
-        string id = _userManager.GetUserId(User)!;
-        if (id == null)
-        {
-            return RedirectToAction("Index", "Home");
-        }
-
-        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-        CoverLetter coverLetter =  _coverLetterRepository.GetAll().Where(x => x.Id == coverLetterId).FirstOrDefault()!;
-        if(coverLetter == null)
-        {
-            return RedirectToAction("Index", "Home");
-        }
-        if(coverLetter.UserInfoId != currUser.Id)
-        {
-            return RedirectToAction("Index", "Home");
-        }
-        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetterHtml(coverLetterId);
-        return View(coverLetterVM);
-    }
-
 }

@@ -13,41 +13,39 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<div class="content">
-<body class="flex-container">
+<body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3 flex-nav">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/Images/CharpSparkLogo.png" alt="CharpSparkLogo" width="50" height="50" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon">
-                        <i class="fa fa-bars"></i>
-                    </span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><span><i class="fa fa-home"></i> Home</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> Home</a>
                         </li>
                          <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About"><span><i class="fa fa-info-circle"></i> About</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About"><i class="fa fa-info-circle"></i> About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Resume" asp-action="Index"><span><i class="fa fa-pencil"></i> Resumes</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="Resume" asp-action="Index"><i class="fa fa-pencil"></i> Resumes</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="CoverLetter" asp-action="Index"><span><i class="fa fa-file-text"></i> Cover Letters</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="CoverLetter" asp-action="Index"><i class="fa fa-file-text"></i> Cover Letters</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Resume" asp-action="YourDashboard"><span><i class='fa fa-archive'></i> Your Dashboard</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="Resume" asp-action="YourDashboard"><i class='fa fa-address-book'></i> Your Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="ApplicationTracker" asp-action="Index"><span><i class='fa fa-address-book'></i> Application Tracker</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="JobListing" asp-action="Index"><span><i class='fa fa-briefcase'></i> Job Listings</span></a>
+                            <a class="nav-link" asp-area="" asp-controller="ApplicationTracker" asp-action="Index"><i class='fa fa-address-book'></i> Application Tracker</a>
                         </li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
@@ -75,6 +73,4 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</div>
-<partial name="_LoginPartial" />
 </html>

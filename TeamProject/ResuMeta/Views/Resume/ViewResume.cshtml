@@ -1,201 +1,179 @@
 @model ResuMeta.ViewModels.ResumeVM;
 @{
-    Layout = null;
     ViewData["Title"] = "Resume - View";
 }
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link id="theme-stylesheet" rel="stylesheet" href="~/css/ViewResumeDark.css" asp-append-version="true" />
-        <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    </head>
+@section Styles {
+    <link rel="stylesheet" href="~/css/ViewResume.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
+}
 
-    <div class="content">
-        <body class="flex-container">
-            <div class="text-center">
-                <div class="alert alert-success alert-dismissable fade show" role="alert">
-                    <h4>Success, Information Stored!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button></h4>
-                </div>
-                <div id="validation-area"></div>
-                <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success" style="display:none;">
-                </div>
-                <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
-                </div>
-                <input type="hidden" id="resume-id" value="@Model.ResumeId" />
-
-                <div class="container" style="display: none;">
-                    <div class="container resume-container" id="resume-container">
-                        <div class="text-start">
-                            @if (Model != null)
-                            {
-                                <div>
-                                    <h1 class="title">@Model!.FirstName @Model!.LastName</h1>
-                                    <p>@Model!.Email</p>
-                                    <p>@Model!.Phone</p>
-                                    <hr />
-                                    @if (Model.Summary != null)
-                                    {
-                                        <div>
-                                        <h2 class="title">Personal Summary</h2>
-                                        <hr />
-                                        <p>@Model!.Summary</p>
-                                        </div>
-                                        <br />
-                                    }
-                                    @if (Model.Education != null && Model.Education.Any())
-                                    {
-                                        <h2 class="title">Education</h2>
-                                        <hr />
-                                        @foreach (var education in Model.Education)
-                                        {
-                                            <p><strong>Institution:</strong> @education.Institution</p>
-                                            <p><strong>Summary:</strong> @education.EducationSummary</p>
-                                            <p>
-                                                <strong>Dates:</strong>
-                                                @education.StartDate?.ToString("MMM yyyy") -
-                                                @(education.Completion ?? false ? education.EndDate?.ToString("MMM yyyy") : "Present")
-                                            </p>
-                                            <br />
-                                        }
-                                    }
-                                </div>
-                                @if (Model.Degree != null && Model.Degree.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Degree</h2>
-                                    <hr />
-                                    @foreach (var degree in Model.Degree)
-                                    {
-                                        <p><strong>Type:</strong> @degree.Type</p>
-                                        <p><strong>Major:</strong> @degree.Major</p>
-                                        @if (degree.Minor != "N/A")
-                                        {
-                                            <p><strong>Minor:</strong> @degree.Minor</p>
-                                        }
-                                        <br />
-                                    }
-                                    </div>
-                                }
-                                @if (Model.EmploymentHistory != null && Model.EmploymentHistory.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Employment History</h2>
-                                    <hr />
-                                    @foreach (var employmentHistory in Model.EmploymentHistory)
-                                    {
-                                        <p><strong>Institution:</strong> @employmentHistory.Company</p>
-                                        <p><strong>Summary:</strong> @employmentHistory.Description</p>
-                                        <p><strong>Location:</strong> @employmentHistory.Location</p>
-                                        <p><strong>Job Title:</strong> @employmentHistory.JobTitle</p>
-
-                                        <p>
-                                            <strong>Dates:</strong>
-                                            @employmentHistory.StartDate?.ToString("MMM yyyy") -
-                                            @employmentHistory.EndDate?.ToString("MMM yyyy")
-                                        </p>
-                                        <br />
-                                    }
-                                    </div>
-                                }
-                                @if (Model.ReferenceContactInfo != null && Model.ReferenceContactInfo.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Reference</h2>
-                                    <hr />
-                                    @foreach (var referenceContactInfo in Model.ReferenceContactInfo)
-                                    {
-                                        <p><strong>First Name:</strong> @referenceContactInfo.FirstName</p>
-                                        <p><strong>Last Name:</strong> @referenceContactInfo.LastName</p>
-                                        <p><strong>Phone:</strong> @referenceContactInfo.PhoneNumber</p>
-                                        <br />
-                                    }
-                                    </div>
-                                }
-                                @if (Model.Skills != null && Model.Skills.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Skills</h2>
-                                    <hr />
-                                    <ul>
-                                        @foreach (var skill in Model.Skills)
-                                        {
-                                            <li>@skill.SkillName</li>
-                                        }
-                                    </ul>
-                                    <br />
-                                    </div>
-                                }
-                                @if (Model.Achievements != null && Model.Achievements.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Achievements</h2>
-                                    <hr />
-                                    <ul>
-                                        @foreach (var achievement in Model.Achievements)
-                                        {
-                                            <li>@achievement.title - @achievement.summary</li>
-                                        }
-                                    </ul>
-                                    <br />
-                                    </div>
-                                }
-                                @if (Model.Projects != null && Model.Projects.Any())
-                                {
-                                    <div>
-                                    <h2 class="title">Projects</h2>
-                                    <hr />
-                                    @foreach (var project in Model.Projects)
-                                    {
-                                        <div>
-                                            <h4><strong>@project.Name - </strong> <a href="@project.Link" target="">@project.Link</a></h4>
-                                            <ul>
-                                                <li>
-                                                    <p>@project.Summary</p>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <br />
-                                    }
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="editor-header">
-                    <div class="left-section">
-                        <button id="back-button" onclick="window.history.back();">
-                            <i class="fa fa-arrow-circle-left"></i>
-                        </button>
-                        <div class="mt-3 mx-2" style="float: left;">
-                            <h6><strong>Title:</strong> <input type="text" id="resume-title"  placeholder="Resume Title" /></h6>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" id="save-resume">Save Resume</button>
-                        <button class="btn btn-primary" id="export-pdf">Export PDF</button>
-                        <label for="theme-switcher" id="theme-label">Switch Theme</label>
-                        <label class="switch">
-                            <input type="checkbox" id="theme-switcher" onchange="SwitchTheme()">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </div>
-                <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
-
-                </div>
-            </div>
-            <script src="~/lib/jquery/dist/jquery.min.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-            <script type="text/javascript" src="~/js/ViewResume.js"></script>
-        </body>
+<div class="text-center">
+    <div class="alert alert-success alert-dismissable fade show" role="alert">
+        <h4>Success, Information Stored!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button></h4>
     </div>
-</html>
+    <div id="validation-area"></div>
+    <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success" style="display:none;">
+    </div>
+    <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
+    </div>
+
+    <h1 class="display-4 title">Your Resume</h1>
+    <input type="hidden" id="resume-id" value="@Model.ResumeId" />
+
+    <div class="container" style="display: none;">
+        <div class="container resume-container" id="resume-container">
+            <div class="text-start">
+                @if (Model != null)
+                {
+                    <div>
+                        <h1 class="title">@Model!.FirstName @Model!.LastName</h1>
+                        <p>@Model!.Email</p>
+                        <p>@Model!.Phone</p>
+                        <hr />
+                        @if (Model.Summary != null)
+                        {
+                            <div>
+                            <h2 class="title">Personal Summary</h2>
+                            <hr />
+                            <p>@Model!.Summary</p>
+                            </div>
+                            <br />
+                        }
+                        @if (Model.Education != null && Model.Education.Any())
+                        {
+                            <h2 class="title">Education</h2>
+                            <hr />
+                            @foreach (var education in Model.Education)
+                            {
+                                <p><strong>Institution:</strong> @education.Institution</p>
+                                <p><strong>Summary:</strong> @education.EducationSummary</p>
+                                <p>
+                                    <strong>Dates:</strong>
+                                    @education.StartDate?.ToString("MMM yyyy") -
+                                    @(education.Completion ?? false ? education.EndDate?.ToString("MMM yyyy") : "Present")
+                                </p>
+                                <br />
+                            }
+                        }
+                    </div>
+                    @if (Model.Degree != null && Model.Degree.Any())
+                    {
+                        <div>
+                        <h2 class="title">Degree</h2>
+                        <hr />
+                        @foreach (var degree in Model.Degree)
+                        {
+                            <p><strong>Type:</strong> @degree.Type</p>
+                            <p><strong>Major:</strong> @degree.Major</p>
+                            @if (degree.Minor != "N/A")
+                            {
+                                <p><strong>Minor:</strong> @degree.Minor</p>
+                            }
+                            <br />
+                        }
+                        </div>
+                    }
+                    @if (Model.EmploymentHistory != null && Model.EmploymentHistory.Any())
+                    {
+                        <div>
+                        <h2 class="title">Employment History</h2>
+                        <hr />
+                        @foreach (var employmentHistory in Model.EmploymentHistory)
+                        {
+                            <p><strong>Institution:</strong> @employmentHistory.Company</p>
+                            <p><strong>Summary:</strong> @employmentHistory.Description</p>
+                            <p><strong>Location:</strong> @employmentHistory.Location</p>
+                            <p><strong>Job Title:</strong> @employmentHistory.JobTitle</p>
+
+                            <p>
+                                <strong>Dates:</strong>
+                                @employmentHistory.StartDate?.ToString("MMM yyyy") -
+                                @employmentHistory.EndDate?.ToString("MMM yyyy")
+                            </p>
+                            <br />
+                        }
+                        </div>
+                    }
+                    @if (Model.ReferenceContactInfo != null && Model.ReferenceContactInfo.Any())
+                    {
+                        <div>
+                        <h2 class="title">Reference</h2>
+                        <hr />
+                        @foreach (var referenceContactInfo in Model.ReferenceContactInfo)
+                        {
+                            <p><strong>First Name:</strong> @referenceContactInfo.FirstName</p>
+                            <p><strong>Last Name:</strong> @referenceContactInfo.LastName</p>
+                            <p><strong>Phone:</strong> @referenceContactInfo.PhoneNumber</p>
+                            <br />
+                        }
+                        </div>
+                    }
+                    @if (Model.Skills != null && Model.Skills.Any())
+                    {
+                        <div>
+                        <h2 class="title">Skills</h2>
+                        <hr />
+                        <ul>
+                            @foreach (var skill in Model.Skills)
+                            {
+                                <li>@skill.SkillName</li>
+                            }
+                        </ul>
+                        <br />
+                        </div>
+                    }
+                    @if (Model.Achievements != null && Model.Achievements.Any())
+                    {
+                        <div>
+                        <h2 class="title">Achievements</h2>
+                        <hr />
+                        <ul>
+                            @foreach (var achievement in Model.Achievements)
+                            {
+                                <li>@achievement.title - @achievement.summary</li>
+                            }
+                        </ul>
+                        <br />
+                        </div>
+                    }
+                    @if (Model.Projects != null && Model.Projects.Any())
+                    {
+                        <div>
+                        <h2 class="title">Projects</h2>
+                        <hr />
+                        @foreach (var project in Model.Projects)
+                        {
+                            <div>
+                                <h4><strong>@project.Name - </strong> <a href="@project.Link" target="">@project.Link</a></h4>
+                                <ul>
+                                    <li>
+                                        <p>@project.Summary</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <br />
+                        }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="mt-2 mx-2" style="float: right;">
+    <button class="btn btn-primary" id="save-resume" style="margin: 0px 0px;">Save Resume</button>
+</div>
+<div class="mt-2 mx-2" style="float: right;">
+    <button class="btn btn-primary" id="export-pdf" style="margin: 0px 0px;">Export PDF</button>
+</div>
+<div class="mt-3 mx-2" style="float: left;">
+    <h6><strong>Title:</strong> <input type="text" id="resume-title" placeholder="Resume Title" /></h6>
+</div>
+<div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
+
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/ViewResume.js"></script>
+}
