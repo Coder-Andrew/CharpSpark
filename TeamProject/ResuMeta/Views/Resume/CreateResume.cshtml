@@ -21,11 +21,11 @@
 
             <div class="form-container">
                 <div class="tab-bar">
-                    <span class="tab active" id="education-tab">Education</span>
-                    <span class="tab" id="employment-tab">Employment</span>
-                    <span class="tab" id="skills-tab">Skills & Achievements</span>
-                    <span class="tab" id="projects-tab">Projects</span>
-                    <span class="tab" id="personal-summary-tab">Personal Summary</span>
+                    <span class="tab active btn-tab" id="education-tab">Education</span>
+                    <span class="tab btn-tab" id="employment-tab">Employment</span>
+                    <span class="tab btn-tab" id="skills-tab">Skills & Achievements</span>
+                    <span class="tab btn-tab" id="projects-tab">Projects</span>
+                    <span class="tab btn-tab" id="personal-summary-tab">Personal Summary</span>
                 </div>
                 <div id="tabs">
                     <div class="row mt-3 d-flex form-group tabpanel" id="educationForm">
@@ -135,116 +135,16 @@
                 </div>
                 <div class="row mt-3 form-group form-btns">
                     <div class="navigation-btns">
-                        <button id="previous" class="btn btn-primary mt-5 hidden">Previous</button>
-                        <button id="next" class="btn btn-primary mt-5">Next</button>
+                        <button id="previous" class="btn btn-arrow mt-5 hidden">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button id="next" class="btn btn-arrow mt-5">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
                     </div>
-                    @* <button id="previous" class="btn btn-primary mt-5">Previous</button>
-                    <button id="next" class="btn btn-primary mt-5">Next</button> *@
                     <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>
 
             </div>
-
-            @* <div class="row mt-3 d-flex form-group" id="educationForm">
-                <h4>Education</h4>
-                <hr \>
-                <div class="d-flex justify-content-center">
-                    <button class="btn bg-success border-0 d-flex mx-1 text-center" id="education-add-btn"
-                        style="width: 50px;">Add</button>
-                    <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="education-clear-btn"
-                        style="width: 60px;">Clear</button>
-                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal"
-                        name="Education" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
-                </div>
-                <div id="education-box">
-
-                </div>
-            </div>
-
-
-            <div class="row mt-3 d-flex form-group" id="employmentForm">
-                <h4>Employment</h4>
-                <hr \>
-                <div class="d-flex justify-content-center">
-                    <button class="btn bg-success border-0 d-flex mx-1 text-center" id="employment-add-btn"
-                        style="width: 50px;">Add</button>
-                    <button class="btn bg-danger border-0 text-white d-flex mx-1 text-center" id="employment-clear-btn"
-                        style="width: 60px;">Clear</button>
-                    <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal"
-                        name="Employment" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
-                </div>
-                <div id="employment-box">
-
-                </div>
-            </div>
-
-
-
-            <div class="row mt-3 d-flex form-group" id="skill-achievements-form">
-                <h4 class="h4 mt-4">Skills & Achievements</h4>
-                <hr />
-                <div class="col col-md-12">
-                    <label class="col-form-label title">Skills:</label>
-                    <div class="d-flex justify-content-center">
-                        <input type="text" id="skills" maxlength="100" style="width: 50%;"
-                            placeholder="Enter a skill..." />
-                        <div class="dropdown-menu" style="margin-top: 27px; width: 26%;" id="skills-dropdown">
-                            <!-- 26% -->
-                            <!-- inline styling :| -->
-                        </div>
-                    </div>
-                    <div class="col" id="skill-col">
-                    </div>
-                </div>
-                <div class="col col-md-12 justify-content-center">
-                    <label class="col-form-label title">Achievements:</label>
-                    <div class="d-flex justify-content-center">
-                        <!-- Achievement Add and Clear buttons -->
-                        <button class="btn bg-success border-0 d-flex mx-1" id="achievement-add-btn">Add</button>
-                        <button class="btn bg-danger border-0 text-white d-flex mx-1"
-                            id="achievement-clear-btn">Clear</button>
-                        <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal"
-                            name="Achievements" data-bs-toggle="modal" data-bs-target="#modal">Use Previous
-                            Info</button>
-                    </div>
-                    <div id="achievement-box" class="justify-content-center">
-                        <!-- Achievement box -->
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-3 d-flex form-group" id="projects-form">
-                <h4 class="h4 mt-4">Projects</h4>
-                <hr />
-                <div class="col col-md-12 justify-content-center">
-                    <label class="col-form-label title">Projects:</label>
-                    <div class="d-flex justify-content-center">
-                        <!-- Project Add and Clear buttons -->
-                        <button class="btn bg-success border-0 d-flex mx-1" id="project-add-btn">Add</button>
-                        <button class="btn bg-danger border-0 text-white d-flex mx-1"
-                            id="project-clear-btn">Clear</button>
-                        <button class="btn btn-primary border-0 text-white d-flex mx-1 text-center" id="open-modal"
-                            name="Projects" data-bs-toggle="modal" data-bs-target="#modal">Use Previous Info</button>
-                    </div>
-                    <div id="project-box" class="justify-content-center">
-                        <!-- Project box -->
-                    </div>
-                </div>
-                <div class="col col-md-6">
-
-                </div>
-            </div>
-            <div class="row mt-3 d-flex form-group">
-                <h4 class="h4 mt-4">Personal Summary</h4>
-                <hr />
-                <div id='personal-summary-btn'>
-                    <button class="btn bg-success border-0 d-flex mx-1" id="personal-summary-add-btn">Add</button>
-                </div>
-                <div id="personal-summary-box" class="justify-content-center">
-                    <!-- Personal Summary box -->
-                </div>
-            </div>
-
-            <button id="submitInfo" class="btn btn-primary mt-5">Submit</button>
-        </div> *@
 
         <!-- Modal -->
         <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">

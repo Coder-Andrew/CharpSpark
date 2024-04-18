@@ -20,7 +20,7 @@
 }
   
 .bg-success:hover {
-    background-color: #0860c4;
+    background-color: #0860c4 !important;
     color: white !important;
 }
   
@@ -29,9 +29,27 @@
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;
 }
 
+.btn-arrow {
+    background-color: #29ADEB !important;
+    color: white !important;
+    border: 0px !important;
+}
+  
+.btn-arrow:hover {
+    background-color: #0860c4 !important;
+    color: white !important;
+}
+  
+.btn-arrow:focus, .bg-arrow:active {
+    border-color: #2a1ce9 !important;
+    box-shadow: none !important;
+}
+
+
 .hidden {
     display: none !important;
 }
+
 
 #tabs {
     max-height: 624px !important;
@@ -108,9 +126,31 @@
     }
 }
 
-.active {
-    color: #E91D1C  !important;
-    text-decoration: underline !important;
+.btn-tab {
+    position: relative;
+    transition: transform 0.43s ease-in-out;
+}
+
+.btn-tab::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    background: linear-gradient(to right, #E91D1C, #FEB617);
+    z-index: -1;
+    height: 4px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.43s ease-in-out;
+}
+
+.btn-tab:hover, .btn-tab.active::before {
+    transform: scaleX(1) !important;
+}
+
+.btn-tab:hover::before {
+    transform: scaleX(1) !important;
 }
 
 .form-container {
