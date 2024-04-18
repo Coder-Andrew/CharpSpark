@@ -15,11 +15,47 @@ let educationList = [];
 let employmentList = [];
 let personalSummary = "";
 
+let currentTab = 0;
+const previousBtn = document.getElementById("previous");
+const nextBtn = document.getElementById("next");
+const tabTargets = document.querySelectorAll(".tab");
+const tabPanels = document.querySelectorAll(".tabpanel");
+console.log(tabPanels);
+console.log(tabTargets);
+
+const educationTab = document.getElementById("education-tab");
+const employmentTab = document.getElementById("employment-tab");
+const skillTab = document.getElementById("skills-tab");
+const projectsTab = document.getElementById("projects-tab");
+const personalSummaryTab = document.getElementById("personal-summary-tab");
 
 function initializePage() {
     console.log("Create Resume Page loaded");
     const submitBtn = document.getElementById("submitInfo");
     submitBtn.addEventListener('click', () => submitInfo(), false);
+
+    nextBtn.addEventListener('click', () => {
+        changeTab(currentTab + 1);
+    });
+    previousBtn.addEventListener('click', () => {
+        changeTab(currentTab - 1);
+    });
+    educationTab.addEventListener('click', () => {
+        changeTab(0);
+    });
+    employmentTab.addEventListener('click', () => {
+        changeTab(1);
+    });
+    skillTab.addEventListener('click', () => {
+        changeTab(2);
+    });
+    projectsTab.addEventListener('click', () => {
+        changeTab(3);
+    });
+    personalSummaryTab.addEventListener('click', () => {
+        changeTab(4);
+    });
+
 
     const skillsDropdown = document.getElementById("skills-dropdown");
     const skillInput = document.getElementById("skills");
@@ -504,4 +540,50 @@ function closeModal() {
     modalName.textContent = "";
     const vmList = document.getElementById("vm-list");
     vmList.textContent = "";
+}
+
+function changeTab(tabIndex) {
+    tabTargets.forEach(tab => {
+        if (!tab.classList.contains("active")) return;
+        tab.classList.remove("active");
+    });
+    tabPanels.forEach(panel => {
+        if (panel.classList.contains("hidden")) return;
+        panel.classList.add("hidden");
+    });
+
+    tabTargets[tabIndex].classList.add("active");
+    tabPanels[tabIndex].classList.remove("hidden");
+    currentTab = tabIndex;
+
+    checkNextBtn();
+    checkPreviousBtn();
+}
+
+function checkNextBtn()
+{
+    if (currentTab === tabTargets.length - 1) {
+        nextBtn.classList.add("hidden");
+    }
+    else
+    {
+        if (nextBtn.classList.contains("hidden"))
+        {
+            nextBtn.classList.remove("hidden");
+        }
+    }
+}
+
+function checkPreviousBtn()
+{
+    if (currentTab === 0) {
+        previousBtn.classList.add("hidden");
+    }
+    else
+    {
+        if (previousBtn.classList.contains("hidden"))
+        {
+            previousBtn.classList.remove("hidden");
+        }
+    }
 }
