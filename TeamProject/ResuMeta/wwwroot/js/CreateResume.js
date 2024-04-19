@@ -20,8 +20,6 @@ const previousBtn = document.getElementById("previous");
 const nextBtn = document.getElementById("next");
 const tabTargets = document.querySelectorAll(".tab");
 const tabPanels = document.querySelectorAll(".tabpanel");
-console.log(tabPanels);
-console.log(tabTargets);
 
 const educationTab = document.getElementById("education-tab");
 const employmentTab = document.getElementById("employment-tab");
