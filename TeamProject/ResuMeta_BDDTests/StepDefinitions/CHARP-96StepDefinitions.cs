@@ -60,7 +60,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _viewResumePage.QuillEditor.Text.Should().Contain("Hello, World!");
         }
 
-        [When("I click on the \"Save Resume\" button")]
+        [When("I click on the Save Resume button")]
         public void WhenIClickOnTheSaveResumeButton()
         {
             _viewResumePage.SaveResume();
@@ -78,7 +78,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _viewResumePage.SaveResume();
         }
 
-        [When("I click on the \"Export Resume\" button")]
+        [When("I click on the Export Resume button")]
         public void WhenIClickOnTheExportResumeButton()
         {
             _viewResumePage.ExportPdf();
