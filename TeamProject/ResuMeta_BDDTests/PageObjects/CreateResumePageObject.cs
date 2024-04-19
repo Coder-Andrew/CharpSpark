@@ -162,7 +162,6 @@ namespace ResuMeta_BDDTests.PageObjects
             _webDriver.FindElement(By.Id("ach-title")).Click();
             _webDriver.FindElement(By.Id("ach-title")).SendKeys("Honor Roll");
             _webDriver.FindElement(By.Id("ach-summary")).Click();
-            _webDriver.FindElement(By.Id("ach-summary")).SendKeys("Achieved ");
             _webDriver.FindElement(By.Id("ach-summary")).SendKeys("Achieved Academic Honor Roll for my time studying at Western Oregon University");
             ClickNext();
             FillOutProjectsForm();
