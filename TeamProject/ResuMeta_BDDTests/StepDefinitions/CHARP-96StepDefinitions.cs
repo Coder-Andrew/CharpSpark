@@ -28,6 +28,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [When("I submit my information in the CreateResume page form")]
         public void WhenISubmitMyInformationInTheCreateResumePageForm()
         {
+            Common.ResetPaths();
             _createResumePage.FillOutForm();
             _createResumePage.SubmitForm();
             _viewResumeUrl = _createResumePage.GetViewResumeUrl();

@@ -19,7 +19,6 @@ Background:
 	  | reynoldsa@mail.com     | reynoldsa@mail.com     | Adrian     | Reynolds    | Password123! |
     And I am a user with the first name 'Adrian'
     And I login
-    And I am on the "Home" page
     And I logout
 
 
