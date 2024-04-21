@@ -9,6 +9,12 @@ CREATE TABLE [UserInfo] (
   [ProfilePicturePath] VARBINARY(MAX),
 );
 
+CREATE TABLE [ResumeTemplate] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [Title] nvarchar(100),
+  [Template] nvarchar(MAX)
+);
+
 CREATE TABLE [Education] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,

@@ -39,7 +39,7 @@ function initializePage() {
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'align': [] }],
         ['link'],
-        ['clean']                                         // remove formatting button
+        ['clean'],                                         // remove formatting button
         ['divider']
     ]
     
@@ -59,7 +59,7 @@ function initializePage() {
             },
         }
     });
-    
+
     console.log("Editor initialized");
     const resumeContent = document.getElementById("resume-content").value;
     const resumeArea = document.getElementById("resume-area");

@@ -39,7 +39,7 @@ function initializePage() {
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'align': [] }],
         ['link'],
-        ['clean']                                         // remove formatting button
+        ['clean'],                                         // remove formatting button
         ['divider']
     ]
     
@@ -59,7 +59,7 @@ function initializePage() {
             },
         }
     });
-    
+
     var htmlContent = document.getElementById('cover-letter-container').outerHTML;
     const delta = quill.clipboard.convert(htmlContent);
     quill.setContents(delta);
