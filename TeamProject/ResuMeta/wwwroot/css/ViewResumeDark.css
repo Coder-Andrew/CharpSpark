@@ -51,6 +51,16 @@ body {
     z-index: 1000;
 }
 
+.ql-toolbar .ql-divider::before {
+    content: '\f068' !important;
+    font-family: FontAwesome !important;
+    color: #444444;
+}
+
+.ql-toolbar .ql-divider:hover::before {
+    color: #0065CC;
+}
+
 .ql-container {
     max-width: 800px;
     margin: 0 auto;

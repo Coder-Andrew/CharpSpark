@@ -7,6 +7,25 @@ function loadQuill() {
     document.head.appendChild(script);
     script.onload = function () {
         console.log("Quill loaded");
+
+        //Register the DividerBlot
+        const BlockEmbed = Quill.import('blots/block/embed');
+
+        class DividerBlot extends BlockEmbed {
+        static create() {
+            let node = super.create();
+            return node;
+        }
+
+        static formats() {
+            return true;
+        }
+        }
+
+        DividerBlot.blotName = 'divider';
+        DividerBlot.tagName = 'hr';
+
+        Quill.register(DividerBlot);
         initializePage();
     }
 }
@@ -21,13 +40,26 @@ function initializePage() {
         [{ 'align': [] }],
         ['link'],
         ['clean']                                         // remove formatting button
+        ['divider']
     ]
+    
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
-            toolbar: toolbarOptions,
+            toolbar: {
+                container: toolbarOptions,
+                handlers: {
+                    'divider': function() {
+                        let range = quill.getSelection(true);
+                        quill.insertText(range.index, '\n', Quill.sources.USER);
+                        quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
+                        quill.setSelection(range.index + 2, Quill.sources.SILENT);
+                    }
+                }
+            },
         }
     });
+    
     console.log("Editor initialized");
     const resumeContent = document.getElementById("resume-content").value;
     const resumeArea = document.getElementById("resume-area");
