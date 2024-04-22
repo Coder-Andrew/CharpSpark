@@ -1,0 +1,32 @@
+Loved:
+- Css and Teamwork
+- Doing the py scraper, dual devloping, teamwork
+- Teamwork
+- Dual programming, BDD testing, teamwork
+
+Loathed:
+- Not having enough time
+- Not having enough time
+- Underestimation of BDD testing
+- Selenium and its glitches
+- Randomly failing tests
+- Testing
+- Testing
+- Other classes taking up too much time
+
+Longed for:
+- One million dollars
+- Two million dollars
+- One trillion dollars
+- More time
+- More time, less time spent on other classes
+- A degree
+- Feeling like having a more impactful story
+- Less bugs
+- More time
+- Less bugs
+- More python programming
+
+Action:
+- Continue good teamwork and communication
+- Keep practicing BDD and maintain more/good testing practices
