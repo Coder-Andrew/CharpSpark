@@ -125,6 +125,11 @@ public class ResumeController : Controller
         return View(resumeVM);
     }
 
+    public IActionResult PreviewResume()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
