@@ -1,31 +1,35 @@
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
+let pageNumber = 1;
+
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
     const searchJobListingsBtn = document.getElementById('search-job-listings');
+    const searchCachedListings = document.getElementById('cached-job-title');
 
-    document.getElementById('page-number').addEventListener('change', getCachedJobListings);
-    getCachedJobListings();
+    searchCachedListings.addEventListener('change', () => { getCachedJobListings(pageNumber, searchCachedListings.value) })
+    //document.getElementById('page-number').addEventListener('change', getCachedJobListings);
+    getCachedJobListings(pageNumber, "");
     //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
 }
 function hideLoader() {
-    document.getElementById('page-number').classList.remove("invisible");
+    //document.getElementById('page-number').classList.remove("invisible");
     document.getElementById("loader").classList.add("invisible");
 }
 function showLoader() {
-    document.getElementById('page-number').classList.add("invisible");
+    //document.getElementById('page-number').classList.add("invisible");
     document.getElementById("loader").classList.remove("invisible");
 }
 
-async function getCachedJobListings() {
+async function getCachedJobListings(pageNumber, jobTitle) {
     showLoader();
     console.log("Getting cached job listings");
-    var pageNum = document.getElementById('page-number').value;
+    //var pageNum = document.getElementById('page-number').value;
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
-    const response = await fetch(`api/scraper/cached_listings/${pageNum}`, {
+    const response = await fetch(`api/scraper/cached_listings?pageNum=${pageNumber}&jobTitle=${jobTitle}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
@@ -34,11 +38,18 @@ async function getCachedJobListings() {
     });
     if (response.ok) {        
         var jobs = await response.json();
-        console.log(jobs);
-        jobs.forEach(job => {
-            const jobListingNode = generateJobListingNode(job);
-            jobListingContainer.appendChild(jobListingNode);
-        });
+        console.log(jobs.jobListings);
+        if (jobs.jobListings.length === 0) {
+            let noResultsNode = document.createElement('div');
+            noResultsNode.className = 'no-results';
+            noResultsNode.innerHTML = 'No cached job listings found';
+            jobListingContainer.appendChild(noResultsNode);
+        } else {
+            jobs.jobListings.forEach(job => {
+                const jobListingNode = generateJobListingNode(job);
+                jobListingContainer.appendChild(jobListingNode);
+            });
+        }
     }
     else 
     {

@@ -5,7 +5,7 @@ namespace ResuMeta.Services.Abstract
 {
     public interface IWebScraperService
     {
-        Task<List<JobListingVM>> GetCachedListings(int pageNum);
+        Task<JobListingContainerVM> GetCachedListings(int pageNum, string jobTitle);
         Task<List<JobListingVM>> SearchJobs(string jobTitle, string city, string state);
     }
 }
