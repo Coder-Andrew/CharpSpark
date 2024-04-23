@@ -20,14 +20,15 @@ public class ResumeController : Controller
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
     private readonly ICoverLetterService _coverLetterService;
-
+    private readonly IResumeTemplateService _resumeTemplateService;
     public ResumeController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
         IRepository<Resume> resumeRepo,
         IResumeService resumeService,
-        ICoverLetterService coverLetterService
+        ICoverLetterService coverLetterService,
+        IResumeTemplateService resumeTemplateService
         )
     {
         _logger = logger;
@@ -36,6 +37,7 @@ public class ResumeController : Controller
         _resumeRepository = resumeRepo;
         _resumeService = resumeService;
         _coverLetterService = coverLetterService;
+        _resumeTemplateService = resumeTemplateService;
     }
 
     public IActionResult Index()
@@ -122,7 +124,14 @@ public class ResumeController : Controller
             return RedirectToAction("Index", "Home");
         }
         ResumeVM resumeVM = _resumeService.GetResumeHtml(resumeId);
-        return View(resumeVM);
+
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
+        TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
+        {
+            Resume = resumeVM,
+            TemplatesList = templatesList
+        };
+        return View(templateAndResumeVM);
     }
 
     public IActionResult PreviewResume()

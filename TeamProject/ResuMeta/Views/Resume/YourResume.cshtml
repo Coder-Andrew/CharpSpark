@@ -1,4 +1,4 @@
-@model ResuMeta.ViewModels.ResumeVM;
+@model ResuMeta.ViewModels.TemplateAndResumeVM;
 @{
     Layout = null;
     ViewData["Title"] = "Resume - View";
@@ -25,10 +25,10 @@
                 </div>
                 <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
                 </div>
-                @if (Model != null)
+                @if (Model.Resume != null)
                 {
-                    <input type="hidden" id="resume-id" value="@Model.ResumeId" />
-                    <input type="hidden" id="resume-content" value="@Model.HtmlContent" />
+                    <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
+                    <input type="hidden" id="resume-content" value="@Model.Resume.HtmlContent" />
                     <div class="container" id="resume-area" style="display: none;">
                         
                     </div>
@@ -38,7 +38,7 @@
                                 <i class="fa fa-arrow-circle-left"></i>
                             </button>
                             <div class="mt-3 mx-2" style="float: left;">
-                                <h6><strong>Title:</strong> <input type="text" id="resume-title"  value="@Model.Title" /></h6>
+                                <h6><strong>Title:</strong> <input type="text" id="resume-title"  value="@Model.Resume.Title" /></h6>
                             </div>
                         </div>
                         <div>
