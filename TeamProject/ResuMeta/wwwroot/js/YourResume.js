@@ -61,6 +61,23 @@ function initializePage() {
     });
 
     console.log("Editor initialized");
+
+    //Templates
+    for (let i = 1; i <= 5; i++) {
+        var templatequill = new Quill(`#template${i}-editor`, {
+            readOnly: true,
+            theme: 'bubble'
+        });
+    
+        var templatecontent = document.getElementById(`template${i}-content`).value;
+        var templatearea = document.getElementById(`template${i}-area`);
+        templatearea.innerHTML = decodeURIComponent(templatecontent);
+    
+        var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
+        templatequill.setContents(templatedelta);
+    }
+
+    //Resume
     const resumeContent = document.getElementById("resume-content").value;
     const resumeArea = document.getElementById("resume-area");
     resumeArea.innerHTML = decodeURIComponent(resumeContent);

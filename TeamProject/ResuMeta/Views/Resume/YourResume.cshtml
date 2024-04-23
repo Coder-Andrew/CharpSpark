@@ -63,6 +63,19 @@
                     </div>
                 }
             </div>
+
+            @for (int i = 0; i < Model.TemplatesList.Count; i++)
+            {
+                <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
+                <div class="container" id="template@(i+1)-area" style="display: none;"></div>
+            }
+            <div class="templates">
+                <div class="template-editor" id="template1-editor"></div>
+                <div class="template-editor" id="template2-editor"></div>
+                <div class="template-editor" id="template3-editor"></div>
+                <div class="template-editor" id="template4-editor"></div>
+                <div class="template-editor" id="template5-editor"></div>
+            </div>
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>

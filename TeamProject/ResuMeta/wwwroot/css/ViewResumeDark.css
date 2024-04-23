@@ -238,3 +238,24 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.templates {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6%;
+}
+
+.template-editor .ql-container,
+.template-editor .ql-editor {
+    overflow: hidden !important;
+}
+
+.template-editor {
+    flex: 0 0 20%;
+    margin: 10px;
+    transform: scale(0.8);
+    transform-origin: 0 0;
+    height: 570px !important;
+}
