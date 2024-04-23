@@ -64,6 +64,7 @@ function initializePage() {
 
     //Templates
     for (let i = 1; i <= 5; i++) {
+        var templateEditor = document.getElementById(`template${i}-editor`);
         var templatequill = new Quill(`#template${i}-editor`, {
             readOnly: true,
             theme: 'bubble'
@@ -75,6 +76,10 @@ function initializePage() {
     
         var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
         templatequill.setContents(templatedelta);
+
+        templateEditor.addEventListener('click', function() {
+            window.location.href = 'Resume/PreviewResume';
+        });
     }
 
     //Resume
@@ -89,6 +94,21 @@ function initializePage() {
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
+    const previewBtn = document.getElementById('preview-resume');
+    previewBtn.addEventListener('click', () => PreviewResume(previewBtn), false);
+}
+
+async function PreviewResume(previewBtn) {
+    const templates = document.getElementById('templates');
+    if (templates.style.display === 'flex') {
+        templates.style.display = 'none';
+        document.body.classList.remove('show-before');
+        previewBtn.textContent = 'Preview Resume';
+    } else {
+        templates.style.display = 'flex';
+        document.body.classList.add('show-before');
+        previewBtn.textContent = 'Close Previews';
+    }
 }
 
 async function SwitchTheme() {
