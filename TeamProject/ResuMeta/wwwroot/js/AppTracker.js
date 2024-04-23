@@ -203,6 +203,7 @@ function refreshTable(sortOption, sortOrder) {
                     const deleteCell = newRow.insertCell();
                     const deleteButton = document.createElement('button');
                     deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
+                    deleteButton.id = 'deleteButton2'
                     deleteButton.addEventListener('click', function () {
                         event.preventDefault();
                         deleteApplication(item.applicationTrackerId);
