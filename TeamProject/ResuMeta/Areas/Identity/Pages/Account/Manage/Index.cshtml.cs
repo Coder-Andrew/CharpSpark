@@ -95,6 +95,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Profile Picture")]
             public IFormFile NewProfilePicture { get; set; }
+            [Display(Name = "Two Factor Authentication")]
+            public bool EnableTwoFactor { get; set; }
+
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -161,6 +164,10 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            user.TwoFactorEnabled = Input.EnableTwoFactor;
+            await _userManager.UpdateAsync(user);
+
+            
             var userName = await _userManager.GetUserNameAsync(user);
             if (Input.NewUsername != userName && !string.IsNullOrEmpty(Input.NewUsername))
             {
