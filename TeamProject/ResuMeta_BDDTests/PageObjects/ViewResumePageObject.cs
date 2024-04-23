@@ -37,33 +37,11 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public void TypeIntoEditor()
         {
+            Thread.Sleep(1000);
             QuillEditor.Click();
-            //if (CheckOperatingSystem() == "MacOS")
-            //{
-            //    QuillEditor.SendKeys(Keys.Command + "a");
-            //    QuillEditor.SendKeys(Keys.Backspace);
-            //}
-            //else
-            //{
-            //    QuillEditor.SendKeys(Keys.Control + "a");
-            //    QuillEditor.SendKeys(Keys.Delete);
-            //}
             QuillEditor.SendKeys("Hello, World!");
             Thread.Sleep(1000);
         }   
-
-
-        public string CheckOperatingSystem()
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return "MacOS";
-            }
-            else
-            {
-                return "Windows or Linux";
-            }
-        }
 
         public void SaveResume()
         {

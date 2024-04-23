@@ -19,7 +19,6 @@ Background:
 	  | reynoldsa@mail.com     | reynoldsa@mail.com     | Adrian     | Reynolds    | Password123! |
     And I am a user with the first name 'Adrian'
     And I login
-    And I am on the "Home" page
     And I logout
 
 
@@ -41,7 +40,7 @@ Scenario: User can save their resume
 Given I am a user with the first name 'Adrian'
      And I login
      And have been redirected to the "ViewResume" page
-When I click on the "Save Resume" button
+When I click on the Save Resume button
 Then I will be able to see a confirmation message letting me know the resume saved successfully
 
 Scenario: User can export their resume to pdf
@@ -49,5 +48,5 @@ Given I am a user with the first name 'Adrian'
      And I login
      And have been redirected to the "ViewResume" page
      And I have saved my resume
-When I click on the "Export Resume" button
+When I click on the Export Resume button
 Then I will be able to see a confirmation message letting me know the resume exported successfully
