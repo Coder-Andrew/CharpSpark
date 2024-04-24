@@ -136,10 +136,10 @@ function openModal(listing) {
     const jobCompany = listing.querySelector(".job-listing-company").textContent;
     const jobLocation = listing.querySelector(".job-listing-location").textContent;
     const jobLink = listing.querySelector("a").href;
-    const appliedDate = new Date().toISOString().slice(0, 10);
+    const appliedDate = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
     const modalBody = document.getElementById("modal-job-input");
     const viewableListing = document.getElementById("viewable-listing");
-    
+
     const jobListingTemplate = document.getElementById("job-listing-template");
     const templateClone = jobListingTemplate.content.cloneNode(true);
     const clone = templateClone.querySelector(".card-body");

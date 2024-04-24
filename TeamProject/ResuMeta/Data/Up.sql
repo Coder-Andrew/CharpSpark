@@ -90,7 +90,7 @@ CREATE TABLE [ApplicationTracker] (
   [UserInfoId] integer,
   [JobTitle] nvarchar(100),
   [CompanyName] nvarchar(100),
-  [JobListingURL] nvarchar(250),
+  [JobListingURL] nvarchar(max),
   [AppliedDate] date,
   [ApplicationDeadline] date,
   [Status] nvarchar(100),
