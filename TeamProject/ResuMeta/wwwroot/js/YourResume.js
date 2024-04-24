@@ -76,10 +76,6 @@ function initializePage() {
     
         var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
         templatequill.setContents(templatedelta);
-
-        templateEditor.addEventListener('click', function() {
-            window.location.href = 'Resume/PreviewResume';
-        });
     }
 
     //Resume

@@ -39,12 +39,10 @@
                                     <h1 class="title">@Model.Resume!.FirstName @Model.Resume!.LastName</h1>
                                     <p>@Model.Resume!.Email</p>
                                     <p>@Model.Resume!.Phone</p>
-                                    <hr />
                                     @if (Model.Resume.Summary != null)
                                     {
                                         <div>
                                         <h2 class="title">Personal Summary</h2>
-                                        <hr />
                                         <p>@Model.Resume!.Summary</p>
                                         </div>
                                         <br />
@@ -52,7 +50,6 @@
                                     @if (Model.Resume.Education != null && Model.Resume.Education.Any())
                                     {
                                         <h2 class="title">Education</h2>
-                                        <hr />
                                         @foreach (var education in Model.Resume.Education)
                                         {
                                             <p><strong>Institution:</strong> @education.Institution</p>
@@ -70,7 +67,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Degree</h2>
-                                    <hr />
                                     @foreach (var degree in Model.Resume.Degree)
                                     {
                                         <p><strong>Type:</strong> @degree.Type</p>
@@ -87,7 +83,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Employment History</h2>
-                                    <hr />
                                     @foreach (var employmentHistory in Model.Resume.EmploymentHistory)
                                     {
                                         <p><strong>Institution:</strong> @employmentHistory.Company</p>
@@ -108,7 +103,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Reference</h2>
-                                    <hr />
                                     @foreach (var referenceContactInfo in Model.Resume.ReferenceContactInfo)
                                     {
                                         <p><strong>First Name:</strong> @referenceContactInfo.FirstName</p>
@@ -122,7 +116,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Skills</h2>
-                                    <hr />
                                     <ul>
                                         @foreach (var skill in Model.Resume.Skills)
                                         {
@@ -136,7 +129,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Achievements</h2>
-                                    <hr />
                                     <ul>
                                         @foreach (var achievement in Model.Resume.Achievements)
                                         {
@@ -150,7 +142,6 @@
                                 {
                                     <div>
                                     <h2 class="title">Projects</h2>
-                                    <hr />
                                     @foreach (var project in Model.Resume.Projects)
                                     {
                                         <div>
@@ -209,7 +200,9 @@
             <div class="templates" id="templates">
                 @for (int i = 1; i <= 5; i++)
                 {
-                    <div class="template-editor" id="template@(i)-editor"></div>
+                    <div class="template-editor" id="template@(i)-editor"
+                    onclick="location.href='@Url.Action("PreviewResume", "Resume", new { currentResumeId = Model.Resume!.ResumeId, templateId = Model.TemplatesList[i - 1].ResumeId })'">
+                    </div>
                 }
             </div>
 

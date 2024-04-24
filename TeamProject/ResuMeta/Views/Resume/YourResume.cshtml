@@ -79,7 +79,9 @@
             <div class="templates" id="templates">
                 @for (int i = 1; i <= 5; i++)
                 {
-                    <div class="template-editor" id="template@(i)-editor"></div>
+                    <div class="template-editor" id="template@(i)-editor"
+                    onclick="location.href='@Url.Action("PreviewResume", "Resume", new { currentResumeId = Model.Resume!.ResumeId, templateId = Model.TemplatesList[i - 1].ResumeId })'">
+                    </div>
                 }
             </div>
 
