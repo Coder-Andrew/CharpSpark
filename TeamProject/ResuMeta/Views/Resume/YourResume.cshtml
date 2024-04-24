@@ -74,13 +74,13 @@
                 <h1 class="display-4 title">Templates</h1>
                 <p>Choose a template to preview your resume</p>
                 <hr />
+                <button class="btn btn-primary" id="close-preview">Close Preview</button>
             </div>
             <div class="templates" id="templates">
-                <div class="template-editor" id="template1-editor"></div>
-                <div class="template-editor" id="template2-editor"></div>
-                <div class="template-editor" id="template3-editor"></div>
-                <div class="template-editor" id="template4-editor"></div>
-                <div class="template-editor" id="template5-editor"></div>
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <div class="template-editor" id="template@(i)-editor"></div>
+                }
             </div>
 
             <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -95,20 +95,26 @@ function initializePage() {
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
     const previewBtn = document.getElementById('preview-resume');
-    previewBtn.addEventListener('click', () => PreviewResume(previewBtn), false);
+    previewBtn.addEventListener('click', () => PreviewResume(), false);
+    const closePreviewBtn = document.getElementById('close-preview');
+    closePreviewBtn.addEventListener('click', () => closePreview(), false);
 }
 
-async function PreviewResume(previewBtn) {
+async function PreviewResume() {
     const templates = document.getElementById('templates');
-    if (templates.style.display === 'flex') {
-        templates.style.display = 'none';
-        document.body.classList.remove('show-before');
-        previewBtn.textContent = 'Preview Resume';
-    } else {
-        templates.style.display = 'flex';
-        document.body.classList.add('show-before');
-        previewBtn.textContent = 'Close Previews';
-    }
+    const templatesTitle = document.getElementById('templates-title');
+    templates.style.display = 'flex';
+    templatesTitle.style.display = 'block';
+    document.body.classList.add('show-before');
+}
+
+async function closePreview() {
+    const templates = document.getElementById('templates');
+    const templatesTitle = document.getElementById('templates-title');
+    templates.style.display = 'none';
+    templatesTitle.style.display = 'none';
+    document.body.classList.remove('show-before');
+
 }
 
 async function SwitchTheme() {
