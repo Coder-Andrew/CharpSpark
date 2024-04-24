@@ -111,7 +111,7 @@
     }
 }
 
-@media(max-width: 964px)
+@media(max-width: 974px)
 {
     .tab-bar {
         display: flex !important;

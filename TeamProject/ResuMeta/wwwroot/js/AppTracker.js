@@ -191,7 +191,7 @@ function refreshTable(sortOption, sortOrder) {
                     cell1.className = 'wrap-text';
                     cell2.innerHTML = item.companyName;
                     cell2.className = 'wrap-text';
-                    cell3.innerHTML = `<a href="${url}" target="_blank">Click Here</a>`;
+                    cell3.innerHTML = `<a href="${url}" target="_blank" style="text-decoration: underline;">Click Here</a>`;
                     cell3.className = 'wrap-text';
                     cell4.innerHTML = item.appliedDate;
                     cell4.className = 'wrap-text';
