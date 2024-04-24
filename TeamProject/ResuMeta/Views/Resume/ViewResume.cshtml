@@ -1,4 +1,4 @@
-@model ResuMeta.ViewModels.ResumeVM;
+@model ResuMeta.ViewModels.TemplateAndResumeVM;
 @{
     Layout = null;
     ViewData["Title"] = "Resume - View";
@@ -28,32 +28,32 @@
                 </div>
                 <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
                 </div>
-                <input type="hidden" id="resume-id" value="@Model.ResumeId" />
+                <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
 
                 <div class="container" style="display: none;">
                     <div class="container resume-container" id="resume-container">
                         <div class="text-start">
-                            @if (Model != null)
+                            @if (Model.Resume != null)
                             {
                                 <div>
-                                    <h1 class="title">@Model!.FirstName @Model!.LastName</h1>
-                                    <p>@Model!.Email</p>
-                                    <p>@Model!.Phone</p>
+                                    <h1 class="title">@Model.Resume!.FirstName @Model.Resume!.LastName</h1>
+                                    <p>@Model.Resume!.Email</p>
+                                    <p>@Model.Resume!.Phone</p>
                                     <hr />
-                                    @if (Model.Summary != null)
+                                    @if (Model.Resume.Summary != null)
                                     {
                                         <div>
                                         <h2 class="title">Personal Summary</h2>
                                         <hr />
-                                        <p>@Model!.Summary</p>
+                                        <p>@Model.Resume!.Summary</p>
                                         </div>
                                         <br />
                                     }
-                                    @if (Model.Education != null && Model.Education.Any())
+                                    @if (Model.Resume.Education != null && Model.Resume.Education.Any())
                                     {
                                         <h2 class="title">Education</h2>
                                         <hr />
-                                        @foreach (var education in Model.Education)
+                                        @foreach (var education in Model.Resume.Education)
                                         {
                                             <p><strong>Institution:</strong> @education.Institution</p>
                                             <p><strong>Summary:</strong> @education.EducationSummary</p>
@@ -66,12 +66,12 @@
                                         }
                                     }
                                 </div>
-                                @if (Model.Degree != null && Model.Degree.Any())
+                                @if (Model.Resume.Degree != null && Model.Resume.Degree.Any())
                                 {
                                     <div>
                                     <h2 class="title">Degree</h2>
                                     <hr />
-                                    @foreach (var degree in Model.Degree)
+                                    @foreach (var degree in Model.Resume.Degree)
                                     {
                                         <p><strong>Type:</strong> @degree.Type</p>
                                         <p><strong>Major:</strong> @degree.Major</p>
@@ -83,12 +83,12 @@
                                     }
                                     </div>
                                 }
-                                @if (Model.EmploymentHistory != null && Model.EmploymentHistory.Any())
+                                @if (Model.Resume.EmploymentHistory != null && Model.Resume.EmploymentHistory.Any())
                                 {
                                     <div>
                                     <h2 class="title">Employment History</h2>
                                     <hr />
-                                    @foreach (var employmentHistory in Model.EmploymentHistory)
+                                    @foreach (var employmentHistory in Model.Resume.EmploymentHistory)
                                     {
                                         <p><strong>Institution:</strong> @employmentHistory.Company</p>
                                         <p><strong>Summary:</strong> @employmentHistory.Description</p>
@@ -104,12 +104,12 @@
                                     }
                                     </div>
                                 }
-                                @if (Model.ReferenceContactInfo != null && Model.ReferenceContactInfo.Any())
+                                @if (Model.Resume.ReferenceContactInfo != null && Model.Resume.ReferenceContactInfo.Any())
                                 {
                                     <div>
                                     <h2 class="title">Reference</h2>
                                     <hr />
-                                    @foreach (var referenceContactInfo in Model.ReferenceContactInfo)
+                                    @foreach (var referenceContactInfo in Model.Resume.ReferenceContactInfo)
                                     {
                                         <p><strong>First Name:</strong> @referenceContactInfo.FirstName</p>
                                         <p><strong>Last Name:</strong> @referenceContactInfo.LastName</p>
@@ -118,13 +118,13 @@
                                     }
                                     </div>
                                 }
-                                @if (Model.Skills != null && Model.Skills.Any())
+                                @if (Model.Resume.Skills != null && Model.Resume.Skills.Any())
                                 {
                                     <div>
                                     <h2 class="title">Skills</h2>
                                     <hr />
                                     <ul>
-                                        @foreach (var skill in Model.Skills)
+                                        @foreach (var skill in Model.Resume.Skills)
                                         {
                                             <li>@skill.SkillName</li>
                                         }
@@ -132,13 +132,13 @@
                                     <br />
                                     </div>
                                 }
-                                @if (Model.Achievements != null && Model.Achievements.Any())
+                                @if (Model.Resume.Achievements != null && Model.Resume.Achievements.Any())
                                 {
                                     <div>
                                     <h2 class="title">Achievements</h2>
                                     <hr />
                                     <ul>
-                                        @foreach (var achievement in Model.Achievements)
+                                        @foreach (var achievement in Model.Resume.Achievements)
                                         {
                                             <li>@achievement.title - @achievement.summary</li>
                                         }
@@ -146,12 +146,12 @@
                                     <br />
                                     </div>
                                 }
-                                @if (Model.Projects != null && Model.Projects.Any())
+                                @if (Model.Resume.Projects != null && Model.Resume.Projects.Any())
                                 {
                                     <div>
                                     <h2 class="title">Projects</h2>
                                     <hr />
-                                    @foreach (var project in Model.Projects)
+                                    @foreach (var project in Model.Resume.Projects)
                                     {
                                         <div>
                                             <h4><strong>@project.Name - </strong> <a href="@project.Link" target="">@project.Link</a></h4>
@@ -193,6 +193,26 @@
 
                 </div>
             </div>
+
+            @for (int i = 0; i < Model.TemplatesList.Count; i++)
+            {
+                <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
+                <div class="container" id="template@(i+1)-area" style="display: none;"></div>
+            }
+
+            <div class="templates-title" id="templates-title">
+                <h1 class="display-4 title">Templates</h1>
+                <p>Choose a template to preview your resume</p>
+                <hr />
+                <button class="btn btn-primary" id="close-preview">Close Preview</button>
+            </div>
+            <div class="templates" id="templates">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <div class="template-editor" id="template@(i)-editor"></div>
+                }
+            </div>
+
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>

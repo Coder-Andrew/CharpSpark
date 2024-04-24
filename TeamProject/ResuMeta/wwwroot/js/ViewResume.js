@@ -60,6 +60,27 @@ function initializePage() {
         }
     });
 
+    //Templates
+    for (let i = 1; i <= 5; i++) {
+        var templateEditor = document.getElementById(`template${i}-editor`);
+        var templatequill = new Quill(`#template${i}-editor`, {
+            readOnly: true,
+            theme: 'bubble'
+        });
+    
+        var templatecontent = document.getElementById(`template${i}-content`).value;
+        var templatearea = document.getElementById(`template${i}-area`);
+        templatearea.innerHTML = decodeURIComponent(templatecontent);
+    
+        var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
+        templatequill.setContents(templatedelta);
+
+        templateEditor.addEventListener('click', function() {
+            window.location.href = 'Resume/PreviewResume';
+        });
+    }
+
+    //Resume
     var htmlContent = document.getElementById('resume-container').outerHTML;
     const delta = quill.clipboard.convert(htmlContent);
     quill.setContents(delta);
@@ -69,6 +90,27 @@ function initializePage() {
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
+    const previewBtn = document.getElementById('preview-resume');
+    previewBtn.addEventListener('click', () => PreviewResume(), false);
+    const closePreviewBtn = document.getElementById('close-preview');
+    closePreviewBtn.addEventListener('click', () => closePreview(), false);
+}
+
+async function PreviewResume() {
+    const templates = document.getElementById('templates');
+    const templatesTitle = document.getElementById('templates-title');
+    templates.style.display = 'flex';
+    templatesTitle.style.display = 'block';
+    document.body.classList.add('show-before');
+}
+
+async function closePreview() {
+    const templates = document.getElementById('templates');
+    const templatesTitle = document.getElementById('templates-title');
+    templates.style.display = 'none';
+    templatesTitle.style.display = 'none';
+    document.body.classList.remove('show-before');
+
 }
 
 async function SwitchTheme() {

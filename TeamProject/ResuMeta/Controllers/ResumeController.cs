@@ -102,7 +102,14 @@ public class ResumeController : Controller
         ApplicationUser idUser = _userManager.FindByIdAsync(id).Result!;
         string email = _userManager.GetEmailAsync(idUser).Result!;
         ResumeVM resumeVM = _resumeService.GetResume(resumeId, email!);
-        return View(resumeVM);
+
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
+        TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
+        {
+            Resume = resumeVM,
+            TemplatesList = templatesList
+        };
+        return View(templateAndResumeVM);
     }
 
     [HttpGet("Resume/YourResume/{resumeId}")]
