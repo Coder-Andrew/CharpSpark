@@ -119,10 +119,8 @@ async function SwitchTheme() {
     var themeLabel = document.getElementById('theme-label');
     if (themeSwitcher.checked) {
         themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
-        themeLabel.textContent = 'Switch to Dark Mode';
     } else {
         themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
-        themeLabel.textContent = 'Switch to Light Mode';
     }
 }
 

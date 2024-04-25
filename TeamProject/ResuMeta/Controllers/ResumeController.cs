@@ -141,7 +141,6 @@ public class ResumeController : Controller
         return View(templateAndResumeVM);
     }
 
-    [HttpGet("Resume/PreviewResume/{resumeId}")]
     public IActionResult PreviewResume(int currentResumeId, int templateId)
     {
         string id = _userManager.GetUserId(User)!;
@@ -160,11 +159,13 @@ public class ResumeController : Controller
             return RedirectToAction("Index", "Home");
         }
         ResumeVM resumeVM = _resumeService.GetResumeHtml(currentResumeId);
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
         ResumeVM resumeTemplateVM = _resumeTemplateService.GetResumeTemplateHtml(templateId);
         TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
         {
             Resume = resumeVM,
-            Template = resumeTemplateVM
+            Template = resumeTemplateVM,
+            TemplatesList = templatesList
         };
         return View(templateAndResumeVM);
     }
