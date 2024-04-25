@@ -7,5 +7,6 @@ namespace ResuMeta.DAL.Abstract
     {
         ResumeVM GetResumeTemplateHtml(int templateId);
         List<ResumeVM> GetAllResumeTemplates();
+        ResumeVM ConvertResumeToTemplate(ResumeVM template, ResumeVM resume, UserInfo currUser);
     }
 }

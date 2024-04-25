@@ -161,10 +161,12 @@ public class ResumeController : Controller
         ResumeVM resumeVM = _resumeService.GetResumeHtml(currentResumeId);
         List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
         ResumeVM resumeTemplateVM = _resumeTemplateService.GetResumeTemplateHtml(templateId);
+        ResumeVM previewResume = _resumeTemplateService.ConvertResumeToTemplate(resumeTemplateVM, resumeVM, currUser);
+
         TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
         {
             Resume = resumeVM,
-            Template = resumeTemplateVM,
+            Template = previewResume,
             TemplatesList = templatesList
         };
         return View(templateAndResumeVM);

@@ -283,6 +283,12 @@ body.show-before::before {
     border: 1px solid rgb(101, 104, 104) !important;
 }
 
+.templates::before,
+.templates::after {
+    content: "{{" "}}";
+    display: none;
+}
+
 .template-editor .ql-container,
 .template-editor .ql-editor {
     overflow: hidden !important;

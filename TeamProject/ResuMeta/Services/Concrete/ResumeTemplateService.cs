@@ -34,5 +34,10 @@ namespace ResuMeta.Services.Concrete
         {
             return _resumeTemplateRepo.GetResumeTemplateHtml(templateId);
         }
+
+        public ResumeVM ConvertResumeToTemplate(ResumeVM template, ResumeVM resume, UserInfo currUser)
+        {
+            return _resumeTemplateRepo.ConvertResumeToTemplate(template, resume, currUser);
+            }
     }
 }
