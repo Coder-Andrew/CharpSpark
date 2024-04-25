@@ -26,13 +26,14 @@
                 </div>
                 <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
                 </div>
-                @if (Model.Resume != null)
+                @if (Model.Resume != null && Model.Template != null)
                 {
                     <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
                     <input type="hidden" id="resume-content" value="@Model.Resume.HtmlContent" />
-                    <div class="container" id="resume-area" style="display: none;">
-                        
-                    </div>
+                    <div class="container" id="resume-area" style="display: none;"></div>
+                    <input type="hidden" id="preview-content" value="@Model.Template.HtmlContent" />
+                    <div class="container" id="preview-area" style="display: none;"></div>
+
                     <div class="editor-header">
                         <div class="left-section">
                             <button id="back-button" onclick="window.history.back();">
@@ -51,8 +52,20 @@
                             </label>
                         </div>
                     </div>
-                    <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
 
+                    <div class="container">
+                        <div id="editor" class="editor" style="height: 100vh; width: 816px;">
+
+                        </div>
+
+                        <div class="arrow">
+                            <i class="fa fa-long-arrow-right fa-4x"></i>
+                            <button class="btn btn-primary" id="apply-template">Apply Template</button>
+                        </div>
+
+                        <div id="preview-editor" class="editor" style="height: 100vh; width: 816px;">
+
+                        </div>
                     </div>
                 }
                 else

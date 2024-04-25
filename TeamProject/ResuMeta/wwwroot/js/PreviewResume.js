@@ -8,6 +8,24 @@ function loadQuill() {
     script.onload = function () {
         console.log("Quill loaded");
 
+        //Register the DividerBlot
+        const BlockEmbed = Quill.import('blots/block/embed');
+
+        class DividerBlot extends BlockEmbed {
+        static create() {
+            let node = super.create();
+            return node;
+        }
+
+        static formats() {
+            return true;
+        }
+        }
+
+        DividerBlot.blotName = 'divider';
+        DividerBlot.tagName = 'hr';
+
+        Quill.register(DividerBlot);
         initializePage();
     }
 }
@@ -16,7 +34,12 @@ function initializePage() {
 
     var quill = new Quill('#editor', {
         readOnly: true,
-        theme: 'bubble'
+        theme: 'snow'
+    });
+
+    var previewQuill = new Quill('#preview-editor', {
+        readOnly: true,
+        theme: 'snow'
     });
 
     //Templates
@@ -24,7 +47,7 @@ function initializePage() {
         var templateEditor = document.getElementById(`template${i}-editor`);
         var templatequill = new Quill(`#template${i}-editor`, {
             readOnly: true,
-            theme: 'bubble'
+            theme: 'snow'
         });
     
         var templatecontent = document.getElementById(`template${i}-content`).value;
@@ -41,6 +64,14 @@ function initializePage() {
     resumeArea.innerHTML = decodeURIComponent(resumeContent);
     const delta = quill.clipboard.convert(resumeArea.innerHTML);
     quill.setContents(delta);
+
+    //Preview Template
+    const previewContent = document.getElementById("preview-content").value;
+    const previewArea = document.getElementById("preview-area");
+    previewArea.innerHTML = decodeURIComponent(previewContent);
+    const previewDelta = previewQuill.clipboard.convert(previewArea.innerHTML);
+    previewQuill.setContents(previewDelta);
+
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
     const previewBtn = document.getElementById('preview-resume');

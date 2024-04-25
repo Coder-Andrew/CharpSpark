@@ -28,7 +28,7 @@
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(184, 114, 35, 0.7);
 }
-.thumbnail h1, .thumbnail h2, .thumbnail h4, .thumbnail p, .thumbnail a, .thumbnail ul, .thumbnail li{
+.thumbnail h1, .thumbnail h2, .thumbnail h3, .thumbnail h4, .thumbnail p, .thumbnail a, .thumbnail ul, .thumbnail li{
     font-size: 45%;
     text-align: left;
     line-height: 1;

@@ -39,38 +39,37 @@ body {
     margin: 20px;
 }
 
-.text-center .ql-toolbar {
-    width: 100%;
-    position: sticky;
-    top: 71px;
-    background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
-    border-top: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    z-index: 1000;
-}
-
-
-.text-center .ql-toolbar .ql-divider::before {
-    content: '\f068' !important;
-    font-family: FontAwesome !important;
-    color: #444444;
-}
-
-
-.text-center .ql-toolbar .ql-divider:hover::before {
-    color: #0065CC;
-}
-
 .text-center .ql-container {
     max-width: 800px;
-    margin: 0 auto;
     padding: 20px;
     background-color: #222424;
     border: 1px solid rgb(101, 104, 104) !important;
     min-height: 500px;
     margin-bottom: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 73px;
+}
+
+.editor {
+    flex-shrink: 0.08;
+    margin-right: 20px !important;
+}
+
+.arrow {
+    display: flex;
+    flex-direction: column;
+    margin-top: 370px;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 20px !important;
+}
+
+.ql-toolbar {
+    display: none !important;
 }
 
 .editor-header {
@@ -329,6 +328,6 @@ body.show-before::before {
     box-shadow: 0 0 20px rgba(184, 114, 35, 0.7);
 }
 
-.template-editor input, .template-editor button{
+.template-editor input, .template-editor button, .editor input, .editor button{
     display: none !important;
 }

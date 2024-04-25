@@ -67,7 +67,7 @@ function initializePage() {
         var templateEditor = document.getElementById(`template${i}-editor`);
         var templatequill = new Quill(`#template${i}-editor`, {
             readOnly: true,
-            theme: 'bubble'
+            theme: 'snow'
         });
     
         var templatecontent = document.getElementById(`template${i}-content`).value;

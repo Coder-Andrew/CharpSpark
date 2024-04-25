@@ -332,3 +332,7 @@ body.show-before::before {
 .template-editor input, .template-editor button{
     display: none !important;
 }
+
+.templates .ql-toolbar {
+    display: none !important;
+}
