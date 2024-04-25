@@ -15,6 +15,7 @@ using ResuMeta.Data;
 
 namespace ResuMeta.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -77,13 +78,14 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+           var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
 
             if (user == null)
             {
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                _logger.LogWarning("Unable to load two-factor authentication user.");
             }
-
+            _logger.LogInformation("User with ID '{UserId}' asked for 2fa.", user.Id);
             ReturnUrl = returnUrl;
             RememberMe = rememberMe;
 

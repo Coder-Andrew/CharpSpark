@@ -165,6 +165,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             }
 
             user.TwoFactorEnabled = Input.EnableTwoFactor;
+            await _userManager.SetTwoFactorEnabledAsync(user, true);
             await _userManager.UpdateAsync(user);
 
             
