@@ -80,7 +80,7 @@
 }
 
 input {
-    margin: 6px;
+    margin: 5px;
 }
 
 #job-container {
@@ -90,4 +90,8 @@ input {
 #job-container .card{
     width: 50%;
     margin: auto;
+}
+
+#search-job-listings {
+    margin-bottom: 0 !important;
 }
