@@ -35,7 +35,7 @@ public class ApplicationTrackerController : Controller
         _applicationTrackerService = applicationTrackerService;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(JobListingVM? jobListing = null)
     {
         string currUserId = _userManager.GetUserId(User)!;
         if (currUserId == null)
@@ -48,9 +48,9 @@ public class ApplicationTrackerController : Controller
             return View();
         }
         ViewBag.UserId = user.Id;
+        ViewBag.JobListing = jobListing;
         return View();
     }
-
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

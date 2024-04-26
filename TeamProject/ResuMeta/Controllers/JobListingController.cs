@@ -25,6 +25,13 @@ public class JobListingController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        return View("Index", User.Identity.IsAuthenticated);
+        JobListingVM jobListing = new JobListingVM();
+        return View("Index", jobListing);
+    }
+
+    [HttpPost]
+    public IActionResult Index(JobListingVM jobListing)
+    {
+        return RedirectToAction("Index", "ApplicationTracker", jobListing);
     }
 }

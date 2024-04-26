@@ -42,7 +42,7 @@ namespace ResuMeta_BDDTests.PageObjects
             var submitElement = _webDriver.FindElement(By.Id("add-application-button"));
             Thread.Sleep(500);
             submitElement.Click();
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
         }
 
         public void FillOutForm()
@@ -92,7 +92,7 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public bool IsJobApplicationAddedToTable()
         {
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
             IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
             string jobTitle = "Student";
             string companyName = "Western Oregon University";
@@ -108,12 +108,19 @@ namespace ResuMeta_BDDTests.PageObjects
             foreach (IWebElement row in rows)
             {
                 IReadOnlyCollection<IWebElement> cells = row.FindElements(By.TagName("td"));
+                string urlCell = "";
+                foreach (IWebElement cell in cells)
+                {
+                    if (cell.FindElements(By.TagName("a")).Count > 0)
+                    {
+                        urlCell = cell.FindElement(By.TagName("a")).GetAttribute("href");
+                    }
+                }
                 List<string> cellTexts = cells.Select(cell => cell.Text).ToList();
-
                 if (cellTexts.Count >= 7 &&
                     cellTexts[0] == jobTitle &&
                     cellTexts[1] == companyName &&
-                    cellTexts[2] == jobListingUrl &&
+                    urlCell.Contains(jobListingUrl) &&
                     cellTexts[3] == appliedDate &&
                     cellTexts[4] == applicationDeadline &&
                     cellTexts[5] == status &&
@@ -128,7 +135,8 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public void FilterByApplicationDeadlineAscending()
         {
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
+            IJavaScriptExecutor js = (IJavaScriptExecutor)_webDriver;
             IWebElement sortByDropdown = _webDriver.FindElement(By.Id("sort-option"));
             SelectElement sortBySelect = new SelectElement(sortByDropdown);
             sortBySelect.SelectByValue("application-deadline");
@@ -136,13 +144,15 @@ namespace ResuMeta_BDDTests.PageObjects
             SelectElement sortOrderSelect = new SelectElement(sortOrderDropdown);
             sortOrderSelect.SelectByValue("ascending");
             IWebElement applyFiltersButton = _webDriver.FindElement(By.Id("apply-filters"));
+            js.ExecuteScript("arguments[0].scrollIntoView();", applyFiltersButton);
+            Thread.Sleep(500);
             applyFiltersButton.Click();
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
         }
 
         public bool AreJobsSorted()
         {
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
             IWebElement table = _webDriver.FindElement(By.Id("app-table"));
             IReadOnlyCollection<IWebElement> rows = table.FindElements(By.TagName("tr"));
             List<string> applicationDeadlines = new List<string>();
@@ -167,7 +177,7 @@ namespace ResuMeta_BDDTests.PageObjects
         public void DeleteJobApplication()
         {
 
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
             IWebElement table = _webDriver.FindElement(By.Id("app-table"));
             IReadOnlyCollection<IWebElement> rows;
 
@@ -184,14 +194,14 @@ namespace ResuMeta_BDDTests.PageObjects
 
                 var deleteButton = rows.Skip(1).First().FindElement(By.Id("deleteButton2"));
                 deleteButton.Click();
-                Thread.Sleep(4000);
+                Thread.Sleep(1000);
             }
 
         }
 
         public bool IsJobApplicationDeleted()
         {
-            Thread.Sleep(4000);
+            Thread.Sleep(1000);
             IWebElement table = _webDriver.FindElement(By.Id("app-table"));
             IReadOnlyCollection<IWebElement> rows = table.FindElements(By.TagName("tr"));
 
@@ -201,5 +211,16 @@ namespace ResuMeta_BDDTests.PageObjects
             }
             return false;
         }
+
+        public IWebElement[] GetInfo()
+        {
+            Thread.Sleep(1000);
+            IWebElement JobTitle = _webDriver.FindElement(By.Id("jobTitle"));
+            IWebElement Company = _webDriver.FindElement(By.Id("companyName"));
+            IWebElement JobListingUrl = _webDriver.FindElement(By.Id("jobListingUrl"));
+            IWebElement AppliedDate = _webDriver.FindElement(By.Id("appliedDate"));
+
+            return new IWebElement[] { JobTitle, Company, JobListingUrl, AppliedDate };
+        }
     }
-    }
+}

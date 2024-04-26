@@ -230,7 +230,10 @@ namespace ResuMeta_BDDTests.PageObjects
             _webDriver.FindElement(By.Id("description")).SendKeys("Made coffee for the patrons of West Salem\'s Dutch Bros");
             _webDriver.FindElement(By.Id("location")).Click();
             _webDriver.FindElement(By.Id("location")).SendKeys("West Salem, OR");
-            _webDriver.FindElement(By.Id("jobTitle")).Click();
+            var jobTitle = _webDriver.FindElement(By.Id("jobTitle"));
+            js.ExecuteScript("arguments[0].scrollIntoView(true);", jobTitle);
+            Thread.Sleep(500);
+            jobTitle.Click();
             _webDriver.FindElement(By.Id("jobTitle")).SendKeys("Broista");
             _webDriver.FindElement(By.Id("firstName")).Click();
             _webDriver.FindElement(By.Id("firstName")).SendKeys("Travis");
