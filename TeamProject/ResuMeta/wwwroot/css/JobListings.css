@@ -92,6 +92,49 @@ input {
     margin: auto;
 }
 
-/*.page-item, .page-link {
-    background-color: orange !important;
-}*/
+/* #yes-btn {
+    border-radius: 15px;
+    margin-left: 6px;
+    min-width: 100px;
+} */
+
+.form-btns {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 0 auto !important; 
+    text-align: center;
+}
+
+.form-btns> :first-child {
+    min-width: 100px !important;
+    margin-right: 10px !important;
+    margin-left: 0 !important;
+    flex: 2;
+}
+
+.form-btns> :last-child {
+    justify-content: flex-end !important;
+    min-width: 100px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    position: relative;
+    flex: 1
+}
+
+#yes-btn {
+    align-content: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
+    text-align: center !important;
+}
+
+#close-modal2 {
+    align-content: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
+    text-align: center !important;
+}

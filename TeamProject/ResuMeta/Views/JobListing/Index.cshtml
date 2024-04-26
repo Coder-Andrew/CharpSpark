@@ -1,3 +1,4 @@
+@model ResuMeta.ViewModels.JobListingVM;
 @section Styles {
     <link rel="stylesheet" href="~/css/ApplicationTracker.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/JobListings.css" asp-append-version="true" />
@@ -12,51 +13,89 @@
 </div>
 
 
-
-<div class="container">
-        <div class="d-flex d-inline-block justify-content-center">
+    <div class="container">
         @if (User.Identity!.IsAuthenticated)
         {
-            <input type="text" id="job-title" class="form-control" placeholder="Job Title" style="width: 300px;"/>
-            <input type="text" id="city" class="form-control" placeholder="City" style="width: 300px;"/>
-            <input type="text" id="state" class="form-control" placeholder="State" style="width: 300px;"/>    
-            <button class="" id="search-job-listings">Search Listings</button>
+            <div class="d-flex d-inline-block justify-content-center">
+                <input type="text" id="job-title" class="form-control" placeholder="Job Title" style="width: 300px;" />
+                <input type="text" id="city" class="form-control" placeholder="City" style="width: 300px;" />
+                <input type="text" id="state" class="form-control" placeholder="State" style="width: 300px;" />
+                <button class="" id="search-job-listings">Search Listings</button>
+            </div>
         }
-        </div>
         <div class="d-flex d-inline-block justify-content-center">
-            <input type="text" id="cached-job-title" placeholder="Search Remote Jobs"/>
-            <button class="btn btn-primary" id="search-cached-job-listings">Search Remote</button>
+            <input type="text" id="cached-job-title" class="form-control" placeholder="Remote Job Title" style="width: 300px;" />
+            <button class="" id="search-cached-job-listings">Search Remote</button>
         </div>
+        <div class="d-flex justify-content-center">
+            <div class="loader my-2" id="loader"></div>
+        </div>
+        <div id="job-container">
 
-    <div class="d-flex justify-content-center">
-        <div class="loader my-2" id="loader"></div>
+        </div>
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <!-- Modal -->
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modal-label">Did You Apply For This Job?</h1>
+                            <button id="close-modal1" type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <form asp-controller="JobListing" asp-action="Index" method="post">
+                            <div class="modal-body">
+
+                                <div class="mb-3" id="modal-job-input">
+                                    <label asp-for="JobTitle" class="form-label" style="display: none;">Job Title</label>
+                                    <input asp-for="JobTitle" type="text" class="form-control" id="job-title" style="display: none;"/>
+                                    <label asp-for="Company" class="form-label" style="display: none;">Company</label>
+                                    <input asp-for="Company" type="text" class="form-control" id="company" style="display: none;" />
+                                    <label asp-for="Link" class="form-label" style="display: none;">Job URL</label>
+                                    <input asp-for="Link" type="text" class="form-control" id="job-link" style="display: none;"/>
+                                    <label asp-for="DateApplied" class="form-label" style="display: none;">Applied Date</label>
+                                    <input asp-for="DateApplied" type="date" class="form-control" id="applied-date" style="display: none;"/>
+
+                                    <div id="viewable-listing"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer form-btns">
+                                <button type="submit" class="btn btn-primary border-0 d-flex mx-1" id="yes-btn">Yes, I applied</button>
+                                <button id="close-modal2" type="button" class="btn btn-secondary border-0 d-flex mx-1"
+                                    data-bs-dismiss="modal">No</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-    <div id="job-container">
-
-    </div>
-</div>
-
-<div class="d-flex justify-content-center" id="page-number">
-    <ul class="pagination">
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-    </ul>
-    @* <input type="number" id="page-number" class="form-control" placeholder="Page Number" style="width: 100px;" value="1" min="1" /> *@
-</div>
-
 
 <template id="job-listing-template">
     <div class="card border-secondary mb-3" style="width: 18rem;">
         <a href="http://example.com" class="card-link" target="_blank">
             <div class="card-body bg-secondary">
-                <h5 class="card-title job-listing-title"></h5>
-                <p class="card-text job-listing-company"><span class="fa fa-building"></span></p>
-                <p class="card-text job-listing-location"><span class="fa fa-globe"></span></p>
+                <h5 class="card-title job-listing-title">Online Data Analyst United States</h5>
+                <p class="card-text job-listing-company"><span class="fa fa-building"></span> TELUS International</p>
+                <p class="card-text job-listing-location"><span class="fa fa-globe"></span> Remote in Washington, DC 20001</p>
             </div>
         </a>
     </div>
 </template>
+
+<div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center" id="page-number">
+        <ul class="pagination">
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+        </ul>
+        @* <input type="number" id="page-number" class="form-control" placeholder="Page Number" style="width: 100px;" value="1" min="1" /> *@
+    </div>
+</div>
+
+</section>
 
 @section Scripts {
     <script src="~/js/JobListing.js"></script>

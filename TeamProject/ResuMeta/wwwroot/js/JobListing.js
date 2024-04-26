@@ -186,7 +186,68 @@ function generateJobListingNode(job) {
     jobCompany.innerHTML = `<span class="fa fa-building"></span> ${job.company}`;
     jobLocation.innerHTML = `<span class="fa fa-globe"></span> ${job.location}`;
 
+    const isAuthenticated = document.querySelector("#modal");
+    if (isAuthenticated != null) {
+        const modalCloseBtn1 = document.getElementById("close-modal1");
+        const modalCloseBtn2 = document.getElementById("close-modal2");
+        modalCloseBtn1.addEventListener('click', closeModal, false);
+        modalCloseBtn2.addEventListener('click', closeModal, false);
+        clone.addEventListener('click', function (event) {
+            openModal(event.currentTarget);
+        }, false);
+    }
+
     return clone;
 }
 
+function openModal(listing) {
+    closeModal();
+    const jobTitle = listing.querySelector(".job-listing-title").textContent;
+    const jobCompany = listing.querySelector(".job-listing-company").textContent;
+    const jobLocation = listing.querySelector(".job-listing-location").textContent;
+    const jobLink = listing.querySelector("a").href;
+    const appliedDate = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+    const modalBody = document.getElementById("modal-job-input");
+    const viewableListing = document.getElementById("viewable-listing");
 
+    const jobListingTemplate = document.getElementById("job-listing-template");
+    const templateClone = jobListingTemplate.content.cloneNode(true);
+    const clone = templateClone.querySelector(".card-body");
+
+    const cloneJobTitle = clone.querySelector(".job-listing-title");
+    const cloneJobCompany = clone.querySelector(".job-listing-company");
+    const cloneJobLocation = clone.querySelector(".job-listing-location"); 
+
+    cloneJobTitle.textContent = jobTitle;
+    cloneJobCompany.innerHTML = `<span class="fa fa-building"></span> ${jobCompany}`;
+    cloneJobLocation.innerHTML = `<span class="fa fa-globe"></span> ${jobLocation}`;
+    
+    
+    const inputTitle = modalBody.querySelector("#job-title");
+    const inputCompany = modalBody.querySelector("#company");
+    const inputLink = modalBody.querySelector("#job-link");
+    const inputAppliedDate = modalBody.querySelector("#applied-date");
+
+    inputTitle.value = jobTitle;
+    inputCompany.value = jobCompany;
+    inputLink.value = jobLink;
+    inputAppliedDate.value = appliedDate;
+    viewableListing.appendChild(clone);
+
+}
+
+function closeModal() {
+    const modalBody = document.getElementById("modal-job-input");
+    const viewableListing = document.getElementById("viewable-listing");
+    const inputTitle = modalBody.querySelector("#job-title");
+    const inputCompany = modalBody.querySelector("#company");
+    const inputLink = modalBody.querySelector("#job-link");
+    const inputAppliedDate = modalBody.querySelector("#applied-date");
+
+    inputTitle.value = '';
+    inputCompany.value = '';
+    inputLink.value = '';
+    inputAppliedDate.value = '';
+    viewableListing.innerHTML = '';
+
+}

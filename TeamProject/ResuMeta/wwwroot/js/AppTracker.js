@@ -81,7 +81,7 @@ function addApplication(event) {
         userInfoId: parseInt(userInfoId.value, 10),
         jobTitle: jobTitle.value,
         companyName: companyName.value,
-        jobListingUrl: jobListingUrl.value,
+        jobListingUrl: encodeURIComponent(jobListingUrl.value),
         appliedDate: appliedDate.value,
         applicationDeadline: applicationDeadline.value,
         status: status.value,
@@ -95,7 +95,7 @@ function addApplication(event) {
     if (applicationDeadline.value) {
         applicationTracker.applicationDeadline = applicationDeadline.value;
     }
-    //console.log(applicationTracker);
+    // console.log(applicationTracker);
     fetch('/api/applicationtracker/applicationInfo', {
         method: 'POST',
         headers: {
@@ -185,12 +185,13 @@ function refreshTable(sortOption, sortOrder) {
                     let cell6 = newRow.insertCell(5);
                     let cell7 = newRow.insertCell(6);
                     //let cell8 = newRow.insertCell(7);
+                    let url = decodeURIComponent(item.jobListingUrl);
 
                     cell1.innerHTML = item.jobTitle;
                     cell1.className = 'wrap-text';
                     cell2.innerHTML = item.companyName;
                     cell2.className = 'wrap-text';
-                    cell3.innerHTML = item.jobListingUrl;
+                    cell3.innerHTML = `<a href="${url}" target="_blank" style="text-decoration: underline;">Click Here</a>`;
                     cell3.className = 'wrap-text';
                     cell4.innerHTML = item.appliedDate;
                     cell4.className = 'wrap-text';

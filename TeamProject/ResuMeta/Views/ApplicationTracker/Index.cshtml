@@ -22,21 +22,54 @@
     <form id="application-form" class="row justify-content-center mx-auto" style="width: 80%;">
         <div class="form-group col-md-6 text-center">
             <input type="hidden" name="UserId" id="userId" value="@ViewBag.UserId" />
-            <label for="jobTitle">Job Title</label>
-            <input type="text" class="form-control" id="jobTitle" maxlength="100" placeholder="Job Title" required>
+            @if (ViewBag.JobListing != null)
+            {
+                <label for="jobTitle">Job Title</label>
+                <input type="text" class="form-control" id="jobTitle" maxlength="100" placeholder="Job Title" value="@ViewBag.JobListing.JobTitle" required>
+            }
+            else
+            {
+                <label for="jobTitle">Job Title</label>
+                <input type="text" class="form-control" id="jobTitle" maxlength="100" placeholder="Job Title" required>
+            }
         </div>
         <div class="form-group col-md-6 text-center">
-            <label for="companyName">Company Name</label>
-            <input type="text" class="form-control" id="companyName" maxlength="100" placeholder="Company Name"
-                required>
+            @if (ViewBag.JobListing != null)
+            {
+                <label for="companyName">Company Name</label>
+                <input type="text" class="form-control" id="companyName" maxlength="100" placeholder="Company Name"
+                    value="@ViewBag.JobListing.Company" required>
+            }
+            else
+            {
+                <label for="companyName">Company Name</label>
+                <input type="text" class="form-control" id="companyName" maxlength="100" placeholder="Company Name"
+                    required>
+            }
         </div>
         <div class="form-group col-md-6 text-center">
-            <label for="jobListingUrl">Job Listing URL</label>
-            <input type="text" class="form-control" id="jobListingUrl" placeholder="Job Listing URL" required>
+            @if (ViewBag.JobListing != null)
+            {
+                <label for="jobListingUrl">Job Listing URL</label>
+                <input type="text" class="form-control" id="jobListingUrl" placeholder="Job Listing URL" value="@ViewBag.JobListing.Link" required>
+            }
+            else
+            {
+                <label for="jobListingUrl">Job Listing URL</label>
+                <input type="text" class="form-control" id="jobListingUrl" placeholder="Job Listing URL" required>
+            }
         </div>
         <div class="form-group col-md-6 text-center">
-            <label for="appliedDate">Applied Date</label>
-            <input type="date" class="form-control" id="appliedDate" placeholder="Applied Date" required>
+            @if (ViewBag.JobListing != null && ViewBag.JobListing.DateApplied != null)
+            {
+                <label for="appliedDate">Applied Date</label>
+                <input type="date" class="form-control" id="appliedDate" placeholder="Applied Date" value="@ViewBag.JobListing.DateApplied.ToString("yyyy-MM-dd")" required>           
+            }
+            else
+            {
+                <label for="appliedDate">Applied Date</label>
+                <input type="date" class="form-control" id="appliedDate" placeholder="Applied Date" required>
+            }
         </div>
         <div class="form-group col-md-6 text-center">
             <label for="applicationDeadline">Application Deadline</label>

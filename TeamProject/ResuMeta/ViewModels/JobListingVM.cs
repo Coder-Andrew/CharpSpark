@@ -6,5 +6,6 @@ namespace ResuMeta.ViewModels
         public string? Link { get; set; }
         public string? Location { get; set; }
         public string? JobTitle { get; set; }
+        public DateOnly? DateApplied { get; set; }
     }
 }
