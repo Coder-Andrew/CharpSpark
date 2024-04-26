@@ -71,7 +71,7 @@
     margin-left: 6px;
 }
 
-#search-job-listings:hover, #search-job-listings:active, #search-job-listings:focus, #search-cached-job-listings:hover, #search-cached-job-listings:active, ##search-cached-job-listings:focus {
+#search-job-listings:hover, #search-job-listings:active, #search-job-listings:focus, #search-cached-job-listings:hover, #search-cached-job-listings:active, #search-cached-job-listings:focus {
     background-color: #E91D1C;
     color: white !important;
     border-color: #E91D1C;
@@ -91,3 +91,7 @@ input {
     width: 50%;
     margin: auto;
 }
+
+/*.page-item, .page-link {
+    background-color: orange !important;
+}*/

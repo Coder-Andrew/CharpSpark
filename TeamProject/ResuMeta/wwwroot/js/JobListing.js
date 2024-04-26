@@ -1,24 +1,33 @@
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
 let pageNumber = 1;
+let numberOfPages = 0;
 
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
     const searchJobListingsBtn = document.getElementById('search-job-listings');
     const searchCachedListings = document.getElementById('cached-job-title');
+    const pageNumberInput = document.getElementById('page-number');
 
     searchCachedListings.addEventListener('change', () => { getCachedJobListings(pageNumber, searchCachedListings.value) })
     //document.getElementById('page-number').addEventListener('change', getCachedJobListings);
     getCachedJobListings(pageNumber, "");
     //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
+
+    pageNumberInput.addEventListener('click', (event) => {
+        if (event.target.tagName === 'A') {
+            pageNumber = parseInt(event.target.textContent);
+            getCachedJobListings(pageNumber, searchCachedListings.value);
+        }
+    })
 }
 function hideLoader() {
-    //document.getElementById('page-number').classList.remove("invisible");
+    document.getElementById('page-number').classList.remove("invisible");
     document.getElementById("loader").classList.add("invisible");
 }
 function showLoader() {
-    //document.getElementById('page-number').classList.add("invisible");
+    document.getElementById('page-number').classList.add("invisible");
     document.getElementById("loader").classList.remove("invisible");
 }
 
@@ -28,7 +37,7 @@ async function getCachedJobListings(pageNumber, jobTitle) {
     //var pageNum = document.getElementById('page-number').value;
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
-
+    if (jobTitle) pageNumber = 1;
     const response = await fetch(`api/scraper/cached_listings?pageNum=${pageNumber}&jobTitle=${jobTitle}`, {
         method: 'GET',
         headers: {
@@ -36,9 +45,11 @@ async function getCachedJobListings(pageNumber, jobTitle) {
             'Content-Type': 'application/json; charset=utf-8'
         }
     });
-    if (response.ok) {        
+    if (response.ok) {
         var jobs = await response.json();
-        console.log(jobs.jobListings);
+        numberOfPages = jobs.numberOfPages;
+        populatePageNumber();
+        console.log(jobs.numberOfPages);
         if (jobs.jobListings.length === 0) {
             let noResultsNode = document.createElement('div');
             noResultsNode.className = 'no-results';
@@ -51,7 +62,7 @@ async function getCachedJobListings(pageNumber, jobTitle) {
             });
         }
     }
-    else 
+    else
     {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
@@ -61,6 +72,54 @@ async function getCachedJobListings(pageNumber, jobTitle) {
     hideLoader();
     return;
 }
+
+function populatePageNumber() {
+    const paginationList = document.querySelector('.pagination');
+    paginationList.innerHTML = ''; // Clear the existing page numbers
+
+    for (let i = -1; i <= 2; i++) {
+        let index = i + pageNumber;
+        if (index <= 0 || index > numberOfPages) continue;
+        //if (index === numberOfPages || pageNumber !== 1) break;
+        const pageItem = document.createElement('li');
+        pageItem.className = 'page-item';
+
+        if (index === pageNumber) {
+            pageItem.classList.add('active');
+        }
+
+        const pageLink = document.createElement('a');
+        pageLink.className = 'page-link';
+        pageLink.href = '#';
+        pageLink.textContent = index;
+
+        pageItem.appendChild(pageLink);
+        paginationList.appendChild(pageItem);
+    }
+}
+
+//function populatePageNumber() {
+//    const paginationList = document.querySelector('.pagination');
+//    paginationList.innerHTML = ''; // Clear existing page numbers
+
+//    for (let i = 1; i <= numberOfPages; i++) {
+//        const pageItem = document.createElement('li');
+//        pageItem.className = 'page-item ' + (i === pageNumber ? 'active' : '');
+
+//        const pageLink = document.createElement('a');
+//        pageLink.className = 'page-link';
+//        pageLink.href = '#';
+//        pageLink.textContent = i;
+//        pageLink.addEventListener('click', () => {
+//            pageNumber = i;
+//            getCachedJobListings(pageNumber, searchCachedListings.value);
+//        });
+
+//        pageItem.appendChild(pageLink);
+//        paginationList.appendChild(pageItem);
+//    }
+//}
+
 
 async function searchJobListings() {
     showLoader();
@@ -99,7 +158,7 @@ async function searchJobListings() {
             return;
         }
     }
-    else 
+    else
     {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
@@ -119,7 +178,7 @@ function generateJobListingNode(job) {
     const jobLink = clone.querySelector("a");
     const jobTitle = clone.querySelector(".job-listing-title");
     const jobCompany = clone.querySelector(".job-listing-company");
-    const jobLocation = clone.querySelector(".job-listing-location"); 
+    const jobLocation = clone.querySelector(".job-listing-location");
 
 
     jobLink.href = `https://www.${job.link}`;
@@ -127,6 +186,7 @@ function generateJobListingNode(job) {
     jobCompany.innerHTML = `<span class="fa fa-building"></span> ${job.company}`;
     jobLocation.innerHTML = `<span class="fa fa-globe"></span> ${job.location}`;
 
-
     return clone;
 }
+
+

@@ -68,6 +68,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     mongoDbConnection = args.mongoDbConnectionString
 
+    ############################################## PLEASE UNCOMMENT THIS OUT
     #run scheduled jobs on a separate thread
     # get_and_cache_listings(mongoDbConnection)
     # t = threading.Thread(target=run_scheduled_jobs)
