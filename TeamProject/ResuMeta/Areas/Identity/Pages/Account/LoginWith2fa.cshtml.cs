@@ -50,6 +50,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
+        public DateTime TokenExpiration { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -75,7 +76,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             public bool RememberMachine { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null, DateTime? tokenExpiration = null)
         {
             // Ensure the user has gone through the username & password screen first
            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -85,9 +86,10 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                 throw new InvalidOperationException($"Unable to load two-factor authentication user.");
                 _logger.LogWarning("Unable to load two-factor authentication user.");
             }
-            _logger.LogInformation("User with ID '{UserId}' asked for 2fa.", user.Id);
+            //_logger.LogInformation("User with ID '{UserId}' asked for 2fa.", user.Id);
             ReturnUrl = returnUrl;
             RememberMe = rememberMe;
+            TokenExpiration = tokenExpiration.GetValueOrDefault();
 
             return Page();
         }
@@ -108,7 +110,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             }
 
             var emailVerificationCode = Input.EmailVerificationCode;
-
+            if (DateTime.Now > TokenExpiration)
+            {
+                ModelState.AddModelError(string.Empty, "Token has expired.");
+                return Page();
+            }
             var result = await _signInManager.TwoFactorSignInAsync("Email", emailVerificationCode, rememberMe, Input.RememberMachine);
 
             var userId = await _userManager.GetUserIdAsync(user);
