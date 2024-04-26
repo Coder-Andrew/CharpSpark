@@ -33,6 +33,18 @@
         <div id="job-container">
 
         </div>
+
+        <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center" id="page-number">
+                <ul class="pagination" id="pagination">
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                </ul>
+                @* <input type="number" id="page-number" class="form-control" placeholder="Page Number" style="width: 100px;" value="1" min="1" /> *@
+            </div>
+        </div>
+
         @if (User.Identity!.IsAuthenticated)
         {
             <!-- Modal -->
@@ -72,28 +84,45 @@
         }
     </div>
 
-<template id="job-listing-template">
-    <div class="card border-secondary mb-3" style="width: 18rem;">
-        <a href="http://example.com" class="card-link" target="_blank">
-            <div class="card-body bg-secondary">
-                <h5 class="card-title job-listing-title">Online Data Analyst United States</h5>
-                <p class="card-text job-listing-company"><span class="fa fa-building"></span> TELUS International</p>
-                <p class="card-text job-listing-location"><span class="fa fa-globe"></span> Remote in Washington, DC 20001</p>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <template id="job-listing-template">
+            <div class="card border-secondary mb-3" style="width: 18rem;" data-bs-toggle="modal" data-bs-target="#modal">
+                <a href="http://example.com" class="card-link" target="_blank">
+                    <div class="card-body bg-secondary">
+                        <h5 class="card-title job-listing-title">Online Data Analyst United States</h5>
+                        <p class="card-text job-listing-company">
+                            <span class="fa fa-building"></span> TELUS International
+                        </p>
+                        <p class="card-text job-listing-location">
+                            <span class="fa fa-globe"></span> Remote in Washington, DC
+                            20001
+                        </p>
+                    </div>
+                </a>
             </div>
-        </a>
-    </div>
-</template>
+        </template>
+    }
+    else
+    {
+        <template id="job-listing-template">
+            <div class="card border-secondary mb-3" style="width: 18rem;">
+                <a href="http://example.com" class="card-link" target="_blank">
+                    <div class="card-body bg-secondary">
+                        <h5 class="card-title job-listing-title">Online Data Analyst United States</h5>
+                        <p class="card-text job-listing-company">
+                            <span class="fa fa-building"></span> TELUS International
+                        </p>
+                        <p class="card-text job-listing-location">
+                            <span class="fa fa-globe"></span> Remote in Washington, DC
+                            20001
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </template>
+    }
 
-<div class="d-flex justify-content-center">
-    <div class="d-flex justify-content-center" id="page-number">
-        <ul class="pagination">
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-        </ul>
-        @* <input type="number" id="page-number" class="form-control" placeholder="Page Number" style="width: 100px;" value="1" min="1" /> *@
-    </div>
-</div>
 
 </section>
 

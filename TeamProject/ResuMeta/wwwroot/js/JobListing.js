@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', initializePage, false);
 
 let pageNumber = 1;
 let numberOfPages = 0;
+//let lastJobTitle = "";
 
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
@@ -9,7 +10,10 @@ function initializePage() {
     const searchCachedListings = document.getElementById('cached-job-title');
     const pageNumberInput = document.getElementById('page-number');
 
-    searchCachedListings.addEventListener('change', () => { getCachedJobListings(pageNumber, searchCachedListings.value) })
+    searchCachedListings.addEventListener('change', () => {
+        pageNumber = 1;
+        getCachedJobListings(pageNumber, searchCachedListings.value)
+    })
     //document.getElementById('page-number').addEventListener('change', getCachedJobListings);
     getCachedJobListings(pageNumber, "");
     //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
@@ -37,7 +41,10 @@ async function getCachedJobListings(pageNumber, jobTitle) {
     //var pageNum = document.getElementById('page-number').value;
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
-    if (jobTitle) pageNumber = 1;
+    //if (jobTitle !== lastJobTitle) {
+    //    pageNumber = 1;
+    //    lastJobTitle = jobTitle;
+    //}
     const response = await fetch(`api/scraper/cached_listings?pageNum=${pageNumber}&jobTitle=${jobTitle}`, {
         method: 'GET',
         headers: {
@@ -73,102 +80,36 @@ async function getCachedJobListings(pageNumber, jobTitle) {
     return;
 }
 
-//function populatePageNumber() {
-//    const paginationList = document.querySelector('.pagination');
-//    paginationList.innerHTML = ''; // Clear the existing page numbers
-
-//    if (pageNumber === numberOfPages) {
-//        addPaginationLink(numberOfPages - 1);
-//        addPaginationLink(numberOfPages - 2);
-//        addPaginationLink(numberOfPages - 3, true);
-//    } else if (pageNumber === 1) {
-//        addPaginationLink(1, true);
-//        if (numberOfPages > 1) addPaginationLink(2);
-//        if (numberOfPages > 2) addPaginationLink(3);
-//    } else {
-//        for (let i = -1; i <= 1; i++) {
-//            let index = i + pageNumber;
-//            if (index <= 0 || index > numberOfPages) continue;
-
-//            if (index === pageNumber) {
-//                addPaginationLink(index, true);
-//            } else {
-//                addPaginationLink(index);
-//            }
-//        }
-//    }
-//}
-
-//function addPaginationLink(number, active = false) {
-//    const paginationList = document.querySelector('.pagination');
-
-//    const pageItem = document.createElement('li');
-//    pageItem.className = 'page-item';
-
-//    if (active) {
-//        pageItem.classList.add('active');
-//    }
-
-//    const pageLink = document.createElement('a');
-//    pageLink.className = 'page-link';
-//    pageLink.href = '#';
-//    pageLink.textContent = number;
-
-//    pageItem.appendChild(pageLink);
-//    paginationList.appendChild(pageItem);
-//}
-
-
 function populatePageNumber() {
     const paginationList = document.querySelector('.pagination');
-    paginationList.innerHTML = ''; // Clear the existing page numbers
+    paginationList.innerHTML = '';
 
-    let startPage = Math.max(1, pageNumber - 2);
-    let endPage = Math.min(numberOfPages, pageNumber + 2);
-
-    // Adjust start and end pages to show a fixed number of pagination links
-    if (pageNumber - 2 < 1) {
-        endPage = Math.min(numberOfPages, endPage + (3 - pageNumber));
-    }
-    if (pageNumber + 2 > numberOfPages) {
-        startPage = Math.max(1, startPage - (pageNumber + 2 - numberOfPages));
-    }
-
-    // Add 'First' page link if not on the first page
-    if (pageNumber > 3) {
-        addPaginationLink(1, false, 'First');
-    }
-
-    // Generate pagination links
-    for (let i = startPage; i <= endPage; i++) {
+    let i = 0;
+    for (i = pageNumber - 1; i <= pageNumber + 1; i++) {
+        if (i < 1 || i > numberOfPages) continue;
         addPaginationLink(i, i === pageNumber);
     }
-
-    // Add 'Last' page link if not on the last page
-    if (pageNumber < numberOfPages - 2) {
-        addPaginationLink(numberOfPages, false, 'Last');
-    }
+    if (pageNumber === 1 && pageNumber + 1 < numberOfPages) addPaginationLink(i);
 }
 
-function addPaginationLink(page, isActive, text) {
+function addPaginationLink(number, active = false) {
     const paginationList = document.querySelector('.pagination');
+
     const pageItem = document.createElement('li');
-    pageItem.className = 'page-item' + (isActive ? ' active' : '');
+    pageItem.className = 'page-item';
+
+    if (active) {
+        pageItem.classList.add('active');
+    }
 
     const pageLink = document.createElement('a');
     pageLink.className = 'page-link';
     pageLink.href = '#';
-    pageLink.textContent = text || page;
-    pageLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        pageNumber = page;
-        getCachedJobListings(pageNumber, document.getElementById('cached-job-title').value);
-    });
+    pageLink.textContent = number;
 
     pageItem.appendChild(pageLink);
     paginationList.appendChild(pageItem);
 }
-
 
 
 async function searchJobListings() {
