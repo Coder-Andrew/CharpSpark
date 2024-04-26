@@ -27,7 +27,8 @@ namespace ResuMeta_BDDTests.Shared
             { "YourDashboard", "/Resume/YourDashboard" },
             { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
             { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
-            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" }
+            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
+            { "ApplicationTracker", "/ApplicationTracker"}
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
