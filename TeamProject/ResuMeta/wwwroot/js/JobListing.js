@@ -73,52 +73,102 @@ async function getCachedJobListings(pageNumber, jobTitle) {
     return;
 }
 
+//function populatePageNumber() {
+//    const paginationList = document.querySelector('.pagination');
+//    paginationList.innerHTML = ''; // Clear the existing page numbers
+
+//    if (pageNumber === numberOfPages) {
+//        addPaginationLink(numberOfPages - 1);
+//        addPaginationLink(numberOfPages - 2);
+//        addPaginationLink(numberOfPages - 3, true);
+//    } else if (pageNumber === 1) {
+//        addPaginationLink(1, true);
+//        if (numberOfPages > 1) addPaginationLink(2);
+//        if (numberOfPages > 2) addPaginationLink(3);
+//    } else {
+//        for (let i = -1; i <= 1; i++) {
+//            let index = i + pageNumber;
+//            if (index <= 0 || index > numberOfPages) continue;
+
+//            if (index === pageNumber) {
+//                addPaginationLink(index, true);
+//            } else {
+//                addPaginationLink(index);
+//            }
+//        }
+//    }
+//}
+
+//function addPaginationLink(number, active = false) {
+//    const paginationList = document.querySelector('.pagination');
+
+//    const pageItem = document.createElement('li');
+//    pageItem.className = 'page-item';
+
+//    if (active) {
+//        pageItem.classList.add('active');
+//    }
+
+//    const pageLink = document.createElement('a');
+//    pageLink.className = 'page-link';
+//    pageLink.href = '#';
+//    pageLink.textContent = number;
+
+//    pageItem.appendChild(pageLink);
+//    paginationList.appendChild(pageItem);
+//}
+
+
 function populatePageNumber() {
     const paginationList = document.querySelector('.pagination');
     paginationList.innerHTML = ''; // Clear the existing page numbers
 
-    for (let i = -1; i <= 2; i++) {
-        let index = i + pageNumber;
-        if (index <= 0 || index > numberOfPages) continue;
-        //if (index === numberOfPages || pageNumber !== 1) break;
-        const pageItem = document.createElement('li');
-        pageItem.className = 'page-item';
+    let startPage = Math.max(1, pageNumber - 2);
+    let endPage = Math.min(numberOfPages, pageNumber + 2);
 
-        if (index === pageNumber) {
-            pageItem.classList.add('active');
-        }
+    // Adjust start and end pages to show a fixed number of pagination links
+    if (pageNumber - 2 < 1) {
+        endPage = Math.min(numberOfPages, endPage + (3 - pageNumber));
+    }
+    if (pageNumber + 2 > numberOfPages) {
+        startPage = Math.max(1, startPage - (pageNumber + 2 - numberOfPages));
+    }
 
-        const pageLink = document.createElement('a');
-        pageLink.className = 'page-link';
-        pageLink.href = '#';
-        pageLink.textContent = index;
+    // Add 'First' page link if not on the first page
+    if (pageNumber > 3) {
+        addPaginationLink(1, false, 'First');
+    }
 
-        pageItem.appendChild(pageLink);
-        paginationList.appendChild(pageItem);
+    // Generate pagination links
+    for (let i = startPage; i <= endPage; i++) {
+        addPaginationLink(i, i === pageNumber);
+    }
+
+    // Add 'Last' page link if not on the last page
+    if (pageNumber < numberOfPages - 2) {
+        addPaginationLink(numberOfPages, false, 'Last');
     }
 }
 
-//function populatePageNumber() {
-//    const paginationList = document.querySelector('.pagination');
-//    paginationList.innerHTML = ''; // Clear existing page numbers
+function addPaginationLink(page, isActive, text) {
+    const paginationList = document.querySelector('.pagination');
+    const pageItem = document.createElement('li');
+    pageItem.className = 'page-item' + (isActive ? ' active' : '');
 
-//    for (let i = 1; i <= numberOfPages; i++) {
-//        const pageItem = document.createElement('li');
-//        pageItem.className = 'page-item ' + (i === pageNumber ? 'active' : '');
+    const pageLink = document.createElement('a');
+    pageLink.className = 'page-link';
+    pageLink.href = '#';
+    pageLink.textContent = text || page;
+    pageLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        pageNumber = page;
+        getCachedJobListings(pageNumber, document.getElementById('cached-job-title').value);
+    });
 
-//        const pageLink = document.createElement('a');
-//        pageLink.className = 'page-link';
-//        pageLink.href = '#';
-//        pageLink.textContent = i;
-//        pageLink.addEventListener('click', () => {
-//            pageNumber = i;
-//            getCachedJobListings(pageNumber, searchCachedListings.value);
-//        });
+    pageItem.appendChild(pageLink);
+    paginationList.appendChild(pageItem);
+}
 
-//        pageItem.appendChild(pageLink);
-//        paginationList.appendChild(pageItem);
-//    }
-//}
 
 
 async function searchJobListings() {
