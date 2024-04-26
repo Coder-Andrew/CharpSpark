@@ -2,23 +2,32 @@ document.addEventListener('DOMContentLoaded', initializePage, false);
 
 let pageNumber = 1;
 let numberOfPages = 0;
-//let lastJobTitle = "";
 
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
     const searchJobListingsBtn = document.getElementById('search-job-listings');
     const searchCachedListings = document.getElementById('cached-job-title');
-    const pageNumberInput = document.getElementById('page-number');
+    const pageNumberInput = document.getElementById('pagination');
 
     searchCachedListings.addEventListener('change', () => {
         pageNumber = 1;
         getCachedJobListings(pageNumber, searchCachedListings.value)
     })
-    //document.getElementById('page-number').addEventListener('change', getCachedJobListings);
     getCachedJobListings(pageNumber, "");
-    //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
 
+
+    // add event listener to first and last links for pagination
+    document.getElementById('first-page').addEventListener('click', () => {
+        pageNumber = 1;
+        getCachedJobListings(pageNumber, searchCachedListings.value);
+    });
+    document.getElementById('last-page').addEventListener('click', () => {
+        pageNumber = numberOfPages;
+        getCachedJobListings(pageNumber, searchCachedListings.value);
+    });
+
+    // add event listener to individual page numbers
     pageNumberInput.addEventListener('click', (event) => {
         if (event.target.tagName === 'A') {
             pageNumber = parseInt(event.target.textContent);
@@ -37,14 +46,9 @@ function showLoader() {
 
 async function getCachedJobListings(pageNumber, jobTitle) {
     showLoader();
-    console.log("Getting cached job listings");
-    //var pageNum = document.getElementById('page-number').value;
+    //console.log("Getting cached job listings");
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
-    //if (jobTitle !== lastJobTitle) {
-    //    pageNumber = 1;
-    //    lastJobTitle = jobTitle;
-    //}
     const response = await fetch(`api/scraper/cached_listings?pageNum=${pageNumber}&jobTitle=${jobTitle}`, {
         method: 'GET',
         headers: {
@@ -56,7 +60,7 @@ async function getCachedJobListings(pageNumber, jobTitle) {
         var jobs = await response.json();
         numberOfPages = jobs.numberOfPages;
         populatePageNumber();
-        console.log(jobs.numberOfPages);
+        //console.log(jobs.numberOfPages);
         if (jobs.jobListings.length === 0) {
             let noResultsNode = document.createElement('div');
             noResultsNode.className = 'no-results';
@@ -81,7 +85,7 @@ async function getCachedJobListings(pageNumber, jobTitle) {
 }
 
 function populatePageNumber() {
-    const paginationList = document.querySelector('.pagination');
+    const paginationList = document.getElementById('pagination');
     paginationList.innerHTML = '';
 
     let i = 0;
@@ -93,7 +97,7 @@ function populatePageNumber() {
 }
 
 function addPaginationLink(number, active = false) {
-    const paginationList = document.querySelector('.pagination');
+    const paginationList = document.getElementById('pagination');
 
     const pageItem = document.createElement('li');
     pageItem.className = 'page-item';
@@ -114,7 +118,7 @@ function addPaginationLink(number, active = false) {
 
 async function searchJobListings() {
     showLoader();
-    console.log("Searching job listings");
+    //console.log("Searching job listings");
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
@@ -132,7 +136,7 @@ async function searchJobListings() {
         var contentType = response.headers.get("content-type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
             var jobs = await response.json();
-            console.log(jobs);
+            //console.log(jobs);
             jobs.forEach(job => {
                 const jobListingNode = generateJobListingNode(job);
                 jobListingContainer.appendChild(jobListingNode);
