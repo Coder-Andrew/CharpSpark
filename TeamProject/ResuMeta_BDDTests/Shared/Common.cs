@@ -27,7 +27,9 @@ namespace ResuMeta_BDDTests.Shared
             { "YourDashboard", "/Resume/YourDashboard" },
             { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
             { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
-            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" }
+            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
+            { "ApplicationTracker", "/ApplicationTracker"},
+            { "JobListings", "/JobListing"}
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
@@ -45,7 +47,9 @@ namespace ResuMeta_BDDTests.Shared
                 { "YourDashboard", "/Resume/YourDashboard" },
                 { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
                 { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
-                { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" }
+                { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
+                { "ApplicationTracker", "/ApplicationTracker"},
+                { "JobListings", "/JobListing"}
             };
         }
     }
