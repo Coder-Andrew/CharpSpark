@@ -22,8 +22,7 @@ Given I am a user with the first name 'Adrian'
    And I login
    And I am on the "JobListings" page
 When I click on a Job Listing
-   And I have redirected back to ResuMeta
-Then I will be able to see a message box asking me if I have sent an application to the job listing I clicked on\
+Then I will be able to see a message box asking me if I have sent an application to the job listing I clicked on
 
 Scenario: User will be able to click on the "No" button in the message box to close the message box
 Given I am a user with the first name 'Adrian'
@@ -32,7 +31,7 @@ Given I am a user with the first name 'Adrian'
    And I have clicked on a Job Listing
 When I click on the "No" button in the message box
 Then I will see the message box disappears 
-  And I will remain on the "JobListings" page
+  And I will remain on the JobListings page
 
 Scenario: User will be able to click on the "Yes, I applied" button in the message box to be redirected to the Application Tracker page
 Given I am a user with the first name 'Adrian'
@@ -40,13 +39,13 @@ Given I am a user with the first name 'Adrian'
    And I am on the "JobListings" page
    And I have clicked on a Job Listing
 When I click on the "Yes, I applied" button in the message box
-Then I will be redirected to the "ApplicationTracker" page
+Then I will be redirected to the ApplicationTracker page
 
 Scenario: User will see a new Application form partially filled out with some of the information from the job listing they clicked on
 Given I am a user with the first name 'Adrian'
    And I login
-   And I am on the "Job Listings" page
+   And I am on the "JobListings" page
    And I have clicked on a Job Listing
-   And I clicked on the "Yes, I applied" button in the message box
-When I am redirected to the "ApplicationTracker" page
+   And I click on the "Yes, I applied" button in the message box
+When I am redirected to the ApplicationTracker page
 Then I will see a new Application form partially filled out with some of the information from the job listing I clicked on
