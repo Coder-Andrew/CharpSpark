@@ -3,6 +3,7 @@
 #nullable disable
 
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ResuMeta.Data;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace ResuMeta.Areas.Identity.Pages.Account
 {
@@ -24,13 +27,22 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IConfiguration _configuration;
+         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly SendGridClient _client;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger,
+            IConfiguration configuration, UserManager<ApplicationUser> userManager, SendGridClient client, IHttpContextAccessor httpContextAccessor)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
+            _configuration = configuration;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
+            _client = client;
         }
+        
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -125,6 +137,32 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                 if (result.RequiresTwoFactor)
                 {
                     var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
+                try
+                {
+                     var emailFromAddress = _configuration["SendFromEmail"];
+                    string email = user.Email;
+                    var from = new EmailAddress(emailFromAddress, "ResuMeta");
+                    var subject = $"Two-Factor Authentication Code";
+                    var to = new EmailAddress(email, user.UserName);
+                    var plainTextContent = $"Hello,\n\nEnter the code below to finish authentication with ResuMeta.\n\n {token}\n\n Thanks for using ResuMeta!\n";
+                    var htmlContent = $"<p>Hello,</p><p>Enter the code below to finish authentication with ResuMeta</p><p><strong><span style='font-size:20px;'>{token}</span></strong></p><p>Thanks for using ResuMeta!</p>";
+                    var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+                    var response = await _client.SendEmailAsync(msg);
+                    if (response.StatusCode != HttpStatusCode.Accepted)
+                    {
+                        _logger.LogError($"Failed to send email");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Email sent");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"An error occurred while sending email");
+                }
                     _logger.LogInformation("Auth code is: {token}", token);
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }

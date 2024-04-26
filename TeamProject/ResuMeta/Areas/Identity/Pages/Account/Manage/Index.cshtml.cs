@@ -71,6 +71,9 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
 
         public byte[] ProfilePicturePath { get; set; }
 
+        [BindProperty]
+        public bool TwoFactorEnabled { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -142,7 +145,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
+            TwoFactorEnabled = user.TwoFactorEnabled;
             await LoadAsync(user);
             return Page();
         }
@@ -164,9 +167,15 @@ namespace ResuMeta.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            user.TwoFactorEnabled = Input.EnableTwoFactor;
-            await _userManager.SetTwoFactorEnabledAsync(user, true);
-            await _userManager.UpdateAsync(user);
+if (!user.TwoFactorEnabled && Input.EnableTwoFactor)
+{
+    user.TwoFactorEnabled = true;
+    await _userManager.SetTwoFactorEnabledAsync(user, true);
+    await _userManager.UpdateAsync(user);
+}
+            // user.TwoFactorEnabled = Input.EnableTwoFactor;
+            // await _userManager.SetTwoFactorEnabledAsync(user, true);
+            // await _userManager.UpdateAsync(user);
 
             
             var userName = await _userManager.GetUserNameAsync(user);

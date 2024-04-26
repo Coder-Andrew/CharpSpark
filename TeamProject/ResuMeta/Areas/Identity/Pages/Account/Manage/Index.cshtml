@@ -88,10 +88,17 @@
                 <label asp-for="Input.NewSummary" class="form-label"></label>
                 <span asp-validation-for="Input.NewSummary" class="text-danger"></span>
             </div>
-            <div class=" form-check">
-                <input asp-for="Input.EnableTwoFactor" type="checkbox" placeholder="Enable Two Factor Authentication" />
-                <label asp-for="Input.EnableTwoFactor" class="form-label"></label>
-            </div>
+<div class="form-check">
+    @if (Model.TwoFactorEnabled)
+    {
+        <p>You have 2FA enabled.</p>
+    }
+    else
+    {
+        <input type="checkbox" asp-for="Input.EnableTwoFactor" />
+        <label asp-for="Input.EnableTwoFactor" class="form-label"></label>
+    }
+</div>
             <button id="update-profile-button" type="submit" asp-page-handler="ChangeProfile"
                 class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
