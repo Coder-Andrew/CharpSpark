@@ -22,13 +22,14 @@ namespace ResuMeta.Controllers
 
         // GET: api/scraper/cached_listings
         [AllowAnonymous]
-        [HttpGet("cached_listings/{pageNum}")]
+        //[HttpGet("cached_listings/{pageNum}")]
+        [HttpGet("cached_listings")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetListings(int pageNum)
+        public async Task<IActionResult> GetListings([FromQuery] int pageNum, [FromQuery] string? jobTitle)
         {
             try
             {
-                List<JobListingVM> listings = await _webScraperService.GetCachedListings(pageNum);
+                JobListingContainerVM listings = await _webScraperService.GetCachedListings(pageNum, jobTitle);
                 return Ok(listings);
             }
             catch (Exception e)

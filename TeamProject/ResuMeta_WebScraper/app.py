@@ -7,7 +7,7 @@ from flask import Flask, request
 
 from src.advanced_search import advanced_search
 from src.cache_listings import get_and_cache_listings
-from src.db_context import mongo_db_context
+from src.db_context import mongo_db_context, NUMBER_OF_LISTINGS_PER_PAGE
 from src.job_listing_repository import job_listing_repository
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ schedule.every(24).hours.do(get_and_cache_listings)
 def run_scheduled_jobs():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(14400)
 
 @app.route('/api/search_jobs')
 def search_jobs():
@@ -33,18 +33,33 @@ def search_jobs():
 
     return {'jobs': [job.__dict__ for job in jobs]}
 
-@app.route('/api/cached_listings/<int:page>')
-def get_cached_listings(page):
-    print("test")
+@app.route('/api/cached_listings')
+def get_cached_listings():
+    job_title = request.args.get('job_title')
+    page_number = request.args.get('page_number')
+
+    if not page_number.isdigit():
+        return {'error': 'page_number must be an integer'}
+    
+    page_number = int(page_number)
+
+    print(f"job_title: {job_title}, page_number: {page_number}")
+
     mongoDbConnection = args.mongoDbConnectionString
     context = mongo_db_context(connectionString=mongoDbConnection, dbname='job_listings', collectionName='job_listings')
     # context = mongo_db_context(ip='localhost', port=27017, dbname='job_listings', collectionName='job_listings')
     repo = job_listing_repository(context)
     
-    listings = list(repo.get_cached_listings(page))
-    [i.pop('_id') for i in listings]
     
-    return {'listings': listings}
+    try:
+        listings = list(repo.get_cached_listings(page_number, job_title))
+        [i.pop('_id') for i in listings]
+
+        return {'number_of_pages': repo.get_number_of_listings_by_search_term(job_title) // NUMBER_OF_LISTINGS_PER_PAGE + 1, 'listings': listings}
+    except ValueError as e:
+        return {'error': str(e)}
+    except:
+        return {'error': 'An error occurred'}
 
 
 if __name__ == '__main__':
