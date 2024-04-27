@@ -30,7 +30,19 @@
                 </div>
                 <div>
                     <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
+                </div>            
+                @foreach (var provider in Model.ExternalLogins!)
+                {
+                    <div class="card-body">
+                        <a asp-controller="GoogleLogin" asp-action="Login" class="w-100 btn text-white login-btn" name="provider" title="Log in using your @provider.DisplayName account">
+                            <img src="https://developers.google.com/static/identity/images/branding_guideline_sample_lt_rd_sl.svg" alt="Google logo" class="google-logo">
+                            Log in with @provider.DisplayName
+                        </a>
+                    </div>
+                }
+@*                 <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/ExternalLogin" asp-route-provider="Google" asp-route-returnUrl="@Model.ReturnUrl">
+                    Login with Google
+                </a> *@
                 <div>
                     <p>
                         <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>

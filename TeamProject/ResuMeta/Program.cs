@@ -26,7 +26,14 @@ var sendGridApiKey = builder.Configuration["SendGridApiKey"] ?? throw new Invali
 var sendFromEmail = builder.Configuration["SendFromEmail"] ?? throw new InvalidOperationException("Connection string 'SendFromEmail' not found.");
 string chatGPTUrl = "https://api.openai.com/";
 
+
 //builder.Services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
+
 
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
@@ -157,6 +164,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
