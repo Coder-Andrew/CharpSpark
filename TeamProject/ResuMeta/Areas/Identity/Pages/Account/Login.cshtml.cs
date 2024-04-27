@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using ResuMeta.Data;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Security.Policy;
 
 namespace ResuMeta.Areas.Identity.Pages.Account
 {
@@ -181,5 +182,19 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+        //public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        //{
+        //    var redirectUrl = Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl });
+        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        //    return Challenge(properties, provider);
+        //}
+        //public async Task<IActionResult> OnPostExternalLoginAsync(string provider, string returnUrl = null)
+        //{
+        //    returnUrl = returnUrl ?? Url.Content("~/");
+        //    var redirectUrl = Url.Page("./ExternalLoginCallback", pageHandler: null, values: new { returnUrl });
+        //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        //    return new ChallengeResult(provider, properties);
+        //}
     }
+
 }
