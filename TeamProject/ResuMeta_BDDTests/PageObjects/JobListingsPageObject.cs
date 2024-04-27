@@ -12,11 +12,14 @@ using OpenQA.Selenium.Support.Extensions;
 using System.Drawing;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
+using Hangfire.Common;
 
 namespace ResuMeta_BDDTests.PageObjects
 {
     public class JobListingsPageObject : PageObject
     {
+        public IWebElement RemoteJobSearchInput => _webDriver.FindElement(By.Id("cached-job-title"));
+        public IWebElement SearchRemoteJobsButton => _webDriver.FindElement(By.Id("search-cached-job-listings"));
         public JobListingsPageObject(IWebDriver webDriver) : base(webDriver)
         {
             // using a named page (in Common.cs)
@@ -64,6 +67,26 @@ namespace ResuMeta_BDDTests.PageObjects
         public string GetCurrentUrl()
         {
             return _webDriver.Url;
+        }
+
+        public void TypeIntoSearchBar(string searchTerm)
+        {
+            Thread.Sleep(5000);
+            RemoteJobSearchInput.SendKeys(searchTerm);
+            SearchRemoteJobsButton.Click();
+            Thread.Sleep(5000);
+        }
+        public List<string> SearchJobsByTerm(string searchTerm)
+        {
+            List<string> results = new();
+            TypeIntoSearchBar(searchTerm);
+            var jobListings = _webDriver.FindElements(By.ClassName("card-title"));
+            foreach (var jobListing in jobListings)
+            {
+                results.Add(jobListing.Text);
+            }
+
+            return results;
         }
     }
 }
