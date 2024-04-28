@@ -124,6 +124,11 @@ public class ResumeController : Controller
         ResumeVM resumeVM = _resumeService.GetResumeHtml(resumeId);
         return View(resumeVM);
     }
+    
+    public IActionResult ImproveResume()
+    {
+        return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
