@@ -160,6 +160,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                  user.SecurityAnswer2 = HashAnswer(Input.SecurityAnswer2);
                  user.SecurityQuestion3 = Input.SecurityQuestion3;
                  user.SecurityAnswer3 = HashAnswer(Input.SecurityAnswer3);
+                  user.EmailConfirmed = true;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);

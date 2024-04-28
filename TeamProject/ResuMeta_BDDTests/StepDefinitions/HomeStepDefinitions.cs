@@ -61,6 +61,5 @@ namespace ResuMeta_BDDTests.StepDefinitions
             Thread.Sleep(3000);
             _homePage.Logout();
         }
-
     }
 }

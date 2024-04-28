@@ -10,7 +10,7 @@ namespace ResuMeta_BDDTests.Shared
     public class Common
     {
         public const string BaseUrl = "http://localhost:5160";     // copied from launchSettings.json
-        
+
 
         // File to store browser cookies in
         public const string CookieFile = "../../../../StandupsCookies.txt";
@@ -27,10 +27,30 @@ namespace ResuMeta_BDDTests.Shared
             { "YourDashboard", "/Resume/YourDashboard" },
             { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
             { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
-            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" }
+            { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
+            { "ApplicationTracker", "/ApplicationTracker"},
+            { "JobListings", "/JobListing"}
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
         public static string UrlFor(string pathName, string id = "") => BaseUrl + Paths[pathName] + id;
+
+        public static void ResetPaths()
+        {
+            Paths = new()
+            {
+                { "Home" , "/" },
+                { "Login", "/Identity/Account/Login" },
+                { "CreateResume", "/Resume/CreateResume" },
+                { "ViewResume", "/Resume/ViewResume/" },
+                { "YourResume", "/Resume/YourResume/" },
+                { "YourDashboard", "/Resume/YourDashboard" },
+                { "YourCoverLetter", "/CoverLetter/YourCoverLetter/" },
+                { "CreateCoverLetter", "/CoverLetter/CreateCoverLetter" },
+                { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
+                { "ApplicationTracker", "/ApplicationTracker"},
+                { "JobListings", "/JobListing"}
+            };
+        }
     }
 }
