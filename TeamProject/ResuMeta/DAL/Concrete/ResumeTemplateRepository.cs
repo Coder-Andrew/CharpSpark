@@ -63,22 +63,26 @@ namespace ResuMeta.DAL.Concrete
             ReplaceUserInfo(templateDoc, resumeDoc, currUser);
 
             // Check if the resume contains the sections for the template
-            var sections = new[] { "Summary", "Experience", "Employment History", "Education", "Degree", "Achievements", "Skills", "Projects", "Reference", "Profile"};
+            var sections = new[] { "Summary", "Experience", "Employment History", "Education", "Achievements", "Skills", "Projects", "Reference", "Profile"};
 
             // Create a dictionary to store the sections and their content
             Dictionary<string, List<HtmlNode>> sectionContent = new Dictionary<string, List<HtmlNode>>();
 
             // Check if the first node is a section title
             HtmlNode firstNode = resumeDoc.DocumentNode.FirstChild;
+            HtmlNode currentNode = firstNode.NextSibling;
+
             string currUserSummary = string.Empty;
             bool firstNodeIsSectionTitle = ExtractCurrUserSummary(resumeDoc, sections, firstNode);
+            
             if (!firstNodeIsSectionTitle)
             {
                 List<HtmlNode> summaryNodes = ExtractSummaryNodes(firstNode, sections);
                 currUserSummary = string.Join(" ", summaryNodes.Select(node => node.InnerText));
             }
             
-            sectionContent = ExtractSectionContent(resumeDoc, sections, out currUserSummary);
+            string[] sectionsWithDegree = sections.Concat(new[] { "degree" }).ToArray();
+            sectionContent = ExtractSectionContent(resumeDoc, sectionsWithDegree, out currUserSummary);
 
             if(currUserSummary.IsNullOrEmpty())
             {
@@ -118,10 +122,11 @@ namespace ResuMeta.DAL.Concrete
                         if (!string.IsNullOrEmpty(currUserSummary) && (section.ToLower() == "summary" || section.ToLower() == "profile"))
                         {
                             ReplaceSectionContentWithString(templateSection, currUserSummary, sections);
+                            
                         }
                         else
                         {
-                            RemoveSectionAndContent(templateSection, sections);
+                            RemoveSectionAndContent(templateSection, sections, section);
                         }
                     }
                     else
@@ -133,14 +138,22 @@ namespace ResuMeta.DAL.Concrete
                         else if (section.ToLower() == "projects")
                         {
                             HtmlNode titleNode = templateDoc.DocumentNode.SelectSingleNode($"//descendant::*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'project title')]");
-                            ReplaceProjects(templateSection, sectionContent, section, titleNode);
+
+                            if (sectionContent.ContainsKey(section) && sectionContent[section].Count > 0)
+                            {
+                                ReplaceProjects(sectionContent, section, titleNode);
+                            }
+                            else
+                            {
+                                ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
+                            }
+
                             string modifiedTemplate = templateSection.OwnerDocument.DocumentNode.OuterHtml;
                         }
                         else if (section.ToLower() == "achievements")
                         {
                             if (!ReplaceAchievements(templateSection, sectionContent, section, template.ResumeId))
                             {
-                                Console.WriteLine("Test");
                                 ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
                             }
                         }
@@ -153,7 +166,7 @@ namespace ResuMeta.DAL.Concrete
             }
 
             template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
-            //template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
+            template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
 
             return template;
         }
@@ -192,7 +205,8 @@ namespace ResuMeta.DAL.Concrete
 
             while (currentSummaryNode != null)
             {
-                if (currentSummaryNode.Name == "hr" || sections.Any(s => currentSummaryNode.InnerText.ToLower().Contains(s.ToLower())))
+                string trim = currentSummaryNode.InnerText.Trim();
+                if (currentSummaryNode.Name == "hr" || sections.Any(s => currentSummaryNode.InnerText.Trim().Equals(s, StringComparison.OrdinalIgnoreCase)) || trim == "Work Experience")
                 {
                     break;
                 }
@@ -228,7 +242,14 @@ namespace ResuMeta.DAL.Concrete
 
                     while (currentNode != null)
                     {
-                        if (currentNode.Name == "hr" || (currentNode.Name != "p" && sections.Any(s => currentNode.InnerText.ToLower().Contains(s.ToLower()))))
+                        if (currentNode.Name == "hr")
+                        {
+                            currentNode = currentNode.NextSibling;
+                            continue;
+                        }
+
+                        string trim = currentNode.InnerText.Trim();
+                        if (sections.Any(s => currentNode.InnerText.Trim().Equals(s, StringComparison.OrdinalIgnoreCase)) || trim == "Work Experience")
                         {
                             break;
                         }
@@ -254,9 +275,9 @@ namespace ResuMeta.DAL.Concrete
                 }
             }
 
-            if (sectionContent.ContainsKey("degree") && sectionContent.ContainsKey("education"))
+            if (sectionContent.ContainsKey("degree") && sectionContent.ContainsKey("Education"))
             {
-                sectionContent["education"].AddRange(sectionContent["degree"]);
+                sectionContent["Education"].AddRange(sectionContent["degree"]);
                 sectionContent.Remove("degree");
             }
 
@@ -330,7 +351,7 @@ namespace ResuMeta.DAL.Concrete
             }
         }
 
-        private void ReplaceProjects(HtmlNode templateSection, Dictionary<string, List<HtmlNode>> sectionContent, string section, HtmlNode titleNode)
+        private void ReplaceProjects(Dictionary<string, List<HtmlNode>> sectionContent, string section, HtmlNode titleNode)
         {
             var projectTitle = sectionContent[section][0].InnerHtml;
             var projectContent = sectionContent[section].Skip(1).Select(node => node.InnerHtml);
@@ -469,11 +490,7 @@ namespace ResuMeta.DAL.Concrete
             return true;
         }
 
-        private void ReplaceEducation(Dictionary<string, List<HtmlNode>> sectionContent, string section, string[] sections)
-        {
-        }
-
-        private void RemoveSectionAndContent(HtmlNode section, string[] sections)
+        private void RemoveSectionAndContent(HtmlNode section, string[] sections, string sectionName)
         {
             HtmlNode prevHr = section.PreviousSibling;
             if (prevHr != null && prevHr.Name == "hr")
@@ -486,8 +503,8 @@ namespace ResuMeta.DAL.Concrete
             {
                 nextHr.Remove();
             }
-
-            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            string trim = section.NextSibling.InnerText.Trim();
+            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || (sections.Any(s => section.NextSibling.InnerText.Trim().Equals(s, StringComparison.OrdinalIgnoreCase)) || trim == "Work Experience")))
             {
                 section.NextSibling.Remove();
             }
@@ -546,19 +563,27 @@ namespace ResuMeta.DAL.Concrete
                 HtmlNode brTag = HtmlNode.CreateNode("<br />");
 
                 section.ParentNode.InsertAfter(brTag, insertAfterNode);
+                
             }
             else
             {
                 HtmlNode insertAfterNode = section;
-                while (insertAfterNode.NextSibling != null && !(insertAfterNode.NextSibling.Name == "hr" || sections.Any(s => insertAfterNode.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+
+                if (insertAfterNode.NextSibling != null && insertAfterNode.NextSibling.Name == "hr")
                 {
                     insertAfterNode = insertAfterNode.NextSibling;
                 }
 
-                // If the next sibling is an "hr" tag, move the insertAfterNode reference back to the section
-                if (insertAfterNode.NextSibling != null && insertAfterNode.NextSibling.Name == "hr")
+                while (insertAfterNode.NextSibling != null && !(insertAfterNode.NextSibling.Name == "hr" || sections.Any(s => insertAfterNode.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
                 {
-                    insertAfterNode = insertAfterNode.NextSibling;
+                    if (insertAfterNode.NextSibling.Name != "hr")
+                    {
+                        insertAfterNode = insertAfterNode.NextSibling;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
                 // Create a <span> node with a style that sets the color and opacity
@@ -580,9 +605,20 @@ namespace ResuMeta.DAL.Concrete
                     spanNode.AppendChild(contentNode);
                 }
 
-                // Insert the span node after the last node of the template's content
-                Console.WriteLine(insertAfterNode.InnerHtml);
-                section.ParentNode.InsertAfter(spanNode, insertAfterNode);
+                if (sectionName.ToLower() == "reference")
+                {
+                    HtmlNode lastSibling = section;
+                    while (lastSibling.NextSibling != null)
+                    {
+                        lastSibling = lastSibling.NextSibling;
+                    }
+                    section.ParentNode.InsertAfter(spanNode, lastSibling);
+                }
+                else
+                {
+                    section.ParentNode.InsertAfter(spanNode, insertAfterNode);
+                }
+
             }
         }
 
@@ -606,13 +642,16 @@ namespace ResuMeta.DAL.Concrete
                 insertAfterNode = section.NextSibling;
             }
 
+            
             HtmlNode newNode = HtmlNode.CreateNode(currUserSummary);
             section.ParentNode.InsertAfter(newNode, insertAfterNode);
             insertAfterNode = newNode;
 
-            HtmlNode brTag = HtmlNode.CreateNode("<br />");
+            HtmlNode brTag1 = HtmlNode.CreateNode("<br />");
+            section.ParentNode.InsertAfter(brTag1, insertAfterNode);
 
-            section.ParentNode.InsertAfter(brTag, insertAfterNode);
+            HtmlNode brTag2 = HtmlNode.CreateNode("<br />");
+            section.ParentNode.InsertAfter(brTag2, brTag1); 
         }
 
         private void ReplaceTextInDocument(HtmlDocument templateDoc, HtmlDocument resumeDoc, string oldText, string newText)
