@@ -5,6 +5,7 @@ using ResuMeta.DAL.Abstract;
 using ResuMeta.Models;
 using ResuMeta.ViewModels;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace ResuMeta.DAL.Concrete
 {
@@ -50,113 +51,164 @@ namespace ResuMeta.DAL.Concrete
 
         public ResumeVM ConvertResumeToTemplate(ResumeVM template, ResumeVM resume, UserInfo currUser)
         {
-            // Decode the content
-            string decodedTemplateContent = System.Net.WebUtility.UrlDecode(template.HtmlContent);
-            string decodedResumeContent = System.Net.WebUtility.UrlDecode(resume.HtmlContent);
+            // Load the template and resume HTML into HtmlDocument objects
+            HtmlDocument templateDoc = new HtmlDocument();
+            templateDoc.LoadHtml(System.Net.WebUtility.UrlDecode(template.HtmlContent));
+            HtmlDocument resumeDoc = new HtmlDocument();
+            resumeDoc.LoadHtml(System.Net.WebUtility.UrlDecode(resume.HtmlContent));
 
             // Replace the template with the user's information
-            decodedTemplateContent = decodedTemplateContent.Replace("Jasmine Patel", currUser.FirstName + " " + currUser.LastName);
-            decodedTemplateContent = decodedTemplateContent.Replace("JASMINE", currUser.FirstName.ToUpper());
-            decodedTemplateContent = decodedTemplateContent.Replace("PATEL", currUser.LastName.ToUpper());
-            decodedTemplateContent = decodedTemplateContent.Replace("555-794-4847", currUser.PhoneNumber);
-            decodedTemplateContent = decodedTemplateContent.Replace("patelj@mail.com", currUser.Email);
+            ReplaceTextInDocument(templateDoc, resumeDoc, "Jasmine Patel", currUser.FirstName + " " + currUser.LastName);
+            ReplaceTextInDocument(templateDoc, resumeDoc, "JASMINE", currUser.FirstName.ToUpper());
+            ReplaceTextInDocument(templateDoc, resumeDoc, "PATEL", currUser.LastName.ToUpper());
+            ReplaceTextInDocument(templateDoc, resumeDoc, "555-794-4847", currUser.PhoneNumber);
+            ReplaceTextInDocument(templateDoc, resumeDoc, "patelj@mail.com", currUser.Email);
 
             // Check if the resume contains the sections for the template
             string[] sections = { "Summary", "Work Experience", "Experience", "Education", "Achievements", "Skills", "Projects", "Reference", "Profile"};
-            string joinedSections = string.Join("|", sections.Select(Regex.Escape));
+
+            // Create a dictionary to store the sections and their content
+            Dictionary<string, List<HtmlNode>> sectionContent = new Dictionary<string, List<HtmlNode>>();
+
+            // Iterate over the sections
             foreach (string section in sections)
             {
+                // Convert the section name to lowercase
+                string lowerSection = section.ToLower();
+
                 // Check if the section is present in the resume
-                if (!Regex.IsMatch(decodedResumeContent, section, RegexOptions.IgnoreCase))
+                HtmlNode resumeSection = resumeDoc.DocumentNode.SelectSingleNode($"//descendant::*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{lowerSection}')]");
+
+                // If the section is present in the resume, store its content
+                if (resumeSection != null)
                 {
-                    // If the section is not present in the resume, check if it is present in the template
-                    if (Regex.IsMatch(decodedTemplateContent, section, RegexOptions.IgnoreCase))
+                    // Create a list to store the content nodes
+                    List<HtmlNode> contentNodes = new List<HtmlNode>();
+
+                    // Start with the node following the section title
+                    HtmlNode currentNode = resumeSection.NextSibling;
+
+                    // Iterate over the following nodes
+                    while (currentNode != null)
                     {
-                        // If the section is present in the template, remove it
-                        string pattern = $@"{section}[\s\S]*?(?={joinedSections}|$)";
-                        decodedTemplateContent = Regex.Replace(decodedTemplateContent, pattern, "", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                        // If the current node is an <hr> tag or contains a section title, stop iterating
+                        if (currentNode.Name == "hr" || sections.Any(s => currentNode.InnerHtml.Contains(s)))
+                        {
+                            break;
+                        }
+
+                        // Add the current node to the content nodes list
+                        contentNodes.Add(currentNode);
+
+                        // Move to the next node
+                        currentNode = currentNode.NextSibling;
                     }
+
+                    // Store the content nodes in the dictionary
+                    sectionContent[section] = contentNodes;
                 }
-                else if (Regex.IsMatch(decodedTemplateContent, section, RegexOptions.IgnoreCase) && section == "Skills")
+            }
+
+            // Iterate over the sections in the template
+            foreach (string section in sections)
+            {
+                // Convert the section name to lowercase
+                string lowerSection = section.ToLower();
+
+                // Check if the section is present in the template
+                HtmlNode templateSection = templateDoc.DocumentNode.SelectSingleNode($"//descendant::*[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{lowerSection}')]");
+
+                // If the section is present in the template
+                if (templateSection != null)
                 {
-                    // Check if the resume section for skills is a list
-                    string skillsPattern = @"<ul>([\s\S]*?)</ul>|<ol>([\s\S]*?)</ol>";
-                    if (Regex.IsMatch(decodedResumeContent, skillsPattern, RegexOptions.IgnoreCase))
+                    // If the section is not present in the resume, remove it from the template
+                    if (!sectionContent.ContainsKey(section))
                     {
-                        // If the section is present in the resume and the template, replace the template section with the resume section
-                        string pattern = $@"{section}[\s\S]*?(?={joinedSections}|$)";
-                        string resumeSection = Regex.Match(decodedResumeContent, pattern, RegexOptions.IgnoreCase).Value;
-
-                        // Extract the content within the list tags
-                        string resumeListContent = Regex.Match(resumeSection, skillsPattern, RegexOptions.IgnoreCase).Groups[1].Value;
-
-                        // if (Regex.IsMatch(decodedTemplateContent, @"<ul>|<ol>"))
-                        if(false)
-                        {
-                            // Check if the template uses ul or ol for the list
-                            string templateListTag = Regex.IsMatch(decodedTemplateContent, @"<ul>") ? "ul" : "ol";
-
-                            // Replace the content within the template's list tags with the resume's list content
-                            string templatePattern = $@"<{templateListTag}>([\s\S]*?)</{templateListTag}>";
-                            decodedTemplateContent = Regex.Replace(decodedTemplateContent, templatePattern, $"<{templateListTag}>{resumeListContent}</{templateListTag}>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                        }
-                        else
-                        {
-                            // Template 2: each skill is contained in a <u> tag with the words 'Lorem Ipsum'
-                            // Extract the list items from the resume section
-                            List<string> resumeListItems = new List<string> { "Meow", "Woof", "nya"};
-
-                            // Replace each 'Lorem Ipsum' with each line from the list in the resume section
-                            var templateSkills = Regex.Matches(decodedTemplateContent, @"<u>Lorem Ipsum</u>", RegexOptions.IgnoreCase)
-                                .Cast<Match>()
-                                .ToList();
-
-                            for (int i = 0; i < templateSkills.Count; i++)
-                            {
-                                if (i < resumeListItems.Count)
-                                {
-                                    // Replace 'Lorem Ipsum' with the corresponding resume list item
-                                   decodedTemplateContent = Regex.Replace(decodedTemplateContent, templateSkills[i].Value, $"<u>{resumeListItems[i]}</u>", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(1));
-                                }
-                                else
-                                {
-                                    // Remove any extra 'Lorem Ipsum'
-                                    decodedTemplateContent = decodedTemplateContent.Replace(templateSkills[i].Value, "");
-                                }
-                            }
-                        }
+                        RemoveSectionAndContent(templateSection, sections);
+                    }
+                    else // If the section is present in the resume, replace the template's content with the resume's content
+                    {
+                        //ReplaceSectionContent(templateSection, sectionContent[section], sections);
                     }
                 }
             }
 
-            string summaryContent = "";
+            // Convert the modified HtmlDocument back to a string
+            template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
 
-            // Find the personal summary on the resume and save it to a string
-            string summaryPattern = $@"((Personal Summary|Summary|Profile|{Regex.Escape(currUser.Email)}|{Regex.Escape(currUser.PhoneNumber)}|{Regex.Escape(currUser.FirstName + " " + currUser.LastName)}|{Regex.Escape(currUser.FirstName)}|{Regex.Escape(currUser.LastName)}|{Regex.Escape(currUser.FirstName.ToUpper())}|{Regex.Escape(currUser.LastName.ToUpper())}))";
-            if (Regex.IsMatch(decodedTemplateContent, summaryPattern, RegexOptions.IgnoreCase))
-            {
-                // If the pattern is found, save the summary content
-                summaryContent = Regex.Match(decodedTemplateContent, summaryPattern, RegexOptions.IgnoreCase).Groups[2].Value;
-            }
-
-            // Check if the template contains a line starting with 'Lorem' and ending with '...' 
-            // and is preceded by either the two lines '555-628-1234' and '<hr />', or the line currUser.FirstName + " " + currUser.LastName
-            // This is template3 and template5's summary locations
-            string template3Summary = $@"({Regex.Escape(currUser.FirstName + " " + currUser.LastName)}</strong></h1>\s*<p>)(Lorem[\s\S]*?\.\.\.)";
-            string template5Summary = $@"(<strong>{Regex.Escape(currUser.PhoneNumber)}</strong></h3><hr>\s*<p>)(Lorem[\s\S]*?\.\.\.)";
-            string loremPattern = $@"{template3Summary}|{template5Summary}";
-
-            if (Regex.IsMatch(decodedTemplateContent, loremPattern))
-            {
-                // If the pattern is found, replace only the content starting at 'Lorem' with 'meow'
-                decodedTemplateContent = Regex.Replace(decodedTemplateContent, loremPattern, m => m.Groups[1].Value + (m.Groups[2].Success ? summaryContent : m.Groups[3].Value + summaryContent));
-            }
-
-            //Attach any extra content from the resume to the end of the template
-
-            template.HtmlContent = decodedTemplateContent;
-
+            // Return the modified template
             return template;
+        }
+
+        private void RemoveSectionAndContent(HtmlNode section, string[] sections)
+        {
+            // Remove the <hr> tags before and after the section
+            HtmlNode prevHr = section.PreviousSibling;
+            if (prevHr != null && prevHr.Name == "hr")
+            {
+                prevHr.Remove();
+            }
+
+            HtmlNode nextHr = section.NextSibling;
+            if (nextHr != null && nextHr.Name == "hr")
+            {
+                nextHr.Remove();
+            }
+
+            // Remove the content of the section
+           while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            {
+                section.NextSibling.Remove();
+            }
+
+            // Remove the <hr> tag after the section if the next section is not immediately following
+            if (section.NextSibling != null && section.NextSibling.Name == "hr" && (section.NextSibling.NextSibling == null || !sections.Any(s => section.NextSibling.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            {
+                section.NextSibling.Remove();
+            }
+
+            // Remove the section
+            section.Remove();
+            
+        }
+
+        private void ReplaceSectionContent(HtmlNode section, List<HtmlNode> contentNodes, string[] sections)
+        {
+            // Remove the existing content of the section
+            HtmlNode currentNode = section.NextSibling;
+            while (currentNode != null && !(currentNode.Name == "hr" || sections.Any(s => currentNode.InnerHtml.Contains(s))))
+            {
+                HtmlNode nextNode = currentNode.NextSibling;
+                currentNode.Remove();
+                currentNode = nextNode;
+            }
+
+            // Add the new content to the section
+            foreach (HtmlNode contentNode in contentNodes)
+            {
+                section.ParentNode.InsertAfter(contentNode, section);
+            }
+        }
+
+        private void ReplaceTextInDocument(HtmlDocument templateDoc, HtmlDocument resumeDoc, string oldText, string newText)
+        {
+            foreach (HtmlNode node in templateDoc.DocumentNode.DescendantsAndSelf())
+            {
+                if (node.NodeType == HtmlNodeType.Text)
+                {
+                    // Replace the text in the node
+                    node.InnerHtml = node.InnerHtml.Replace(oldText, newText);
+                }
+            }
+
+            foreach (HtmlNode node in resumeDoc.DocumentNode.DescendantsAndSelf())
+            {
+                if (node.NodeType == HtmlNodeType.Text)
+                {
+                    // Remove the replaced text from the resume
+                    node.InnerHtml = node.InnerHtml.Replace(newText, "");
+                }
+            }
         }
     }
 }
