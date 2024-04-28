@@ -6,6 +6,7 @@ using ResuMeta.Models;
 using ResuMeta.ViewModels;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ResuMeta.DAL.Concrete
 {
@@ -70,6 +71,8 @@ namespace ResuMeta.DAL.Concrete
             // Create a dictionary to store the sections and their content
             Dictionary<string, List<HtmlNode>> sectionContent = new Dictionary<string, List<HtmlNode>>();
 
+            string currUserSummary = string.Empty;
+
             // Iterate over the sections
             foreach (string section in sections)
             {
@@ -92,7 +95,7 @@ namespace ResuMeta.DAL.Concrete
                     while (currentNode != null)
                     {
                         // If the current node is an <hr> tag or contains a section title, stop iterating
-                        if (currentNode.Name == "hr" || sections.Any(s => currentNode.InnerHtml.Contains(s)))
+                        if (currentNode.Name == "hr" || sections.Any(s => currentNode.InnerText.ToLower().Contains(s.ToLower())))
                         {
                             break;
                         }
@@ -100,12 +103,54 @@ namespace ResuMeta.DAL.Concrete
                         // Add the current node to the content nodes list
                         contentNodes.Add(currentNode);
 
+                        // Store the next node before removing the current node
+                        HtmlNode nextNode = currentNode.NextSibling;
+
+                        // Remove the current node from its parent
+                        currentNode.Remove();
+
                         // Move to the next node
-                        currentNode = currentNode.NextSibling;
+                        currentNode = nextNode;
                     }
 
                     // Store the content nodes in the dictionary
                     sectionContent[section] = contentNodes;
+
+                    // If the section is "Summary" or "Profile", store its content in currUserSummary
+                    if (section.ToLower() == "summary" || section.ToLower() == "profile")
+                    {
+                        currUserSummary = string.Join(" ", contentNodes.Select(node => node.InnerText));
+                    }
+
+                    // Remove the section title from the resume
+                    resumeSection.Remove();
+                }
+            }
+
+            if(currUserSummary.IsNullOrEmpty())
+            {
+                currUserSummary = currUser.Summary;
+            }
+
+            if (template.ResumeId == 3 || template.ResumeId == 5)
+            {
+                // Define the regex pattern to match the personal summary
+                string pattern = @"Lorem.*?\.\.\.";
+
+                // Find the personal summary in the template
+                Regex regex = new Regex(pattern);
+                Match match = regex.Match(templateDoc.DocumentNode.OuterHtml);
+
+                // If the personal summary is found, replace it with the currUser's first name
+                if (match.Success)
+                {
+                    string personalSummary = match.Value;
+                    var nodes = templateDoc.DocumentNode.DescendantsAndSelf().Where(n => n.OuterHtml.Contains(personalSummary));
+                    foreach (var node in nodes)
+                    {
+                        node.InnerHtml = node.InnerHtml.Replace(personalSummary, currUserSummary);
+                        break; // replace only the first occurrence
+                    }
                 }
             }
 
@@ -128,13 +173,16 @@ namespace ResuMeta.DAL.Concrete
                     }
                     else // If the section is present in the resume, replace the template's content with the resume's content
                     {
-                        //ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                        ReplaceSectionContent(templateSection, sectionContent[section], sections);
                     }
                 }
             }
 
             // Convert the modified HtmlDocument back to a string
             template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
+
+            // Append the remaining content from the resume to the end of the template
+            template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
 
             // Return the modified template
             return template;
@@ -156,9 +204,17 @@ namespace ResuMeta.DAL.Concrete
             }
 
             // Remove the content of the section
-           while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
             {
                 section.NextSibling.Remove();
+            }
+
+            if(section.InnerText.ToLower().Contains("reference"))
+            {
+                while (section.NextSibling != null)
+                {
+                    section.NextSibling.Remove();
+                }
             }
 
             // Remove the <hr> tag after the section if the next section is not immediately following
@@ -174,20 +230,39 @@ namespace ResuMeta.DAL.Concrete
 
         private void ReplaceSectionContent(HtmlNode section, List<HtmlNode> contentNodes, string[] sections)
         {
-            // Remove the existing content of the section
-            HtmlNode currentNode = section.NextSibling;
-            while (currentNode != null && !(currentNode.Name == "hr" || sections.Any(s => currentNode.InnerHtml.Contains(s))))
+            HtmlNode firstSibling = section.NextSibling;
+
+            //Skip the <hr> tag if it is the first sibling
+            if(firstSibling.Name == "hr")
             {
-                HtmlNode nextNode = currentNode.NextSibling;
-                currentNode.Remove();
-                currentNode = nextNode;
+                section = firstSibling;
+            }
+
+            // Remove the existing content of the section
+            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            {
+                section.NextSibling.Remove();
+            }
+
+            // Determine where to insert the new content
+            HtmlNode insertAfterNode = section;
+            if (section.NextSibling != null && section.NextSibling.Name == "hr")
+            {
+                insertAfterNode = section.NextSibling;
             }
 
             // Add the new content to the section
             foreach (HtmlNode contentNode in contentNodes)
             {
-                section.ParentNode.InsertAfter(contentNode, section);
+                section.ParentNode.InsertAfter(contentNode, insertAfterNode);
+                insertAfterNode = contentNode; // Update the node to insert after
             }
+
+            // Create a new <br> tag
+            HtmlNode brTag = HtmlNode.CreateNode("<br>");
+
+            // Insert the <br> tag after the last content node
+            section.ParentNode.InsertAfter(brTag, insertAfterNode);
         }
 
         private void ReplaceTextInDocument(HtmlDocument templateDoc, HtmlDocument resumeDoc, string oldText, string newText)
