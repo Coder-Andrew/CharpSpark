@@ -141,18 +141,18 @@ namespace ResuMeta.DAL.Concrete
                             if (!ReplaceAchievements(templateSection, sectionContent, section, template.ResumeId))
                             {
                                 Console.WriteLine("Test");
-                                ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                                ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
                             }
                         }
                         else
                         {
-                            ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                            ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
                         }
                     }
                 }
             }
 
-            //template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
+            template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
             //template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
 
             return template;
@@ -322,11 +322,11 @@ namespace ResuMeta.DAL.Concrete
                     sectionContent[section][0].InnerHtml = skillsList;
                 }
 
-                ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
             }
             else
             {
-                ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
             }
         }
 
@@ -469,6 +469,10 @@ namespace ResuMeta.DAL.Concrete
             return true;
         }
 
+        private void ReplaceEducation(Dictionary<string, List<HtmlNode>> sectionContent, string section, string[] sections)
+        {
+        }
+
         private void RemoveSectionAndContent(HtmlNode section, string[] sections)
         {
             HtmlNode prevHr = section.PreviousSibling;
@@ -505,34 +509,81 @@ namespace ResuMeta.DAL.Concrete
             
         }
 
-        private void ReplaceSectionContent(HtmlNode section, List<HtmlNode> contentNodes, string[] sections)
+        private void ReplaceSectionContent(HtmlNode section, List<HtmlNode> contentNodes, string[] sections, string sectionName)
         {
-            HtmlNode firstSibling = section.NextSibling;
-            if(firstSibling.Name == "hr")
+            if(sectionName.ToLower() == "summary" || sectionName.ToLower() == "profile" || sectionName.ToLower() == "skills")
             {
-                section = firstSibling;
-            }
+                HtmlNode firstSibling = section.NextSibling;
+                if(firstSibling.Name == "hr")
+                {
+                    section = firstSibling;
+                }
 
-            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+                while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+                {
+                    section.NextSibling.Remove();
+                }
+
+                HtmlNode insertAfterNode = section;
+                while (insertAfterNode.NextSibling != null && !(insertAfterNode.NextSibling.Name == "hr" || sections.Any(s => insertAfterNode.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+                {
+                    if (insertAfterNode.NextSibling.Name != "hr")
+                    {
+                        insertAfterNode = insertAfterNode.NextSibling;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                foreach (HtmlNode contentNode in contentNodes)
+                {
+                    section.ParentNode.InsertAfter(contentNode, insertAfterNode);
+                    insertAfterNode = contentNode;
+                }
+
+                HtmlNode brTag = HtmlNode.CreateNode("<br />");
+
+                section.ParentNode.InsertAfter(brTag, insertAfterNode);
+            }
+            else
             {
-                section.NextSibling.Remove();
+                HtmlNode insertAfterNode = section;
+                while (insertAfterNode.NextSibling != null && !(insertAfterNode.NextSibling.Name == "hr" || sections.Any(s => insertAfterNode.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+                {
+                    insertAfterNode = insertAfterNode.NextSibling;
+                }
+
+                // If the next sibling is an "hr" tag, move the insertAfterNode reference back to the section
+                if (insertAfterNode.NextSibling != null && insertAfterNode.NextSibling.Name == "hr")
+                {
+                    insertAfterNode = insertAfterNode.NextSibling;
+                }
+
+                // Create a <span> node with a style that sets the color and opacity
+                HtmlNode spanNode = HtmlNode.CreateNode("<span style='color: rgba(169, 169, 169, 0.7);'></span>");
+
+                /// Create a new HtmlNode with the clarifying text and formatting
+                HtmlNode boldNode = HtmlNode.CreateNode("<b>This is the old content. Please reformat it to match the above.</b>");
+
+                // Create a <br> node
+                HtmlNode brNode = HtmlNode.CreateNode("<br/>");
+
+                // Append the bold node and the <br> node to the span node
+                spanNode.AppendChild(boldNode);
+                spanNode.AppendChild(brNode);
+
+                // Append the new content to the span node
+                foreach (HtmlNode contentNode in contentNodes)
+                {
+                    spanNode.AppendChild(contentNode);
+                }
+
+                // Insert the span node after the last node of the template's content
+                Console.WriteLine(insertAfterNode.InnerHtml);
+                section.ParentNode.InsertAfter(spanNode, insertAfterNode);
             }
-
-            HtmlNode insertAfterNode = section;
-            if (section.NextSibling != null && section.NextSibling.Name == "hr")
-            {
-                insertAfterNode = section.NextSibling;
-            }
-
-            foreach (HtmlNode contentNode in contentNodes)
-            {
-                section.ParentNode.InsertAfter(contentNode, insertAfterNode);
-                insertAfterNode = contentNode;
-            }
-
-            HtmlNode brTag = HtmlNode.CreateNode("<br />");
-
-            section.ParentNode.InsertAfter(brTag, insertAfterNode);
         }
 
         private void ReplaceSectionContentWithString(HtmlNode section, string currUserSummary, string[] sections)
