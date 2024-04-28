@@ -66,31 +66,33 @@ h1 {
 }
 
 body {
-  margin-bottom: 60px;
-  background: #000B0E; /* Initial solid color */
-  color: rgb(207, 207, 207);
-  font-family: 'Open Sans', sans-serif;
-  animation: bodyBackgroundChange 1s ease-out forwards;
+    margin-bottom: 60px;
+    background: #000B0E; /* Initial solid color */
+    color: rgb(207, 207, 207);
+    font-family: 'Open Sans', sans-serif;
+    animation: bodyBackgroundChange 1s ease-out forwards;
 }
 
 .navbar::before {
-  content: "";
-  position: absolute;
-  top: 23px;
-  bottom: 2px;
-  left: 0;
-  width: 1px;
-  background: linear-gradient(to bottom, #E91D1C, #FEB617);
-  animation: slideInFromTop 1s ease-out forwards;
-  animation-delay: 1.8s;
-  opacity: 0; 
+    opacity: 0; 
+    transform: translateY(-100%);
+    content: "";
+    position: absolute;
+    top: 23px;
+    bottom: 2px;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, #E91D1C, #FEB617);
+    animation: slideInFromTop 1s ease-out forwards;
+    animation-delay: 1.8s;
 }
 
 hr {
+    opacity: 0; 
+    transform: translateY(-100%);
     box-shadow:  0 0 10px #c21f1f, 0 0 20px #ac1f1f, 0 0 20px #a74823, 0 0 30px #8d532c !important;
     animation: slideInFromLeft 1s ease-out forwards;
     animation-delay: 1.4s;
-    opacity: 0;
 }
 
 .btn:focus, .btn:active {
@@ -99,7 +101,8 @@ hr {
 }
 
 section .body-paragraph, .navbar *:not(.border-bottom), .footer *, section .title, section img, .navbar-brand, .nav-login-item{
-    opacity: 1;
+    opacity: 0; 
+    transform: translateY(-100%);
     animation: fadeInMoveUp 1s ease-out forwards;
     animation-delay: .6s;
 }

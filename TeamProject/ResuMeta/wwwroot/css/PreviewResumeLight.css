@@ -38,37 +38,42 @@ body {
     margin: 20px;
 }
 
-.ql-toolbar .ql-divider::before {
-    content: '\f068' !important;
-    font-family: FontAwesome !important;
-    color: #444444;
-}
-
-.ql-toolbar .ql-divider:hover::before {
-    color: #0065CC;
-}
-
-.ql-toolbar {
-    width: 100%;
-    position: sticky;
-    top: 71px;
-    background-color: #f0f2f3;
-    border-bottom: 1px solid #dee2e6 !important;
-    border-top: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    z-index: 1000;
-}
-
-.ql-container {
+.text-center .ql-container {
     max-width: 800px;
-    margin: 0 auto;
     padding: 20px;
     background-color: #f8f9fa;
     border: 1px solid #dee2e6 !important;
-    border-top: none !important;
     min-height: 500px;
     margin-bottom: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 73px;
+}
+
+.editor {
+    flex-shrink: 0.08;
+    margin-right: 20px !important;
+}
+
+.arrow {
+    display: flex;
+    flex-direction: column;
+    margin-top: 370px;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 20px !important;
+    color: rgb(102, 102, 102);
+}
+
+.arrow button {
+    color: black !important;
+}
+
+.ql-toolbar {
+    display: none !important;
 }
 
 .editor-header {
@@ -238,8 +243,6 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-
-
 body.show-before::before {
     content: "";
     position: fixed;
@@ -261,6 +264,7 @@ body.show-before::before {
     padding: 0 6%;
 }
 
+
 .templates-title {
     position: fixed;
     top: 11%;
@@ -272,12 +276,6 @@ body.show-before::before {
     display: none;
 }
 
-.templates-title p, .templates-title hr {
-    color: white;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
-    
-}
-
 .title {
     color: #e9912c;
 }
@@ -287,6 +285,12 @@ body.show-before::before {
     width: 300px;
     background-color: #f8f9fa;
     border: 1px solid rgb(144, 145, 146) !important;
+}
+
+.templates::before,
+.templates::after {
+    content: "{{" "}}";
+    display: none;
 }
 
 .template-editor .ql-container,
@@ -334,15 +338,6 @@ body.show-before::before {
     box-shadow: 0 0 20px rgba(233, 167, 91, 0.7);
 }
 
-.template-editor input, .template-editor button{
+.template-editor input, .template-editor button, .editor input, .editor button{
     display: none !important;
-}
-
-.templates .ql-toolbar {
-    display: none !important;
-}
-
-.preview-a {
-    color: #212529 !important;
-    text-decoration: none !important;
 }

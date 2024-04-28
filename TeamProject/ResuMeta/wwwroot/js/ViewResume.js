@@ -7,9 +7,30 @@ function loadQuill() {
     document.head.appendChild(script);
     script.onload = function () {
         console.log("Quill loaded");
+
+        //Register the DividerBlot
+        const BlockEmbed = Quill.import('blots/block/embed');
+
+        class DividerBlot extends BlockEmbed {
+        static create() {
+            let node = super.create();
+            return node;
+        }
+
+        static formats() {
+            return true;
+        }
+        }
+
+        DividerBlot.blotName = 'divider';
+        DividerBlot.tagName = 'hr';
+
+        Quill.register(DividerBlot);
         initializePage();
     }
 }
+
+let isResumeSaved = false;
 
 function initializePage() {
     var toolbarOptions = [
@@ -20,14 +41,48 @@ function initializePage() {
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'align': [] }],
         ['link'],
-        ['clean']                                         // remove formatting button
+        ['clean'],                                        // remove formatting button
+        ['divider']
     ]
+    
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
-            toolbar: toolbarOptions,
+            toolbar: {
+                container: toolbarOptions,
+                handlers: {
+                    'divider': function() {
+                        let range = quill.getSelection(true);
+                        quill.insertText(range.index, '\n', Quill.sources.USER);
+                        quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
+                        quill.setSelection(range.index + 2, Quill.sources.SILENT);
+                    }
+                }
+            },
         }
     });
+
+    //Templates
+    for (let i = 1; i <= 5; i++) {
+        var templateEditor = document.getElementById(`template${i}-editor`);
+        var templatequill = new Quill(`#template${i}-editor`, {
+            readOnly: true,
+            theme: 'snow'
+        });
+    
+        var templatecontent = document.getElementById(`template${i}-content`).value;
+        var templatearea = document.getElementById(`template${i}-area`);
+        templatearea.innerHTML = decodeURIComponent(templatecontent);
+    
+        var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
+        templatequill.setContents(templatedelta);
+
+        templateEditor.addEventListener('click', function() {
+            window.location.href = 'Resume/PreviewResume';
+        });
+    }
+
+    //Resume
     var htmlContent = document.getElementById('resume-container').outerHTML;
     const delta = quill.clipboard.convert(htmlContent);
     quill.setContents(delta);
@@ -37,6 +92,40 @@ function initializePage() {
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
+    const previewBtn = document.getElementById('preview-resume');
+    previewBtn.addEventListener('click', () => PreviewResume(), false);
+    const closePreviewBtn = document.getElementById('close-preview');
+    closePreviewBtn.addEventListener('click', () => closePreview(), false);
+}
+
+async function PreviewResume() {
+    if(isResumeSaved)
+    {
+        const templates = document.getElementById('templates');
+        const templatesTitle = document.getElementById('templates-title');
+        templates.style.display = 'flex';
+        templatesTitle.style.display = 'block';
+        document.body.classList.add('show-before');
+    }
+    else
+    {
+        const validationArea = document.getElementById('validation-area');
+        const errorValidation = document.getElementById('validation-error');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please save the resume before previewing. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
+    }
+}
+
+async function closePreview() {
+    const templates = document.getElementById('templates');
+    const templatesTitle = document.getElementById('templates-title');
+    templates.style.display = 'none';
+    templatesTitle.style.display = 'none';
+    document.body.classList.remove('show-before');
+
 }
 
 async function SwitchTheme() {
@@ -45,10 +134,8 @@ async function SwitchTheme() {
     var themeLabel = document.getElementById('theme-label');
     if (themeSwitcher.checked) {
         themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
-        themeLabel.textContent = 'Switch to Dark Mode';
     } else {
         themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
-        themeLabel.textContent = 'Switch to Light Mode';
     }
 }
 
@@ -150,6 +237,7 @@ async function getHtmlInfo()
         const cloneSuccess = successValidation.cloneNode(true);
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        isResumeSaved = true;
         validationArea.appendChild(cloneSuccess);
         return;
     }

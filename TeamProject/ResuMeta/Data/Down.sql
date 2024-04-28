@@ -27,3 +27,4 @@ DROP TABLE [Education];
 DROP TABLE [Resume];
 DROP TABLE [UserInfo];
 DROP TABLE [CoverLetter];
+DROP TABLE [ResumeTemplate];

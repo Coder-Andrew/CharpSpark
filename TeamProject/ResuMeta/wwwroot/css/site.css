@@ -286,10 +286,6 @@ color: #E91D1C !important;
 text-decoration: none;
 }
 
-form button {
-  padding: 21px 0px !important;
-}
-
 .red-text{
 color: #E91D1C;
 }
@@ -308,6 +304,7 @@ background-color: #e9912c;
 border-color: #e9912c;
 margin-bottom: 20px;
 }
+
 
 .btn:hover, .btn:active, .btn:focus {
 background-color: #E91D1C;
