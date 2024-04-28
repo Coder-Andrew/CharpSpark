@@ -30,6 +30,8 @@ function loadQuill() {
     }
 }
 
+let isResumeSaved = false;
+
 function initializePage() {
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -97,11 +99,24 @@ function initializePage() {
 }
 
 async function PreviewResume() {
-    const templates = document.getElementById('templates');
-    const templatesTitle = document.getElementById('templates-title');
-    templates.style.display = 'flex';
-    templatesTitle.style.display = 'block';
-    document.body.classList.add('show-before');
+    if(isResumeSaved)
+    {
+        const templates = document.getElementById('templates');
+        const templatesTitle = document.getElementById('templates-title');
+        templates.style.display = 'flex';
+        templatesTitle.style.display = 'block';
+        document.body.classList.add('show-before');
+    }
+    else
+    {
+        const validationArea = document.getElementById('validation-area');
+        const errorValidation = document.getElementById('validation-error');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please save the resume before previewing. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
+    }
 }
 
 async function closePreview() {
@@ -222,6 +237,7 @@ async function getHtmlInfo()
         const cloneSuccess = successValidation.cloneNode(true);
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        isResumeSaved = true;
         validationArea.appendChild(cloneSuccess);
         return;
     }

@@ -53,20 +53,16 @@ namespace ResuMeta.DAL.Concrete
         public ResumeVM ConvertResumeToTemplate(ResumeVM template, ResumeVM resume, UserInfo currUser)
         {
             // Load the template and resume HTML into HtmlDocument objects
-            HtmlDocument templateDoc = new HtmlDocument();
+            HtmlDocument templateDoc = new();
             templateDoc.LoadHtml(System.Net.WebUtility.UrlDecode(template.HtmlContent));
-            HtmlDocument resumeDoc = new HtmlDocument();
+            HtmlDocument resumeDoc = new();
             resumeDoc.LoadHtml(System.Net.WebUtility.UrlDecode(resume.HtmlContent));
 
             // Replace the template with the user's information
-            ReplaceTextInDocument(templateDoc, resumeDoc, "Jasmine Patel", currUser.FirstName + " " + currUser.LastName);
-            ReplaceTextInDocument(templateDoc, resumeDoc, "JASMINE", currUser.FirstName.ToUpper());
-            ReplaceTextInDocument(templateDoc, resumeDoc, "PATEL", currUser.LastName.ToUpper());
-            ReplaceTextInDocument(templateDoc, resumeDoc, "555-794-4847", currUser.PhoneNumber);
-            ReplaceTextInDocument(templateDoc, resumeDoc, "patelj@mail.com", currUser.Email);
+            ReplaceUserInfo(templateDoc, resumeDoc, currUser);
 
             // Check if the resume contains the sections for the template
-            string[] sections = { "Summary", "Work Experience", "Experience", "Education", "Achievements", "Skills", "Projects", "Reference", "Profile"};
+            var sections = new[] { "Summary", "Work Experience", "Experience", "Education", "Achievements", "Skills", "Projects", "Reference", "Profile"};
 
             // Create a dictionary to store the sections and their content
             Dictionary<string, List<HtmlNode>> sectionContent = new Dictionary<string, List<HtmlNode>>();
@@ -239,20 +235,108 @@ namespace ResuMeta.DAL.Concrete
                     }
                     else // If the section is present in the resume, replace the template's content with the resume's content
                     {
+                        if(section.ToLower() == "skills")
+                        {
+                            if(template.ResumeId == 2)
+                            {
+                                // Assuming sectionContent[section] is a HtmlNode
+                                var nodeContent = sectionContent[section][0].InnerHtml;
+
+                                // Check if the skills are already in a <ul> list
+                                if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
+                                {
+                                    // Assuming nodeContent is a string containing the HTML
+                                    var htmlDoc = new HtmlDocument();
+                                    htmlDoc.LoadHtml(nodeContent);
+
+                                    // Extract the text from the <li> elements
+                                    var skills = htmlDoc.DocumentNode.SelectNodes("//li")
+                                        .Select(node => node.InnerText.Trim())
+                                        .ToArray();
+
+                                    var formattedSkills = "";
+
+                                    foreach (var skill in skills)
+                                    {
+                                        formattedSkills += $"<strong><u>{skill}</u></strong>&nbsp;";
+                                    }
+
+                                    // Remove the trailing non-breaking space
+                                    formattedSkills = formattedSkills.TrimEnd(new[] { '&', 'n', 'b', 's', 'p', ';' });
+
+                                    // Wrap the formattedSkills string in a div element
+                                    var newNode = HtmlNode.CreateNode($"<div>{formattedSkills}</div>");
+
+                                    // Replace the first HtmlNode in sectionContent[section] with the new node
+                                    sectionContent[section][0] = newNode;
+
+                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                                }
+                            }
+                            else
+                            {
+                                // Assuming sectionContent[section] is a HtmlNode
+                                var nodeContent = sectionContent[section][0].InnerHtml;
+
+                                // Check if the skills are already in a <ul> list
+                                if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
+                                {
+                                    // If not, convert them into a <ul> list
+                                    var skills = nodeContent.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                                    var skillsList = "<ul>\n";
+
+                                    foreach (var skill in skills)
+                                    {
+                                        skillsList += $"<li>{skill.Trim()}</li>\n";
+                                    }
+
+                                    skillsList += "</ul>";
+
+                                    // Replace the skills in the first HtmlNode with the <ul> list
+                                    sectionContent[section][0].InnerHtml = skillsList;
+
+                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                                }
+                                else
+                                {
+                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                                }
+                            }
+                        }
+
                         ReplaceSectionContent(templateSection, sectionContent[section], sections);
                     }
                 }
             }
 
             // Convert the modified HtmlDocument back to a string
-            template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
+            //template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
 
-            // Append the remaining content from the resume to the end of the template
+            // // Append the remaining content from the resume to the end of the template
             template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
 
             // Return the modified template
             return template;
         }
+
+        
+        private void ReplaceUserInfo(HtmlDocument templateDoc, HtmlDocument resumeDoc, UserInfo currUser)
+        {
+            var replacements = new Dictionary<string, string>
+            {
+                { "Jasmine Patel", $"{currUser.FirstName} {currUser.LastName}" },
+                { "JASMINE", currUser.FirstName.ToUpper() },
+                { "PATEL", currUser.LastName.ToUpper() },
+                { "555-794-4847", currUser.PhoneNumber },
+                { "patelj@mail.com", currUser.Email }
+            };
+
+            foreach (var replacement in replacements)
+            {
+                ReplaceTextInDocument(templateDoc, resumeDoc, replacement.Key, replacement.Value);
+            }
+        }
+
 
         private void RemoveSectionAndContent(HtmlNode section, string[] sections)
         {

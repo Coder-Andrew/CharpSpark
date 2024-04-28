@@ -336,3 +336,8 @@ body.show-before::before {
 .templates .ql-toolbar {
     display: none !important;
 }
+
+.preview-a {
+    color: rgb(207, 207, 207) !important;
+    text-decoration: none !important;
+}
