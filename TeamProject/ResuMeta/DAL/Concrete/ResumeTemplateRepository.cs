@@ -668,6 +668,10 @@ namespace ResuMeta.DAL.Concrete
             {
                 if (node.NodeType == HtmlNodeType.Text)
                 {
+                    if (newText == null)
+                    {
+                        newText = " ";
+                    }
                     node.InnerHtml = node.InnerHtml.Replace(newText, "");
                 }
             }
