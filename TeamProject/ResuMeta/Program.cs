@@ -33,7 +33,12 @@ builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, ser
     httpClient.BaseAddress = new Uri(chatGPTUrl);
     httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", chatGPTApiKey);
-    return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
+    //return new ChatGPTService(httpClient, services.GetRequiredService<ILogger<ChatGPTService>>());
+    return new ChatGPTService(
+    httpClient, 
+    services.GetRequiredService<ILogger<ChatGPTService>>(),
+    services.GetRequiredService<IResumeRepository>()
+);
 });
 
 string nodeUrl = builder.Configuration["NodeUrl"] ?? throw new InvalidOperationException("Connection string 'NodeUrl' not found.");

@@ -35,5 +35,20 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+         // POST: api/cgpt/improve/{id}
+        [HttpPost("improve/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ChatGPTResponse>> GenerateResume(int id)
+        {
+            try
+            {   
+                var response = await _chatGPTService.GenerateResume(id);
+                return Ok(response);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
