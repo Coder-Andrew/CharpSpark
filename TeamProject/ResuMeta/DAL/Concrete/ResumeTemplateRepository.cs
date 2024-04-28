@@ -237,80 +237,18 @@ namespace ResuMeta.DAL.Concrete
                     {
                         if(section.ToLower() == "skills")
                         {
-                            if(template.ResumeId == 2)
-                            {
-                                // Assuming sectionContent[section] is a HtmlNode
-                                var nodeContent = sectionContent[section][0].InnerHtml;
-
-                                // Check if the skills are already in a <ul> list
-                                if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
-                                {
-                                    // Assuming nodeContent is a string containing the HTML
-                                    var htmlDoc = new HtmlDocument();
-                                    htmlDoc.LoadHtml(nodeContent);
-
-                                    // Extract the text from the <li> elements
-                                    var skills = htmlDoc.DocumentNode.SelectNodes("//li")
-                                        .Select(node => node.InnerText.Trim())
-                                        .ToArray();
-
-                                    var formattedSkills = "";
-
-                                    foreach (var skill in skills)
-                                    {
-                                        formattedSkills += $"<strong><u>{skill}</u></strong>&nbsp;";
-                                    }
-
-                                    // Remove the trailing non-breaking space
-                                    formattedSkills = formattedSkills.TrimEnd(new[] { '&', 'n', 'b', 's', 'p', ';' });
-
-                                    // Wrap the formattedSkills string in a div element
-                                    var newNode = HtmlNode.CreateNode($"<div>{formattedSkills}</div>");
-
-                                    // Replace the first HtmlNode in sectionContent[section] with the new node
-                                    sectionContent[section][0] = newNode;
-
-                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
-                                }
-                            }
-                            else
-                            {
-                                // Assuming sectionContent[section] is a HtmlNode
-                                var nodeContent = sectionContent[section][0].InnerHtml;
-
-                                // Check if the skills are already in a <ul> list
-                                if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
-                                {
-                                    // If not, convert them into a <ul> list
-                                    var skills = nodeContent.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                                    var skillsList = "<ul>\n";
-
-                                    foreach (var skill in skills)
-                                    {
-                                        skillsList += $"<li>{skill.Trim()}</li>\n";
-                                    }
-
-                                    skillsList += "</ul>";
-
-                                    // Replace the skills in the first HtmlNode with the <ul> list
-                                    sectionContent[section][0].InnerHtml = skillsList;
-
-                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
-                                }
-                                else
-                                {
-                                    ReplaceSectionContent(templateSection, sectionContent[section], sections);
-                                }
-                            }
+                            ReplaceSkills(templateSection, sectionContent, section, template.ResumeId, sections);
                         }
-
-                        ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                        else
+                        {
+                            ReplaceSectionContent(templateSection, sectionContent[section], sections);
+                        }
                     }
                 }
             }
 
             // Convert the modified HtmlDocument back to a string
-            //template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
+            template.HtmlContent = templateDoc.DocumentNode.OuterHtml;
 
             // // Append the remaining content from the resume to the end of the template
             template.HtmlContent += resumeDoc.DocumentNode.OuterHtml;
@@ -337,6 +275,59 @@ namespace ResuMeta.DAL.Concrete
             }
         }
 
+        private void ReplaceSkills(HtmlNode templateSection, Dictionary<string, List<HtmlNode>> sectionContent, string section, int? templateId, string[] sections)
+        {
+            // Assuming sectionContent[section] is a HtmlNode
+            var nodeContent = sectionContent[section][0].InnerHtml;
+
+            // Check if the skills are already in a <ul> list
+            if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
+            {
+                if (templateId == 2)
+                {
+                    // Assuming nodeContent is a string containing the HTML
+                    var htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(nodeContent);
+
+                    // Extract the text from the <li> elements
+                    var skills = htmlDoc.DocumentNode.SelectNodes("//li")
+                        .Select(node => node.InnerText.Trim())
+                        .ToArray();
+
+                    var formattedSkills = skills
+                        .Select(skill => $"<strong><u>{skill}</u></strong>&nbsp;")
+                        .Aggregate((a, b) => a + b);
+
+                    // Remove the trailing non-breaking space
+                    formattedSkills = formattedSkills.TrimEnd(new[] { '&', 'n', 'b', 's', 'p', ';' });
+
+                    // Wrap the formattedSkills string in a div element
+                    var newNode = HtmlNode.CreateNode($"<div>{formattedSkills}</div>");
+
+                    // Replace the first HtmlNode in sectionContent[section] with the new node
+                    sectionContent[section][0] = newNode;
+                }
+                else
+                {
+                    // If not, convert them into a <ul> list
+                    var skills = nodeContent.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    var skillsList = skills
+                        .Select(skill => $"<li>{skill.Trim()}</li>\n")
+                        .Aggregate((a, b) => a + b);
+
+                    skillsList = "<ul>\n" + skillsList + "</ul>";
+
+                    // Replace the skills in the first HtmlNode with the <ul> list
+                    sectionContent[section][0].InnerHtml = skillsList;
+                }
+
+                ReplaceSectionContent(templateSection, sectionContent[section], sections);
+            }
+            else
+            {
+                ReplaceSectionContent(templateSection, sectionContent[section], sections);
+            }
+        }
 
         private void RemoveSectionAndContent(HtmlNode section, string[] sections)
         {
