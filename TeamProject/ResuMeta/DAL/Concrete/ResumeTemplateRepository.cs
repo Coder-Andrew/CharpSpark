@@ -70,8 +70,65 @@ namespace ResuMeta.DAL.Concrete
 
             // Create a dictionary to store the sections and their content
             Dictionary<string, List<HtmlNode>> sectionContent = new Dictionary<string, List<HtmlNode>>();
-
             string currUserSummary = string.Empty;
+
+            // Check if the first node is a section title
+            HtmlNode firstNode = resumeDoc.DocumentNode.FirstChild;
+            bool firstNodeIsSectionTitle = false;
+
+            while(firstNode != null)
+            {
+                if(firstNode.Name == "hr" || firstNode.Name == "p")
+                {
+                    firstNodeIsSectionTitle = false;
+                    break;
+                }
+                if(sections.Any(s => firstNode.InnerText.ToLower().Contains(s.ToLower())))
+                {
+                    break;
+                }
+                firstNode = firstNode.NextSibling;
+            }
+            
+            if (!firstNodeIsSectionTitle)
+            {
+                // Create a list to store the content nodes
+                List<HtmlNode> summaryNodes = new List<HtmlNode>();
+
+                // Start with the node following the <hr> tag
+                HtmlNode currentSummaryNode = firstNode;
+
+                //Check if the first node is an <hr> tag and if so then remove it 
+                if (firstNode.Name == "hr")
+                {
+                    currentSummaryNode = firstNode.NextSibling;
+                    firstNode.Remove();
+                }
+
+                // Iterate over the following nodes
+                while (currentSummaryNode != null)
+                {
+                    // If the current node is an <hr> tag or contains a section title, stop iterating
+                    if (currentSummaryNode.Name == "hr" || sections.Any(s => currentSummaryNode.InnerText.ToLower().Contains(s.ToLower())))
+                    {
+                        break;
+                    }
+
+                    // Add the current node to the content nodes list
+                    summaryNodes.Add(currentSummaryNode);
+
+                    // Store the current node for removal
+                    HtmlNode nodeToRemove = currentSummaryNode;
+
+                    // Move to the next node
+                    currentSummaryNode = currentSummaryNode.NextSibling;
+
+                    // Remove the node from the document
+                    nodeToRemove.Remove();
+                }
+
+                currUserSummary = string.Join(" ", summaryNodes.Select(node => node.InnerText));
+            }
 
             // Iterate over the sections
             foreach (string section in sections)
@@ -85,6 +142,7 @@ namespace ResuMeta.DAL.Concrete
                 // If the section is present in the resume, store its content
                 if (resumeSection != null)
                 {
+
                     // Create a list to store the content nodes
                     List<HtmlNode> contentNodes = new List<HtmlNode>();
 
@@ -169,7 +227,15 @@ namespace ResuMeta.DAL.Concrete
                     // If the section is not present in the resume, remove it from the template
                     if (!sectionContent.ContainsKey(section))
                     {
-                        RemoveSectionAndContent(templateSection, sections);
+                        // If currUserSummary is not empty and the current section is "Summary" or "Profile", replace the section content
+                        if (!string.IsNullOrEmpty(currUserSummary) && (section.ToLower() == "summary" || section.ToLower() == "profile"))
+                        {
+                            ReplaceSectionContentWithString(templateSection, currUserSummary, sections);
+                        }
+                        else
+                        {
+                            RemoveSectionAndContent(templateSection, sections);
+                        }
                     }
                     else // If the section is present in the resume, replace the template's content with the resume's content
                     {
@@ -259,7 +325,42 @@ namespace ResuMeta.DAL.Concrete
             }
 
             // Create a new <br> tag
-            HtmlNode brTag = HtmlNode.CreateNode("<br>");
+            HtmlNode brTag = HtmlNode.CreateNode("<br />");
+
+            // Insert the <br> tag after the last content node
+            section.ParentNode.InsertAfter(brTag, insertAfterNode);
+        }
+
+        private void ReplaceSectionContentWithString(HtmlNode section, string currUserSummary, string[] sections)
+        {
+            HtmlNode firstSibling = section.NextSibling;
+
+            //Skip the <hr> tag if it is the first sibling
+            if(firstSibling.Name == "hr")
+            {
+                section = firstSibling;
+            }
+
+            // Remove the existing content of the section
+            while (section.NextSibling != null && !(section.NextSibling.Name == "hr" || sections.Any(s => section.NextSibling.InnerText.ToLower().Contains(s.ToLower()))))
+            {
+                section.NextSibling.Remove();
+            }
+
+            // Determine where to insert the new content
+            HtmlNode insertAfterNode = section;
+            if (section.NextSibling != null && section.NextSibling.Name == "hr")
+            {
+                insertAfterNode = section.NextSibling;
+            }
+
+            // Add the new content to the section
+            HtmlNode newNode = HtmlNode.CreateNode(currUserSummary);
+            section.ParentNode.InsertAfter(newNode, insertAfterNode);
+            insertAfterNode = newNode; // Update the node to insert after
+
+            // Create a new <br> tag
+            HtmlNode brTag = HtmlNode.CreateNode("<br />");
 
             // Insert the <br> tag after the last content node
             section.ParentNode.InsertAfter(brTag, insertAfterNode);

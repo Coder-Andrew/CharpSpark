@@ -78,6 +78,8 @@ function initializePage() {
     previewBtn.addEventListener('click', () => PreviewResume(), false);
     const closePreviewBtn = document.getElementById('close-preview');
     closePreviewBtn.addEventListener('click', () => closePreview(), false);
+    const saveAndApplyBtn = document.getElementById('save-and-apply');
+    saveAndApplyBtn.addEventListener('click', () => getHtmlInfo(), false);
 }
 
 async function PreviewResume() {
@@ -105,5 +107,62 @@ async function SwitchTheme() {
         themeStylesheet.setAttribute('href', '/css/PreviewResumeLight.css');
     } else {
         themeStylesheet.setAttribute('href', '/css/PreviewResumeDark.css');
+    }
+}
+
+async function getHtmlInfo() 
+{
+    const validationArea = document.getElementById('validation-area');
+    const successValidation = document.getElementById('validation-success');
+    const errorValidation = document.getElementById('validation-error');
+    const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
+    const whiteSpacePattern = /^\s+$/;
+
+    const title = document.getElementById('resume-title').value;
+    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99)
+    {
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Resume Title is invalid, please use a valid title. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
+        return;
+    }
+    
+    const previewEditor = document.querySelector('#preview-editor');
+    const htmlContent = previewEditor.querySelector('.ql-editor').innerHTML;
+    const resumeId = document.getElementById('resume-id').value;
+    const response = await fetch(`/api/resume/${resumeId}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+            resumeId: resumeId,
+            title: title,
+            htmlContent: encodeURIComponent(htmlContent)
+        })
+    });    
+    if (response.ok)
+    {
+        validationArea.innerHTML = "";
+        const cloneSuccess = successValidation.cloneNode(true);
+        cloneSuccess.style.display = "block";
+        cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneSuccess);
+        // Redirect to the YourResume page
+        window.location.href = `/Resume/YourResume/${resumeId}`;
+        return;
+    }
+    else
+    {
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `An error occurred while saving the resume. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
+        console.log("Error saving information");
+        return;
     }
 }
