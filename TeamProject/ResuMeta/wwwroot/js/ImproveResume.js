@@ -9,46 +9,21 @@ function loadQuill() {
         console.log("Quill loaded");
         initializePage();
     }
+
 }
 
 function initializePage() {
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'align': [] }],
-        ['link'],
-        ['clean']                                         // remove formatting button
-    ]
-    // var quill = new Quill('#editor', {
-    //     theme: 'snow',
-    //     modules: {
-    //         toolbar: toolbarOptions,
-    //     }
-    // });
+
     var quill1 = new Quill('#editor1', {
         theme: 'snow',
-        modules: {
-            toolbar: toolbarOptions,
-        },
         readOnly: true
     });
 
     var quill2 = new Quill('#editor2', {
         theme: 'snow',
-        modules: {
-            toolbar: toolbarOptions,
-        },
         readOnly: true
     });
     console.log("Editor initialized");
-    // const resumeContent = document.getElementById("resume-content").value;
-    // const resumeArea = document.getElementById("resume-area");
-    // resumeArea.innerHTML = decodeURIComponent(resumeContent);
-    // const delta = quill.clipboard.convert(resumeArea.innerHTML);
-    // quill.setContents(delta);
 
     const resumeContent1 = document.getElementById("resume-content1").value;
     const resumeArea1 = document.getElementById("resume-area1");
@@ -56,14 +31,26 @@ function initializePage() {
     const delta1 = quill1.clipboard.convert(resumeArea1.innerHTML);
     quill1.setContents(delta1);
 
-    const resumeContent2 = document.getElementById("resume-content2").value;
+    const resumeId = document.getElementById('resume-id').value;
+    const resumeContent2 = fetchAndDisplayData(resumeId, quill2);
     const resumeArea2 = document.getElementById("resume-area2");
     resumeArea2.innerHTML = decodeURIComponent(resumeContent2);
     const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML);
     quill2.setContents(delta2);
 
-    const saveBtn = document.getElementById("save-resume");
-    saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+    const regenerateButton = document.getElementById("regenerate-button");
+    if (regenerateButton) {
+        regenerateButton.addEventListener("click", () => {
+            const resumeId = document.getElementById('resume-id').value;
+            fetchAndDisplayData(resumeId, quill2);
+        });
+    }
+
+    const saveBtn = document.getElementById("save-and-apply");
+    saveBtn.addEventListener('click', async () => {
+        await getHtmlInfo();
+        window.location.href = `/Resume/YourDashboard`;
+    }, false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill2), false);
     const themeSwitcher = document.getElementById('theme-switcher');
@@ -75,10 +62,10 @@ async function SwitchTheme() {
     var themeSwitcher = document.getElementById('theme-switcher');
     var themeLabel = document.getElementById('theme-label');
     if (themeSwitcher.checked) {
-        themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveResumeLight.css');
         themeLabel.textContent = 'Switch to Dark Mode';
     } else {
-        themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveResumeDark.css');
         themeLabel.textContent = 'Switch to Light Mode';
     }
 }
@@ -117,11 +104,11 @@ async function exportPdf(quill) {
         let base64Pdf = jsonString
         let pdfBytes = atob(base64Pdf);
         let pdfArray = new Uint8Array(new ArrayBuffer(pdfBytes.length));
-        
+
         for (let i = 0; i < pdfBytes.length; i++) {
             pdfArray[i] = pdfBytes.charCodeAt(i);
         }
-        
+
         const blob = new Blob([pdfArray], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -134,7 +121,7 @@ async function exportPdf(quill) {
         cloneSuccess.innerHTML = `Resume exported successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
         link.click();
-        document.body.removeChild(link); 
+        document.body.removeChild(link);
         return;
     }
     else {
@@ -143,16 +130,14 @@ async function exportPdf(quill) {
     }
 }
 
-async function getHtmlInfo() 
-{
+async function getHtmlInfo() {
     const validationArea = document.getElementById('validation-area');
     const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
     const whiteSpacePattern = /^\s+$/;
     const title = document.getElementById('resume-title').value;
-    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99)
-    {
+    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99) {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
@@ -161,7 +146,7 @@ async function getHtmlInfo()
         return;
     }
     console.log("Save Resume button clicked");
-    const htmlContent = document.querySelector('.ql-editor').innerHTML;
+    const htmlContent = document.getElementById('editor2').querySelector('.ql-editor').innerHTML;
     const resumeId = document.getElementById('resume-id').value;
     const response = await fetch(`/api/resume/${resumeId}`, {
         method: 'PUT',
@@ -174,18 +159,16 @@ async function getHtmlInfo()
             title: title,
             htmlContent: encodeURIComponent(htmlContent)
         })
-    });    
-    if (response.ok)
-    {
-        validationArea.innerHTML = "";
-        const cloneSuccess = successValidation.cloneNode(true);
-        cloneSuccess.style.display = "block";
-        cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
-        validationArea.appendChild(cloneSuccess);
+    });
+    if (response.ok) {
+        // validationArea.innerHTML = "";
+        // const cloneSuccess = successValidation.cloneNode(true);
+        // cloneSuccess.style.display = "block";
+        // cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        // validationArea.appendChild(cloneSuccess);
         return;
     }
-    else
-    {
+    else {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
@@ -193,5 +176,42 @@ async function getHtmlInfo()
         validationArea.appendChild(cloneError);
         console.log("Error saving information");
         return;
+    }
+}
+
+
+async function fetchAndDisplayData(resumeId, quill2) {
+    const loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.style.display = "block";
+
+    quill2.root.innerHTML = "Loading...";
+
+    try {
+        const response = await fetch(`/api/cgpt/improve/${resumeId}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        let responseData;
+        try {
+            responseData = await response.text();
+        } catch (error) {
+            throw new Error('Failed to parse response data');
+        }
+
+        quill2.root.innerHTML = responseData;
+
+    } catch (error) {
+        console.error('Error fetching and displaying data:', error);
+        quill2.root.innerHTML = "Error loading data";
+    } finally {
+        loadingScreen.style.display = "none"; 
     }
 }

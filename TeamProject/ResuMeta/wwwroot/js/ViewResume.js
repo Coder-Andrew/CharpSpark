@@ -37,6 +37,8 @@ function initializePage() {
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
+    const improveWithAiBtn = document.getElementById("improve-with-ai");
+    improveWithAiBtn.addEventListener("click", redirectToAiPage);
 }
 
 async function SwitchTheme() {
@@ -163,4 +165,12 @@ async function getHtmlInfo()
         console.log("Error saving information");
         return;
     }
+}
+
+function redirectToAiPage() {
+    const resumeId = document.getElementById("resume-id").value;
+    const aiPageUrl = `/Resume/ImproveResume/${resumeId}`;
+    console.log("Redirecting to improve with ai page");
+    // Redirect the user to improve with ai page
+    window.location.href = aiPageUrl;
 }

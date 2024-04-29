@@ -1,5 +1,5 @@
 .resume-container {
-    background-color: #f8f9fa;
+    background-color: #fff;
     margin-top: 20px;
     padding: 20px;
     border-radius: 5px;
@@ -27,8 +27,9 @@ html {
   
 body {
     margin-bottom: 60px;
-    background-color: #f8f9fa !important;
-    color: #212529;
+    background-color: #131414 !important;
+    background: linear-gradient(to bottom, #131414 65%, rgb(34, 18, 8)) !important;
+    color: rgb(207, 207, 207);
     font-family: 'Open Sans', sans-serif;
 }
   
@@ -42,8 +43,8 @@ body {
     width: 100%;
     position: sticky;
     top: 71px;
-    background-color: #f0f2f3;
-    border-bottom: 1px solid #dee2e6 !important;
+    background-color: #222424;
+    border: 1px solid rgb(101,104,104) !important;
     border-top: none !important;
     border-right: none !important;
     border-left: none !important;
@@ -54,8 +55,8 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6 !important;
+    background-color: #222424;
+    border: 1px solid rgb(101,104,104) !important;
     border-top: none !important;
     min-height: 500px;
     margin-bottom: 50px;
@@ -66,8 +67,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 7px 0;
-    background-color: #f0f2f3;
-    border-bottom: 1px solid #dee2e6 !important;
+    background-color: #222424;
+    border-bottom: 1px solid rgb(101,104,104) !important;
     position: sticky;
     top: 0;
     z-index: 1001;
@@ -75,7 +76,7 @@ body {
 
 .editor-header button {
     margin-left: 10px;
-    color: #212529;
+
 }
 
 .left-section {
@@ -116,12 +117,12 @@ body {
 }
 
 #resume-title {
-    background-color: #dddddd;
+    background-color: #5a5a5a;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
     margin-bottom: 3px;
-    color: rgb(56, 56, 56);
+    color: rgb(214, 214, 214);
 }
 
 #resume-title:focus {

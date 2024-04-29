@@ -38,12 +38,20 @@ namespace ResuMeta.Controllers
          // POST: api/cgpt/improve/{id}
         [HttpPost("improve/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ChatGPTResponse>> GenerateResume(int id)
+        public async Task<IActionResult> GenerateResume(int id)
         {
             try
             {   
                 var response = await _chatGPTService.GenerateResume(id);
-                return Ok(response);
+
+                if (response == null || response.Response == null)
+                {
+                    return BadRequest();
+                }
+                
+                string responseData = response.Response.Trim('"');
+
+                return Content(responseData, "text/html");
             }
             catch
             {

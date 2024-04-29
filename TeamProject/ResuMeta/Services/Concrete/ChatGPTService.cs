@@ -109,19 +109,12 @@ namespace ResuMeta.Services.Concrete
                         content = "You are here to improve a resume. " +
                             "You need to correct any grammatical errors, make the language more professional, " +
                             "and optimize the content for job applications. " +
+                            "If you don't have an improvement available for part of the resume, just return the same content that you read. " +
+                            "Don't add any extra spacing. " +
                             "Please return the improved content in the same HTML format that I'm sending, " +
                             "without adding any extra code or HTML headers. " +
                             "Here is the resume: "
                     },
-                    // new Message
-                    // {
-                    //     role = "system",
-                    //     content = "You are here to improve a resume. " +
-                    //         "You need to improve the content resume and send it back to me in the same html format (html tags). " +
-                    //         "Do not include any extra code other than the same types of html tags I am sending.  " +
-                    //         "Please do not add any html headers, only return the same kinds of html tags that are sent with the resume.  " +
-                    //         "Here is the resume: " 
-                    // },
                     new Message
                     {
                         role = "user",
