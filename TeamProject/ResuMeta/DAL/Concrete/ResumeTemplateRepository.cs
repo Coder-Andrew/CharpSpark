@@ -310,44 +310,60 @@ namespace ResuMeta.DAL.Concrete
         {
             var nodeContent = sectionContent[section][0].InnerHtml;
 
-            if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(nodeContent);
+
+            var listItems = htmlDoc.DocumentNode.SelectNodes("//li");
+
+            if (listItems == null || !listItems.Any())
             {
-                if (templateId == 2)
-                {
-                    var htmlDoc = new HtmlDocument();
-                    htmlDoc.LoadHtml(nodeContent);
-
-                    var skills = htmlDoc.DocumentNode.SelectNodes("//li")
-                        .Select(node => node.InnerText.Trim())
-                        .ToArray();
-
-                    var formattedSkills = skills
-                        .Select(skill => $"<strong><u>{skill}</u></strong>&nbsp;")
-                        .Aggregate((a, b) => a + b);
-
-                    formattedSkills = formattedSkills.TrimEnd(new[] { '&', 'n', 'b', 's', 'p', ';' });
-
-                    var newNode = HtmlNode.CreateNode($"<div>{formattedSkills}</div>");
-
-                    sectionContent[section][0] = newNode;
-                }
-                else
-                {
-                    var skills = nodeContent.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                    var skillsList = skills
-                        .Select(skill => $"<li>{skill.Trim()}</li>\n")
-                        .Aggregate((a, b) => a + b);
-
-                    skillsList = "<ul>\n" + skillsList + "</ul>";
-
-                    sectionContent[section][0].InnerHtml = skillsList;
-                }
-
                 ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
             }
             else
             {
-                ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
+                if (!nodeContent.Trim().StartsWith("<ul>") || !nodeContent.Trim().EndsWith("</ul>"))
+                {
+                    if (templateId == 2)
+                    {
+                        var skills = listItems
+                            .Select(node => node.InnerText.Trim())
+                            .ToArray();
+
+                        var formattedSkills = skills
+                            .Select(skill => $"<strong><u>{skill}</u></strong>&nbsp;")
+                            .Aggregate((a, b) => a + b);
+
+                        formattedSkills = formattedSkills.TrimEnd(new[] { '&', 'n', 'b', 's', 'p', ';' });
+
+                        var newNode = HtmlNode.CreateNode($"<div>{formattedSkills}</div>");
+
+                        sectionContent[section][0] = newNode;
+                    }
+                    else
+                    {
+                        var skills = nodeContent.Split(new[] { ',', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                        if(skills.IsNullOrEmpty())
+                        {
+                            ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
+                        }
+                        else
+                        {
+                            var skillsList = skills
+                                .Select(skill => $"<li>{skill.Trim()}</li>\n")
+                                .Aggregate((a, b) => a + b);
+
+                            skillsList = "<ul>\n" + skillsList + "</ul>";
+
+                            sectionContent[section][0].InnerHtml = skillsList;
+                        }
+                    }
+
+                    ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
+                }
+                else
+                {
+                    ReplaceSectionContent(templateSection, sectionContent[section], sections, section);
+                }
             }
         }
 
