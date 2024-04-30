@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
-
 function loadQuill() {
     console.log("Loading Quill");
     var script = document.createElement('script');
@@ -8,114 +7,54 @@ function loadQuill() {
     document.head.appendChild(script);
     script.onload = function () {
         console.log("Quill loaded");
-
-        //Register the DividerBlot
-        const BlockEmbed = Quill.import('blots/block/embed');
-
-        class DividerBlot extends BlockEmbed {
-        static create() {
-            let node = super.create();
-            return node;
-        }
-
-        static formats() {
-            return true;
-        }
-        }
-
-        DividerBlot.blotName = 'divider';
-        DividerBlot.tagName = 'hr';
-
-        Quill.register(DividerBlot);
         initializePage();
-        
     }
-}
 
+}
 
 function initializePage() {
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'align': [] }],
-        ['link'],
-        ['clean'],                                         // remove formatting button
-        ['divider']
-    ]
-    
-    var quill = new Quill('#editor', {
+
+    var quill1 = new Quill('#editor1', {
         theme: 'snow',
-        modules: {
-            toolbar: {
-                container: toolbarOptions,
-                handlers: {
-                    'divider': function() {
-                        let range = quill.getSelection(true);
-                        quill.insertText(range.index, '\n', Quill.sources.USER);
-                        quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
-                        quill.setSelection(range.index + 2, Quill.sources.SILENT);
-                    }
-                }
-            },
-        }
+        readOnly: true
     });
 
+    var quill2 = new Quill('#editor2', {
+        theme: 'snow',
+        readOnly: true
+    });
     console.log("Editor initialized");
 
-    //Templates
-    for (let i = 1; i <= 5; i++) {
-        var templateEditor = document.getElementById(`template${i}-editor`);
-        var templatequill = new Quill(`#template${i}-editor`, {
-            readOnly: true,
-            theme: 'snow'
+    const resumeContent1 = document.getElementById("resume-content1").value;
+    const resumeArea1 = document.getElementById("resume-area1");
+    resumeArea1.innerHTML = decodeURIComponent(resumeContent1);
+    const delta1 = quill1.clipboard.convert(resumeArea1.innerHTML);
+    quill1.setContents(delta1);
+
+    const resumeId = document.getElementById('resume-id').value;
+    const resumeContent2 = fetchAndDisplayData(resumeId, quill2);
+    const resumeArea2 = document.getElementById("resume-area2");
+    resumeArea2.innerHTML = decodeURIComponent(resumeContent2);
+    const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML);
+    quill2.setContents(delta2);
+
+    const regenerateButton = document.getElementById("regenerate-button");
+    if (regenerateButton) {
+        regenerateButton.addEventListener("click", () => {
+            const resumeId = document.getElementById('resume-id').value;
+            fetchAndDisplayData(resumeId, quill2);
         });
-    
-        var templatecontent = document.getElementById(`template${i}-content`).value;
-        var templatearea = document.getElementById(`template${i}-area`);
-        templatearea.innerHTML = decodeURIComponent(templatecontent);
-    
-        var templatedelta = quill.clipboard.convert(templatearea.innerHTML);
-        templatequill.setContents(templatedelta);
     }
 
-    //Resume
-    const resumeContent = document.getElementById("resume-content").value;
-    const resumeArea = document.getElementById("resume-area");
-    resumeArea.innerHTML = decodeURIComponent(resumeContent);
-    const delta = quill.clipboard.convert(resumeArea.innerHTML);
-    quill.setContents(delta);
-    const saveBtn = document.getElementById("save-resume");
-    saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+    const saveBtn = document.getElementById("save-and-apply");
+    saveBtn.addEventListener('click', async () => {
+        await getHtmlInfo();
+        window.location.href = `/Resume/YourDashboard`;
+    }, false);
     const exportBtn = document.getElementById("export-pdf");
-    exportBtn.addEventListener('click', () => exportPdf(quill), false);
+    exportBtn.addEventListener('click', () => exportPdf(quill2), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
-    const improveWithAiBtn = document.getElementById("improve-with-ai");
-    improveWithAiBtn.addEventListener("click", redirectToAiPage);
-    const previewBtn = document.getElementById('preview-resume');
-    previewBtn.addEventListener('click', () => PreviewResume(), false);
-    const closePreviewBtn = document.getElementById('close-preview');
-    closePreviewBtn.addEventListener('click', () => closePreview(), false);
-}
-
-async function PreviewResume() {
-    const templates = document.getElementById('templates');
-    const templatesTitle = document.getElementById('templates-title');
-    templates.style.display = 'flex';
-    templatesTitle.style.display = 'block';
-    document.body.classList.add('show-before');
-}
-
-async function closePreview() {
-    const templates = document.getElementById('templates');
-    const templatesTitle = document.getElementById('templates-title');
-    templates.style.display = 'none';
-    templatesTitle.style.display = 'none';
-    document.body.classList.remove('show-before');
-
 }
 
 async function SwitchTheme() {
@@ -123,9 +62,11 @@ async function SwitchTheme() {
     var themeSwitcher = document.getElementById('theme-switcher');
     var themeLabel = document.getElementById('theme-label');
     if (themeSwitcher.checked) {
-        themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveResumeLight.css');
+        themeLabel.textContent = 'Switch to Dark Mode';
     } else {
-        themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveResumeDark.css');
+        themeLabel.textContent = 'Switch to Light Mode';
     }
 }
 
@@ -163,11 +104,11 @@ async function exportPdf(quill) {
         let base64Pdf = jsonString
         let pdfBytes = atob(base64Pdf);
         let pdfArray = new Uint8Array(new ArrayBuffer(pdfBytes.length));
-        
+
         for (let i = 0; i < pdfBytes.length; i++) {
             pdfArray[i] = pdfBytes.charCodeAt(i);
         }
-        
+
         const blob = new Blob([pdfArray], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -180,7 +121,7 @@ async function exportPdf(quill) {
         cloneSuccess.innerHTML = `Resume exported successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
         link.click();
-        document.body.removeChild(link); 
+        document.body.removeChild(link);
         return;
     }
     else {
@@ -189,16 +130,14 @@ async function exportPdf(quill) {
     }
 }
 
-async function getHtmlInfo() 
-{
+async function getHtmlInfo() {
     const validationArea = document.getElementById('validation-area');
     const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
     const whiteSpacePattern = /^\s+$/;
     const title = document.getElementById('resume-title').value;
-    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99)
-    {
+    if (title === "" || title === null || title === "Resume Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99) {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
@@ -207,7 +146,7 @@ async function getHtmlInfo()
         return;
     }
     console.log("Save Resume button clicked");
-    const htmlContent = document.querySelector('.ql-editor').innerHTML;
+    const htmlContent = document.getElementById('editor2').querySelector('.ql-editor').innerHTML;
     const resumeId = document.getElementById('resume-id').value;
     const response = await fetch(`/api/resume/${resumeId}`, {
         method: 'PUT',
@@ -220,18 +159,16 @@ async function getHtmlInfo()
             title: title,
             htmlContent: encodeURIComponent(htmlContent)
         })
-    });    
-    if (response.ok)
-    {
-        validationArea.innerHTML = "";
-        const cloneSuccess = successValidation.cloneNode(true);
-        cloneSuccess.style.display = "block";
-        cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
-        validationArea.appendChild(cloneSuccess);
+    });
+    if (response.ok) {
+        // validationArea.innerHTML = "";
+        // const cloneSuccess = successValidation.cloneNode(true);
+        // cloneSuccess.style.display = "block";
+        // cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        // validationArea.appendChild(cloneSuccess);
         return;
     }
-    else
-    {
+    else {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
@@ -242,10 +179,39 @@ async function getHtmlInfo()
     }
 }
 
-function redirectToAiPage() {
-    const resumeId = document.getElementById("resume-id").value;
-    const aiPageUrl = `/Resume/ImproveResume/${resumeId}`;
-    console.log("Redirecting to improve with ai page");
-    // Redirect the user to improve with ai page
-    window.location.href = aiPageUrl;
+
+async function fetchAndDisplayData(resumeId, quill2) {
+    const loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.style.display = "block";
+
+    quill2.root.innerHTML = "Loading...";
+
+    try {
+        const response = await fetch(`/api/cgpt/improve/${resumeId}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        let responseData;
+        try {
+            responseData = await response.text();
+        } catch (error) {
+            throw new Error('Failed to parse response data');
+        }
+
+        quill2.root.innerHTML = responseData;
+
+    } catch (error) {
+        console.error('Error fetching and displaying data:', error);
+        quill2.root.innerHTML = "Error loading data";
+    } finally {
+        loadingScreen.style.display = "none"; 
+    }
 }

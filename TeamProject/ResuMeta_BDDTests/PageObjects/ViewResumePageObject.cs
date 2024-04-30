@@ -23,6 +23,7 @@ namespace ResuMeta_BDDTests.PageObjects
         public IWebElement SaveResumeBtn => _webDriver.FindElement(By.Id("save-resume"));
         public IWebElement ResumeTitle => _webDriver.FindElement(By.Id("resume-title"));
         public IWebElement ExportPdfBtn => _webDriver.FindElement(By.Id("export-pdf"));
+        public IWebElement ImproveWithAIBtn => _webDriver.FindElement(By.Id("improve-with-ai"));
         public bool GetEditor()
         {
             if (QuillToolBar.Displayed && QuillEditor.Displayed) 
@@ -69,5 +70,28 @@ namespace ResuMeta_BDDTests.PageObjects
                 _webDriver.SwitchTo().Window(_webDriver.WindowHandles[0]);
             }
         }
+        public bool ImproveWithAIButton()
+        {
+            Thread.Sleep(1000);
+            if (ImproveWithAIBtn.Displayed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void ClickImproveWithAI()
+        {
+            ImproveWithAIBtn.Click();
+        }
+        public string GetYourImprovedResumeUrl(string resumeId)
+        {
+            string improveResumeUrl = "/ImproveResume/" + resumeId;
+
+            return improveResumeUrl;
+        }
+
     }
 }

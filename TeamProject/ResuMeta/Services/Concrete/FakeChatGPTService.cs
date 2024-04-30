@@ -12,5 +12,12 @@ namespace ResuMeta.Services.Concrete
                 Response = $"This is a fake service used for testing the ChatGPT service, message: {question}"
             };
         }
+        public async Task<ChatGPTResponse> GenerateResume(int id)
+        {
+            return new ChatGPTResponse
+            {
+                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+            };
+        }
     }
 }

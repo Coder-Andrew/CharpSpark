@@ -110,11 +110,11 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             }
 
             var emailVerificationCode = Input.EmailVerificationCode;
-            if (DateTime.Now > TokenExpiration)
-            {
-                ModelState.AddModelError(string.Empty, "Token has expired.");
-                return Page();
-            }
+            // if (DateTime.Now > TokenExpiration)
+            // {
+            //     ModelState.AddModelError(string.Empty, "Token has expired.");
+            //     return Page();
+            // }
             var result = await _signInManager.TwoFactorSignInAsync("Email", emailVerificationCode, rememberMe, Input.RememberMachine);
 
             var userId = await _userManager.GetUserIdAsync(user);

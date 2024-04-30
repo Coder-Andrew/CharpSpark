@@ -1,4 +1,4 @@
-﻿.resume-container {
+.resume-container {
     background-color: #fff;
     margin-top: 20px;
     padding: 20px;
@@ -12,18 +12,18 @@ hr {
 
 html {
     font-size: 14px;
-  }
+}
   
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
     html {
-      font-size: 16px;
+        font-size: 16px;
     }
-  }
+}
 
 html {
     position: relative;
     min-height: 100%;
-  }
+}
   
 body {
     margin-bottom: 60px;
@@ -39,36 +39,25 @@ body {
     margin: 20px;
 }
 
-.text-center .ql-toolbar {
+.ql-toolbar {
     width: 100%;
     position: sticky;
     top: 71px;
     background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
+    border: 1px solid rgb(101,104,104) !important;
     border-top: none !important;
     border-right: none !important;
     border-left: none !important;
     z-index: 1000;
 }
 
-
-.text-center .ql-toolbar .ql-divider::before {
-    content: '\f068' !important;
-    font-family: FontAwesome !important;
-    color: #444444;
-}
-
-
-.text-center .ql-toolbar .ql-divider:hover::before {
-    color: #0065CC;
-}
-
-.text-center .ql-container {
+.ql-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
+    border: 1px solid rgb(101,104,104) !important;
+    border-top: none !important;
     min-height: 500px;
     margin-bottom: 50px;
 }
@@ -79,14 +68,15 @@ body {
     align-items: center;
     padding: 7px 0;
     background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
+    border-bottom: 1px solid rgb(101,104,104) !important;
     position: sticky;
-    z-index: 1000;
     top: 0;
+    z-index: 1001;
 }
 
 .editor-header button {
     margin-left: 10px;
+
 }
 
 .left-section {
@@ -179,7 +169,6 @@ a {
     border: none;
 }
 
-
 .switch {
     position: relative;
     display: inline-block;
@@ -240,104 +229,3 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
-body.show-before::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.56);
-    z-index: 1002;
-}
-
-.templates {
-    position: fixed;
-    top: 53%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1003;
-    display: none;
-    padding: 0 6%;
-}
-
-
-.templates-title {
-    position: fixed;
-    top: 11%;
-    left: 52%;
-    z-index: 1003;
-    transform: translate(-50%, -50%);
-    padding: 0 6%;
-    text-align: center;
-    display: none;
-}
-
-.title {
-    color: #e9912c;
-}
-
-.templates .ql-container {
-    padding: 0 0px;
-    width: 300px;
-    background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
-}
-
-.template-editor .ql-container,
-.template-editor .ql-editor {
-    overflow: hidden !important;
-    padding-top: 41px;
-    margin-top: -27px;
-    margin-left: -60px;
-    margin-right: -60px;
-}
-
-.template-editor .ql-editor {
-    cursor: pointer !important;
-}
-
-.template-editor {
-    flex: 0 0 20%;
-    margin: 5px !important;
-    transform: scale(0.9);
-    transform-origin: 0 0;
-    height: 570px !important;
-    box-shadow: 0 0 8px rgba(101, 104, 104, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.template-editor .ql-editor.ql-blank::before {
-    bottom: 0 !important;
-}
-
-.template-editor .ql-editor {
-    padding-bottom: 0 !important;
-}
-
-.template-editor p, .template-editor h1, .template-editor h2, .template-editor h3, .template-editor h4, .template-editor h5, .template-editor h6, .template-editor ul, .template-editor hr{
-    transform: scale(.66);
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
-.template-editor:hover {
-    border-color: #b87223;
-    cursor: pointer;
-    transform: scale(.97);
-    box-shadow: 0 0 20px rgba(184, 114, 35, 0.7);
-}
-
-.template-editor input, .template-editor button{
-    display: none !important;
-}
-
-.templates .ql-toolbar {
-    display: none !important;
-}
-
-.preview-a {
-    color: rgb(207, 207, 207) !important;
-    text-decoration: none !important;
-}

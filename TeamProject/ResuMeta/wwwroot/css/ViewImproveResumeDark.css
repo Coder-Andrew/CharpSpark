@@ -1,13 +1,49 @@
-﻿.resume-container {
+.resume-container {
     background-color: #fff;
     margin-top: 20px;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1); 
 }
-
 hr {
     margin-right: auto;
+}
+
+.container {
+    display: flex;
+    justify-content: center; /* Align container in the center horizontally */
+    height: 100vh;
+    width: 800px;
+}
+
+.editor-container {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    margin-top: 20px; /* Add margin to create space for the fixed header */
+    padding-top: 30px;
+    max-width: 1300px; 
+}
+
+.editor {
+    height: 80vh;
+    width: 800px; /* Adjust width as needed */
+}
+
+.arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px; /* Adjust margin as needed */
+}
+
+.arrow i {
+    margin-bottom: 20px;
+}
+
+.btn {
+    margin-top: 20px; /* Adjust margin as needed */
 }
 
 html {
@@ -19,7 +55,6 @@ html {
       font-size: 16px;
     }
   }
-
 html {
     position: relative;
     min-height: 100%;
@@ -36,68 +71,64 @@ body {
 #editor-title {
     text-align: right;
     font-size: 2em;
-    margin: 20px;
-}
+     margin: 20px;
+ }
 
-.text-center .ql-toolbar {
-    width: 100%;
-    position: sticky;
-    top: 71px;
+ .text-center  {
+     width: 100%;
+     position: sticky;
+     top: 71px;
     background-color: #222424;
     border-bottom: 1px solid rgb(101, 104, 104) !important;
     border-top: none !important;
     border-right: none !important;
     border-left: none !important;
-    z-index: 1000;
-}
+     z-index: 1000;
+ }
 
 
-.text-center .ql-toolbar .ql-divider::before {
-    content: '\f068' !important;
-    font-family: FontAwesome !important;
-    color: #444444;
-}
+ .text-center .ql-divider::before {
+     content: '\f068' !important;
+     font-family: FontAwesome !important;
+     color: #444444;
+ }
 
 
-.text-center .ql-toolbar .ql-divider:hover::before {
-    color: #0065CC;
-}
+ .text-center  .ql-divider:hover::before {
+     color: #0065CC;
+ }
 
-.text-center .ql-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
-    min-height: 500px;
-    margin-bottom: 50px;
-}
-
+ .text-center .ql-container {
+     max-width: 800px;
+     margin: 0 auto;
+     padding: 20px;
+     background-color: #222424;
+     border: 1px solid rgb(101, 104, 104) !important;
+     min-height: 500px;
+     margin-bottom: 50px;
+ }
 .editor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 7px 0;
-    background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
-    position: sticky;
-    z-index: 1000;
-    top: 0;
-}
+     background-color: #222424;
+     border-bottom: 1px solid rgb(101, 104, 104) !important;
+     position: sticky;
+     z-index: 1000;
+     top: 0;
+ }
 
-.editor-header button {
+ .editor-header button {
     margin-left: 10px;
 }
-
 .left-section {
     display: flex;
     align-items: center;
 }
-
 .left-section h6 {
     margin-left: 10px;
 }
-
 .btn{
     background-color: #e9912c;
     border-color: #e9912c;
@@ -110,22 +141,18 @@ body {
     outline: none;
     box-shadow: none;
 }
-
 #back-button {
     background: transparent;
     border: none;
     font-size: 2em;
     color: #045cff;
 }
-
 #back-button:hover {
     color: #19ddff;
 }
-
 #back-button .fa {
     filter: invert(1);
 }
-
 #resume-title {
     background-color: #5a5a5a;
     border: none;
@@ -134,18 +161,14 @@ body {
     margin-bottom: 3px;
     color: rgb(214, 214, 214);
 }
-
 #resume-title:focus {
     outline: 1px solid #9e9e9e;
     box-shadow: none !important;
 }
-
 a {
     color: #e9912c !important;
     text-decoration: none !important;
-
 }
-
 #resume-title::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     color: #a8a8a8;
 }
@@ -158,7 +181,6 @@ a {
 #resume-title:-moz-placeholder { /* Firefox 18- */
     color: #a8a8a8;
 }
-
 .alert-success{
     background-color: #e9912c !important;
     color: white !important;
@@ -178,8 +200,6 @@ a {
     color: white;
     border: none;
 }
-
-
 .switch {
     position: relative;
     display: inline-block;
@@ -193,7 +213,6 @@ a {
     width: 0;
     height: 0;
 }
-
 .slider {
     position: absolute;
     cursor: pointer;
@@ -205,7 +224,6 @@ a {
     -webkit-transition: .4s;
     transition: .4s;
 }
-
 .slider:before {
     position: absolute;
     content: "";
@@ -217,127 +235,109 @@ a {
     -webkit-transition: .4s;
     transition: .4s;
 }
-
 input:checked + .slider {
     background-color: #e9912c;
 }
-
 input:focus + .slider {
     box-shadow: 0 0 1px #e9912c;
 }
-
 input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
 }
-
 .slider.round {
     border-radius: 34px;
 }
 
-.slider.round:before {
-    border-radius: 50%;
+ .slider.round:before {
+     border-radius: 50%;
+ }
+
+ body.show-before::before {
+     content: "";
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background: rgba(0, 0, 0, 0.56);
+     z-index: 1002;
+ }
+
+
+ .title {
+     color: #e9912c;
+ }
+
+ .ql-container {
+    padding: 20px;
+    width: 800px;
+    background-color: #222424;
+    border: 1px solid rgb(101, 104, 104) !important;
+    overflow-y: auto; /* Add vertical scrolling if content exceeds container height */
+    min-height: 500px; /* Set a minimum height to prevent the container from collapsing */
 }
 
-body.show-before::before {
-    content: "";
+.ql-container,
+.ql-editor {
+    /* overflow: hidden !important;  */
+    overflow-y: auto; /* Add vertical scrolling if content exceeds editor height */
+    max-height: 80vh; 
+    margin-top: 3px;
+    margin-left: -15px;
+    margin-right: -30px;
+}
+ 
+
+.ql-toolbar {
+     display: none !important;
+ }
+
+ .loading-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.56);
-    z-index: 1002;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none; 
+}
+#loading-screen {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.templates {
-    position: fixed;
-    top: 53%;
+#loading-content {
+    text-align: center;
+    font-size: 2em;
+}
+
+.loading-spinner {
+    position: absolute;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1003;
-    display: none;
-    padding: 0 6%;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 
-.templates-title {
-    position: fixed;
-    top: 11%;
-    left: 52%;
-    z-index: 1003;
-    transform: translate(-50%, -50%);
-    padding: 0 6%;
-    text-align: center;
-    display: none;
-}
-
-.title {
-    color: #e9912c;
-}
-
-.templates .ql-container {
-    padding: 0 0px;
-    width: 300px;
-    background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
-}
-
-.template-editor .ql-container,
-.template-editor .ql-editor {
-    overflow: hidden !important;
-    padding-top: 41px;
-    margin-top: -27px;
-    margin-left: -60px;
-    margin-right: -60px;
-}
-
-.template-editor .ql-editor {
-    cursor: pointer !important;
-}
-
-.template-editor {
-    flex: 0 0 20%;
-    margin: 5px !important;
-    transform: scale(0.9);
-    transform-origin: 0 0;
-    height: 570px !important;
-    box-shadow: 0 0 8px rgba(101, 104, 104, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.template-editor .ql-editor.ql-blank::before {
-    bottom: 0 !important;
-}
-
-.template-editor .ql-editor {
-    padding-bottom: 0 !important;
-}
-
-.template-editor p, .template-editor h1, .template-editor h2, .template-editor h3, .template-editor h4, .template-editor h5, .template-editor h6, .template-editor ul, .template-editor hr{
-    transform: scale(.66);
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
-.template-editor:hover {
-    border-color: #b87223;
-    cursor: pointer;
-    transform: scale(.97);
-    box-shadow: 0 0 20px rgba(184, 114, 35, 0.7);
-}
-
-.template-editor input, .template-editor button{
-    display: none !important;
-}
-
-.templates .ql-toolbar {
-    display: none !important;
-}
-
-.preview-a {
-    color: rgb(207, 207, 207) !important;
-    text-decoration: none !important;
-}
