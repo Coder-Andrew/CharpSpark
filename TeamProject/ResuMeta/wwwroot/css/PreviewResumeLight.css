@@ -1,5 +1,5 @@
-﻿.resume-container {
-    background-color: #fff;
+.resume-container {
+    background-color: #f8f9fa;
     margin-top: 20px;
     padding: 20px;
     border-radius: 5px;
@@ -12,24 +12,23 @@ hr {
 
 html {
     font-size: 14px;
-  }
+}
   
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
     html {
-      font-size: 16px;
+        font-size: 16px;
     }
-  }
+}
 
 html {
     position: relative;
     min-height: 100%;
-  }
+}
   
 body {
     margin-bottom: 60px;
-    background-color: #131414 !important;
-    background: linear-gradient(to bottom, #131414 65%, rgb(34, 18, 8)) !important;
-    color: rgb(207, 207, 207);
+    background-color: #f8f9fa !important;
+    color: #212529;
     font-family: 'Open Sans', sans-serif;
 }
   
@@ -39,38 +38,42 @@ body {
     margin: 20px;
 }
 
-.text-center .ql-toolbar {
-    width: 100%;
-    position: sticky;
-    top: 71px;
-    background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
-    border-top: none !important;
-    border-right: none !important;
-    border-left: none !important;
-    z-index: 1000;
-}
-
-
-.text-center .ql-toolbar .ql-divider::before {
-    content: '\f068' !important;
-    font-family: FontAwesome !important;
-    color: #444444;
-}
-
-
-.text-center .ql-toolbar .ql-divider:hover::before {
-    color: #0065CC;
-}
-
 .text-center .ql-container {
     max-width: 800px;
-    margin: 0 auto;
     padding: 20px;
-    background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6 !important;
     min-height: 500px;
     margin-bottom: 50px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 73px;
+}
+
+.editor {
+    flex-shrink: 0.08;
+    margin-right: 20px !important;
+}
+
+.arrow {
+    display: flex;
+    flex-direction: column;
+    margin-top: 370px;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 20px !important;
+    color: rgb(102, 102, 102);
+}
+
+.arrow button {
+    color: black !important;
+}
+
+.ql-toolbar {
+    display: none !important;
 }
 
 .editor-header {
@@ -78,15 +81,16 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 7px 0;
-    background-color: #222424;
-    border-bottom: 1px solid rgb(101, 104, 104) !important;
+    background-color: #f0f2f3;
+    border-bottom: 1px solid #dee2e6 !important;
     position: sticky;
-    z-index: 1000;
     top: 0;
+    z-index: 1001;
 }
 
 .editor-header button {
     margin-left: 10px;
+    color: #212529;
 }
 
 .left-section {
@@ -127,12 +131,12 @@ body {
 }
 
 #resume-title {
-    background-color: #5a5a5a;
+    background-color: #dddddd;
     border: none;
     border-radius: 5px;
     padding: 5px 10px;
     margin-bottom: 3px;
-    color: rgb(214, 214, 214);
+    color: rgb(56, 56, 56);
 }
 
 #resume-title:focus {
@@ -178,7 +182,6 @@ a {
     color: white;
     border: none;
 }
-
 
 .switch {
     position: relative;
@@ -247,7 +250,7 @@ body.show-before::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.56);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1002;
 }
 
@@ -280,8 +283,14 @@ body.show-before::before {
 .templates .ql-container {
     padding: 0 0px;
     width: 300px;
-    background-color: #222424;
-    border: 1px solid rgb(101, 104, 104) !important;
+    background-color: #f8f9fa;
+    border: 1px solid rgb(144, 145, 146) !important;
+}
+
+.templates::before,
+.templates::after {
+    content: "{{" "}}";
+    display: none;
 }
 
 .template-editor .ql-container,
@@ -303,7 +312,7 @@ body.show-before::before {
     transform: scale(0.9);
     transform-origin: 0 0;
     height: 570px !important;
-    box-shadow: 0 0 8px rgba(101, 104, 104, 0.4);
+    box-shadow: 0 0 8px rgba(114, 119, 119, 0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -326,18 +335,9 @@ body.show-before::before {
     border-color: #b87223;
     cursor: pointer;
     transform: scale(.97);
-    box-shadow: 0 0 20px rgba(184, 114, 35, 0.7);
+    box-shadow: 0 0 20px rgba(233, 167, 91, 0.7);
 }
 
-.template-editor input, .template-editor button{
+.template-editor input, .template-editor button, .editor input, .editor button{
     display: none !important;
-}
-
-.templates .ql-toolbar {
-    display: none !important;
-}
-
-.preview-a {
-    color: rgb(207, 207, 207) !important;
-    text-decoration: none !important;
 }

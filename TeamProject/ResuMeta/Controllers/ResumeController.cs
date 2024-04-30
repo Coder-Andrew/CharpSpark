@@ -20,14 +20,15 @@ public class ResumeController : Controller
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
     private readonly ICoverLetterService _coverLetterService;
-
+    private readonly IResumeTemplateService _resumeTemplateService;
     public ResumeController(
         ILogger<ResumeController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
         IRepository<Resume> resumeRepo,
         IResumeService resumeService,
-        ICoverLetterService coverLetterService
+        ICoverLetterService coverLetterService,
+        IResumeTemplateService resumeTemplateService
         )
     {
         _logger = logger;
@@ -36,6 +37,7 @@ public class ResumeController : Controller
         _resumeRepository = resumeRepo;
         _resumeService = resumeService;
         _coverLetterService = coverLetterService;
+        _resumeTemplateService = resumeTemplateService;
     }
 
     public IActionResult Index()
@@ -100,7 +102,14 @@ public class ResumeController : Controller
         ApplicationUser idUser = _userManager.FindByIdAsync(id).Result!;
         string email = _userManager.GetEmailAsync(idUser).Result!;
         ResumeVM resumeVM = _resumeService.GetResume(resumeId, email!);
-        return View(resumeVM);
+
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
+        TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
+        {
+            Resume = resumeVM,
+            TemplatesList = templatesList
+        };
+        return View(templateAndResumeVM);
     }
 
     [HttpGet("Resume/YourResume/{resumeId}")]
@@ -122,7 +131,45 @@ public class ResumeController : Controller
             return RedirectToAction("Index", "Home");
         }
         ResumeVM resumeVM = _resumeService.GetResumeHtml(resumeId);
-        return View(resumeVM);
+
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
+        TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
+        {
+            Resume = resumeVM,
+            TemplatesList = templatesList
+        };
+        return View(templateAndResumeVM);
+    }
+
+    public IActionResult PreviewResume(int currentResumeId, int templateId)
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == currentResumeId).FirstOrDefault()!;
+        if (userResume == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        if (userResume.UserInfoId != currUser.Id)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        ResumeVM resumeVM = _resumeService.GetResumeHtml(currentResumeId);
+        List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
+        ResumeVM resumeTemplateVM = _resumeTemplateService.GetResumeTemplateHtml(templateId);
+        ResumeVM previewResume = _resumeTemplateService.ConvertResumeToTemplate(resumeTemplateVM, resumeVM, currUser);
+
+        TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
+        {
+            Resume = resumeVM,
+            Template = previewResume,
+            TemplatesList = templatesList
+        };
+        return View(templateAndResumeVM);
     }
     
     [HttpGet("Resume/ImproveResume/{resumeId}")]

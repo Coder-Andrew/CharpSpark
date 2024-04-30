@@ -38,6 +38,16 @@ body {
     margin: 20px;
 }
 
+.ql-toolbar .ql-divider::before {
+    content: '\f068' !important;
+    font-family: FontAwesome !important;
+    color: #444444;
+}
+
+.ql-toolbar .ql-divider:hover::before {
+    color: #0065CC;
+}
+
 .ql-toolbar {
     width: 100%;
     position: sticky;
@@ -228,3 +238,111 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+
+
+body.show-before::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1002;
+}
+
+.templates {
+    position: fixed;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1003;
+    display: none;
+    padding: 0 6%;
+}
+
+.templates-title {
+    position: fixed;
+    top: 11%;
+    left: 52%;
+    z-index: 1003;
+    transform: translate(-50%, -50%);
+    padding: 0 6%;
+    text-align: center;
+    display: none;
+}
+
+.templates-title p, .templates-title hr {
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+    
+}
+
+.title {
+    color: #e9912c;
+}
+
+.templates .ql-container {
+    padding: 0 0px;
+    width: 300px;
+    background-color: #f8f9fa;
+    border: 1px solid rgb(144, 145, 146) !important;
+}
+
+.template-editor .ql-container,
+.template-editor .ql-editor {
+    overflow: hidden !important;
+    padding-top: 41px;
+    margin-top: -27px;
+    margin-left: -60px;
+    margin-right: -60px;
+}
+
+.template-editor .ql-editor {
+    cursor: pointer !important;
+}
+
+.template-editor {
+    flex: 0 0 20%;
+    margin: 5px !important;
+    transform: scale(0.9);
+    transform-origin: 0 0;
+    height: 570px !important;
+    box-shadow: 0 0 8px rgba(114, 119, 119, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.template-editor .ql-editor.ql-blank::before {
+    bottom: 0 !important;
+}
+
+.template-editor .ql-editor {
+    padding-bottom: 0 !important;
+}
+
+.template-editor p, .template-editor h1, .template-editor h2, .template-editor h3, .template-editor h4, .template-editor h5, .template-editor h6, .template-editor ul, .template-editor hr{
+    transform: scale(.66);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.template-editor:hover {
+    border-color: #b87223;
+    cursor: pointer;
+    transform: scale(.97);
+    box-shadow: 0 0 20px rgba(233, 167, 91, 0.7);
+}
+
+.template-editor input, .template-editor button{
+    display: none !important;
+}
+
+.templates .ql-toolbar {
+    display: none !important;
+}
+
+.preview-a {
+    color: #212529 !important;
+    text-decoration: none !important;
+}

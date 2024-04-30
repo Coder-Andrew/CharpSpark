@@ -64,14 +64,14 @@
     transform: scale(1.05);
 }
 
-#search-job-listings {
+#search-job-listings, #search-cached-job-listings {
     background-color: #e9912c;
     border-color: #e9912c;
     border-radius: 15px;
     margin-left: 6px;
 }
 
-#search-job-listings:hover, #search-job-listings:active, #search-job-listings:focus {
+#search-job-listings:hover, #search-job-listings:active, #search-job-listings:focus, #search-cached-job-listings:hover, #search-cached-job-listings:active, #search-cached-job-listings:focus {
     background-color: #E91D1C;
     color: white !important;
     border-color: #E91D1C;
@@ -80,7 +80,7 @@
 }
 
 input {
-    margin: 6px;
+    margin: 5px;
 }
 
 #job-container {
@@ -92,11 +92,16 @@ input {
     margin: auto;
 }
 
-/* #yes-btn {
+
+#search-job-listings {
+    margin-bottom: 0 !important;
+}
+
+#yes-btn {
     border-radius: 15px;
     margin-left: 6px;
     min-width: 100px;
-} */
+} 
 
 .form-btns {
     display: flex !important;

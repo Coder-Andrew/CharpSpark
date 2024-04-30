@@ -26,7 +26,14 @@ var sendGridApiKey = builder.Configuration["SendGridApiKey"] ?? throw new Invali
 var sendFromEmail = builder.Configuration["SendFromEmail"] ?? throw new InvalidOperationException("Connection string 'SendFromEmail' not found.");
 string chatGPTUrl = "https://api.openai.com/";
 
+
 //builder.Services.AddScoped<IUserInfoRepository, UserInfoRepository>();
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
+
 
 builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, services) =>
 {
@@ -87,7 +94,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 
@@ -100,9 +108,11 @@ builder.Services.AddScoped<DbContext, ResuMetaDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IResumeService, ResumeService>();
 builder.Services.AddScoped<ICoverLetterService, CoverLetterService>();
+builder.Services.AddScoped<IResumeTemplateService, ResumeTemplateService>();
 builder.Services.AddScoped<ISkillsRepository, SkillsRepository>();
 builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
+builder.Services.AddScoped<IResumeTemplateRepository, ResumeTemplateRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
 builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
@@ -161,6 +171,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

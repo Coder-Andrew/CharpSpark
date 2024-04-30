@@ -1,13 +1,39 @@
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
+let pageNumber = 1;
+let numberOfPages = 0;
+
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
     const searchJobListingsBtn = document.getElementById('search-job-listings');
+    const searchCachedListings = document.getElementById('cached-job-title');
+    const pageNumberInput = document.getElementById('pagination');
 
-    document.getElementById('page-number').addEventListener('change', getCachedJobListings);
-    getCachedJobListings();
-    //getCachedListingsBtn.addEventListener('click', getCachedJobListings, false);
+    searchCachedListings.addEventListener('change', () => {
+        pageNumber = 1;
+        getCachedJobListings(pageNumber, searchCachedListings.value)
+    })
+    getCachedJobListings(pageNumber, "");
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
+
+
+    // add event listener to first and last links for pagination
+    document.getElementById('first-page').addEventListener('click', () => {
+        pageNumber = 1;
+        getCachedJobListings(pageNumber, searchCachedListings.value);
+    });
+    document.getElementById('last-page').addEventListener('click', () => {
+        pageNumber = numberOfPages;
+        getCachedJobListings(pageNumber, searchCachedListings.value);
+    });
+
+    // add event listener to individual page numbers
+    pageNumberInput.addEventListener('click', (event) => {
+        if (event.target.tagName === 'A') {
+            pageNumber = parseInt(event.target.textContent);
+            getCachedJobListings(pageNumber, searchCachedListings.value);
+        }
+    })
 }
 function hideLoader() {
     document.getElementById('page-number').classList.remove("invisible");
@@ -18,29 +44,36 @@ function showLoader() {
     document.getElementById("loader").classList.remove("invisible");
 }
 
-async function getCachedJobListings() {
+async function getCachedJobListings(pageNumber, jobTitle) {
     showLoader();
-    console.log("Getting cached job listings");
-    var pageNum = document.getElementById('page-number').value;
+    //console.log("Getting cached job listings");
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
-
-    const response = await fetch(`api/scraper/cached_listings/${pageNum}`, {
+    const response = await fetch(`api/scraper/cached_listings?pageNum=${pageNumber}&jobTitle=${jobTitle}`, {
         method: 'GET',
         headers: {
             'Accept': 'application/json; application/problem+json; charset=utf-8',
             'Content-Type': 'application/json; charset=utf-8'
         }
     });
-    if (response.ok) {        
+    if (response.ok) {
         var jobs = await response.json();
-        console.log(jobs);
-        jobs.forEach(job => {
-            const jobListingNode = generateJobListingNode(job);
-            jobListingContainer.appendChild(jobListingNode);
-        });
+        numberOfPages = jobs.numberOfPages;
+        populatePageNumber();
+        //console.log(jobs.numberOfPages);
+        if (jobs.jobListings.length === 0) {
+            let noResultsNode = document.createElement('div');
+            noResultsNode.className = 'no-results';
+            noResultsNode.innerHTML = 'No cached job listings found';
+            jobListingContainer.appendChild(noResultsNode);
+        } else {
+            jobs.jobListings.forEach(job => {
+                const jobListingNode = generateJobListingNode(job);
+                jobListingContainer.appendChild(jobListingNode);
+            });
+        }
     }
-    else 
+    else
     {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
@@ -51,9 +84,41 @@ async function getCachedJobListings() {
     return;
 }
 
+function populatePageNumber() {
+    const paginationList = document.getElementById('pagination');
+    paginationList.innerHTML = '';
+
+    let i = 0;
+    for (i = pageNumber - 1; i <= pageNumber + 1; i++) {
+        if (i < 1 || i > numberOfPages) continue;
+        addPaginationLink(i, i === pageNumber);
+    }
+    if (pageNumber === 1 && pageNumber + 1 < numberOfPages) addPaginationLink(i);
+}
+
+function addPaginationLink(number, active = false) {
+    const paginationList = document.getElementById('pagination');
+
+    const pageItem = document.createElement('li');
+    pageItem.className = 'page-item';
+
+    if (active) {
+        pageItem.classList.add('active');
+    }
+
+    const pageLink = document.createElement('a');
+    pageLink.className = 'page-link';
+    pageLink.href = '#';
+    pageLink.textContent = number;
+
+    pageItem.appendChild(pageLink);
+    paginationList.appendChild(pageItem);
+}
+
+
 async function searchJobListings() {
     showLoader();
-    console.log("Searching job listings");
+    //console.log("Searching job listings");
     const jobListingContainer = document.getElementById('job-container');
     jobListingContainer.innerHTML = '';
 
@@ -71,7 +136,7 @@ async function searchJobListings() {
         var contentType = response.headers.get("content-type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
             var jobs = await response.json();
-            console.log(jobs);
+            //console.log(jobs);
             jobs.forEach(job => {
                 const jobListingNode = generateJobListingNode(job);
                 jobListingContainer.appendChild(jobListingNode);
@@ -88,7 +153,7 @@ async function searchJobListings() {
             return;
         }
     }
-    else 
+    else
     {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
@@ -108,7 +173,7 @@ function generateJobListingNode(job) {
     const jobLink = clone.querySelector("a");
     const jobTitle = clone.querySelector(".job-listing-title");
     const jobCompany = clone.querySelector(".job-listing-company");
-    const jobLocation = clone.querySelector(".job-listing-location"); 
+    const jobLocation = clone.querySelector(".job-listing-location");
 
 
     jobLink.href = `https://www.${job.link}`;

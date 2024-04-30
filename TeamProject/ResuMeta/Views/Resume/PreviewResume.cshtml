@@ -1,15 +1,16 @@
 @model ResuMeta.ViewModels.TemplateAndResumeVM;
 @{
     Layout = null;
-    ViewData["Title"] = "Resume - View";
+    ViewData["Title"] = "Resume - Preview";
 }
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link id="theme-stylesheet" rel="stylesheet" href="~/css/ViewResumeDark.css" asp-append-version="true" />
+        <link id="theme-stylesheet" rel="stylesheet" href="~/css/PreviewResumeDark.css" asp-append-version="true" />
         <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,28 +26,25 @@
                 </div>
                 <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
                 </div>
-                @if (Model.Resume != null)
+                @if (Model.Resume != null && Model.Template != null)
                 {
                     <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
                     <input type="hidden" id="resume-content" value="@Model.Resume.HtmlContent" />
-                    <div class="container" id="resume-area" style="display: none;">
-                        
-                    </div>
+                    <div class="container" id="resume-area" style="display: none;"></div>
+                    <input type="hidden" id="preview-content" value="@Model.Template.HtmlContent" />
+                    <div class="container" id="preview-area" style="display: none;"></div>
+
                     <div class="editor-header">
                         <div class="left-section">
-                            <button id="back-button" onclick="location.href='@Url.Action("YourDashboard", "Resume")'">
+                            <button id="back-button" onclick="window.history.back();">
                                 <i class="fa fa-arrow-circle-left"></i>
                             </button>
                             <div class="mt-3 mx-2" style="float: left;">
-                                <h6><strong>Title:</strong> <input type="text" id="resume-title"  value="@Model.Resume.Title" /></h6>
+                                <h6><strong>Title:</strong> <input type="text" id="resume-title"  value="@Model.Resume.Title" readonly /></h6>
                             </div>
                         </div>
-                        
                         <div>
-                            <button class="btn btn-primary" id="improve-with-ai">Improve With AI</button>
                             <button class="btn btn-primary" id="preview-resume">Preview Resume</button>
-                            <button class="btn btn-primary" id="save-resume">Save Resume</button>
-                            <button class="btn btn-primary" id="export-pdf">Export PDF</button>
                             <label for="theme-switcher" id="theme-label">Switch Theme</label>
                             <label class="switch">
                                 <input type="checkbox" id="theme-switcher" onchange="SwitchTheme()">
@@ -54,8 +52,20 @@
                             </label>
                         </div>
                     </div>
-                    <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
 
+                    <div class="container">
+                        <div id="editor" class="editor" style="height: 100vh; width: 816px;">
+
+                        </div>
+
+                        <div class="arrow">
+                            <i class="fa fa-long-arrow-right fa-4x"></i>
+                            <button class="btn btn-primary" id="save-and-apply">Save and Apply</button>
+                        </div>
+
+                        <div id="preview-editor" class="editor" style="height: 100vh; width: 816px;">
+
+                        </div>
                     </div>
                 }
                 else
@@ -66,7 +76,7 @@
                 }
             </div>
 
-            @for (int i = 0; i < Model.TemplatesList.Count; i++)
+            @for (int i = 0; i < Model.TemplatesList!.Count; i++)
             {
                 <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
                 <div class="container" id="template@(i+1)-area" style="display: none;"></div>
@@ -90,7 +100,7 @@
             <script src="~/lib/jquery/dist/jquery.min.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>
-            <script type="text/javascript" src="~/js/YourResume.js"></script>
+            <script type="text/javascript" src="~/js/PreviewResume.js"></script>
         </body>
     </div>
 </html>

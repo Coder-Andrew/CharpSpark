@@ -39,6 +39,16 @@ body {
     margin: 20px;
 }
 
+.ql-toolbar .ql-divider::before {
+    content: '\f068' !important;
+    font-family: FontAwesome !important;
+    color: #444444;
+}
+
+.ql-toolbar .ql-divider:hover::before {
+    color: #0065CC;
+}
+
 .ql-toolbar {
     width: 100%;
     position: sticky;

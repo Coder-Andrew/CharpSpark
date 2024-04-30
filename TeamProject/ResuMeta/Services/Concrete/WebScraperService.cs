@@ -21,6 +21,7 @@ namespace ResuMeta.Services.Concrete
     class JsonListings
     {
         public List<JsonListing> listings { get; set; }
+        public int number_of_pages { get; set; }
     }
 
     class JsonJobs
@@ -38,10 +39,10 @@ namespace ResuMeta.Services.Concrete
 
         }
 
-        public async Task<List<JobListingVM>> GetCachedListings(int pageNum)
+        public async Task<JobListingContainerVM> GetCachedListings(int pageNum, string jobTitle)
         {
             Console.WriteLine("Getting cached listings");
-            var url = _scraperUrl + "api/cached_listings/" + pageNum;
+            var url = _scraperUrl + "api/cached_listings?page_number=" + pageNum + "&job_title=" + System.Net.WebUtility.UrlEncode(jobTitle);
             var response = await _httpClient.GetAsync(url);
             Console.WriteLine(response.StatusCode);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -50,13 +51,18 @@ namespace ResuMeta.Services.Concrete
                 try
                 {
                     var jobListings = JsonSerializer.Deserialize<JsonListings>(responseString);
-                    return jobListings.listings.Select(l => new JobListingVM
+                    JobListingContainerVM listingsContainer = new JobListingContainerVM();
+                    listingsContainer.JobListings = jobListings.listings.Select(l => new JobListingVM
                     {
                         Company = l.listing_company,
                         Link = l.listing_link,
                         Location = l.listing_location,
                         JobTitle = l.listing_title
                     }).ToList();
+
+                    listingsContainer.NumberOfPages = jobListings.number_of_pages;
+
+                    return listingsContainer;
                 }
                 catch (Exception e)
                 {
