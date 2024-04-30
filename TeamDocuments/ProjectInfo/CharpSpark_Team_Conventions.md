@@ -1,0 +1,11 @@
+# Conventions:
+- _Tests for nunit testing
+- Most recent dotnet 8.0.101
+- Bootstrap
+- Plain JavaScript
+- Lazy Loading
+- Most recent EF
+- Git branching: (first initial)(last initial)/(sprint)/(user story)
+- Require users to be logged in by default (routes that allow anonymous users must have appropriate statements)
+- C#: Camel case variables, pascel case methods and classes
+- Python: snake case

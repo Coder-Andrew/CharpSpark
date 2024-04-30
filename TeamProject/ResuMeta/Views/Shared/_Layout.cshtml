@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ResuMeta</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ResuMeta.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<div class="content">
+<body class="flex-container">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3 flex-nav">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="fa fa-bars"></i>
+                    </span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="Home" asp-action="Index"><span><i class="fa fa-home"></i> Home</span></a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="Home" asp-action="About"><span><i class="fa fa-info-circle"></i> About</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="Resume" asp-action="Index"><span><i class="fa fa-pencil"></i> Resumes</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="CoverLetter" asp-action="Index"><span><i class="fa fa-file-text"></i> <span class="smaller-text">Cover Letters</span></span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="Resume" asp-action="YourDashboard"><span><i class='fa fa-archive'></i> Dashboard</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="ApplicationTracker" asp-action="Index"><span><i class='fa fa-address-book'></i> App Tracker</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-reactive" asp-area="" asp-controller="JobListing" asp-action="Index"><span><i class='fa fa-briefcase'></i> Job Listings</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (TempData["RegistrationMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissable fade show" role="alert">
+                    @TempData["RegistrationMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - ResuMeta
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</div>
+<partial name="_LoginPartial" />
+</html>

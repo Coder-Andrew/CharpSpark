@@ -1,0 +1,17 @@
+@{
+    ViewData["Title"] = "Cover Letter - Home";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/CoverLetterIndex.css" asp-append-version="true" />
+}
+
+
+<section>
+<div class="text-center">
+    <h1 class="display-4 title">Cover Letter Center</h1>
+    <hr />
+    <div class="container text-center">
+        <h4>Create a cover letter from Scratch</h4>
+        <a asp-controller="CoverLetter" asp-action="CreateCoverLetter" class="btn btn-primary">Create Cover Letter</a>
+    </div>
+</div>

@@ -10,9 +10,6 @@
 # Mac-specific files
 .DS_Store
 
-# Deploy profiles
-*profile.arm.json
-
 ### DotnetCore ###
 # .NET Core build folders
 bin/

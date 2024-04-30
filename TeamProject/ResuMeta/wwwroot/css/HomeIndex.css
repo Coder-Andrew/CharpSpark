@@ -1,0 +1,121 @@
+.title {
+    align-items: center;
+    justify-content: center;
+    color: #fc9c2f;
+    font-size: 8rem;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .title img {
+    width: 10.2%;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #ff941aef, 0 0 10px #f3711aef, 0 0 0px #f3711aef, 0 0 50px #5e351cef;
+    transition: box-shadow 0.3s ease-in-out;
+    margin-right: 28px;
+  }
+  
+  .title img:hover {
+    box-shadow: 0 0 8px #ff941aef, 0 0 20px #f3711aef, 0 0 0px #f3711aef, 0 0 100px #5e351cef;
+  }
+
+h1 {
+    margin-bottom: 30px;
+}
+
+@keyframes fadeInMoveUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bodyBackgroundChange {
+    0% {
+        background: #000B0E;
+    }
+    100% {
+        background: linear-gradient(to bottom right, #000B0E 65%, rgb(134, 76, 29));
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background: #000B0E; /* Initial solid color */
+    color: rgb(207, 207, 207);
+    font-family: 'Open Sans', sans-serif;
+    animation: bodyBackgroundChange 1s ease-out forwards;
+}
+
+.navbar::before {
+    opacity: 0; 
+    transform: translateY(-100%);
+    content: "";
+    position: absolute;
+    top: 23px;
+    bottom: 2px;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, #E91D1C, #FEB617);
+    animation: slideInFromTop 1s ease-out forwards;
+    animation-delay: 1.8s;
+}
+
+hr {
+    opacity: 0; 
+    transform: translateY(-100%);
+    box-shadow:  0 0 10px #c21f1f, 0 0 20px #ac1f1f, 0 0 20px #a74823, 0 0 30px #8d532c !important;
+    animation: slideInFromLeft 1s ease-out forwards;
+    animation-delay: 1.4s;
+}
+
+.btn:focus, .btn:active {
+    border-color: #2a1ce9 !important;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;
+}
+
+section .body-paragraph, .navbar *:not(.border-bottom), .footer *, section .title, section img, .navbar-brand, .nav-login-item{
+    opacity: 0; 
+    transform: translateY(-100%);
+    animation: fadeInMoveUp 1s ease-out forwards;
+    animation-delay: .6s;
+}
+
+.body-paragraph {
+    text-align: center;
+}
+
+.btn {
+    background-color: #29adeb !important;
+}
+
+.btn-lg, .checkbox {
+    padding: 0px !important;
+    margin: 0px! important;
+}

@@ -1,0 +1,89 @@
+#app-table {
+    color: #e9912c; 
+    overflow-x: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%; 
+    /* table-layout: fixed;  */
+}
+#app-table td:nth-child(8), #app-table th:nth-child(8) {
+    min-width: 30px;
+    max-width: 40px;
+}
+#app-table td:nth-child(9), #app-table th:nth-child(9) {
+    min-width: 200px;
+    max-width: 250px;
+}
+#app-table tr {
+    border-bottom: 1px solid #ddd; 
+}
+#app-table th, #app-table td {
+  
+    width: 100px; 
+    font-size: small;
+    padding: 10px; 
+    text-align: left;
+}
+#app-table button {
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#app-table select {
+    width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+#add-application-button {
+    margin-top: 3%;
+}
+
+.wrap-text {
+    word-wrap: break-word;
+    max-width: 200px; 
+}
+
+.table-responsive {
+    display: flex;
+    justify-content: center;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-section h4 {
+    color: #e9912c;
+    margin-bottom: 0px;
+}
+
+.filter-section hr {
+    width: 100%;
+}
+.filter-section label {
+    margin: 3px 0;
+    color: #e9912c;
+}
+
+.filter-section select {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 3px;
+}
+
+button {
+    background-color: #E91D1C;
+    color: white;
+    border: none;
+    box-shadow: none;
+}

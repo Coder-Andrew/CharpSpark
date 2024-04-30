@@ -1,0 +1,38 @@
+@page
+@model SecurityQuestionsModel
+@{
+    ViewData["Title"] = "Security Questions";
+}
+
+<div class="text-center">
+    <h1 class="area-title">@ViewData["Title"]</h1>
+    <div class="text-danger" id="security-page">
+        <div asp-validation-summary="All"></div>
+    </div>
+    <div class="sign-page">
+        <form method="post">
+            <h2 class="area-h2">Answer your security questions</h2>
+            <hr />
+            <div class="form-group">
+                <label>@Model.SecurityQuestion1</label>
+                <input asp-for="Input.Answer1" class="form-control" id="Answer1" />
+                <span asp-validation-for="Input.Answer1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>@Model.SecurityQuestion2</label>
+                <input asp-for="Input.Answer2" class="form-control" id="Answer2" />
+                <span asp-validation-for="Input.Answer2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>@Model.SecurityQuestion3</label>
+                <input asp-for="Input.Answer3" class="form-control" id="Answer3" />
+                <span asp-validation-for="Input.Answer3" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

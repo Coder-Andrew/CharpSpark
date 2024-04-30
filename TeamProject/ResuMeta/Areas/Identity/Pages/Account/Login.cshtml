@@ -1,0 +1,64 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="text-center">
+    <h1 class="area-title">@ViewData["Title"]</h1>
+    <div class="sign-page">
+        <section>
+            <form id="account" method="post">
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert" id="login-page"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="checkbox mb-3">
+                    <label asp-for="Input.RememberMe" class="form-label">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                    </label>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                </div>            
+                @foreach (var provider in Model.ExternalLogins!)
+                {
+                    <div class="card-body">
+                        <a asp-controller="GoogleLogin" asp-action="Login" class="w-100 btn text-white login-btn" name="provider" title="Log in using your @provider.DisplayName account">
+                            <img src="https://developers.google.com/static/identity/images/branding_guideline_sample_lt_rd_sl.svg" alt="Google logo" class="google-logo">
+                            Log in with @provider.DisplayName
+                        </a>
+                    </div>
+                }
+@*                 <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/ExternalLogin" asp-route-provider="Google" asp-route-returnUrl="@Model.ReturnUrl">
+                    Login with Google
+                </a> *@
+                <div>
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>
+                    <p>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">First time user? Register Here!</a>
+                    </p>
+                    @* <p>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                    </p> *@
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,110 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3 class="title">@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-group profile-picture-group">
+                @if (Model.ProfilePicturePath != null && Model.ProfilePicturePath.Length > 0)
+                {
+                    <img id="currentProfilePicture"
+                        src="data:image;base64,@Convert.ToBase64String(Model.ProfilePicturePath)" alt="Profile Picture"
+                        class="img-thumbnail" />
+                }
+                else
+                {
+                    <img id="currentProfilePicture" src="~/Images/profile.svg" alt="Profile Picture"
+                        class="profile-placeholder img-thumbnail" />
+                }
+            </div>
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="Input.NewProfilePicture" type="file" accept="image/*" aria-required="true">
+                <span asp-validation-for="Input.NewProfilePicture" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="Username" class="form-control locked-label" placeholder="Please enter your username."
+                    disabled />
+                <label asp-for="Username" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewUsername" class="form-control" autocomplete="Username" aria-required="true"
+                    placeholder="Please enter new username." />
+                <label asp-for="Input.NewUsername" class="form-label"></label>
+                <span asp-validation-for="Input.NewUsername" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="FirstName" class="form-control locked-label" placeholder="Please enter your first name."
+                    disabled />
+                <label asp-for="FirstName" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewFirstName" class="form-control" autocomplete="FirstName" aria-required="true"
+                    placeholder="Please enter new first name." />
+                <label asp-for="Input.NewFirstName" class="form-label"></label>
+                <span asp-validation-for="Input.NewFirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="LastName" class="form-control locked-label" placeholder="Please enter your last name."
+                    disabled />
+                <label asp-for="LastName" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewLastName" class="form-control" autocomplete="LastName" aria-required="true"
+                    placeholder="Please enter new last name." />
+                <label asp-for="Input.NewLastName" class="form-label"></label>
+                <span asp-validation-for="Input.NewLastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="PhoneNumber" class="form-control locked-label"
+                    placeholder="Please enter your phone number." disabled />
+                <label asp-for="PhoneNumber" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewPhoneNumber" class="form-control" autocomplete="PhoneNumber"
+                    aria-required="true" placeholder="Please enter new phone number." />
+                <label asp-for="Input.NewPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Input.NewPhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3 input-group">
+                <input asp-for="Summary" class="form-control locked-label" placeholder="Please enter your summary."
+                    disabled />
+                <label asp-for="Summary" class="form-label"></label>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewSummary" class="form-control" autocomplete="Summary" aria-required="true"
+                    placeholder="Please enter new summary." />
+                <label asp-for="Input.NewSummary" class="form-label"></label>
+                <span asp-validation-for="Input.NewSummary" class="text-danger"></span>
+            </div>
+<div class="form-check">
+    @if (Model.TwoFactorEnabled)
+    {
+        <p>You have 2FA enabled.</p>
+    }
+    else
+    {
+        <input type="checkbox" asp-for="Input.EnableTwoFactor" />
+        <label asp-for="Input.EnableTwoFactor" class="form-label"></label>
+    }
+</div>
+            <button id="update-profile-button" type="submit" asp-page-handler="ChangeProfile"
+                class="w-100 btn btn-lg btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
