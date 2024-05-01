@@ -54,7 +54,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.STANDUPS_PUBLISH }}
+        publish-profile: ${{ secrets.RESUMETA_PUBLISH }}
         package: ${{ env.PATH_TO_SOLUTION }}/${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
 # Lots of examples have the deploy step in a separate job, but publishing artifacts for the publish
