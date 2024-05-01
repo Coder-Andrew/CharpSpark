@@ -1,5 +1,5 @@
 
-name: Build, test and deploy Standups application to Azure
+name: Build, test and deploy ResuMeta application to Azure
 
 on:
   push:
