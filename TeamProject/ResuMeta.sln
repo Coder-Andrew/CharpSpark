@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta", "resuMeta\ResuMeta.csproj", "{05C391E0-B67E-4ACD-8B2F-2BD52A1277F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta", "ResuMeta\ResuMeta.csproj", "{05C391E0-B67E-4ACD-8B2F-2BD52A1277F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta_Tests", "resuMeta_Tests\ResuMeta_Tests.csproj", "{0F5B1788-886F-479C-A638-9706936628D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResuMeta_Tests", "ResuMeta_Tests\ResuMeta_Tests.csproj", "{0F5B1788-886F-479C-A638-9706936628D4}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ResuMeta_JSTests", "ResuMeta_JSTests\ResuMeta_JSTests.esproj", "{B76FA403-1475-47A2-B384-BFDC54997935}"
 EndProject
