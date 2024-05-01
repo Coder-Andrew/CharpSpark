@@ -20,7 +20,7 @@ env:
 
 defaults:
   run:
-    working-directory: './TeamProject/ResuMeta'
+    working-directory: './TeamProject'
 
 jobs:
   build_and_test:
