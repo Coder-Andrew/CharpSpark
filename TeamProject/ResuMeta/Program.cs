@@ -44,7 +44,8 @@ builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, ser
     return new ChatGPTService(
     httpClient, 
     services.GetRequiredService<ILogger<ChatGPTService>>(),
-    services.GetRequiredService<IResumeRepository>()
+    services.GetRequiredService<IResumeRepository>(),
+    services.GetRequiredService<ICoverLetterRepository>()
 );
 });
 
