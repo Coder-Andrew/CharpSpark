@@ -88,6 +88,8 @@ function initializePage() {
     quill.setContents(delta);
     const saveBtn = document.getElementById("save-resume");
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+    const deleteBtn = document.getElementById("delete-resume");
+    deleteBtn.addEventListener('click', () => deleteResume(), false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');

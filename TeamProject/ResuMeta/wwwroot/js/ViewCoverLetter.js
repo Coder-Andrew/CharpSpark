@@ -65,11 +65,15 @@ function initializePage() {
     quill.setContents(delta);
     const saveBtn = document.getElementById("save-cover-letter");
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+    const deleteBtn = document.getElementById("delete-cover-letter");
+    deleteBtn.addEventListener('click', () => deleteCoverLetter(), false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
 }
+
+let isCoverLetterSaved = false;
 
 async function SwitchTheme() {
     var themeStylesheet = document.getElementById('theme-stylesheet');
@@ -177,6 +181,7 @@ async function getHtmlInfo()
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Cover letter saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
+        isCoverLetterSaved = true;
         return;
     }
     else
@@ -188,5 +193,56 @@ async function getHtmlInfo()
         validationArea.appendChild(cloneError);
         console.log("Error saving information");
         return;
+    }
+}
+
+async function deleteCoverLetter() {
+    if(isCoverLetterSaved)
+    {
+        const validationArea = document.getElementById('validation-area');
+        const successValidation = document.getElementById('validation-success');
+        const errorValidation = document.getElementById('validation-error');
+        const coverLetterId = document.getElementById('cover-letter-id').value;
+
+        const userConfirmed = confirm('Are you sure you want to delete your cover letter?');
+        if (!userConfirmed) {
+            return;
+        }
+
+        const response = await fetch(`/api/coverletter/${coverLetterId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json; application/problem+json; charset=utf-8',
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+        if (response.ok) {
+            validationArea.innerHTML = "";
+            const cloneSuccess = successValidation.cloneNode(true);
+            cloneSuccess.style.display = "block";
+            cloneSuccess.innerHTML = `Cover letter deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+            validationArea.appendChild(cloneSuccess);
+            window.location.href = "/resume/yourdashboard";
+            return;
+        }
+        else {
+            validationArea.innerHTML = "";
+            const cloneError = errorValidation.cloneNode(true);
+            cloneError.style.display = "block";
+            cloneError.innerHTML = `An error occurred while deleting the cover letter. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+            validationArea.appendChild(cloneError);
+            console.log("Error deleting information");
+            return;
+        }
+    }
+    else
+    {
+        const validationArea = document.getElementById('validation-area');
+        const errorValidation = document.getElementById('validation-error');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please save the cover letter before deleting. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
     }
 }
