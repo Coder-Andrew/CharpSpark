@@ -340,4 +340,42 @@ input:checked + .slider:before {
     100% { transform: rotate(360deg); }
 }
 
+#regenerate-button {
+    position: relative;
+    background-color: #29ADEB;
+    border: 1px solid #29ADEB;
+    color: white;
+    box-shadow: 0 0 10px #29ADEB;
+}
 
+#regenerate-button::before {
+    content: "\f005";
+    font-family: "FontAwesome";
+    position: absolute;
+    top: -15px;
+    left: -8px;
+    font-size: 20px;
+    text-shadow: 0 0 10px #29ADEB;
+}
+
+#regenerate-button::after {
+    content: "\f005";
+    font-family: "FontAwesome";
+    position: absolute;
+    font-size: 10px;
+    top: -6px;
+    left: 14px;
+    text-shadow: 0 0 10px #29ADEB;
+}
+
+#regenerate-button:hover {
+    background-color: #0860c4;
+    border: 1px solid #0860c4;
+    color: white;
+    box-shadow: 0 0 10px #0860c4;
+}
+
+#regenerate-button:focus, #regenerate-button:active {
+    border-color: #2a1ce9 !important;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;
+}
