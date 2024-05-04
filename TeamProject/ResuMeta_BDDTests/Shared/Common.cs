@@ -30,7 +30,8 @@ namespace ResuMeta_BDDTests.Shared
             { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
             { "ApplicationTracker", "/ApplicationTracker"},
             { "JobListings", "/JobListing"},
-            { "ImproveResume", "/Resume/ImproveResume/" }
+            { "ImproveResume", "/Resume/ImproveResume/" },
+            { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" }
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
@@ -51,7 +52,8 @@ namespace ResuMeta_BDDTests.Shared
                 { "ViewCoverLetter", "/CoverLetter/ViewCoverLetter/" },
                 { "ApplicationTracker", "/ApplicationTracker"},
                 { "JobListings", "/JobListing"},
-                { "ImproveResume", "/Resume/ImproveResume/"}
+                { "ImproveResume", "/Resume/ImproveResume/"},
+                { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" }
             };
         }
     }

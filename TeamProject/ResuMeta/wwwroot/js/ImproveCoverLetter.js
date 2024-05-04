@@ -7,73 +7,54 @@ function loadQuill() {
     document.head.appendChild(script);
     script.onload = function () {
         console.log("Quill loaded");
-
-        //Register the DividerBlot
-        const BlockEmbed = Quill.import('blots/block/embed');
-
-        class DividerBlot extends BlockEmbed {
-        static create() {
-            let node = super.create();
-            return node;
-        }
-
-        static formats() {
-            return true;
-        }
-        }
-
-        DividerBlot.blotName = 'divider';
-        DividerBlot.tagName = 'hr';
-
-        Quill.register(DividerBlot);
         initializePage();
     }
+
 }
 
 function initializePage() {
-    var toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-        [{ 'align': [] }],
-        ['link'],
-        ['clean'],                                         // remove formatting button
-        ['divider']
-    ]
-    
-    var quill = new Quill('#editor', {
+
+    var quill1 = new Quill('#editor1', {
         theme: 'snow',
-        modules: {
-            toolbar: {
-                container: toolbarOptions,
-                handlers: {
-                    'divider': function() {
-                        let range = quill.getSelection(true);
-                        quill.insertText(range.index, '\n', Quill.sources.USER);
-                        quill.insertEmbed(range.index + 1, 'divider', true, Quill.sources.USER);
-                        quill.setSelection(range.index + 2, Quill.sources.SILENT);
-                    }
-                }
-            },
-        }
+        readOnly: true
     });
 
+    var quill2 = new Quill('#editor2', {
+        theme: 'snow',
+        readOnly: true
+    });
     console.log("Editor initialized");
-    const coverLetterContent = document.getElementById("cover-letter-content").value;
-    const coverLetterArea = document.getElementById("cover-letter-area");
-    coverLetterArea.innerHTML = decodeURIComponent(coverLetterContent);
-    const delta = quill.clipboard.convert(coverLetterArea.innerHTML);
-    quill.setContents(delta);
-    const saveBtn = document.getElementById("save-cover-letter");
-    saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+
+    const coverLetterContent1 = document.getElementById("cover-letter-content1").value;
+    const coverLetterArea1 = document.getElementById("cover-letter-area1");
+    coverLetterArea1.innerHTML = decodeURIComponent(coverLetterContent1);
+    const delta1 = quill1.clipboard.convert(coverLetterArea1.innerHTML);
+    quill1.setContents(delta1);
+
+    const coverLetterId = document.getElementById('cover-letter-id').value;
+    const coverLetterContent2 = fetchAndDisplayData(coverLetterId, quill2);
+    const coverLetterArea2 = document.getElementById("cover-letter-area2");
+    coverLetterArea2.innerHTML = decodeURIComponent(coverLetterContent2);
+    const delta2 = quill2.clipboard.convert(coverLetterArea2.innerHTML);
+    quill2.setContents(delta2);
+
+    const regenerateButton = document.getElementById("regenerate-button");
+    if (regenerateButton) {
+        regenerateButton.addEventListener("click", () => {
+            const coverLetterId = document.getElementById('cover-letter-id').value;
+            fetchAndDisplayData(coverLetterId, quill2);
+        });
+    }
+
+    const saveBtn = document.getElementById("save-and-apply");
+    saveBtn.addEventListener('click', async () => {
+        await getHtmlInfo();
+        window.location.href = `/Resume/YourDashboard`;
+    }, false);
     const exportBtn = document.getElementById("export-pdf");
-    exportBtn.addEventListener('click', () => exportPdf(quill), false);
+    exportBtn.addEventListener('click', () => exportPdf(quill2), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
-    const improveWithAiBtn = document.getElementById("improve-with-ai");
-    improveWithAiBtn.addEventListener("click", redirectToAiPage);
 }
 
 async function SwitchTheme() {
@@ -81,10 +62,10 @@ async function SwitchTheme() {
     var themeSwitcher = document.getElementById('theme-switcher');
     var themeLabel = document.getElementById('theme-label');
     if (themeSwitcher.checked) {
-        themeStylesheet.setAttribute('href', '/css/ViewCoverLetterLight.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveCoverLetterLight.css');
         themeLabel.textContent = 'Switch to Dark Mode';
     } else {
-        themeStylesheet.setAttribute('href', '/css/ViewCoverLetterDark.css');
+        themeStylesheet.setAttribute('href', '/css/ViewImproveCoverLetterDark.css');
         themeLabel.textContent = 'Switch to Light Mode';
     }
 }
@@ -92,6 +73,7 @@ async function SwitchTheme() {
 async function exportPdf(quill) {
     console.log("Export PDF button clicked");
     const validationArea = document.getElementById('validation-area');
+    const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     var title = document.getElementById('cover-letter-title').value;
     if (title === "" || title === null || title === "Cover Letter Title") {
@@ -122,19 +104,24 @@ async function exportPdf(quill) {
         let base64Pdf = jsonString
         let pdfBytes = atob(base64Pdf);
         let pdfArray = new Uint8Array(new ArrayBuffer(pdfBytes.length));
-        
+
         for (let i = 0; i < pdfBytes.length; i++) {
             pdfArray[i] = pdfBytes.charCodeAt(i);
         }
-        
+
         const blob = new Blob([pdfArray], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = `${title}.pdf`;
         document.body.appendChild(link);
+        validationArea.innerHTML = "";
+        const cloneSuccess = successValidation.cloneNode(true);
+        cloneSuccess.style.display = "block";
+        cloneSuccess.innerHTML = `Cover letter exported successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneSuccess);
         link.click();
-        document.body.removeChild(link); 
+        document.body.removeChild(link);
         return;
     }
     else {
@@ -143,25 +130,23 @@ async function exportPdf(quill) {
     }
 }
 
-async function getHtmlInfo() 
-{
+async function getHtmlInfo() {
     const validationArea = document.getElementById('validation-area');
     const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     const specialPattern = /[\\_\|\^%=+\(\)#*\[\]\<\>\~\`]+/;
     const whiteSpacePattern = /^\s+$/;
     const title = document.getElementById('cover-letter-title').value;
-    if (title === "" || title === null || title === "Cover Letter Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99)
-    {
+    if (title === "" || title === null || title === "Cover Letter Title" || title.match(specialPattern) || title.match(whiteSpacePattern) || title.length > 99) {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
-        cloneError.innerHTML = `Cover Letter Title is invalid, please use a valid title. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        cloneError.innerHTML = `Cover letter Title is invalid, please use a valid title. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneError);
         return;
     }
     console.log("Save Cover Letter button clicked");
-    const htmlContent = document.querySelector('.ql-editor').innerHTML;
+    const htmlContent = document.getElementById('editor2').querySelector('.ql-editor').innerHTML;
     const coverLetterId = document.getElementById('cover-letter-id').value;
     const response = await fetch(`/api/coverletter/${coverLetterId}`, {
         method: 'PUT',
@@ -174,18 +159,16 @@ async function getHtmlInfo()
             title: title,
             htmlContent: encodeURIComponent(htmlContent)
         })
-    });    
-    if (response.ok)
-    {
-        validationArea.innerHTML = "";
-        const cloneSuccess = successValidation.cloneNode(true);
-        cloneSuccess.style.display = "block";
-        cloneSuccess.innerHTML = `Cover letter saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
-        validationArea.appendChild(cloneSuccess);
+    });
+    if (response.ok) {
+        // validationArea.innerHTML = "";
+        // const cloneSuccess = successValidation.cloneNode(true);
+        // cloneSuccess.style.display = "block";
+        // cloneSuccess.innerHTML = `Cover letter saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        // validationArea.appendChild(cloneSuccess);
         return;
     }
-    else
-    {
+    else {
         validationArea.innerHTML = "";
         const cloneError = errorValidation.cloneNode(true);
         cloneError.style.display = "block";
@@ -196,10 +179,39 @@ async function getHtmlInfo()
     }
 }
 
-function redirectToAiPage() {
-    const coverLetterId = document.getElementById("cover-letter-id").value;
-    const aiPageUrl = `/CoverLetter/ImproveCoverLetter/${coverLetterId}`;
-    console.log("Redirecting to improve with ai page");
-    // Redirect the user to improve with ai page
-    window.location.href = aiPageUrl;
+
+async function fetchAndDisplayData(coverLetterId, quill2) {
+    const loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.style.display = "block";
+
+    quill2.root.innerHTML = "Loading...";
+
+    try {
+        const response = await fetch(`/api/cgpt/improve-coverletter/${coverLetterId}`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        let responseData;
+        try {
+            responseData = await response.text();
+        } catch (error) {
+            throw new Error('Failed to parse response data');
+        }
+
+        quill2.root.innerHTML = responseData;
+
+    } catch (error) {
+        console.error('Error fetching and displaying data:', error);
+        quill2.root.innerHTML = "Error loading data";
+    } finally {
+        loadingScreen.style.display = "none"; 
+    }
 }

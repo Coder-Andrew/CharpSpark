@@ -30,6 +30,8 @@ function loadQuill() {
     }
 }
 
+let isCoverLetterSaved = false;
+
 function initializePage() {
     var toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -69,6 +71,8 @@ function initializePage() {
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
     themeSwitcher.addEventListener('click', SwitchTheme, false);
+    const improveWithAiBtn = document.getElementById("improve-with-ai");
+    improveWithAiBtn.addEventListener("click", redirectToAiPage);
 }
 
 async function SwitchTheme() {
@@ -176,6 +180,7 @@ async function getHtmlInfo()
         const cloneSuccess = successValidation.cloneNode(true);
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Cover letter saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        isCoverLetterSaved = true;
         validationArea.appendChild(cloneSuccess);
         return;
     }
@@ -188,5 +193,26 @@ async function getHtmlInfo()
         validationArea.appendChild(cloneError);
         console.log("Error saving information");
         return;
+    }
+}
+
+function redirectToAiPage() {
+    if(isCoverLetterSaved)
+    {
+    const coverLetterId = document.getElementById("cover-letter-id").value;
+    const aiPageUrl = `/CoverLetter/ImproveCoverLetter/${coverLetterId}`;
+    console.log("Redirecting to improve with ai page");
+    // Redirect the user to improve with ai page
+    window.location.href = aiPageUrl;
+    }
+    else
+    {
+        const validationArea = document.getElementById('validation-area');
+        const errorValidation = document.getElementById('validation-error');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please save the cover letter before improving. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
     }
 }
