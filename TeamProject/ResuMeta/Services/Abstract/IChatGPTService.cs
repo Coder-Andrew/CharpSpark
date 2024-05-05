@@ -6,5 +6,6 @@ namespace ResuMeta.Services.Abstract
     {
         Task<ChatGPTResponse> AskQuestion(string question);
         Task<ChatGPTResponse> GenerateResume(int id);
+        Task<ChatGPTResponse> GenerateCoverLetter(int id);
     }
 }
