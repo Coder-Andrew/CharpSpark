@@ -167,7 +167,7 @@ async function deleteCoverLetter() {
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Cover letter deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
-        window.location.href = "/resume/yourdashboard";
+        window.location.href = "/Resume/YourDashboard";
         return;
     }
     else {

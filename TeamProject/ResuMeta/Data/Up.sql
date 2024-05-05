@@ -18,7 +18,7 @@ CREATE TABLE [ResumeTemplate] (
 CREATE TABLE [Education] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [ResumeId] integer,
+  [ResumeId] integer NULL,
   [Institution] nvarchar(100),
   [EducationSummary] nvarchar(250),
   [StartDate] date,
@@ -37,7 +37,7 @@ CREATE TABLE [Degree] (
 CREATE TABLE [EmploymentHistory] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [ResumeId] integer,
+  [ResumeId] integer NULL,
   [Company] nvarchar(100),
   [Description] nvarchar(250),
   [Location] nvarchar(100),
@@ -70,7 +70,7 @@ CREATE TABLE [Skills] (
 CREATE TABLE [Projects] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [ResumeId] integer,
+  [ResumeId] integer NULL,
   [Name] nvarchar(100),
   [Link] nvarchar(250),
   [Summary] nvarchar(250)
@@ -79,7 +79,7 @@ CREATE TABLE [Projects] (
 CREATE TABLE [Achievements] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
-  [ResumeId] integer,
+  [ResumeId] integer NULL,
   [Achievement] nvarchar(100),
   [Summary] nvarchar(250)
 );
@@ -119,16 +119,16 @@ ALTER TABLE [UserSkill] ADD CONSTRAINT [Fk UserSkill Resume Id]
   FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education Resume Id]
-  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE [Projects] ADD CONSTRAINT [Fk Projects Resume Id]
-  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE [EmploymentHistory] ADD CONSTRAINT [Fk EmploymentHistory Resume Id]
-  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE [Achievements] ADD CONSTRAINT [Fk Achievements Resume Id]
-  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE [Education] ADD CONSTRAINT [Fk Education UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;

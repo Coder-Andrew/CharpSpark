@@ -136,6 +136,12 @@ async function deleteResume() {
     const successValidation = document.getElementById('validation-success');
     const errorValidation = document.getElementById('validation-error');
     const resumeId = document.getElementById('resume-id').value;
+
+    const userConfirmed = confirm('Are you sure you want to delete your resume?');
+    if (!userConfirmed) {
+        return;
+    }
+
     const response = await fetch(`/api/resume/${resumeId}`, {
         method: 'DELETE',
         headers: {
@@ -150,9 +156,7 @@ async function deleteResume() {
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Resume deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
-        setTimeout(() => {
-            window.location.href = "/Resume/YourResume";
-        }, 2000);
+        window.location.href = "/Resume/YourDashboard";
         return;
     }
     else {
