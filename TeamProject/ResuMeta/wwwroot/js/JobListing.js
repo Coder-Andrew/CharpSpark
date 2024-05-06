@@ -17,6 +17,7 @@ function initializePage() {
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
 
 
+
     // add event listener to first and last links for pagination
     document.getElementById('first-page').addEventListener('click', () => {
         pageNumber = 1;

@@ -7,5 +7,6 @@ namespace ResuMeta.Services.Abstract
     {
         Task<JobListingContainerVM> GetCachedListings(int pageNum, string jobTitle);
         Task<List<JobListingVM>> SearchJobs(string jobTitle, string city, string state);
+        Task<string> GetJobDescription(string url);
     }
 }

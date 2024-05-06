@@ -53,5 +53,21 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
+        // GET: api/scraper/job_description
+        [HttpGet("job_description/")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetJobDescription([FromQuery] string url)
+        {
+            try
+            {
+                string description = await _webScraperService.GetJobDescription(url);
+                return Ok(description);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

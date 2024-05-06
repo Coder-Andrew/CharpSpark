@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using ResuMeta.Services.Concrete;
 using Microsoft.Extensions.Options;
+using EllipticCurve.Utils;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -27,6 +28,11 @@ namespace ResuMeta.Services.Concrete
     class JsonJobs
     {
         public List<JsonListing> jobs { get; set; }
+    }
+
+    class JsonJobDescription
+    {
+        public string job_description { get; set; }
     }
     public class WebScraperService : IWebScraperService
     {
@@ -103,6 +109,30 @@ namespace ResuMeta.Services.Concrete
             else
             {
                 throw new Exception("Error searching jobs");
+            }
+        }
+        public async Task<string> GetJobDescription(string url)
+        {
+            string endPoint = "/api/job_description";
+
+            var response = _httpClient.GetAsync(_scraperUrl + endPoint + "?listing_url=" + url);
+
+            if (response.Result.StatusCode == HttpStatusCode.OK)
+            {
+                var responseString = await response.Result.Content.ReadAsStringAsync();
+                try
+                {
+                    var jobDescription = JsonSerializer.Deserialize<JsonJobDescription>(responseString);
+                    return jobDescription.job_description;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error getting job description");
+                }
+            }
+            else
+            {
+                throw new Exception("Error getting job description");
             }
         }
     }
