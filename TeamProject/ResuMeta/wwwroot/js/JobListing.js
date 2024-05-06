@@ -9,14 +9,14 @@ function initializePage() {
     const searchCachedListings = document.getElementById('cached-job-title');
     const pageNumberInput = document.getElementById('pagination');
 
+
+    // add event listener to get cached listings button
     searchCachedListings.addEventListener('change', () => {
         pageNumber = 1;
         getCachedJobListings(pageNumber, searchCachedListings.value)
     })
     getCachedJobListings(pageNumber, "");
     searchJobListingsBtn ? searchJobListingsBtn.addEventListener('click', searchJobListings, false) : "";
-
-
 
     // add event listener to first and last links for pagination
     document.getElementById('first-page').addEventListener('click', () => {
@@ -227,9 +227,9 @@ function openModal(listing) {
     inputTitle.value = jobTitle;
     inputCompany.value = jobCompany;
     inputLink.value = jobLink;
+    sessionStorage.setItem('jobLink', jobLink);
     inputAppliedDate.value = appliedDate;
     viewableListing.appendChild(clone);
-
 }
 
 function closeModal() {
