@@ -112,6 +112,13 @@ CREATE TABLE [CoverLetter] (
   [CoverLetter] nvarchar(MAX)
 );
 
+CREATE TABLE [Profile] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [UserInfoId] integer,
+  [Resume] nvarchar(MAX),
+  [Description] nvarchar(250)
+);
+
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -158,4 +165,7 @@ ALTER TABLE [ApplicationTracker] ADD CONSTRAINT [Fk ApplicationTracker UserInfo 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE [CoverLetter] ADD CONSTRAINT [Fk CoverLetter UserInfo Id]
+  FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Profile] ADD CONSTRAINT [Fk Profile UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
