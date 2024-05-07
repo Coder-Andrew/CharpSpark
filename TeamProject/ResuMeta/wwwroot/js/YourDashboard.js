@@ -8,21 +8,22 @@ function initializePage() {
 
     console.log(resumeSection);
 
+    // Moved onclick in html to js eventlistener
     resumeSection.addEventListener('click', function (event) {
-        let target = event.target;
-        console.log('test');
+        let target = event.target.closest('.thumbnail');
 
-        if (target.closest('.thumbnail')) {
-            event.preventDefault();
-            event.stopPropagation();
-           
+        // If the user is selecting a resume to improve, store the resumeId in session storage
+        if (target && jobLink) {
+            const resumeId = target.dataset.url.split('/').pop();
+            sessionStorage.setItem('resumeId', resumeId); // Get the resumeId from the url
+            window.location.href = `/Resume/ImproveResume/${resumeId}`;
+        } else if (target) {
+            window.location.href = target.dataset.url;
         }
-
-
-
-
     })
-    //console.log(jobLink);
+
+
+    // Change dashboard title to indicate that user is selecting a resume to improve
     if (jobLink) {
         dashBoardTitle.textContent = "Select a resume you'd like to improve";
     }

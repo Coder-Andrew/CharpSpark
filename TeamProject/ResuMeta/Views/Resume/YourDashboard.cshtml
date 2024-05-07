@@ -18,7 +18,7 @@
                 <section id="resume-section">
                 @foreach(var resume in Model.Resumes)
                 {
-                    <div class="thumbnail" onclick="location.href='@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})'">
+                    <div class="thumbnail" data-url="@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})">
                         <div class="resume-content-ids" id="resume-content-@resume.ResumeId"></div>
                         <div class="thumbnail-title">@resume.Title</div>
                     </div>
