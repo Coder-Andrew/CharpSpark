@@ -19,14 +19,16 @@ public class ProfileController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IRepository<Resume> _resumeRepository;
     private readonly IResumeService _resumeService;
-    private readonly IResumeTemplateService _resumeTemplateService;
+    private readonly IRepository<Profile> _profileRepository;
+    private readonly IProfileService _profileService;
     public ProfileController(
         ILogger<ProfileController> logger,
         IRepository<UserInfo> userInfo,
         UserManager<ApplicationUser> userManager,
         IRepository<Resume> resumeRepo,
         IResumeService resumeService,
-        IResumeTemplateService resumeTemplateService
+        IRepository<Profile> profileRepository,
+        IProfileService profileService
         )
     {
         _logger = logger;
@@ -34,7 +36,8 @@ public class ProfileController : Controller
         _userManager = userManager;
         _resumeRepository = resumeRepo;
         _resumeService = resumeService;
-        _resumeTemplateService = resumeTemplateService;
+        _profileRepository = profileRepository;
+        _profileService = profileService;
     }
 
     public IActionResult Index()
@@ -42,13 +45,14 @@ public class ProfileController : Controller
         return View();
     }
 
-    public IActionResult CreateResume()
+    public IActionResult CreateProfile()
     {
         string id = _userManager.GetUserId(User)!;
         if (id == null)
         {
             return RedirectToAction("Index", "Home");
         }
+        _profileRepository.GetAll().Where(x => x.UserInfoId == _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!.Id).FirstOrDefault();
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
         UserVM userVM = new UserVM(); 
         userVM.UserId = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!.Id;
