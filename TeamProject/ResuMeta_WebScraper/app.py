@@ -63,6 +63,7 @@ def get_cached_listings():
     except:
         return {'error': 'An error occurred'}
     
+    
 @app.route('/api/job_description')
 def get_job_description():
     listing_url = request.args.get('listing_url')
@@ -70,7 +71,10 @@ def get_job_description():
     if listing_url == None:
         return {'error': 'listing_url is a required parameter'}
     
-    return {'job_description': get_job_descriptions(listing_url)}
+    try:
+        return {'job_description': get_job_descriptions(listing_url)}
+    except:
+        return {'error': 'An error occurred'}
 
 
 

@@ -8,6 +8,14 @@ function initializePage() {
     const searchJobListingsBtn = document.getElementById('search-job-listings');
     const searchCachedListings = document.getElementById('cached-job-title');
     const pageNumberInput = document.getElementById('pagination');
+    const improveWithAiBtn = document.getElementById('improve-with-ai');
+
+
+    // redirect to /Resume/YourDashboard
+    improveWithAiBtn.addEventListener('click', () => {
+        console.log("test")
+        window.location.href = "/Resume/YourDashboard";
+    })
 
 
     // add event listener to get cached listings button
