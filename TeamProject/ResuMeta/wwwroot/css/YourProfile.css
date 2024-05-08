@@ -1,0 +1,11 @@
+
+.ql-toolbar {
+    display: none;
+}
+
+.ql-container {
+    border-top: 2px solid rgb(88, 88, 88) !important;
+    border-left: 2px solid rgb(88, 88, 88) !important;
+    border-right: 2px solid rgb(88, 88, 88) !important;
+    border-bottom: 2px solid rgb(88, 88, 88) !important;
+}
