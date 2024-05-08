@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ResuMeta.Models;
 
+[Table("Profile")]
 public partial class Profile
 {
     [Key]
@@ -20,6 +21,6 @@ public partial class Profile
     public string? Description { get; set; }
 
     [ForeignKey("UserInfoId")]
-    [InverseProperty("Projects")]
+    [InverseProperty("Profile")]
     public virtual UserInfo? UserInfo { get; set; }
 }
