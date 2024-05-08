@@ -74,7 +74,7 @@ public class ProfileController : Controller
             return RedirectToAction("Index", "Home");
         }
         UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-        if (!ModelState.IsValid)
+        if (profile.Description == null)
         {
             ViewBag.User = currUser;
             ViewBag.UserName = _userManager.GetUserName(User);
@@ -87,7 +87,8 @@ public class ProfileController : Controller
         {
             return RedirectToAction("YourProfile", "Profile");
         }
-        try{
+        try
+        {
             Profile newProfile = new Profile
             {
                 UserInfoId = currUser.Id,
@@ -99,7 +100,7 @@ public class ProfileController : Controller
         catch (Exception e)
         {
             _logger.LogError(e, "Error saving profile");
-            throw new Exception("Error saving profile");
+            return RedirectToAction("Index", "Profile");
         }
         return RedirectToAction("YourProfile", "Profile");
     }
@@ -121,138 +122,7 @@ public class ProfileController : Controller
         ProfileVM profileVM = await _profileService.GetProfile(userProfile.Id);
         return View(profileVM);
     }
-    // public IActionResult YourDashboard()
-    // {
-    //     string currUserId = _userManager.GetUserId(User)!;
-    //     if (currUserId == null)
-    //     {
-    //         return View();
-    //     }    
-    //     var user = _userInfo.GetAll().Where(x => x.AspnetIdentityId == currUserId).FirstOrDefault();
-    //     if (user == null)
-    //     {
-    //         return View();
-    //     }
-    //     List<ResumeVM> resumeList = _resumeService.GetAllResumes(user.Id);
-    //     DashboardVM dashboardVM = new DashboardVM
-    //     {
-    //         Resumes = resumeList,
-    //     };
-    //     return View(dashboardVM) ?? View();
-    // }
-
-    // [HttpGet("Resume/ViewResume/{resumeId}")]
-    // public IActionResult ViewResume(int resumeId)
-    // {
-    //     string id = _userManager.GetUserId(User)!;
-    //     if (id == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-    //     Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == resumeId).FirstOrDefault()!;
-    //     if (userResume == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     if (userResume.UserInfoId != currUser.Id)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     ApplicationUser idUser = _userManager.FindByIdAsync(id).Result!;
-    //     string email = _userManager.GetEmailAsync(idUser).Result!;
-    //     ResumeVM resumeVM = _resumeService.GetResume(resumeId, email!);
-
-    //     List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
-    //     TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
-    //     {
-    //         Resume = resumeVM,
-    //         TemplatesList = templatesList
-    //     };
-    //     return View(templateAndResumeVM);
-    // }
-
-    // [HttpGet("Resume/YourResume/{resumeId}")]
-    // public IActionResult YourResume(int resumeId)
-    // {
-    //     string id = _userManager.GetUserId(User)!;
-    //     if (id == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-    //     Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == resumeId).FirstOrDefault()!;
-    //     if (userResume == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     if (userResume.UserInfoId != currUser.Id)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     ResumeVM resumeVM = _resumeService.GetResumeHtml(resumeId);
-
-    //     List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
-    //     TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
-    //     {
-    //         Resume = resumeVM,
-    //         TemplatesList = templatesList
-    //     };
-    //     return View(templateAndResumeVM);
-    // }
-
-    // public IActionResult PreviewResume(int currentResumeId, int templateId)
-    // {
-    //     string id = _userManager.GetUserId(User)!;
-    //     if (id == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-    //     Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == currentResumeId).FirstOrDefault()!;
-    //     if (userResume == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     if (userResume.UserInfoId != currUser.Id)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     ResumeVM resumeVM = _resumeService.GetResumeHtml(currentResumeId);
-    //     List<ResumeVM> templatesList = _resumeTemplateService.GetAllResumeTemplates();
-    //     ResumeVM resumeTemplateVM = _resumeTemplateService.GetResumeTemplateHtml(templateId);
-    //     ResumeVM previewResume = _resumeTemplateService.ConvertResumeToTemplate(resumeTemplateVM, resumeVM, currUser);
-
-    //     TemplateAndResumeVM templateAndResumeVM = new TemplateAndResumeVM
-    //     {
-    //         Resume = resumeVM,
-    //         Template = previewResume,
-    //         TemplatesList = templatesList
-    //     };
-    //     return View(templateAndResumeVM);
-    // }
     
-    // [HttpGet("Resume/ImproveResume/{resumeId}")]
-    // public IActionResult ImproveResume(int resumeId)
-    // {
-    //     string id = _userManager.GetUserId(User)!;
-    //     if (id == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
-    //     Resume userResume = _resumeRepository.GetAll().Where(x => x.Id == resumeId).FirstOrDefault()!;
-    //     if (userResume == null)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     if (userResume.UserInfoId != currUser.Id)
-    //     {
-    //         return RedirectToAction("Index", "Home");
-    //     }
-    //     ResumeVM resumeVM = _resumeService.GetResumeHtml(resumeId);
-    //     return View(resumeVM);
-    // }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
