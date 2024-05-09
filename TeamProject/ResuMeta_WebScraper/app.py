@@ -3,7 +3,7 @@ import time
 import threading
 import schedule
 import argparse
-from flask import Flask, request
+from flask import Flask, request, abort
 
 from src.advanced_search import advanced_search
 from src.job_descriptions import get_job_descriptions
@@ -64,9 +64,10 @@ def get_cached_listings():
         return {'error': 'An error occurred'}
     
     
-@app.route('/api/job_description')
+@app.route('/api/job_description', methods=["POST"])
 def get_job_description():
-    listing_url = request.args.get('listing_url')
+    
+    listing_url = request.json.get('url')
     
     if listing_url == None:
         return {'error': 'listing_url is a required parameter'}
@@ -74,7 +75,8 @@ def get_job_description():
     try:
         return {'job_description': get_job_descriptions(listing_url)}
     except:
-        return {'error': 'An error occurred'}
+        #return 404 error 
+        abort(404)
 
 
 
@@ -85,9 +87,9 @@ if __name__ == '__main__':
     mongoDbConnection = args.mongoDbConnectionString
 
     #run scheduled jobs on a separate thread
-    get_and_cache_listings(mongoDbConnection)
-    t = threading.Thread(target=run_scheduled_jobs)
-    t.start()
+    # get_and_cache_listings(mongoDbConnection)
+    # t = threading.Thread(target=run_scheduled_jobs)
+    # t.start()
 
 
 

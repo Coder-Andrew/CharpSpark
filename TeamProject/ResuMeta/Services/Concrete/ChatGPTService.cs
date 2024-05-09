@@ -176,7 +176,7 @@ namespace ResuMeta.Services.Concrete
                     {
                         role = "user",
                         content = decodedHtmlContent
-                    }
+                    },
                 }
             };
             JsonSerializerOptions options = new JsonSerializerOptions

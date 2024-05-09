@@ -3,6 +3,7 @@ from selenium import webdriver
 from typing import List
 
 def get_job_descriptions(listing_url) -> str:
+    print(f"Getting job description for {listing_url}")
     firefox_profile = webdriver.FirefoxProfile()
     firefox_profile.set_preference('permissions.default.image', 2)
     
