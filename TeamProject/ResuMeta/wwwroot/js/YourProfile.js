@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 function loadQuill() {
-    console.log("Loading Quill");
     var script = document.createElement('script');
     script.src = "https://cdn.quilljs.com/1.0.0/quill.js";
     document.head.appendChild(script);
@@ -30,7 +29,6 @@ function loadQuill() {
 }
 
 function initializePage() {
-    console.log("Quill loaded");
     var quill = new Quill('#editor', {
         readOnly: true,
         theme: 'snow'

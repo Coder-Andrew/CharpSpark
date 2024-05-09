@@ -149,12 +149,6 @@ public class ProfileController : Controller
             {
                 return RedirectToAction("EditProfile", "Profile");
             }
-            // int profileId = (int)profile.ProfileId!;
-            // Profile? userProfile = _profileRepository.FindById(profileId);
-            // userProfile.Description = profile.Description;
-            // userProfile.Resume = profile.Resume;
-            // _profileRepository.AddOrUpdate(userProfile);
-            // Console.WriteLine("Profile updated");
             return RedirectToAction("YourProfile", "Profile");
         }
         catch (Exception e)
