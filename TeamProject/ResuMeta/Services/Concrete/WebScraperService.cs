@@ -111,11 +111,13 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception("Error searching jobs");
             }
         }
-        public async Task<string> GetJobDescription(string url)
+        public async Task<JobDescriptionVM> GetJobDescription(JsonElement url)
         {
-            string endPoint = "/api/job_description";
-
-            var response = _httpClient.GetAsync(_scraperUrl + endPoint + "?listing_url=" + url);
+            string endPoint = "api/job_description";
+            string messageAndEndpoint = _scraperUrl + endPoint;
+            var json = JsonSerializer.Serialize(url);
+            var stringContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            var response = _httpClient.PostAsync(messageAndEndpoint, stringContent);
 
             if (response.Result.StatusCode == HttpStatusCode.OK)
             {
@@ -123,7 +125,11 @@ namespace ResuMeta.Services.Concrete
                 try
                 {
                     var jobDescription = JsonSerializer.Deserialize<JsonJobDescription>(responseString);
-                    return jobDescription.job_description;
+                    JobDescriptionVM description = new JobDescriptionVM
+                    {
+                        JobDescription = jobDescription.job_description
+                    };
+                    return description;
                 }
                 catch (Exception e)
                 {

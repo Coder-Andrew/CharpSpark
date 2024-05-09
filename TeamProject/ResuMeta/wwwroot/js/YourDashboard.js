@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', initializePage);
 
-const jobLink = sessionStorage.getItem('jobLink');
+let jobLink = sessionStorage.getItem('jobLink');
+let isImprovingResume = false;
 
 function initializePage() {
     const dashBoardTitle = document.getElementById('dashboard-title');
@@ -14,6 +15,7 @@ function initializePage() {
 
         // If the user is selecting a resume to improve, store the resumeId in session storage
         if (target && jobLink) {
+            isImprovingResume = true;
             const resumeId = target.dataset.url.split('/').pop();
             sessionStorage.setItem('resumeId', resumeId); // Get the resumeId from the url
             window.location.href = `/Resume/ImproveResume/${resumeId}`;
@@ -31,7 +33,9 @@ function initializePage() {
     // Clear storage when user navigates away from dashboard page after 
     // selecting a job description
     window.addEventListener('beforeunload', function (event) {
-        sessionStorage.clear();
+        if (!isImprovingResume) {
+            sessionStorage.clear(); // might want to only clear jobLink from session storage
+        }
     });
 
 

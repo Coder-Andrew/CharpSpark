@@ -63,7 +63,7 @@
                         </label> *@
                     </div>
                 </div>
-                <div id="loading-screen" style="display: none;">
+                <div class="invisible" id="loading-screen" style="display: none;"> @* Invisible loading screen *@
                     <div id="loading-content">
                         <div class="loading-spinner"></div>
                         <p>Please wait while your resume is improved...</p>
@@ -73,6 +73,10 @@
                     <div class="editor-container">
                         <div id="editor1" class="editor"></div>
                         <div class="arrow">
+                            <div id="job-description-input" class="">
+                                <h5>Job Description</h5>
+                                <textarea id="job-description" class="form-control" rows="10"></textarea>
+                            </div>
                             <i class="fa fa-long-arrow-right fa-4x"></i>
                             <button class="btn btn-primary" id="save-and-apply">Save and Apply</button>
                         </div>

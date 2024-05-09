@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 using ResuMeta.ViewModels;
 
 namespace ResuMeta.Services.Abstract
@@ -7,6 +8,6 @@ namespace ResuMeta.Services.Abstract
     {
         Task<JobListingContainerVM> GetCachedListings(int pageNum, string jobTitle);
         Task<List<JobListingVM>> SearchJobs(string jobTitle, string city, string state);
-        Task<string> GetJobDescription(string url);
+        Task<JobDescriptionVM> GetJobDescription(JsonElement url);
     }
 }

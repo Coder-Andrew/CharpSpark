@@ -55,13 +55,13 @@ namespace ResuMeta.Controllers
         }
 
         // GET: api/scraper/job_description
-        [HttpGet("job_description/")]
+        [HttpPost("job_description")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetJobDescription([FromQuery] string url)
+        public async Task<IActionResult> GetJobDescription([FromBody] JsonElement jsonUrl)
         {
             try
-            {
-                string description = await _webScraperService.GetJobDescription(url);
+            {        
+                JobDescriptionVM description = await _webScraperService.GetJobDescription(jsonUrl);
                 return Ok(description);
             }
             catch (Exception e)

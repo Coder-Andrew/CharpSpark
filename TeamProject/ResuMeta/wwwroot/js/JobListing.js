@@ -12,10 +12,12 @@ function initializePage() {
 
 
     // redirect to /Resume/YourDashboard
-    improveWithAiBtn.addEventListener('click', () => {
-        console.log("test")
-        window.location.href = "/Resume/YourDashboard";
-    })
+    if (improveWithAiBtn) {
+        improveWithAiBtn.addEventListener('click', () => {
+            console.log("test")
+            window.location.href = "/Resume/YourDashboard";
+        })
+    }
 
 
     // add event listener to get cached listings button
