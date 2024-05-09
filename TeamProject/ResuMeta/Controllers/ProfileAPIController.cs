@@ -9,6 +9,8 @@ using System.Net;
 using NuGet.Protocol;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using ResuMeta.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResuMeta.Controllers
 {
@@ -25,6 +27,7 @@ namespace ResuMeta.Controllers
             _profileService = profileService;
             _logger = logger;
         }
+
 
         // GET: api/profiles/{id}
         [HttpGet("{profileId}")]
@@ -50,5 +53,26 @@ namespace ResuMeta.Controllers
                 return BadRequest("Invalid Profile ID");
             }
         }
+
+
+        // GET: api/profiles/search/{keyWord}
+        [AllowAnonymous]
+        [HttpGet("search/{keyWord}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchProfile(string keyWord)
+        {
+            List<ProfileVM> profiles = await _profileService.SearchProfile(keyWord);
+            if (profiles.Count == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(profiles);
+            }
+        }
+
+
     }
 }

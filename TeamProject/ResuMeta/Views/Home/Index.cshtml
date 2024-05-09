@@ -12,6 +12,13 @@
 }
 
 <section>
+    <div class="justify-content-center" style="position: absolute; top: 0; z-index: 1;" id="search-bar-area">
+        <span><i class="fa fa-search" style="color: #e9912c;"></i> <input class="justify-content-center" type="text" id="search-profiles" placeholder="Search Profiles"
+            style="height: 25px; margin-top:5px; width: 196px;" /></span>
+        <div id="profile-container" style="margin-top: 0; width: 196px;">
+
+        </div>
+    </div>
 <div class="text-center">
     <div class="align-items-center">
         <h1 class="title"><img src="~/Images/resuMetaLogo.png" alt="ResuMetaLogo"/>ResuMeta</h1>
@@ -62,4 +69,14 @@
         <div class="d-flex flex-column mb-4">
             <div class="rounded p-2 text-white rounded p-2">test</div>
         </div>
+</template>
+
+<template id="profile-template">
+    <div id="profile-box">
+        <div class="d-flex flex-column mb-4" style="width: 196px; font-size: 12px; cursor: pointer; margin: 2px 2px; height: 10px;">
+            <p id="profile-username" style="margin: 0 0; padding-bottom: 0;"></p>
+            <p id="profile-name" style="margin: 0 0; padding-top: 0;"></p>
+            <hr />
+        </div>
+    </div>
 </template>

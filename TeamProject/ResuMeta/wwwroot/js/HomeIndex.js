@@ -1,12 +1,58 @@
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
 function initializePage() {
+    var searchBar = document.getElementById('search-profiles');
+    searchBar.addEventListener('keyup', debounce(searchProfiles, 500), false);
     if (!document.getElementById('chat-body')) return;
 
     setupChatToggle();
     setupMessageInput();
     setupSendButton();
 }
+
+
+function debounce(func, delay) {
+    let timeoutdId;
+    return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutdId);
+        timeoutdId = setTimeout(() => func.apply(context, args), delay);
+    }
+}
+
+async function searchProfiles() {
+    const profileContainer = document.getElementById('profile-container');
+    profileContainer.innerHTML = "";
+    const searchValue = document.getElementById('search-profiles').value;
+    if (searchValue.length < 3) return;
+    const response = await fetch(`/api/profiles/search/${searchValue}`, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (!response.ok){
+        profileContainer.innerHTML = "No profiles found";
+        return;
+    }
+    const data = await response.json();
+
+    data.forEach(profile => {
+        const profileNode = generateProfileNode(profile);
+        profileContainer.appendChild(profileNode);
+    });
+}
+
+function generateProfileNode(profile) {
+    const profileNode = document.getElementById('profile-template').content.cloneNode(true).firstElementChild;
+    profileNode.querySelector('#profile-username').textContent = profile.userName;
+    profileNode.querySelector('#profile-name').textContent = profile.firstName + " " + profile.lastName;
+    profileNode.addEventListener('click', () => window.location.href = `/Profile/UserProfile/${profile.profileId}`, false);
+    return profileNode;
+}
+
 
 function setupChatToggle() {
     const showHideChat = document.getElementById('show-hide-chat');

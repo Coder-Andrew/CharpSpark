@@ -1,6 +1,6 @@
 @model ResuMeta.ViewModels.ProfileVM;
 @{
-    ViewData["Title"] = "Your Profile";
+    ViewData["Title"] = "User Profile";
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/YourProfile.css" asp-append-version="true" />
@@ -9,8 +9,7 @@
 
 <section>
     <div class="text-center">
-        <h1 class="display-4 title">Your Profile</h1>
-        <button class="btn btn-primary" id="edit-profile-button" onclick="location.href='@Url.Action("EditProfile", "Profile")'"><span><i class="fa fa-pencil"></i> Edit</span></button>
+        <h1 class="display-4 title">Profile - @Model.FirstName @Model.LastName</h1>
         <hr />
         <div class="container">
             <div class="row">
@@ -25,7 +24,7 @@
                         else
                         {
                             <img id="currentProfilePicture" src="~/Images/profile.svg" alt="Profile Picture"
-                                class="profile-placeholder img-thumbnail" style="width: 150px; height: 150px;" />
+                                class="profile-placeholder img-thumbnail" style="width: 150px; height: 150px;"/>
                         }
                     </div>
                 </div>

@@ -38,9 +38,6 @@ function initializePage() {
 
     //Resume
     const resumeContent = document.getElementById("resume-content");
-    // const resumeArea = document.getElementById("resume-area");
-    // resumeArea.innerHTML = decodeURIComponent(resumeContent.innerHTML);
-    // console.log(resumeArea.innerHTML);
     const delta = quill.clipboard.convert(decodeURIComponent(resumeContent.innerHTML));
     quill.setContents(delta);
 }

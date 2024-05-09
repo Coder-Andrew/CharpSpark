@@ -11,21 +11,21 @@ using ResuMeta.Data;
 
 namespace ResuMeta.Services.Concrete
 {
-    class JsonUserInfo
-    {
-        public string? id { get; set; }
-        public string? firstName { get; set; }
-        public string? lastName { get; set; }
-        public string? userName { get; set; }
-        public string? profilePicturePath { get; set; }
-    }
-    class JsonProfile
-    {
-        public string? id { get; set; }
-        public string? description { get; set; }
-        public JsonUserInfo? user { get; set; }
-        public string? resume { get; set; }
-    }
+    // class JsonUserInfo
+    // {
+    //     public string? id { get; set; }
+    //     public string? firstName { get; set; }
+    //     public string? lastName { get; set; }
+    //     public string? userName { get; set; }
+    //     public string? profilePicturePath { get; set; }
+    // }
+    // class JsonProfile
+    // {
+    //     public string? id { get; set; }
+    //     public string? description { get; set; }
+    //     public JsonUserInfo? user { get; set; }
+    //     public string? resume { get; set; }
+    // }
 
     public class ProfileService : IProfileService
     {
@@ -52,28 +52,28 @@ namespace ResuMeta.Services.Concrete
             _profileRepository = profileRepository;
         }
 
-        public int AddProfile(JsonElement response)
-        {
-            JsonSerializerOptions options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            try
-            {
-                JsonProfile profile = JsonSerializer.Deserialize<JsonProfile>(response, options)!;
-                if (profile.user == null)
-                {
-                    throw new Exception("Invalid input");
-                }
-                Profile userProfile = _profileRepository.AddOrUpdate(new Profile { UserInfoId = Int32.Parse(profile.user.id!), Description = profile.description, Resume = profile.resume });
-                return userProfile.Id;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error deserializing json");
-                throw new Exception("Error deserializing json");
-            }
-        }
+        // public int AddProfile(JsonElement response)
+        // {
+        //     JsonSerializerOptions options = new JsonSerializerOptions
+        //     {
+        //         PropertyNameCaseInsensitive = true,
+        //     };
+        //     try
+        //     {
+        //         JsonProfile profile = JsonSerializer.Deserialize<JsonProfile>(response, options)!;
+        //         if (profile.user == null)
+        //         {
+        //             throw new Exception("Invalid input");
+        //         }
+        //         Profile userProfile = _profileRepository.AddOrUpdate(new Profile { UserInfoId = Int32.Parse(profile.user.id!), Description = profile.description, Resume = profile.resume });
+        //         return userProfile.Id;
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         _logger.LogError(e, "Error deserializing json");
+        //         throw new Exception("Error deserializing json");
+        //     }
+        // }
         public async Task<ProfileVM> GetProfile(int profileId)
         {
             Profile? profile = _profileRepository.FindById(profileId);
@@ -95,34 +95,45 @@ namespace ResuMeta.Services.Concrete
             return userProfile;
         }
 
-        public void SaveProfileById(JsonElement content)
+        public bool SaveProfile(int userId, ProfileVM profile)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions
+            UserInfo? currUser = _userInfo.FindById(userId);
+            if (currUser == null)
             {
-                PropertyNameCaseInsensitive = true,
-            };
+                return false;
+            }
+            Profile? userProfile = _profileRepository.GetAll().Where(x => x.UserInfoId == currUser.Id).FirstOrDefault();
+            int profileId = userProfile!.Id;
+            if (userProfile == null)
+            {
+                return false;
+            }
             try
             {
-                JsonProfile profile = JsonSerializer.Deserialize<JsonProfile>(content, options)!;
-                if (profile.user == null)
-                {
-                    throw new Exception("Invalid input");
-                }
-                Profile userProfile = _profileRepository.FindById(Int32.Parse(profile.user.id!));
-                if (userProfile == null)
-                {
-                    throw new Exception("Profile not found");
-                }
-                userProfile.Description = profile.description;
-                userProfile.Resume = profile.resume;
+                userProfile.Resume = profile.Resume;
+                userProfile.Description = profile.Description;
                 _profileRepository.AddOrUpdate(userProfile);
+                return true;
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error deserializing json");
-                throw new Exception("Error deserializing json");
+                _logger.LogError(e, "Error saving profile");
+                return false;
+            
             }
         }
 
+        public async Task<List<ProfileVM>> SearchProfile(string keyWord)
+        {
+            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.Contains(keyWord) || x.UserInfo!.FirstName!.Contains(keyWord) || x.UserInfo!.LastName!.Contains(keyWord)).ToList();
+            List<Profile> topProfiles = profiles.GetRange(0, Math.Min(5, profiles.Count));
+            List<ProfileVM> profileVMs = new List<ProfileVM>();
+            foreach (Profile profile in topProfiles)
+            {
+                ProfileVM profileVM = await GetProfile(profile.Id);
+                profileVMs.Add(profileVM);
+            }
+            return profileVMs;
+        }
     }
 }

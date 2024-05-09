@@ -105,6 +105,64 @@ public class ProfileController : Controller
         return RedirectToAction("YourProfile", "Profile");
     }
 
+    public async Task<IActionResult> EditProfile()
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        Profile? userProfile = _profileRepository.GetAll().Where(x => x.UserInfoId == currUser.Id).FirstOrDefault();
+        if (userProfile != null)
+        {
+            ProfileVM profileVM = await _profileService.GetProfile(userProfile.Id);
+            List<ResumeVM> resumeList = _resumeService.GetAllResumes(currUser.Id);
+            ViewBag.Resumes = resumeList;
+            return View(profileVM);
+        }
+        else
+        {
+            return RedirectToAction("Index", "Profile");
+        }
+    }
+
+    [HttpPost]
+    public IActionResult EditProfile(ProfileVM profile)
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        if (profile.Description == null)
+        {
+            List<ResumeVM> resumeList = _resumeService.GetAllResumes(currUser.Id);
+            ViewBag.Resumes = resumeList;
+            return View(profile);
+        }
+        try
+        {
+            bool result = _profileService.SaveProfile(currUser.Id, profile);
+            if (!result)
+            {
+                return RedirectToAction("EditProfile", "Profile");
+            }
+            // int profileId = (int)profile.ProfileId!;
+            // Profile? userProfile = _profileRepository.FindById(profileId);
+            // userProfile.Description = profile.Description;
+            // userProfile.Resume = profile.Resume;
+            // _profileRepository.AddOrUpdate(userProfile);
+            // Console.WriteLine("Profile updated");
+            return RedirectToAction("YourProfile", "Profile");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error saving profile");
+            return RedirectToAction("Index", "Profile");
+        }
+    }
 
     public async Task<IActionResult> YourProfile()
     {
@@ -121,6 +179,21 @@ public class ProfileController : Controller
         }
         ProfileVM profileVM = await _profileService.GetProfile(userProfile.Id);
         return View(profileVM);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> UserProfile(int id)
+    {
+        try 
+        {
+            ProfileVM profileVM = await _profileService.GetProfile(id);
+            return View(profileVM);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting profile");
+            return RedirectToAction("Index", "Home");
+        }
     }
     
 
