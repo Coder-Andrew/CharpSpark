@@ -39,11 +39,11 @@ namespace ResuMeta.Controllers
          // POST: api/cgpt/improve/{id}
         [HttpPost("improve/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GenerateResume(int id)
+        public async Task<IActionResult> GenerateResume(int id, [FromBody] JsonElement jobDescription)
         {
             try
             {   
-                var response = await _chatGPTService.GenerateResume(id);
+                var response = await _chatGPTService.GenerateResume(id, jobDescription);
 
                 if (response == null || response.Response == null)
                 {

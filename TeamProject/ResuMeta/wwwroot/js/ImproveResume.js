@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 const jobLink = sessionStorage.getItem('jobLink');
+let jobDescription = "";
 
 function loadQuill() {
     console.log("Loading Quill");
@@ -15,11 +16,10 @@ function loadQuill() {
 }
 
 function initializePage() {
-    getJobDescription(jobLink);
+    console.log(jobLink);
     window.addEventListener('beforeunload', function (event) {
         sessionStorage.clear(); // might want to only clear jobLink from session storage
     });
-
 
 
     var quill1 = new Quill('#editor1', {
@@ -40,7 +40,7 @@ function initializePage() {
     quill1.setContents(delta1);
 
     const resumeId = document.getElementById('resume-id').value;
-    const resumeContent2 = fetchAndDisplayData(resumeId, quill2);
+    const resumeContent2 = fetchAndDisplayData(resumeId, quill2, jobLink);
     const resumeArea2 = document.getElementById("resume-area2");
     resumeArea2.innerHTML = decodeURIComponent(resumeContent2);
     const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML);
@@ -189,11 +189,15 @@ async function getHtmlInfo() {
 }
 
 
-async function fetchAndDisplayData(resumeId, quill2) {
+async function fetchAndDisplayData(resumeId, quill2, jobLink) {
     const loadingScreen = document.getElementById("loading-screen");
     loadingScreen.style.display = "block";
 
     quill2.root.innerHTML = "Loading...";
+
+    if (jobLink) {
+        await getJobDescription(jobLink);
+    }
 
     try {
         const response = await fetch(`/api/cgpt/improve/${resumeId}`, {
@@ -201,7 +205,10 @@ async function fetchAndDisplayData(resumeId, quill2) {
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json; charset=UTF-8'
-            }
+            },
+            body: JSON.stringify({
+                jobDescription: document.getElementById('job-description').value
+            })
         });
 
         if (!response.ok) {
@@ -228,7 +235,8 @@ async function fetchAndDisplayData(resumeId, quill2) {
 async function getJobDescription(url) {
     if (!url) return;
 
-    console.log(`page url:    ${url}`);
+    document.getElementById("job-description-input").classList.remove("invisible");
+
     const response = await fetch(`/api/scraper/job_description`, {
         method: 'POST',
         headers: {
@@ -243,7 +251,7 @@ async function getJobDescription(url) {
     if (response.ok) {
         let jsonResponse = await response.json();
         console.log(jsonResponse);
-        let jobDescription = jsonResponse.jobDescription;
+        jobDescription = jsonResponse.jobDescription;
         populateJobDescription(jobDescription);
     }
 }

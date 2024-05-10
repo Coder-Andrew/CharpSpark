@@ -87,9 +87,9 @@ if __name__ == '__main__':
     mongoDbConnection = args.mongoDbConnectionString
 
     #run scheduled jobs on a separate thread
-    # get_and_cache_listings(mongoDbConnection)
-    # t = threading.Thread(target=run_scheduled_jobs)
-    # t.start()
+    get_and_cache_listings(mongoDbConnection)
+    t = threading.Thread(target=run_scheduled_jobs)
+    t.start()
 
 
 

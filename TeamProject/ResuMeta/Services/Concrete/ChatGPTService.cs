@@ -150,8 +150,13 @@ namespace ResuMeta.Services.Concrete
             _logger.LogInformation($"Cover letter improved: {cGPTResponse.choices[0].message.content}");
         }
 
-        public async Task<ChatGPTResponse> GenerateResume(int id)
+        public async Task<ChatGPTResponse> GenerateResume(int id, JsonElement jobDescription)
         {
+            JsonDocument doc = JsonDocument.Parse(jobDescription.ToString());
+            JsonElement root = doc.RootElement;
+
+            string? jobDescriptionString = root.GetProperty("jobDescription").GetString();
+            
             var resumeContent = _resumeRepository.GetResumeHtml(id);
             var htmlContent = resumeContent.HtmlContent;
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
@@ -163,20 +168,27 @@ namespace ResuMeta.Services.Concrete
                     new Message
                     {
                         role = "system",
-                        content = "You are here to improve a resume. " +
-                            "You need to correct any grammatical errors, make the language more professional, " +
-                            "and optimize the content for job applications. " +
-                            "If you don't have an improvement available for part of the resume, just return the same content that you read. " +
-                            "Don't add any extra spacing. " +
-                            "Please return the improved content in the same HTML format that I'm sending, " +
-                            "without adding any extra code or HTML headers. " +
-                            "Here is the resume: "
+                        content = //"You are here to improve a resume. " +
+                        //    "You need to correct any grammatical errors, make the language more professional, " +
+                        //    "and optimize the content for job applications. " +
+                        //    "If you don't have an improvement available for part of the resume, just return the same content that you read. " +
+                        //    "Don't add any extra spacing. " +
+                        //    "Please return the improved content in the same HTML format that I'm sending, " +
+                        //    "without adding any extra code or HTML headers. " +
+                        //    "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description" +
+                        //    "Here is the resume: "
+                        "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description. Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the flow and increase the chances of getting a job with the generated resume. "
                     },
                     new Message
                     {
                         role = "user",
                         content = decodedHtmlContent
                     },
+                    new Message
+                    {
+                        role = "user", 
+                        content = jobDescriptionString
+                    }
                 }
             };
             JsonSerializerOptions options = new JsonSerializerOptions
