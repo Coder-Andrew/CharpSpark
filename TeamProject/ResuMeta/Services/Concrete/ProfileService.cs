@@ -16,14 +16,12 @@ namespace ResuMeta.Services.Concrete
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<ProfileService> _logger;
         private readonly IRepository<UserInfo> _userInfo;
-        private readonly IResumeRepository _resumeRepo;
         private readonly IProfileRepository _profileRepo;
         private readonly IRepository<Profile> _profileRepository;
         public ProfileService(
             ILogger<ProfileService> logger,
             UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
-            IResumeRepository resumeRepo,
             IProfileRepository profileRepo,
             IRepository<Profile> profileRepository
             )
@@ -31,7 +29,6 @@ namespace ResuMeta.Services.Concrete
             _logger = logger;
             _userManager = userManager;
             _userInfo = userInfo;
-            _resumeRepo = resumeRepo;
             _profileRepo = profileRepo;
             _profileRepository = profileRepository;
         }
@@ -87,7 +84,6 @@ namespace ResuMeta.Services.Concrete
                 return false;
             }
             Profile? userProfile = _profileRepository.GetAll().Where(x => x.UserInfoId == currUser.Id).FirstOrDefault();
-            int profileId = userProfile!.Id;
             if (userProfile == null)
             {
                 return false;
@@ -109,13 +105,18 @@ namespace ResuMeta.Services.Concrete
 
         public async Task<List<ProfileVM>> SearchProfile(string keyWord)
         {
-            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.Contains(keyWord) || x.UserInfo!.FirstName!.Contains(keyWord) || x.UserInfo!.LastName!.Contains(keyWord)).ToList();
+            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.FirstName!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.LastName!.ToLower().Contains(keyWord.ToLower())).ToList();
             List<Profile> topProfiles = profiles.GetRange(0, Math.Min(5, profiles.Count));
             List<ProfileVM> profileVMs = new List<ProfileVM>();
             foreach (Profile profile in topProfiles)
             {
-                ProfileVM profileVM = await GetProfile(profile.Id);
-                profileVMs.Add(profileVM);
+                try{
+                    ProfileVM profileVM = await GetProfile(profile.Id);
+                    profileVMs.Add(profileVM);
+                }
+                catch(Exception e){
+                    continue;
+                }
             }
             return profileVMs;
         }
