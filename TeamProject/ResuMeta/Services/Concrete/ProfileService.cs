@@ -11,22 +11,6 @@ using ResuMeta.Data;
 
 namespace ResuMeta.Services.Concrete
 {
-    // class JsonUserInfo
-    // {
-    //     public string? id { get; set; }
-    //     public string? firstName { get; set; }
-    //     public string? lastName { get; set; }
-    //     public string? userName { get; set; }
-    //     public string? profilePicturePath { get; set; }
-    // }
-    // class JsonProfile
-    // {
-    //     public string? id { get; set; }
-    //     public string? description { get; set; }
-    //     public JsonUserInfo? user { get; set; }
-    //     public string? resume { get; set; }
-    // }
-
     public class ProfileService : IProfileService
     {
         private readonly UserManager<ApplicationUser> _userManager;
