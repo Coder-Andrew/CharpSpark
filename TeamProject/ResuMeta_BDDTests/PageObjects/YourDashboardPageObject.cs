@@ -127,5 +127,7 @@ namespace ResuMeta_BDDTests.PageObjects
             Thread.Sleep(500);
             FirstCoverLetterDiv.Click();
         }
+
+
     }
 }
