@@ -117,6 +117,8 @@ builder.Services.AddScoped<IResumeTemplateRepository, ResumeTemplateRepository>(
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
 builder.Services.AddScoped<IUserSkillRepository, UserSkillRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
 builder.Services.AddScoped<ISendGridService, SendGridService>();
 

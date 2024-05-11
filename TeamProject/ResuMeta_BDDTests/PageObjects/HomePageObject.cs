@@ -21,6 +21,7 @@ namespace ResuMeta_BDDTests.PageObjects
         public IWebElement ChatBoxInput => _webDriver.FindElement(By.Id("message-input"));
         public IWebElement ChatSendButton => _webDriver.FindElement(By.Id("send"));
         public ReadOnlyCollection<IWebElement> ChatGPTResponses => _webDriver.FindElements(By.CssSelector(".rounded.p-2.text-white.bg-primary"));
+        public IWebElement ProfileButton => _webDriver.FindElement(By.CssSelector("a[href=\"/Profile\"]"));
 
         public IWebElement ShowHideChatButton()
         {
