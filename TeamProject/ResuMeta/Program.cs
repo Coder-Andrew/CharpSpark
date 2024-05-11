@@ -115,6 +115,7 @@ builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
 builder.Services.AddScoped<IResumeTemplateRepository, ResumeTemplateRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
+builder.Services.AddScoped<IUserSkillRepository, UserSkillRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();

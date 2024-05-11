@@ -113,5 +113,11 @@ namespace ResuMeta.Services.Concrete
         {
             return _coverLetterRepo.GetAllCoverLetters(userId);
         }
+
+        public void DeleteCoverLetter(int coverLetterId)
+        {
+            CoverLetter coverLetter = _coverLetterRepository.FindById(coverLetterId);
+            _coverLetterRepository.Delete(coverLetter);
+        }
     }
 }

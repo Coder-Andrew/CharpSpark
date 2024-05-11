@@ -88,6 +88,8 @@ function initializePage() {
     quill.setContents(delta);
     const saveBtn = document.getElementById("save-resume");
     saveBtn.addEventListener('click', () => getHtmlInfo(), false);
+    const deleteBtn = document.getElementById("delete-resume");
+    deleteBtn.addEventListener('click', () => deleteResume(), false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill), false);
     const themeSwitcher = document.getElementById('theme-switcher');
@@ -138,6 +140,58 @@ async function SwitchTheme() {
         themeStylesheet.setAttribute('href', '/css/ViewResumeLight.css');
     } else {
         themeStylesheet.setAttribute('href', '/css/ViewResumeDark.css');
+    }
+}
+
+async function deleteResume() {
+    if(isResumeSaved)
+    {
+        const validationArea = document.getElementById('validation-area');
+        const successValidation = document.getElementById('validation-success');
+        const errorValidation = document.getElementById('validation-error');
+        const resumeId = document.getElementById('resume-id').value;
+
+        const userConfirmed = confirm('Are you sure you want to delete your resume?');
+        if (!userConfirmed) {
+            return;
+        }
+
+        const response = await fetch(`/api/resume/${resumeId}`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json; application/problem+json; charset=utf-8',
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+        if (response.ok) {
+            console.log("Resume deleted successfully");
+            validationArea.innerHTML = "";
+            const cloneSuccess = successValidation.cloneNode(true);
+            cloneSuccess.style.display = "block";
+            cloneSuccess.innerHTML = `Resume deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+            validationArea.appendChild(cloneSuccess);
+            window.location.href = "/Resume/YourDashboard";
+            return;
+        }
+        else {
+            console.log("Error deleting resume");
+            validationArea.innerHTML = "";
+            const cloneError = errorValidation.cloneNode(true);
+            cloneError.style.display = "block";
+            cloneError.innerHTML = `An error occurred while deleting the resume. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+            validationArea.appendChild(cloneError);
+            return;
+        }
+    }
+    else
+    {
+        const validationArea = document.getElementById('validation-area');
+        const errorValidation = document.getElementById('validation-error');
+        validationArea.innerHTML = "";
+        const cloneError = errorValidation.cloneNode(true);
+        cloneError.style.display = "block";
+        cloneError.innerHTML = `Please save the resume before deleting. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
+        validationArea.appendChild(cloneError);
     }
 }
 
