@@ -88,5 +88,23 @@ namespace ResuMeta_BDDTests.PageObjects
 
             return results;
         }
+
+        public IWebElement ButtonShouldExist(string buttonId)
+        {
+            try
+            {
+                return _webDriver.FindElements(By.Id(buttonId)).First();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public void ClickFirstResume()
+        {
+            _webDriver.FindElement(By.ClassName("thumbnail")).Click();
+        }
+
     }
 }

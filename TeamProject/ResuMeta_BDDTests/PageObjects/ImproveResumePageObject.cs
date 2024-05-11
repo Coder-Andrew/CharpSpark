@@ -23,7 +23,8 @@ namespace ResuMeta_BDDTests.PageObjects
             _pageName = "ImproveResume";
         }
         public IWebElement RegenerateBtn => _webDriver.FindElement(By.Id("regenerate-button"));
-
+        public IWebElement JobDescription => _webDriver.FindElement(By.Id("job-description"));
+        public IWebElement ImprovedResume => _webDriver.FindElement(By.Id("editor2"));
         public bool RegenerateButton()
         {
             Thread.Sleep(20000);
