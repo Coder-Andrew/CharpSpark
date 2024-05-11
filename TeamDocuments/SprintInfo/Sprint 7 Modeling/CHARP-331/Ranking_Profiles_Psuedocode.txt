@@ -1,0 +1,35 @@
+int n = profiles.Count
+
+int maxSkills = profiles.UserSkills.Max(us => us.Count) 	// Find the highest number of userskills for all public resumes
+int maxAchievements = resume.Achievements.Max(a => a.Count) 	// Find the highest number of achievements for all public resumes
+
+// Repeat for the remainder of resume fields
+
+decimal decimalScore = 0;
+
+foreach (UserProfile profile in _PublicProfiles)
+{
+	decimalScore += profile.UserSkills.Count / MaxSkills
+	decimalScore += profile.Achievements.Count / maxAchievements
+	
+	// repeat for the remainder of fields
+
+	profile.ProfileScore = (n + 1) - (n(decimalScore/NumberOfFields))
+	decimalScore = 0
+}
+
+
+----------------------------------- OR --------------------------------------------
+int n = profiles.Count
+
+int maxScore = 0
+maxScore  += profiles.UserSkills.Max(us => us.Count) 		// Find the highest number of userskills for all public resumes
+maxScore  += resume.Achievements.Max(a => a.Count) 		// Find the highest number of achievements for all public resumes
+// Repeat for the remainder of resume fields
+
+intScoreForUser = 0
+intScoreForUser += profile.UserSkills.Count(us => us.Count)	// Count number of userskills for a user
+intScoreForUser += profile.Achievements.Count(us => us.Count)	// Count number of achievements for a user
+// Repeat for the remainder of resume fields
+
+Score = (n + 1)(n)(intUserScoreForUser/maxScore)
