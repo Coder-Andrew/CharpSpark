@@ -85,6 +85,11 @@ namespace ResuMeta_BDDTests.PageObjects
             return true;
         }
 
+        public bool CurrentPageShouldBe(string pageName)
+        {
+            return _webDriver.Url.Contains(pageName);
+        }
+
         public void DeleteCookies()
         {
             _webDriver.Manage().Cookies.DeleteAllCookies();

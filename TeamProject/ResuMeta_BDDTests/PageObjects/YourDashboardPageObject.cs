@@ -127,5 +127,11 @@ namespace ResuMeta_BDDTests.PageObjects
             Thread.Sleep(500);
             FirstCoverLetterDiv.Click();
         }
+
+        public bool ResumeExists()
+        {
+            return _webDriver.FindElements(By.ClassName("thumbnail")).Count > 0;
+        }
+
     }
 }
