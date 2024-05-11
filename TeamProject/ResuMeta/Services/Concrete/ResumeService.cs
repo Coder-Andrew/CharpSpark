@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using ResuMeta.Models.DTO;
 using ResuMeta.ViewModels;
 using ResuMeta.Data;
+using ResuMeta.DAL.Concrete;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -91,6 +92,7 @@ namespace ResuMeta.Services.Concrete
         private readonly IResumeRepository _resumeRepo;
         private readonly IRepository<Achievement> _achievementRepository;
         private readonly IRepository<Project> _projectRepository;
+        private readonly IUserSkillRepository _userSkillRepository;
         public ResumeService(
             ILogger<ResumeService> logger,
             UserManager<ApplicationUser> userManager,
@@ -104,7 +106,8 @@ namespace ResuMeta.Services.Concrete
             IRepository<Resume> resumeRepository,
             IResumeRepository resumeRepo,
             IRepository<Achievement> achievementRepository,
-            IRepository<Project> projectRepository
+            IRepository<Project> projectRepository,
+            IUserSkillRepository userSkillRepository
             )
         {
             _logger = logger;
@@ -120,6 +123,7 @@ namespace ResuMeta.Services.Concrete
             _resumeRepo = resumeRepo;
             _achievementRepository = achievementRepository;
             _projectRepository = projectRepository;
+            _userSkillRepository = userSkillRepository;
         }
 
         public int AddResumeInfo(JsonElement response)
@@ -408,6 +412,20 @@ namespace ResuMeta.Services.Concrete
                 });
             }
             return projectList;
+        }
+
+        public void DeleteResume(int resumeId)
+        {
+            
+            var resume = _resumeRepository.FindById(resumeId);
+    
+             var skills = _userSkillRepository.GetSkillsByResumeId(resumeId);
+             foreach (var skill in skills)
+             {
+                 _userSkillRepository.Delete(skill);
+             }
+            
+            _resumeRepository.Delete(resume);
         }
     }
 }

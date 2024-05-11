@@ -72,6 +72,22 @@ namespace ResuMeta.Controllers
             }
         }
 
+        // DELETE: api/resume/{resumeId}
+        [HttpDelete("{resumeId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult DeleteResume(int resumeId)
+        {
+            try
+            {
+                _resumeService.DeleteResume(resumeId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         // GET: api/resume/education/{userInfoId} 
         [HttpGet("education/{userInfoId}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
