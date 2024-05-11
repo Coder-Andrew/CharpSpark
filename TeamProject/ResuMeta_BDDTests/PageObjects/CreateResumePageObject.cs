@@ -272,6 +272,7 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public void FillOutProjectsForm()
         {
+            Thread.Sleep(1000);
             _webDriver.FindElement(By.Id("project-add-btn")).Click();
             {
                 var element = _webDriver.FindElement(By.Id("project-add-btn"));
@@ -300,5 +301,6 @@ namespace ResuMeta_BDDTests.PageObjects
             nextButtonElement.Click();
             Thread.Sleep(500);
         }
+
     }
 }

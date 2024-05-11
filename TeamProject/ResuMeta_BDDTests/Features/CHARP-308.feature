@@ -11,6 +11,10 @@ Background:
 	  | reynoldsa@mail.com     | reynoldsa@mail.com     | Adrian     | Reynolds    | Password123! |
     And I am a user with the first name 'Adrian'
     And I login
+	And I am on the "YourDashboard" page
+	And the following users has at least one resume
+      | Email              | Resumes |
+      | reynoldsa@mail.com | 1       |
 
 
 Scenario: A user should be able to see the "Improve with AI" button

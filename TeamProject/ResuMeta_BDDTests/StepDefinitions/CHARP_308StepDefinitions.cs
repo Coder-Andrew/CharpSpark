@@ -13,13 +13,36 @@ namespace ResuMeta_BDDTests.StepDefinitions
         private readonly JobListingsPageObject _jobListingPage;
         private readonly YourDashboardPageObject _dashboardPage;
         private readonly ImproveResumePageObject _improveResumePage;
+        private readonly CreateResumePageObject _createResumePage;
+        private readonly ViewResumePageObject _viewResumePage;
         public CHARP_308StepDefinitions(ScenarioContext scenarioContext, BrowserDriver browserDriver)
         {
             _scenarioContext = scenarioContext;
             _jobListingPage = new JobListingsPageObject(browserDriver.Current);
             _dashboardPage = new YourDashboardPageObject(browserDriver.Current);
             _improveResumePage = new ImproveResumePageObject(browserDriver.Current);
+            _createResumePage = new CreateResumePageObject(browserDriver.Current);
+            _viewResumePage = new ViewResumePageObject(browserDriver.Current);
         }
+        [Given("the following users has at least one resume")]
+        public void GivenTheFollowingUsersHasAtLeastOneResume(DataTable dataTable)
+        {
+
+            if (!_dashboardPage.ResumeExists())
+            {
+                _createResumePage.GoTo("CreateResume");
+                for (int i = 0; i < 3; i++)
+                {
+                    _createResumePage.ClickNext();
+                }
+                _createResumePage.FillOutProjectsForm();
+                _createResumePage.SubmitForm();
+                _viewResumePage.SaveResume();
+
+            }
+        }
+
+
         [When("I click on a job listing")]
         public void WhenIClickOnAJobListing()
         {
