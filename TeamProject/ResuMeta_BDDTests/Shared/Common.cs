@@ -20,6 +20,7 @@ namespace ResuMeta_BDDTests.Shared
         public static Dictionary<string, string> Paths = new()
         {
             { "Home" , "/" },
+            { "Register", "/Identity/Account/Register"},
             { "Login", "/Identity/Account/Login" },
             { "CreateResume", "/Resume/CreateResume" },
             { "ViewResume", "/Resume/ViewResume/" },
@@ -31,7 +32,10 @@ namespace ResuMeta_BDDTests.Shared
             { "ApplicationTracker", "/ApplicationTracker"},
             { "JobListings", "/JobListing"},
             { "ImproveResume", "/Resume/ImproveResume/" },
-            { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" }
+            { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" },
+            { "CreateProfile", "/Profile/" },
+            { "YourProfile", "/Profile/YourProfile/" },
+            { "User", "/Profile/UserProfile/" }
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
@@ -42,6 +46,7 @@ namespace ResuMeta_BDDTests.Shared
             Paths = new()
             {
                 { "Home" , "/" },
+                { "Register", "/Identity/Account/Register"},
                 { "Login", "/Identity/Account/Login" },
                 { "CreateResume", "/Resume/CreateResume" },
                 { "ViewResume", "/Resume/ViewResume/" },
@@ -53,7 +58,10 @@ namespace ResuMeta_BDDTests.Shared
                 { "ApplicationTracker", "/ApplicationTracker"},
                 { "JobListings", "/JobListing"},
                 { "ImproveResume", "/Resume/ImproveResume/"},
-                { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" }
+                { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" },
+                { "CreateProfile", "/Profile/" },
+                { "YourProfile", "/Profile/YourProfile/" },
+                { "User", "/Profile/UserProfile/" }
             };
         }
     }
