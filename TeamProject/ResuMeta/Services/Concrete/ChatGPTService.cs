@@ -217,5 +217,64 @@ namespace ResuMeta.Services.Concrete
             };
             _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
         }
+    
+        public async Task<ChatGPTResponse> GenerateTailoredCoverLetter(int id, JsonElement jobDescription)
+        {
+            JsonDocument doc = JsonDocument.Parse(jobDescription.ToString());
+            JsonElement root = doc.RootElement;
+
+            string? jobDescriptionString = root.GetProperty("jobDescription").GetString();
+            
+            var resumeContent = _resumeRepository.GetResumeHtml(id);
+            var htmlContent = resumeContent.HtmlContent;
+            var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
+            JsonMessage jsonMessage = new JsonMessage
+            {
+                model = "gpt-3.5-turbo",
+                messages = new List<Message>
+                {
+                    new Message
+                    {
+                        role = "system",
+                        content = "You are here to act as a cover letter writer. You will read the given resume and job description, and then return a professional cover letter. Please make the cover letter tailored to the job description. The goal is to write an amazing cover letter so that the user is able to increase their chances of getting a job. If there is no hiring manager named, just address it “To the Hiring Manager”."
+                    },
+                    new Message
+                    {
+                        role = "user",
+                        content = decodedHtmlContent
+                    },
+                    new Message
+                    {
+                        role = "user", 
+                        content = jobDescriptionString
+                    }
+                }
+            };
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            string message = JsonSerializer.Serialize<JsonMessage>(jsonMessage, options);
+
+            StringContent postContent = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("v1/chat/completions", postContent);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error: {response.StatusCode} - {content}");
+                throw new Exception($"Error: {response.StatusCode} - {content}");
+            }
+
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+
+            return new ChatGPTResponse
+            {
+                Response = cGPTResponse.choices[0].message.content
+            
+            };
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
+        }
     }
 }

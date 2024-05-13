@@ -49,6 +49,9 @@
 
         @if (User.Identity!.IsAuthenticated)
         {
+
+
+
             <!-- Modal -->
             <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
                 <div class="modal-dialog">
@@ -83,8 +86,17 @@
                                 @* <a asp-controller="ApplicationTracker" asp-action="Index" class="btn btn-primary text-center">Improve resume based on job description</a> *@
                                 @* <button class="btn btn-primary text-center" id="improve-with-ai">Improve resume based on job description</button> *@
                                 <a class="btn btn-primary text-center" id="improve-with-ai">Improve resume based on job description</a>
+                                <a class="btn btn-primary text-center" id="create-cover-letter-ai">Create cover letter for this job</a>
                             </div>
-
+                          <div class="mb-3" id="resume-selection" style="display: none;">
+                            <label for="resumeSelect" class="form-label">Select a Resume</label>
+                            <select id="resumeSelect" class="form-select">
+                                    @foreach (var resume in ViewBag.Resumes)
+                                    {
+                                        <option value="@resume.Value">@resume.Text</option>
+                                    }
+                            </select>
+                        </div>
 
                         </form>
                     </div>

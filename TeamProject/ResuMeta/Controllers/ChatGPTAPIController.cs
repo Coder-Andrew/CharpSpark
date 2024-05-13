@@ -63,11 +63,35 @@ namespace ResuMeta.Controllers
          // POST: api/cgpt/improve-coverletter/{id}
         [HttpPost("improve-coverletter/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GenerateCoverLetter(int id)
+        public async Task<IActionResult> GenerateCoverLetter(int id, [FromBody] JsonElement jobDescription)
         {
             try
             {   
                 var response = await _chatGPTService.GenerateCoverLetter(id);
+
+                if (response == null || response.Response == null)
+                {
+                    return BadRequest();
+                }
+                
+                string responseData = response.Response.Trim('"');
+
+                return Content(responseData, "text/html");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        // POST: api/cgpt/tailored-coverletter/{id}
+        [HttpPost("tailored-coverletter/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GenerateTailoredCoverLetter(int id, [FromBody] JsonElement jobDescription)
+        {
+            try
+            {   
+                var response = await _chatGPTService.GenerateTailoredCoverLetter(id, jobDescription);
 
                 if (response == null || response.Response == null)
                 {

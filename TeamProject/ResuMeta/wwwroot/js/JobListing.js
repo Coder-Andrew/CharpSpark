@@ -9,7 +9,7 @@ function initializePage() {
     const searchCachedListings = document.getElementById('cached-job-title');
     const pageNumberInput = document.getElementById('pagination');
     const improveWithAiBtn = document.getElementById('improve-with-ai');
-
+    const createCoverLetterAiBtn = document.getElementById('create-cover-letter-ai');
 
     // redirect to /Resume/YourDashboard
     if (improveWithAiBtn) {
@@ -18,6 +18,37 @@ function initializePage() {
             window.location.href = "/Resume/YourDashboard";
         })
     }
+
+    // redirect to /Resume/YourDashboard
+    // if (createCoverLetterAiBtn) {
+    //     createCoverLetterAiBtn.addEventListener('click', () => {
+    //         console.log("cover letter button clicked")
+    //         window.location.href = "/Resume/YourDashboard";
+    //     })
+    // }
+
+
+if (createCoverLetterAiBtn) {
+    createCoverLetterAiBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        // Populate the dropdown list with your pre-existing resumes
+        // const resumes = ["Resume 1", "Resume 2", "Resume 3"]; // Replace this with your actual data
+        // const resumeSelect = document.getElementById('resumeSelect');
+        // // Clear any existing options
+        // while (resumeSelect.firstChild) {
+        //     resumeSelect.removeChild(resumeSelect.firstChild);
+        // }
+        // // Add new options
+        // resumes.forEach((resume) => {
+        //     const option = document.createElement('option');
+        //     option.value = resume;
+        //     option.text = resume;
+        //     resumeSelect.appendChild(option);
+        // });
+        // Show the dropdown list
+        document.getElementById('resume-selection').style.display = 'block';
+    })
+}
 
 
     // add event listener to get cached listings button
