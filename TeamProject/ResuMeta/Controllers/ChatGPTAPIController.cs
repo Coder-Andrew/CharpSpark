@@ -12,8 +12,10 @@ namespace ResuMeta.Controllers
     public class ChatGPTAPIController : ControllerBase
     {
         private readonly IChatGPTService _chatGPTService;
-        public ChatGPTAPIController(IChatGPTService chatGPTService)
+        private readonly ILogger<ChatGPTAPIController> _logger;
+        public ChatGPTAPIController(IChatGPTService chatGPTService, ILogger<ChatGPTAPIController> logger)
         {
+            _logger = logger;
             _chatGPTService = chatGPTService;
         }
 
@@ -63,7 +65,7 @@ namespace ResuMeta.Controllers
          // POST: api/cgpt/improve-coverletter/{id}
         [HttpPost("improve-coverletter/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GenerateCoverLetter(int id, [FromBody] JsonElement jobDescription)
+        public async Task<IActionResult> GenerateCoverLetter(int id)
         {
             try
             {   
@@ -98,7 +100,7 @@ namespace ResuMeta.Controllers
                     return BadRequest();
                 }
                 
-                string responseData = response.Response.Trim('"');
+               string responseData = response.Response.Trim('"');
 
                 return Content(responseData, "text/html");
             }
@@ -107,5 +109,6 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
     }
 }

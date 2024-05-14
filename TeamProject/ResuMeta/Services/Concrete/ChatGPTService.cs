@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Text.Json;
 using ResuMeta.DAL.Abstract;
+using Hangfire.Common;
 
 namespace ResuMeta.Services.Concrete
 {

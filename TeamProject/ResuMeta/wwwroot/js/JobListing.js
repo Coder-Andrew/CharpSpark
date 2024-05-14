@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
+let jobDesc = '';
 let pageNumber = 1;
 let numberOfPages = 0;
 
@@ -19,36 +20,61 @@ function initializePage() {
         })
     }
 
-    // redirect to /Resume/YourDashboard
-    // if (createCoverLetterAiBtn) {
-    //     createCoverLetterAiBtn.addEventListener('click', () => {
-    //         console.log("cover letter button clicked")
-    //         window.location.href = "/Resume/YourDashboard";
-    //     })
-    // }
 
+    if (createCoverLetterAiBtn) {
+        createCoverLetterAiBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+    
+            document.getElementById('resume-selection').style.display = 'block';
+    
+            const dropdown = document.getElementById('resumeSelect');
+            //const spinner = document.getElementById('loading-spinner'); // get the spinner element
+            const spinner = document.querySelector('.loading-spinner');
+            const loadingScreen = document.getElementById("loading-screen"); // get the loading screen element
+            const dropdownSpinner = document.getElementById('dropdown-spinner'); // get the new dropdown spinner element
 
-if (createCoverLetterAiBtn) {
-    createCoverLetterAiBtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        // Populate the dropdown list with your pre-existing resumes
-        // const resumes = ["Resume 1", "Resume 2", "Resume 3"]; // Replace this with your actual data
-        // const resumeSelect = document.getElementById('resumeSelect');
-        // // Clear any existing options
-        // while (resumeSelect.firstChild) {
-        //     resumeSelect.removeChild(resumeSelect.firstChild);
-        // }
-        // // Add new options
-        // resumes.forEach((resume) => {
-        //     const option = document.createElement('option');
-        //     option.value = resume;
-        //     option.text = resume;
-        //     resumeSelect.appendChild(option);
-        // });
-        // Show the dropdown list
-        document.getElementById('resume-selection').style.display = 'block';
-    })
-}
+            dropdown.disabled = true; 
+            dropdownSpinner.style.display = 'block';
+    
+            await getJobDescription(sessionStorage.getItem('jobLink'));
+    
+            dropdown.disabled = false;
+            dropdownSpinner.style.display = 'none'; 
+    
+            dropdown.addEventListener('change', async (event) => {
+                const resumeId = event.target.value;
+                console.log('resumeId', resumeId);
+    
+                spinner.style.display = 'block'; // show the spinner
+                loadingScreen.style.display = "block"; // show the loading screen
+    
+                // Make the HTTP POST request
+                const response = await fetch(`/api/cgpt/tailored-coverletter/${resumeId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-type': 'application/json; charset=UTF-8'
+                        },
+                        body: JSON.stringify({jobDescription: jobDesc})
+                    });
+                // Check that the request was successful
+                if (!response.ok) {
+                    console.error('HTTP error', response.status);
+                    return;
+                }
+                // Extract HTML content from the response
+                const htmlContent = await response.text();
+    
+                // Store the HTML content in sessionStorage
+                sessionStorage.setItem('htmlContent', encodeURIComponent(htmlContent));
+    
+                spinner.style.display = 'none'; // hide the spinner
+                loadingScreen.style.display = "none"; // hide the loading screen
+                window.location.href = `/CoverLetter/TailoredCoverLetter/`;
+                console.log('the response is', response);
+            });
+        })
+    }
 
 
     // add event listener to get cached listings button
@@ -115,8 +141,7 @@ async function getCachedJobListings(pageNumber, jobTitle) {
             });
         }
     }
-    else
-    {
+    else {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
         noResultsNode.innerHTML = 'No cached job listings found';
@@ -185,8 +210,7 @@ async function searchJobListings() {
             });
             hideLoader();
         }
-        else
-        {
+        else {
             var noResultsNode = document.createElement('div');
             noResultsNode.className = 'no-results';
             noResultsNode.innerHTML = 'No job listings found';
@@ -195,8 +219,7 @@ async function searchJobListings() {
             return;
         }
     }
-    else
-    {
+    else {
         var noResultsNode = document.createElement('div');
         noResultsNode.className = 'no-results';
         noResultsNode.innerHTML = 'No job listings found';
@@ -253,13 +276,13 @@ function openModal(listing) {
 
     const cloneJobTitle = clone.querySelector(".job-listing-title");
     const cloneJobCompany = clone.querySelector(".job-listing-company");
-    const cloneJobLocation = clone.querySelector(".job-listing-location"); 
+    const cloneJobLocation = clone.querySelector(".job-listing-location");
 
     cloneJobTitle.textContent = jobTitle;
     cloneJobCompany.innerHTML = `<span class="fa fa-building"></span> ${jobCompany}`;
     cloneJobLocation.innerHTML = `<span class="fa fa-globe"></span> ${jobLocation}`;
-    
-    
+
+
     const inputTitle = modalBody.querySelector("#job-title");
     const inputCompany = modalBody.querySelector("#company");
     const inputLink = modalBody.querySelector("#job-link");
@@ -287,4 +310,25 @@ function closeModal() {
     inputAppliedDate.value = '';
     viewableListing.innerHTML = '';
 
+}
+
+async function getJobDescription(url) {
+    if (!url) return;
+
+    const response = await fetch(`/api/scraper/job_description`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+            url: url.toString()
+        })
+    });
+
+    if (response.ok) {
+        let jsonResponse = await response.json();
+        console.log('jobDescription', jsonResponse.jobDescription)
+        jobDesc = jsonResponse.jobDescription;
+    }
 }
