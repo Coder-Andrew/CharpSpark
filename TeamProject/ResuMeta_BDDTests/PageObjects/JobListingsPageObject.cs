@@ -20,6 +20,8 @@ namespace ResuMeta_BDDTests.PageObjects
     {
         public IWebElement RemoteJobSearchInput => _webDriver.FindElement(By.Id("cached-job-title"));
         public IWebElement SearchRemoteJobsButton => _webDriver.FindElement(By.Id("search-cached-job-listings"));
+        public IWebElement ResumeSelect => _webDriver.FindElement(By.Id("resumeSelect"));
+
         public JobListingsPageObject(IWebDriver webDriver) : base(webDriver)
         {
             // using a named page (in Common.cs)
@@ -104,6 +106,26 @@ namespace ResuMeta_BDDTests.PageObjects
         public void ClickFirstResume()
         {
             _webDriver.FindElement(By.ClassName("thumbnail")).Click();
+        }
+
+        public void ClickOnTheCreateCoverLetterButton()
+        {
+            var coverLetterAIButton = _webDriver.FindElement(By.Id("create-cover-letter-ai"));
+            coverLetterAIButton.Click();
+            Thread.Sleep(9000);
+        }
+
+        public bool IsResumeSelectPresent()
+        {
+            try
+            {
+                _webDriver.FindElement(By.Id("resumeSelect"));
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
         }
 
     }

@@ -23,6 +23,15 @@ namespace ResuMeta.Services.Concrete
         public string? HiringManager { get; set; }
         public string? Body { get; set; }
     }
+    class JsonCoverLetterComplete
+    {
+        public string? Id { get; set; }
+        public string? HiringManager { get; set; }
+        public string? Body { get; set; }
+        public string? coverLetterId { get; set; }
+        public string? title { get; set; }
+        public string? htmlContent { get; set; }
+    }
 
     public class CoverLetterService : ICoverLetterService
     {
@@ -118,6 +127,44 @@ namespace ResuMeta.Services.Concrete
         {
             CoverLetter coverLetter = _coverLetterRepository.FindById(coverLetterId);
             _coverLetterRepository.Delete(coverLetter);
+        }
+
+
+        public int TailoredCoverLetter(JsonElement response)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            try
+            {
+                JsonCoverLetterComplete coverLetterComplete = JsonSerializer.Deserialize<JsonCoverLetterComplete>(response, options)!;
+
+                // Add cover letter info
+                CoverLetter coverLetter = new CoverLetter
+                {
+                    UserInfoId = Int32.Parse(coverLetterComplete.Id!),
+                    HiringManager = coverLetterComplete.HiringManager,
+                    Body = coverLetterComplete.Body
+                };
+                _coverLetterRepository.AddOrUpdate(coverLetter);
+
+                // Save cover letter content
+                if (coverLetterComplete.htmlContent == null)
+                {
+                    throw new Exception("Invalid input");
+                }
+                coverLetter.CoverLetter1 = coverLetterComplete.htmlContent;
+                coverLetter.Title = coverLetterComplete.title;
+                _coverLetterRepository.AddOrUpdate(coverLetter);
+
+                return coverLetter.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deserializing json");
+                throw new Exception("Error deserializing json");
+            }
         }
     }
 }

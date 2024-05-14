@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
+
 function loadQuill() {
     console.log("Loading Quill");
     var script = document.createElement('script');

@@ -119,4 +119,18 @@ public class CoverLetterController : Controller
         return View(coverLetterVM);
     }
 
+    public IActionResult TailoredCoverLetter()
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        UserVM userVM = new UserVM(); 
+        userVM.UserId = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!.Id;
+        return View(userVM);
+    }
+
 }

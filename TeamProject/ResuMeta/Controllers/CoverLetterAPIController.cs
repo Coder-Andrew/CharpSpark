@@ -69,5 +69,22 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
+         // PUT: api/coverletter/tailoredcoverletter
+        [HttpPut("tailoredcoverletter")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult TailoredCoverLetter(JsonElement response)
+        {
+            try
+            {
+                int coverLetterId = _coverLetterService.TailoredCoverLetter(response);
+                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetterId;
+                return Ok(new { Success = true, RedirectUrl = newUrl });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

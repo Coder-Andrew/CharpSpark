@@ -13,5 +13,6 @@ namespace ResuMeta.Services.Abstract
         CoverLetterVM GetCoverLetterHtml(int coverLetterId);
         List<CoverLetterVM> GetAllCoverLetters(int userId);
         void DeleteCoverLetter(int coverLetterId);
+        int TailoredCoverLetter(JsonElement response);
     }
 }
