@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <UpToDateCheckInput Remove="features\CHARP-308.feature" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Bogus" Version="35.5.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="Reqnroll.NUnit" Version="1.0.0" />

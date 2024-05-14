@@ -3,12 +3,14 @@ import time
 import threading
 import schedule
 import argparse
-from flask import Flask, request
+from flask import Flask, request, abort
 
 from src.advanced_search import advanced_search
+from src.job_descriptions import get_job_descriptions
 from src.cache_listings import get_and_cache_listings
 from src.db_context import mongo_db_context, NUMBER_OF_LISTINGS_PER_PAGE
 from src.job_listing_repository import job_listing_repository
+
 
 app = Flask(__name__)
 
@@ -60,6 +62,22 @@ def get_cached_listings():
         return {'error': str(e)}
     except:
         return {'error': 'An error occurred'}
+    
+    
+@app.route('/api/job_description', methods=["POST"])
+def get_job_description():
+    
+    listing_url = request.json.get('url')
+    
+    if listing_url == None:
+        return {'error': 'listing_url is a required parameter'}
+    
+    try:
+        return {'job_description': get_job_descriptions(listing_url)}
+    except:
+        #return 404 error 
+        abort(404)
+
 
 
 if __name__ == '__main__':

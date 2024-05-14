@@ -97,4 +97,40 @@ public class CoverLetterController : Controller
         return View(coverLetterVM);
     }
 
+    [HttpGet("CoverLetter/ImproveCoverLetter/{coverLetterId}")]
+    public IActionResult ImproveCoverLetter(int coverLetterId)
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        CoverLetter userCoverLetter = _coverLetterRepository.GetAll().Where(x => x.Id == coverLetterId).FirstOrDefault()!;
+        if (userCoverLetter == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        if (userCoverLetter.UserInfoId != currUser.Id)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        CoverLetterVM coverLetterVM = _coverLetterService.GetCoverLetterHtml(coverLetterId);
+        return View(coverLetterVM);
+    }
+
+    public IActionResult TailoredCoverLetter()
+    {
+        string id = _userManager.GetUserId(User)!;
+        if (id == null)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
+        UserVM userVM = new UserVM(); 
+        userVM.UserId = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!.Id;
+        return View(userVM);
+    }
+
 }

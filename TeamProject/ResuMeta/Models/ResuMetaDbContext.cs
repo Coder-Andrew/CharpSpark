@@ -38,6 +38,7 @@ public partial class ResuMetaDbContext : DbContext
     public virtual DbSet<UserSkill> UserSkills { get; set; }
     public virtual DbSet<CoverLetter> CoverLetters { get; set; }
     public virtual DbSet<ResumeTemplate> ResumeTemplates { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -54,7 +55,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Achievem__3214EC0771090A2C");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.Achievements).HasConstraintName("Fk Achievements Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.Achievements).HasConstraintName("Fk Achievements Resume Id").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Achievements).HasConstraintName("Fk Achievements UserInfo Id");
         });
@@ -77,7 +78,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Educatio__3214EC07F870F0E0");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.Educations).HasConstraintName("Fk Education Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.Educations).HasConstraintName("Fk Education Resume Id").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Educations).HasConstraintName("Fk Education UserInfo Id");
         });
@@ -86,7 +87,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Employme__3214EC0709675694");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.EmploymentHistories).HasConstraintName("Fk EmploymentHistory Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.EmploymentHistories).HasConstraintName("Fk EmploymentHistory Resume Id").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.EmploymentHistories).HasConstraintName("Fk EmploymentHistory UserInfo Id");
         });
@@ -95,7 +96,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Projects__3214EC0735A54740");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.Projects).HasConstraintName("Fk Projects Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.Projects).HasConstraintName("Fk Projects Resume Id").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.Projects).HasConstraintName("Fk Projects UserInfo Id");
         });
@@ -128,7 +129,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__UserSkil__3214EC079D65A9F2");
 
-            entity.HasOne(d => d.Resume).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Resume Id");
+            entity.HasOne(d => d.Resume).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Resume Id").OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills).HasConstraintName("Fk UserSkill Skill Id");
 
@@ -145,6 +146,12 @@ public partial class ResuMetaDbContext : DbContext
         modelBuilder.Entity<ResumeTemplate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__ResumeTe__3214EC07A3A3D3A3");
+        });
+
+        modelBuilder.Entity<Profile>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Profile__3214EC07A3A3D3A3");
+            entity.HasOne(d => d.UserInfo).WithOne(p => p.Profile).HasConstraintName("Fk Profile UserInfo Id");
         });
 
         OnModelCreatingPartial(modelBuilder);

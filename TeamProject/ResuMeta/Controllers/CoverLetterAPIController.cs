@@ -53,5 +53,38 @@ namespace ResuMeta.Controllers
                 return BadRequest();
             }
         }
+
+        // DELETE: api/coverletter/{coverLetterId}
+        [HttpDelete("{coverLetterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult DeleteCoverLetter(int coverLetterId)
+        {
+            try
+            {
+                _coverLetterService.DeleteCoverLetter(coverLetterId);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+         // PUT: api/coverletter/tailoredcoverletter
+        [HttpPut("tailoredcoverletter")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult TailoredCoverLetter(JsonElement response)
+        {
+            try
+            {
+                int coverLetterId = _coverLetterService.TailoredCoverLetter(response);
+                string newUrl = "/CoverLetter/ViewCoverLetter/" + coverLetterId;
+                return Ok(new { Success = true, RedirectUrl = newUrl });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

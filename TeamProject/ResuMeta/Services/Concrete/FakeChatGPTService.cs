@@ -1,5 +1,6 @@
 ﻿using ResuMeta.Models;
 using ResuMeta.Services.Abstract;
+using System.Text.Json;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -12,7 +13,22 @@ namespace ResuMeta.Services.Concrete
                 Response = $"This is a fake service used for testing the ChatGPT service, message: {question}"
             };
         }
-        public async Task<ChatGPTResponse> GenerateResume(int id)
+        public async Task<ChatGPTResponse> GenerateResume(int id, JsonElement jobDescription)
+        {
+            return new ChatGPTResponse
+            {
+                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+            };
+        }
+
+        public async Task<ChatGPTResponse> GenerateCoverLetter(int id)
+        {
+            return new ChatGPTResponse
+            {
+                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+            };
+        }
+        public async Task<ChatGPTResponse> GenerateTailoredCoverLetter(int id, JsonElement jobDescription)
         {
             return new ChatGPTResponse
             {

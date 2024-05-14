@@ -20,12 +20,37 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public IWebElement SaveCoverLetterBtn => _webDriver.FindElement(By.Id("save-cover-letter"));
         public IWebElement CoverLetterTitle => _webDriver.FindElement(By.Id("cover-letter-title"));
+        public IWebElement ImproveWithAIBtn => _webDriver.FindElement(By.Id("improve-with-ai"));
         public void SaveCoverLetter()
         {
             CoverLetterTitle.Click();
             CoverLetterTitle.SendKeys("Test Cover Letter");
             SaveCoverLetterBtn.Click();
             coverLetterCreated = true;
+        }
+
+        public bool ImproveWithAIButton()
+        {
+            Thread.Sleep(1000);
+            if (ImproveWithAIBtn.Displayed)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public void ClickImproveWithAI()
+        {
+            ImproveWithAIBtn.Click();
+        }
+
+        public string GetYourImprovedCoverLetterUrl(string coverLetterId)
+        {
+            string improveCoverLetterUrl = "/ImproveCoverLetter/" + coverLetterId;
+
+            return improveCoverLetterUrl;
         }
     }
 }

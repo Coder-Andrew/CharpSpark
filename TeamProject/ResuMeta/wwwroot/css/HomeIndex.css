@@ -95,6 +95,36 @@ hr {
     animation-delay: 1.4s;
 }
 
+#search-bar-area {
+    opacity: 0;
+    transform: translateY(-100%);
+    content: "";
+    animation: slideInFromTop 1s ease-out forwards;
+    animation-delay: 0.6s;
+}
+
+#profile-box {
+    opacity: 0; 
+    transform: translateY(-100%);
+    animation: fadeInMoveUp 0.5s ease-out forwards;
+    animation-delay: 0.5s;
+    margin-left: 20px !important;
+    background: linear-gradient(to bottom right, #000B0E 85%, #FFFFFF) !important;
+    border: 1px solid #fc9c2f !important;
+    width: 196px;
+    border-radius: 5px;
+    margin-top: 2px;
+    color: white;
+}
+
+#profile-box:hover {
+    box-shadow: 0 0 2px #ff941aef, 0 0 5px #f3711aef, 0 0 0px #f3711aef, 0 0 25px #5e351cef;
+    transition: box-shadow 0.3s ease-in-out;
+    color:#fc9c2f;
+}
+
+
+
 .btn:focus, .btn:active {
     border-color: #2a1ce9 !important;
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;

@@ -1,0 +1,28 @@
+Loved:
+- Teamwork and communication
+- Teamwork
+- DC's user story
+- Working with ChatGPT
+- Working with web scraper
+- Team work
+
+Loathed:
+- Azure issues with the ':' character for environment variables
+- Writing tests
+- Lack of time between classes
+- Merge conflicts
+- Merge conflicts
+- Main acting like it had major changes (merge conflicts)
+- Testing
+- Other classes
+
+Longed For:
+- 3 million dollars
+- More time and lighter workload between classes
+- Azure to work simply and first time without any issues
+- More time to figure out why chatgpt was being so difficult
+- More time for stuff outside of school
+
+Solutions:
+- Continue teamwork
+- Communicate better/cooperate so the chance of merge conflicts is lower 

@@ -44,7 +44,8 @@ builder.Services.AddHttpClient<IChatGPTService, ChatGPTService>((httpClient, ser
     return new ChatGPTService(
     httpClient, 
     services.GetRequiredService<ILogger<ChatGPTService>>(),
-    services.GetRequiredService<IResumeRepository>()
+    services.GetRequiredService<IResumeRepository>(),
+    services.GetRequiredService<ICoverLetterRepository>()
 );
 });
 
@@ -114,7 +115,10 @@ builder.Services.AddScoped<IResumeRepository, ResumeRepository>();
 builder.Services.AddScoped<ICoverLetterRepository, CoverLetterRepository>();
 builder.Services.AddScoped<IResumeTemplateRepository, ResumeTemplateRepository>();
 builder.Services.AddScoped<IApplicationTrackerRepository, ApplicationTrackerRepository>();
+builder.Services.AddScoped<IUserSkillRepository, UserSkillRepository>();
 builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
 builder.Services.AddScoped<ISendGridService, SendGridService>();
 

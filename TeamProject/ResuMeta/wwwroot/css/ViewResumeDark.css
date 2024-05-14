@@ -341,3 +341,43 @@ body.show-before::before {
     color: rgb(207, 207, 207) !important;
     text-decoration: none !important;
 }
+
+#improve-with-ai {
+    position: relative;
+    background-color: #29ADEB;
+    border: 1px solid #29ADEB;
+    color: white;
+    box-shadow: 0 0 10px #29ADEB;
+}
+
+#improve-with-ai::before {
+    content: "\f005";
+    font-family: "FontAwesome";
+    position: absolute;
+    top: -15px;
+    left: -8px;
+    font-size: 20px;
+    text-shadow: 0 0 10px #29ADEB;
+}
+
+#improve-with-ai::after {
+    content: "\f005";
+    font-family: "FontAwesome";
+    position: absolute;
+    font-size: 10px;
+    top: -6px;
+    left: 14px;
+    text-shadow: 0 0 10px #29ADEB;
+}
+
+#improve-with-ai:hover {
+    background-color: #0860c4;
+    border: 1px solid #0860c4;
+    color: white;
+    box-shadow: 0 0 10px #0860c4;
+}
+
+#improve-with-ai:focus, #improve-with-ai:active {
+    border-color: #2a1ce9 !important;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #190db6 !important;
+}

@@ -1,0 +1,73 @@
+@model ResuMeta.ViewModels.UserVM;
+@{
+    Layout = null;
+    ViewData["Title"] = "Tailored Cover Letter - View";
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link id="theme-stylesheet" rel="stylesheet" href="~/css/TailoredCoverLetterDark.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<div class="content">
+
+    <body class="flex-container">
+        <div class="text-center">
+            <div id="validation-area"></div>
+            <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success"
+                style="display:none;">
+            </div>
+            <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error"
+                style="display:none;">
+            </div>
+
+            <div class="container" id="resume-area1" style="display: none;">
+
+                <input type="hidden" id="userId" value="@Model.UserId" />
+            </div>
+            <div class="editor-header">
+                <div class="left-section">
+                    <button id="back-button" onclick="window.history.back();">
+                        <i class="fa fa-arrow-circle-left"></i>
+                    </button>
+                    <div class="mt-3 mx-2" style="float: left;">
+                        <h6><strong>Title:</strong> <input type="text" id="cover-letter-title"
+                                placeholder="Cover Letter Title" /></h6>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-primary" id="save-cover-letter">Save Cover Letter</button>
+                </div>
+            </div>
+            <div class="" id="loading-screen" style="display: none;"> @* Invisible loading screen *@
+                <div id="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p>Please wait while your cover letter is created...</p>
+                </div>
+            </div>
+            <div class="container">
+                <div class="editor-container">
+                    <div id="editor2" class="editor"></div>
+
+                </div>
+            </div>
+        </div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/TailoredCoverLetter.js"></script>
+    </body>
+</div>
+
+</html>

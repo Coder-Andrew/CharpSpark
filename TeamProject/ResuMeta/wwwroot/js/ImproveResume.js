@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
+const jobLink = sessionStorage.getItem('jobLink');
+let jobDescription = "";
+
 function loadQuill() {
     console.log("Loading Quill");
     var script = document.createElement('script');
@@ -13,6 +16,11 @@ function loadQuill() {
 }
 
 function initializePage() {
+    console.log(jobLink);
+    window.addEventListener('beforeunload', function (event) {
+        sessionStorage.clear(); // might want to only clear jobLink from session storage
+    });
+
 
     var quill1 = new Quill('#editor1', {
         theme: 'snow',
@@ -32,11 +40,12 @@ function initializePage() {
     quill1.setContents(delta1);
 
     const resumeId = document.getElementById('resume-id').value;
-    const resumeContent2 = fetchAndDisplayData(resumeId, quill2);
+    const resumeContent2 = fetchAndDisplayData(resumeId, quill2, jobLink);
     const resumeArea2 = document.getElementById("resume-area2");
     resumeArea2.innerHTML = decodeURIComponent(resumeContent2);
     const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML);
     quill2.setContents(delta2);
+    const jobDescription = document.getElementById('job-description');
 
     const regenerateButton = document.getElementById("regenerate-button");
     if (regenerateButton) {
@@ -54,7 +63,7 @@ function initializePage() {
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill2), false);
     const themeSwitcher = document.getElementById('theme-switcher');
-    themeSwitcher.addEventListener('click', SwitchTheme, false);
+    //themeSwitcher.addEventListener('click', SwitchTheme, false);
 }
 
 async function SwitchTheme() {
@@ -180,11 +189,15 @@ async function getHtmlInfo() {
 }
 
 
-async function fetchAndDisplayData(resumeId, quill2) {
+async function fetchAndDisplayData(resumeId, quill2, jobLink) {
     const loadingScreen = document.getElementById("loading-screen");
     loadingScreen.style.display = "block";
 
     quill2.root.innerHTML = "Loading...";
+
+    if (jobLink) {
+        await getJobDescription(jobLink);
+    }
 
     try {
         const response = await fetch(`/api/cgpt/improve/${resumeId}`, {
@@ -192,7 +205,10 @@ async function fetchAndDisplayData(resumeId, quill2) {
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json; charset=UTF-8'
-            }
+            },
+            body: JSON.stringify({
+                jobDescription: document.getElementById('job-description').value
+            })
         });
 
         if (!response.ok) {
@@ -214,4 +230,35 @@ async function fetchAndDisplayData(resumeId, quill2) {
     } finally {
         loadingScreen.style.display = "none"; 
     }
+}
+
+async function getJobDescription(url) {
+    if (!url) return;
+
+    document.getElementById("job-description-input").classList.remove("invisible");
+
+    const response = await fetch(`/api/scraper/job_description`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify({
+            url: url.toString()
+        })
+    });
+
+    if (response.ok) {
+        let jsonResponse = await response.json();
+        console.log(jsonResponse);
+        jobDescription = jsonResponse.jobDescription;
+        populateJobDescription(jobDescription);
+    }
+}
+// Need to check response to make sure that it is a valid response
+// Always returning null for jobdescription
+function populateJobDescription(jobDescription) {
+    const jobDescriptionArea = document.getElementById('job-description');
+    jobDescriptionArea.classList.remove('invisible');
+    jobDescriptionArea.innerHTML = jobDescription;
 }

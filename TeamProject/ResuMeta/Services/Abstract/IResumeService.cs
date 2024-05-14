@@ -17,5 +17,6 @@ namespace ResuMeta.Services.Abstract
         List<EmploymentHistoryVM> GetEmploymentByUserInfoId(int userInfoId);
         List<AchievementVM> GetAchievementsByUserInfoId(int userInfoId);
         List<ProjectVM> GetProjectsByUserInfoId(int userInfoId);
+        void DeleteResume(int resumeId);
     }
 }
