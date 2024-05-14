@@ -1,0 +1,29 @@
+Loved:
+- Figuring out how to test the service layer
+- Only having one user story
+- Only having one user story
+- Only having one user story
+- Got everything out of the way really fast
+- Working with Chat GPT again
+- Javascript
+
+Loathed:
+- Selenium and BDD
+- Selenium and BDD
+- Javascript and css
+- Procrastination and time management
+- Testing 
+- Testing
+- Anxiety from presentations
+
+Longed for:
+- One million dollars
+- Abolition of standardized testing
+- Being done and enjoying the sun
+- Graduating
+- More motivation
+- Being paid for being tired
+
+Solutions:
+- Starting sooner, working faster
+- Practicing for presentations
