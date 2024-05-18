@@ -820,3 +820,7 @@ INSERT INTO [SKILLS] ([SKILLNAME]) VALUES
     ('App Store Optimization (ASO)'),
     ('Kanban Boards'),
     ('International Market Research');
+
+INSERT INTO [VOTE] ([VOTEVALUE]) VALUES
+    ('UP'),
+    ('DOWN');

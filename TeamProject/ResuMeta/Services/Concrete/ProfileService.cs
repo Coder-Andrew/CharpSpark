@@ -105,7 +105,7 @@ namespace ResuMeta.Services.Concrete
 
         public async Task<List<ProfileVM>> SearchProfile(string keyWord)
         {
-            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.FirstName!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.LastName!.ToLower().Contains(keyWord.ToLower())).ToList();
+            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.FirstName!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.LastName!.ToLower().Contains(keyWord.ToLower()) || (x.UserInfo!.FirstName!.ToLower() + " " + x.UserInfo!.LastName!.ToLower()).Contains(keyWord.ToLower())).ToList();
             List<Profile> topProfiles = profiles.GetRange(0, Math.Min(5, profiles.Count));
             List<ProfileVM> profileVMs = new List<ProfileVM>();
             foreach (Profile profile in topProfiles)

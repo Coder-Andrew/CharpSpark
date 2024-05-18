@@ -39,6 +39,8 @@ public partial class ResuMetaDbContext : DbContext
     public virtual DbSet<CoverLetter> CoverLetters { get; set; }
     public virtual DbSet<ResumeTemplate> ResumeTemplates { get; set; }
     public virtual DbSet<Profile> Profiles { get; set; }
+    public virtual DbSet<UserVote> UserVotes { get; set; }
+    public virtual DbSet<Vote> Votes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -152,6 +154,22 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Profile__3214EC07A3A3D3A3");
             entity.HasOne(d => d.UserInfo).WithOne(p => p.Profile).HasConstraintName("Fk Profile UserInfo Id");
+        });
+        
+        modelBuilder.Entity<Vote>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Vote__3214EC07A3A3D3A3");
+        });
+
+        modelBuilder.Entity<UserVote>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__UserVote__3214EC07A3A3D3A3");
+
+            entity.HasOne(d => d.UserInfo).WithMany(p => p.UserVotes).HasConstraintName("Fk UserVote UserInfo Id");
+
+            entity.HasOne(d => d.Resume).WithMany(p => p.UserVotes).HasConstraintName("Fk UserVote Resume Id");
+
+            entity.HasOne(d => d.Vote).WithMany(p => p.UserVotes).HasConstraintName("Fk UserVote Vote Id");
         });
 
         OnModelCreatingPartial(modelBuilder);

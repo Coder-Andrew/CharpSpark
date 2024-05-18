@@ -10,6 +10,7 @@ namespace ResuMeta.ViewModels
         public string? LastName { get; set; }
 
         [Required]
+        [StringLength(250)]
         public string? Description { get; set; }
         public byte[]? ProfilePicturePath { get; set; }
         public string? Resume { get; set; }
