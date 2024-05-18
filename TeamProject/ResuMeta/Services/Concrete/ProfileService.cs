@@ -33,28 +33,6 @@ namespace ResuMeta.Services.Concrete
             _profileRepository = profileRepository;
         }
 
-        // public int AddProfile(JsonElement response)
-        // {
-        //     JsonSerializerOptions options = new JsonSerializerOptions
-        //     {
-        //         PropertyNameCaseInsensitive = true,
-        //     };
-        //     try
-        //     {
-        //         JsonProfile profile = JsonSerializer.Deserialize<JsonProfile>(response, options)!;
-        //         if (profile.user == null)
-        //         {
-        //             throw new Exception("Invalid input");
-        //         }
-        //         Profile userProfile = _profileRepository.AddOrUpdate(new Profile { UserInfoId = Int32.Parse(profile.user.id!), Description = profile.description, Resume = profile.resume });
-        //         return userProfile.Id;
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         _logger.LogError(e, "Error deserializing json");
-        //         throw new Exception("Error deserializing json");
-        //     }
-        // }
         public async Task<ProfileVM> GetProfile(int profileId)
         {
             Profile? profile = _profileRepository.FindById(profileId);
@@ -90,7 +68,8 @@ namespace ResuMeta.Services.Concrete
             }
             try
             {
-                userProfile.Resume = profile.Resume;
+                userProfile.ResumeHtml = profile.Resume;
+                userProfile.ResumeId = profile.ResumeId;
                 userProfile.Description = profile.Description;
                 _profileRepository.AddOrUpdate(userProfile);
                 return true;

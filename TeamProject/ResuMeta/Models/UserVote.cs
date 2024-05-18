@@ -17,15 +17,15 @@ public partial class UserVote
     public int? VoteId { get; set; }
 
     [ForeignKey("UserInfoId")]
-    [InverseProperty("UserVote")]
+    [InverseProperty("UserVotes")]
     public virtual UserInfo? UserInfo { get; set; }
 
     [ForeignKey("ResumeId")]
-    [InverseProperty("UserVote")]
+    [InverseProperty("UserVotes")]
     public virtual Resume? Resume { get; set; }
 
     [ForeignKey("VoteId")]
-    [InverseProperty("UserVote")]
+    [InverseProperty("UserVotes")]
     public virtual Vote? Vote { get; set; }
 
 }

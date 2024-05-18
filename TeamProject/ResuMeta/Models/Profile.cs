@@ -15,7 +15,9 @@ public partial class Profile
     public int? UserInfoId { get; set; }
 
     [Column("Resume")]
-    public string? Resume { get; set; }
+    public string? ResumeHtml { get; set; }
+
+    public int? ResumeId { get; set; }
 
     [StringLength(250)]
     public string? Description { get; set; }
@@ -23,4 +25,8 @@ public partial class Profile
     [ForeignKey("UserInfoId")]
     [InverseProperty("Profile")]
     public virtual UserInfo? UserInfo { get; set; }
+
+    [ForeignKey("ResumeId")]
+    [InverseProperty("Profile")]
+    public virtual Resume? Resume { get; set; }
 }

@@ -154,6 +154,7 @@ public partial class ResuMetaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Profile__3214EC07A3A3D3A3");
             entity.HasOne(d => d.UserInfo).WithOne(p => p.Profile).HasConstraintName("Fk Profile UserInfo Id");
+            entity.HasOne(d => d.Resume).WithOne(p => p.Profile).HasConstraintName("Fk Profile Resume Id");
         });
         
         modelBuilder.Entity<Vote>(entity =>
