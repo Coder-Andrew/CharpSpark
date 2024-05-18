@@ -29,10 +29,10 @@ namespace ResuMeta.Controllers
         {
             try
             {
-                JobListingContainerVM listings = await _webScraperService.GetCachedListings(pageNum, jobTitle);
+                JobListingContainerVM listings = await _webScraperService.GetCachedListings(pageNum, jobTitle!);
                 return Ok(listings);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -48,7 +48,7 @@ namespace ResuMeta.Controllers
                 List<JobListingVM> listings = await _webScraperService.SearchJobs(jobTitle, city, state);
                 return Ok(listings);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -64,7 +64,7 @@ namespace ResuMeta.Controllers
                 JobDescriptionVM description = await _webScraperService.GetJobDescription(jsonUrl);
                 return Ok(description);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }

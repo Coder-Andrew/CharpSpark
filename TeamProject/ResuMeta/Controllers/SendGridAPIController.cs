@@ -36,7 +36,7 @@ namespace ResuMeta.Controllers
 
         [HttpPost("apply")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SetReminder([FromBody] ReminderVM reminder)
+        public  IActionResult SetReminder([FromBody] ReminderVM reminder)
         {
             if (reminder == null)
             {
@@ -88,7 +88,7 @@ namespace ResuMeta.Controllers
 
         [HttpPost("followup")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SetFollowUp([FromBody] ReminderVM reminder)
+        public IActionResult SetFollowUp([FromBody] ReminderVM reminder)
         {
             if (reminder == null)
             {

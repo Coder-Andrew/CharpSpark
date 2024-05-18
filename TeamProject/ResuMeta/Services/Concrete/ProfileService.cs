@@ -114,7 +114,7 @@ namespace ResuMeta.Services.Concrete
                     ProfileVM profileVM = await GetProfile(profile.Id);
                     profileVMs.Add(profileVM);
                 }
-                catch(Exception e){
+                catch(Exception){
                     continue;
                 }
             }

@@ -159,7 +159,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
                         }
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         _logger.LogError($"An error occurred while sending email");
                     }

@@ -67,7 +67,7 @@ namespace ResuMeta.Services.Concrete
                 var emailFromAddress = _configuration["SendFromEmail"];
                 UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
                 _logger.LogInformation($"User with email {currUser.Email}  found. ");
-                string email = currUser.Email;
+                string email = currUser.Email!;
 
                 var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
                 if (application != null && application.ApplicationDeadline.HasValue)
@@ -89,7 +89,7 @@ namespace ResuMeta.Services.Concrete
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _logger.LogError($"An error occurred while sending email");
             }
@@ -106,7 +106,7 @@ namespace ResuMeta.Services.Concrete
                 var emailFromAddress = _configuration["SendFromEmail"];
                 UserInfo currUser = _userInfo.GetAll().Where(x => x.AspnetIdentityId == id).FirstOrDefault()!;
                 _logger.LogInformation($"User with email {currUser.Email}  found. ");
-                string email = currUser.Email;
+                string email = currUser.Email!;
 
                 var application = applications.FirstOrDefault(a => a.ApplicationTrackerId == applicationTrackerId);
 
@@ -129,7 +129,7 @@ namespace ResuMeta.Services.Concrete
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 _logger.LogError($"An error occurred while sending email");
             }

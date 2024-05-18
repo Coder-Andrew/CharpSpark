@@ -31,7 +31,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public IActionResult Index()
     {
-        return View("Index",User.Identity.IsAuthenticated);
+        return View("Index",User.Identity!.IsAuthenticated);
     }
 
     public IActionResult Privacy()
