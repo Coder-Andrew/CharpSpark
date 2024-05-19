@@ -18,12 +18,14 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IProfileRepository _profileRepo;
         private readonly IRepository<Profile> _profileRepository;
+        private readonly IVoteRepository _voteRepository;
         public ProfileService(
             ILogger<ProfileService> logger,
             UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
             IProfileRepository profileRepo,
-            IRepository<Profile> profileRepository
+            IRepository<Profile> profileRepository,
+            IVoteRepository voteRepository
             )
         {
             _logger = logger;
@@ -31,6 +33,7 @@ namespace ResuMeta.Services.Concrete
             _userInfo = userInfo;
             _profileRepo = profileRepo;
             _profileRepository = profileRepository;
+            _voteRepository = voteRepository;
         }
 
         public async Task<ProfileVM> GetProfile(int profileId)
@@ -51,6 +54,22 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception("User not found");
             }
             ProfileVM userProfile = _profileRepo.GetProfileById(userInfo.Id, appUser.Email!, userInfo.FirstName!, userInfo.LastName!, userInfo.ProfilePicturePath!);
+            var upVotes = _voteRepository.GetAllUpVotesByResumeId(profile.ResumeId);
+            var downVotes = _voteRepository.GetAllDownVotesByResumeId(profile.ResumeId);
+            if (upVotes != null && upVotes.Count > 0)
+            {
+                userProfile.UpVoteCount = upVotes.Count;
+            }
+            else {
+                userProfile.UpVoteCount = 0;
+            }
+            if (downVotes != null && downVotes.Count > 0)
+            {
+                userProfile.DownVoteCount = downVotes.Count;
+            }
+            else {
+                userProfile.DownVoteCount = 0;
+            }
             return userProfile;
         }
 
