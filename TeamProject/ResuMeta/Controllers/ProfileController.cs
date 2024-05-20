@@ -66,6 +66,7 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Index(ProfileVM profile)
     {
         string id = _userManager.GetUserId(User)!;
@@ -129,6 +130,7 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult EditProfile(ProfileVM profile)
     {
         string id = _userManager.GetUserId(User)!;
