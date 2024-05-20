@@ -132,6 +132,18 @@ CREATE TABLE [UserVote] (
   [VoteId] integer
 );
 
+CREATE TABLE [ProfileViews] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [ProfileId] integer,
+  [ViewCount] integer
+);
+
+CREATE TABLE [Follower] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [ProfileId] integer,
+  [FollowerId] integer
+);
+
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -194,3 +206,12 @@ ALTER TABLE [UserVote] ADD CONSTRAINT [Fk UserVote Resume Id]
 
 ALTER TABLE [UserVote] ADD CONSTRAINT [Fk UserVote Vote Id]
   FOREIGN KEY ([VoteId]) REFERENCES [Vote] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [ProfileViews] ADD CONSTRAINT [Fk ProfileViews Profile Id]
+  FOREIGN KEY ([ProfileId]) REFERENCES [Profile] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Follower] ADD CONSTRAINT [Fk Follower Profile Id]
+  FOREIGN KEY ([ProfileId]) REFERENCES [Profile] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Follower] ADD CONSTRAINT [Fk Follower FollowerProfile Id]
+  FOREIGN KEY ([FollowerId]) REFERENCES [Profile] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
