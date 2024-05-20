@@ -26,7 +26,7 @@ namespace ResuMeta.Controllers
         {
             try
             {   
-                string question = jsonQuestion.GetProperty("question").GetString();
+                string question = jsonQuestion.GetProperty("question").GetString()!;
                 if (question.IsNullOrEmpty()) return BadRequest();
 
                 var response = await _chatGPTService.AskQuestion(question);

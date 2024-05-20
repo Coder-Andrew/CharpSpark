@@ -46,11 +46,11 @@ Given I am a user with the first name 'Adrian'
     And I login
     And I am on the "YourDashboard" page
 When I click on a resume
-Then I should be redirected to the "YourResume" page
+Then I should be rerouted to the "YourResume" page
 
 Scenario: Users can click on a cover letter and be redirected to view it
 Given I am a user with the first name 'Adrian'
     And I login
     And I am on the "YourDashboard" page
 When I click on a cover letter
-Then I should be redirected to the "YourCoverLetter" page
+Then I should be reroute to the "YourCoverLetter" page

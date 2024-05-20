@@ -39,7 +39,7 @@ When I type "Software" into the search bar
 Then I see only job listings containing the term "Software"
 
 Scenario: Visitor can see pagination
-Given I am visitor
+Given I am a visitor
 	And I am on the "JobListings" page
 	And I type “Software Engineer” into the search bar
 	And I see only job listings containing the term “Software Engineer”
@@ -47,7 +47,7 @@ When I scroll down to the bottom of the page
 Then I see numbers indicating which page I am on
 
 Scenario: User can see pagination
-Given I am user
+Given I am a user with the first name 'Adrian'
 	And I am on the "JobListings" page
 	And I type “Software Engineer” into the search bar
 	And I see only job listings containing the term “Software Engineer”

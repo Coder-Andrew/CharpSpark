@@ -11,7 +11,6 @@ using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.Extensions;
 using System.Drawing;
 using System.Threading;
-using OpenQA.Selenium.Support.UI;
 
 namespace ResuMeta_BDDTests.PageObjects
 {
@@ -50,6 +49,12 @@ namespace ResuMeta_BDDTests.PageObjects
             js.ExecuteScript("arguments[0].scrollIntoView();", submitButton);
             Thread.Sleep(500);
             submitButton.Click();
+        }
+
+        public string GetCurrentEmail()
+        {
+            var emailElement = _webDriver.FindElement(By.CssSelector("span[class=\"red-text\"]"));
+            return emailElement.Text;
         }
     }
 }

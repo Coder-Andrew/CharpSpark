@@ -35,6 +35,8 @@
                         <span asp-validation-for="Description" class="text-danger"></span>
                         <label asp-for="Resume" class="form-label" style="display: none;"></label>
                         <input asp-for="Resume" type="text" class="form-control" id="resume" style="display: none;" readonly />
+                        <label asp-for="ResumeId" class="form-label" style="display: none;"></label>
+                        <input asp-for="ResumeId" type="number" class="form-control" id="resume-id" style="display: none;" readonly />
                     </div>
                     </div>
                     <div class="row">
@@ -58,7 +60,9 @@
                                             resumeThumbnail.style.border = '2px solid #007bff';
                                             var resumeContent = encodeURIComponent(resumeContentDiv.innerHTML);
                                             var resumeInput = document.getElementById('resume');
+                                            var resumeIdInput = document.getElementById('resume-id');
                                             resumeInput.value = resumeContent;
+                                            resumeIdInput.value = resumeId;
                                         }
                                         function ClearResumeSelection() {
                                             var resumeSection = document.getElementById('resume-section');

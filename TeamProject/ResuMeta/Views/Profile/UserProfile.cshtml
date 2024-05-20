@@ -9,6 +9,7 @@
 
 <section>
     <div class="text-center">
+        <div id="profile-id" style="display: none;">@Model.ProfileId</div>
         <h1 class="display-4 title">Profile - @Model.FirstName @Model.LastName</h1>
         <hr />
         <div class="container">
@@ -45,9 +46,20 @@
             </div>
             <hr />
             <div class="row">
+                <div id="resume-id" style="display: none;">@Model.ResumeId</div>
                 @if (Model.Resume != null)
                 {
                     <h4 class="mt-3 text-center">Showcased Resume:</h4>
+                    <div class="votes" style="display: inline-flex">
+                        <div id="upvotes" class="upvotes">
+                            <i class="fa fa-thumbs-up"></i>
+                            <span id="upvotes-count">@Model.UpVoteCount</span>
+                        </div>
+                        <div id="downvotes" class="downvotes">
+                            <i class="fa fa-thumbs-down"></i>
+                            <span id="downvotes-count">@Model.DownVoteCount</span>
+                        </div>
+                    </div>
                     <section id="resume-section">
                         <div class="resume-content-ids" id="resume-content" style="display: none;">@Model.Resume</div>
                         <div id="editor" style="height: 100%; width: 100%; margin: 0 auto;">
@@ -63,6 +75,27 @@
         </div>
     </div>
 
+<style>
+    .upvotes {
+        cursor: pointer;
+        color: lime;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .downvotes {
+        cursor: pointer;
+        color: rgb(255, 0, 64);
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .upvotes:hover {
+        color: rgb(133, 255, 133);
+    }
+    .downvotes:hover {
+        color: rgb(249, 116, 116);
+    }
+</style>
+
 @section Scripts {
-    <script type="text/javascript" src="~/js/YourProfile.js"></script>
+    <script type="text/javascript" src="~/js/UserProfile.js"></script>
 }

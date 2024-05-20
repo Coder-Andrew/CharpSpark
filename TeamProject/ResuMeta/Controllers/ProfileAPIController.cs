@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using ResuMeta.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using ResuMeta.DAL.Abstract;
 
 namespace ResuMeta.Controllers
 {
@@ -21,11 +22,15 @@ namespace ResuMeta.Controllers
     {
         private readonly IProfileService _profileService;
         private readonly ILogger<ProfileApiController> _logger;
+        private readonly IVoteRepository _voteRepo;
+        private readonly IUserInfoRepository _userInfoRepo;
 
-        public ProfileApiController(IProfileService profileService, ILogger<ProfileApiController> logger)
+        public ProfileApiController(IProfileService profileService, ILogger<ProfileApiController> logger, IVoteRepository voteRepo, IUserInfoRepository userInfoRepo)
         {
             _profileService = profileService;
             _logger = logger;
+            _voteRepo = voteRepo;
+            _userInfoRepo = userInfoRepo;
         }
 
 
@@ -73,6 +78,42 @@ namespace ResuMeta.Controllers
             }
         }
 
+        // PUT: api/profiles/vote/{profileId}
+        [HttpPut("vote/{profileId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> VoteProfile(string profileId, [FromBody] JsonElement voteValue)
+        {
+            if (int.TryParse(profileId, out int id))
+            {
+                try
+                {
+                    var voteValueString = voteValue.GetProperty("voteValue").ToString();
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                    var userInfoId = _userInfoRepo.GetAll().Where(ui => ui.AspnetIdentityId == userId).FirstOrDefault();
+                    var profile = await _profileService.GetProfile(id);
+                    var resumeId = profile.ResumeId!;
+                    var voteId = _voteRepo.GetVoteIdByValue(voteValueString);
+                    var vote = new UserVoteVM
+                    {
+                        UserInfoId = userInfoId!.Id,
+                        ResumeId = resumeId,
+                        VoteId = voteId
+                    };
+                    var result = await _voteRepo.AddOrUpdateVote(vote);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error voting on profile");
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid Profile ID");
+            }
+        }
 
     }
 }

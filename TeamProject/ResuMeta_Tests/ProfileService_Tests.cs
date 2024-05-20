@@ -34,8 +34,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
 
         ProfileVM expected = new ProfileVM
@@ -81,8 +82,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
 
         ProfileVM expected = new ProfileVM
@@ -122,8 +124,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         try{
             await profileService.GetProfile(profileId);
@@ -151,8 +154,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         try{
             await profileService.GetProfile(profileId);
@@ -181,8 +185,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
 
         ProfileVM newProfile = new ProfileVM
@@ -240,8 +245,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         ProfileVM newProfile = new ProfileVM
         {
@@ -275,8 +281,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         ProfileVM newProfile = new ProfileVM
         {
@@ -317,8 +324,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         List<ProfileVM> result = await profileService.SearchProfile(keyword);
 
@@ -343,8 +351,9 @@ public class ProfileService_Tests
         IUserInfoRepository userRepo = new UserInfoRepository(context);
         IProfileRepository repo = new ProfileRepository(context);
         IRepository<Profile> profileRepo = new Repository<Profile>(context);
+        IVoteRepository voteRepo = new VoteRepository(context);
 
-        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo);
+        IProfileService profileService = new ProfileService(null!, mockUserManager.Object, userRepo, repo, profileRepo, voteRepo);
 
         ProfileVM profile1 = new ProfileVM
         {

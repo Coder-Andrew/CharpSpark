@@ -92,7 +92,8 @@ public class ProfileController : Controller
             Profile newProfile = new Profile
             {
                 UserInfoId = currUser.Id,
-                Resume = profile.Resume,
+                ResumeHtml = profile.Resume,
+                ResumeId = profile.ResumeId,
                 Description = profile.Description
             };
             _profileRepository.AddOrUpdate(newProfile);

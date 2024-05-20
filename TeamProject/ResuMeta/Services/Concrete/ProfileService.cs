@@ -18,12 +18,14 @@ namespace ResuMeta.Services.Concrete
         private readonly IRepository<UserInfo> _userInfo;
         private readonly IProfileRepository _profileRepo;
         private readonly IRepository<Profile> _profileRepository;
+        private readonly IVoteRepository _voteRepository;
         public ProfileService(
             ILogger<ProfileService> logger,
             UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
             IProfileRepository profileRepo,
-            IRepository<Profile> profileRepository
+            IRepository<Profile> profileRepository,
+            IVoteRepository voteRepository
             )
         {
             _logger = logger;
@@ -31,30 +33,9 @@ namespace ResuMeta.Services.Concrete
             _userInfo = userInfo;
             _profileRepo = profileRepo;
             _profileRepository = profileRepository;
+            _voteRepository = voteRepository;
         }
 
-        // public int AddProfile(JsonElement response)
-        // {
-        //     JsonSerializerOptions options = new JsonSerializerOptions
-        //     {
-        //         PropertyNameCaseInsensitive = true,
-        //     };
-        //     try
-        //     {
-        //         JsonProfile profile = JsonSerializer.Deserialize<JsonProfile>(response, options)!;
-        //         if (profile.user == null)
-        //         {
-        //             throw new Exception("Invalid input");
-        //         }
-        //         Profile userProfile = _profileRepository.AddOrUpdate(new Profile { UserInfoId = Int32.Parse(profile.user.id!), Description = profile.description, Resume = profile.resume });
-        //         return userProfile.Id;
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         _logger.LogError(e, "Error deserializing json");
-        //         throw new Exception("Error deserializing json");
-        //     }
-        // }
         public async Task<ProfileVM> GetProfile(int profileId)
         {
             Profile? profile = _profileRepository.FindById(profileId);
@@ -73,6 +54,22 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception("User not found");
             }
             ProfileVM userProfile = _profileRepo.GetProfileById(userInfo.Id, appUser.Email!, userInfo.FirstName!, userInfo.LastName!, userInfo.ProfilePicturePath!);
+            var upVotes = _voteRepository.GetAllUpVotesByResumeId(profile.ResumeId);
+            var downVotes = _voteRepository.GetAllDownVotesByResumeId(profile.ResumeId);
+            if (upVotes != null && upVotes.Count > 0)
+            {
+                userProfile.UpVoteCount = upVotes.Count;
+            }
+            else {
+                userProfile.UpVoteCount = 0;
+            }
+            if (downVotes != null && downVotes.Count > 0)
+            {
+                userProfile.DownVoteCount = downVotes.Count;
+            }
+            else {
+                userProfile.DownVoteCount = 0;
+            }
             return userProfile;
         }
 
@@ -90,7 +87,8 @@ namespace ResuMeta.Services.Concrete
             }
             try
             {
-                userProfile.Resume = profile.Resume;
+                userProfile.ResumeHtml = profile.Resume;
+                userProfile.ResumeId = profile.ResumeId;
                 userProfile.Description = profile.Description;
                 _profileRepository.AddOrUpdate(userProfile);
                 return true;
@@ -105,7 +103,7 @@ namespace ResuMeta.Services.Concrete
 
         public async Task<List<ProfileVM>> SearchProfile(string keyWord)
         {
-            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.FirstName!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.LastName!.ToLower().Contains(keyWord.ToLower())).ToList();
+            List<Profile> profiles = _profileRepository.GetAll().Where(x => x.UserInfo!.Email!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.FirstName!.ToLower().Contains(keyWord.ToLower()) || x.UserInfo!.LastName!.ToLower().Contains(keyWord.ToLower()) || (x.UserInfo!.FirstName!.ToLower() + " " + x.UserInfo!.LastName!.ToLower()).Contains(keyWord.ToLower())).ToList();
             List<Profile> topProfiles = profiles.GetRange(0, Math.Min(5, profiles.Count));
             List<ProfileVM> profileVMs = new List<ProfileVM>();
             foreach (Profile profile in topProfiles)
@@ -114,7 +112,7 @@ namespace ResuMeta.Services.Concrete
                     ProfileVM profileVM = await GetProfile(profile.Id);
                     profileVMs.Add(profileVM);
                 }
-                catch(Exception e){
+                catch(Exception){
                     continue;
                 }
             }

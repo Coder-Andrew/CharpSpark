@@ -11,23 +11,23 @@ namespace ResuMeta.Services.Concrete
 {
     class JsonMessage
     {
-        public string model { get; set; }
-        public List<Message> messages { get; set; }
+        public string? model { get; set; }
+        public List<Message>? messages { get; set; }
     }
 
     class Message
     {
-        public string role { get; set; }
-        public string content { get; set; }
+        public string? role { get; set; }
+        public string? content { get; set; }
     }
 
     class Choice
     {
-        public Message message { get; set; }
+        public Message? message { get; set; }
     }
     class CGPTResponse
     {
-        public List<Choice> choices { get; set; }
+        public List<Choice>? choices { get; set; }
     }
 
     public class ChatGPTService : IChatGPTService
@@ -87,11 +87,11 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             };
 
         }
@@ -142,13 +142,13 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Cover letter improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             };
-            _logger.LogInformation($"Cover letter improved: {cGPTResponse.choices[0].message.content}");
         }
 
         public async Task<ChatGPTResponse> GenerateResume(int id, JsonElement jobDescription)
@@ -209,14 +209,14 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             
             };
-            _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
         }
     
         public async Task<ChatGPTResponse> GenerateTailoredCoverLetter(int id, JsonElement jobDescription)
@@ -268,14 +268,14 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             
             };
-            _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
         }
     }
 }

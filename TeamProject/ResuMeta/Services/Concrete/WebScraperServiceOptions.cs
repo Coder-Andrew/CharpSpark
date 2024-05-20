@@ -2,6 +2,6 @@ namespace ResuMeta.Services.Concrete
 {
     public class WebScraperServiceOptions
     {
-        public string ScraperUrl { get; set; }
+        public string? ScraperUrl { get; set; }
     }
 }

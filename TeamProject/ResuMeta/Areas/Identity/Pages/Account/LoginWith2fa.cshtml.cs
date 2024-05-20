@@ -83,8 +83,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account
 
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
                 _logger.LogWarning("Unable to load two-factor authentication user.");
+                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
             }
             //_logger.LogInformation("User with ID '{UserId}' asked for 2fa.", user.Id);
             ReturnUrl = returnUrl;

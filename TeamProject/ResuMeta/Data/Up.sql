@@ -116,7 +116,20 @@ CREATE TABLE [Profile] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [Resume] nvarchar(MAX),
+  [ResumeId] integer,
   [Description] nvarchar(250)
+);
+
+CREATE TABLE [Vote] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [VoteValue] nvarchar(10)
+);
+
+CREATE TABLE [UserVote] (
+  [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+  [UserInfoId] integer,
+  [ResumeId] integer,
+  [VoteId] integer
 );
 
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 
@@ -169,3 +182,15 @@ ALTER TABLE [CoverLetter] ADD CONSTRAINT [Fk CoverLetter UserInfo Id]
 
 ALTER TABLE [Profile] ADD CONSTRAINT [Fk Profile UserInfo Id]
   FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [Profile] ADD CONSTRAINT [Fk Profile Resume Id]
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [UserVote] ADD CONSTRAINT [Fk UserVote UserInfo Id]
+  FOREIGN KEY ([UserInfoId]) REFERENCES [UserInfo] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [UserVote] ADD CONSTRAINT [Fk UserVote Resume Id]
+  FOREIGN KEY ([ResumeId]) REFERENCES [Resume] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE [UserVote] ADD CONSTRAINT [Fk UserVote Vote Id]
+  FOREIGN KEY ([VoteId]) REFERENCES [Vote] ([Id]) ON DELETE NO ACTION ON UPDATE NO ACTION;

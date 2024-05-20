@@ -57,6 +57,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         {
             _viewResumePage.GoTo("ViewResume");
         }
+
         [Then("I will be see a button that says \"Improve With AI\"")]
         public void ThenIWillBeSeeButtonThatSaysImproveWithAI()
         {

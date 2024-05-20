@@ -247,7 +247,7 @@ namespace ResuMeta.Services.Concrete
                 UserInfo userInfo = _userInfo.FindById(Int32.Parse(resumeInfo.id!));
 
                 
-                if (!string.IsNullOrWhiteSpace(resumeInfo.personalSummary.ToString())) {
+                if (!string.IsNullOrWhiteSpace(resumeInfo.personalSummary!.ToString())) {
                     userInfo.Summary = resumeInfo.personalSummary.ToString();
                     _userInfo.AddOrUpdate(userInfo);
                 }
@@ -332,7 +332,7 @@ namespace ResuMeta.Services.Concrete
                 var degree = _degree.GetAll(x => x.EducationId == ed.Id).FirstOrDefault();
                 var degreeVM = new DegreeVM
                 {
-                    Type = degree.Type,
+                    Type = degree!.Type,
                     Major = degree.Major,
                     Minor = degree.Minor
                 };
@@ -361,7 +361,7 @@ namespace ResuMeta.Services.Concrete
                 var referenceContactInfo = _referenceContactInfo.GetAll(x => x.EmploymentHistoryId == eh.Id).FirstOrDefault();
                 var referenceVM = new ReferenceContactInfoVM
                 {
-                    FirstName = referenceContactInfo.FirstName,
+                    FirstName = referenceContactInfo!.FirstName,
                     LastName = referenceContactInfo.LastName,
                     PhoneNumber = referenceContactInfo.PhoneNumber
                 };

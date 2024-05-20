@@ -28,7 +28,7 @@
                 </div>
                 <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
                 </div>
-                <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
+                <input type="hidden" id="resume-id" value="@Model.Resume!.ResumeId" />
 
                 <div class="container" style="display: none;">
                     <div class="container resume-container" id="resume-container">
@@ -187,7 +187,7 @@
                 </div>
             </div>
 
-            @for (int i = 0; i < Model.TemplatesList.Count; i++)
+            @for (int i = 0; i < Model.TemplatesList!.Count; i++)
             {
                 <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
                 <div class="container" id="template@(i+1)-area" style="display: none;"></div>

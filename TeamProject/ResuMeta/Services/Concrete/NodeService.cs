@@ -17,19 +17,19 @@ using System.Web;
 
 namespace ResuMeta.Services.Concrete
 {
-    class line
+    class Line
     {
-        public string text { get; set; }
-        public List<int> style { get; set; }
+        public string? text { get; set; }
+        public List<int>? style { get; set; }
     }
     class ImportedJsonPdf
     {
-        public string filename { get; set; }
-        public List<List<line>> content { get; set; }
+        public string? filename { get; set; }
+        public List<List<Line>>? content { get; set; }
     }
     class JsonPdf
     {
-        public string pdf { get; set; }
+        public string? pdf { get; set; }
     }
     public class NodeService : INodeService
     {
@@ -40,7 +40,7 @@ namespace ResuMeta.Services.Concrete
         public NodeService(HttpClient httpClient, IOptions<NodeServiceOptions> options, IRepository<Resume> resumeRepo, IRepository<UserInfo> userInfoRepo)
         {
             _httpClient = httpClient;
-            _nodeUrl = options.Value.NodeUrl;
+            _nodeUrl = options.Value.NodeUrl!;
             _resumeRepo = resumeRepo;
             _userInfoRepo = userInfoRepo;
         }
@@ -57,10 +57,17 @@ namespace ResuMeta.Services.Concrete
             {
                 var responseString = await response.Content.ReadAsStringAsync();
                 try{
-                    var pdf = JsonSerializer.Deserialize<JsonPdf>(responseString);
-                    return pdf.pdf;
+                    var pdf = JsonSerializer.Deserialize<JsonPdf>(responseString)!;
+                    if (pdf != null)
+                    {
+                    return pdf.pdf!;
+                    }
+                    else
+                    {
+                        throw new Exception("Error exporting PDF");
+                    }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new Exception("Error exporting PDF");
                 
@@ -93,14 +100,13 @@ namespace ResuMeta.Services.Concrete
                     throw new Exception("Error importing PDF");
                 }
 
-                ImportedJsonPdf importedJson = JsonSerializer.Deserialize<ImportedJsonPdf>(await res.Content.ReadAsStringAsync());
-                if (importedJson.content.Count == 0) return;
-                
+                ImportedJsonPdf importedJson = JsonSerializer.Deserialize<ImportedJsonPdf>(await res.Content.ReadAsStringAsync())!;
+                if (importedJson!.content!.Count == 0) return;
                 string htmlContent = string.Empty;
-                foreach (List<line> line in importedJson.content)
+                foreach (List<Line> line in importedJson.content)
                 {
                     htmlContent += "<p>";
-                    foreach (line chunk in line)
+                    foreach (Line chunk in line)
                     {
                         htmlContent += chunk.text;
                     }

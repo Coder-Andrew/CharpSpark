@@ -294,10 +294,10 @@ namespace ResuMeta.DAL.Concrete
             var replacements = new Dictionary<string, string>
             {
                 { "Jasmine Patel", $"{currUser.FirstName} {currUser.LastName}" },
-                { "JASMINE", currUser.FirstName.ToUpper() },
-                { "PATEL", currUser.LastName.ToUpper() },
-                { "555-794-4847", currUser.PhoneNumber },
-                { "patelj@mail.com", currUser.Email }
+                { "JASMINE", currUser.FirstName!.ToUpper() },
+                { "PATEL", currUser.LastName!.ToUpper() },
+                { "555-794-4847", currUser.PhoneNumber! },
+                { "patelj@mail.com", currUser.Email! }
             };
 
             foreach (var replacement in replacements)

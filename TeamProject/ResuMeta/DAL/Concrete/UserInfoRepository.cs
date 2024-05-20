@@ -14,7 +14,7 @@ namespace ResuMeta.DAL.Concrete
 
         public UserInfo GetUserInfoByAspNetId(string aspNetId)
         {
-            return _userInfos.Where(x => x.AspnetIdentityId == aspNetId).FirstOrDefault();
+            return _userInfos.Where(x => x.AspnetIdentityId == aspNetId).FirstOrDefault()!;
         }
     }
 }

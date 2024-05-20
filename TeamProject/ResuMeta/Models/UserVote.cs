@@ -6,27 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ResuMeta.Models;
 
-[Table("Profile")]
-public partial class Profile
+[Table("UserVote")]
+public partial class UserVote
 {
     [Key]
     public int Id { get; set; }
 
     public int? UserInfoId { get; set; }
-
-    [Column("Resume")]
-    public string? ResumeHtml { get; set; }
-
     public int? ResumeId { get; set; }
-
-    [StringLength(250)]
-    public string? Description { get; set; }
+    public int? VoteId { get; set; }
 
     [ForeignKey("UserInfoId")]
-    [InverseProperty("Profile")]
+    [InverseProperty("UserVotes")]
     public virtual UserInfo? UserInfo { get; set; }
 
     [ForeignKey("ResumeId")]
-    [InverseProperty("Profile")]
+    [InverseProperty("UserVotes")]
     public virtual Resume? Resume { get; set; }
+
+    [ForeignKey("VoteId")]
+    [InverseProperty("UserVotes")]
+    public virtual Vote? Vote { get; set; }
+
 }
