@@ -20,6 +20,10 @@ namespace ResuMeta.DAL.Concrete
                 throw new Exception("Profile ID cannot be null");
             }
             List<Follower> followers = _followers.Where(f => f.ProfileId == profileId).ToList();
+            if (followers == null)
+            {
+                return new List<Follower>();
+            }
             return followers;
         }
         public List<Follower> GetFollowingByProfileId(int? profileId)
@@ -29,6 +33,10 @@ namespace ResuMeta.DAL.Concrete
                 throw new Exception("Profile ID cannot be null");
             }
             List<Follower> following = _followers.Where(f => f.FollowerId == profileId).ToList();
+            if (following == null)
+            {
+                return new List<Follower>();
+            }
             return following;
         }
 

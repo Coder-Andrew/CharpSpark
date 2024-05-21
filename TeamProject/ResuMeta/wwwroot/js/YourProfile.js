@@ -29,6 +29,10 @@ function loadQuill() {
 }
 
 function initializePage() {
+    var editor = document.getElementById("editor");
+    if (editor === null) {
+        return;
+    }
     var quill = new Quill('#editor', {
         readOnly: true,
         theme: 'snow'

@@ -29,20 +29,26 @@ function loadQuill() {
 }
 
 function initializePage() {
-    var quill = new Quill('#editor', {
-        readOnly: true,
-        theme: 'snow'
-    });
+    var editor = document.getElementById("editor");
+    if (editor !== null) {
+        var quill = new Quill('#editor', {
+            readOnly: true,
+            theme: 'snow'
+        });
 
-    //Resume
-    const resumeContent = document.getElementById("resume-content");
-    const delta = quill.clipboard.convert(decodeURIComponent(resumeContent.innerHTML));
-    quill.setContents(delta);
+        //Resume
+        const resumeContent = document.getElementById("resume-content");
+        if (resumeContent !== null) {
+            const delta = quill.clipboard.convert(decodeURIComponent(resumeContent.innerHTML));
+            quill.setContents(delta);
+        }
+        const upVoteBtn = document.getElementById("upvotes");
+        upVoteBtn.addEventListener("click", upVote, false);
+        const downVoteBtn = document.getElementById("downvotes");
+        downVoteBtn.addEventListener("click", downVote, false);
+    }
     
-    const upVoteBtn = document.getElementById("upvotes");
-    upVoteBtn.addEventListener("click", upVote, false);
-    const downVoteBtn = document.getElementById("downvotes");
-    downVoteBtn.addEventListener("click", downVote, false);
+    isAlreadyFollowing();
     updateViewCount();
 }
 
@@ -131,5 +137,121 @@ async function updateViewCount() {
     if (!response.ok)
     {
         console.log("Error updating view count");
+    }
+}
+
+async function follow() {
+    const profileId = document.getElementById("profile-id").textContent;
+    const url = `/api/profiles/follow/${profileId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (response.ok)
+    {
+        const followBtn = document.getElementById("follow-btn");
+        followBtn.textContent = "Unfollow";
+        followBtn.removeEventListener("click", follow, false);
+        followBtn.addEventListener("click", unfollow, false);
+        refreshFollowers();
+    }
+    else
+    {
+        console.log("Error following user");
+    }
+}
+
+async function unfollow() {
+    const profileId = document.getElementById("profile-id").textContent;
+    const url = `/api/profiles/unfollow/${profileId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (response.ok)
+    {
+        const followBtn = document.getElementById("follow-btn");
+        followBtn.textContent = "Follow";
+        followBtn.removeEventListener("click", unfollow, false);
+        followBtn.addEventListener("click", follow, false);
+        refreshFollowers();
+    }
+    else
+    {
+        console.log("Error unfollowing user");
+    }
+
+}
+
+async function isAlreadyFollowing()
+{
+    const profileId = document.getElementById("profile-id").textContent;
+    const url = `/api/profiles/isFollowing/${profileId}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (response.ok)
+    {
+        const data = await response.json();
+        if (data === 1)
+        {
+            const followBtn = document.getElementById("follow-btn");
+            followBtn.disabled = true;
+            followBtn.style = "display: none;";
+        }
+        if (data === true)
+        {
+            const followBtn = document.getElementById("follow-btn");
+            followBtn.textContent = "Unfollow";
+            followBtn.removeEventListener("click", follow, false);
+            followBtn.addEventListener("click", unfollow, false);
+        }
+        else
+        {
+            const followBtn = document.getElementById("follow-btn");
+            followBtn.textContent = "Follow";
+            followBtn.removeEventListener("click", unfollow, false);
+            followBtn.addEventListener("click", follow, false);
+        }
+    }
+    else
+    {
+        console.log("Error checking if user is following");
+        const followBtn = document.getElementById("follow-btn");
+        followBtn.disabled = true;
+        followBtn.style = "display: none;";
+    }
+}
+
+async function refreshFollowers()
+{
+    const profileId = document.getElementById("profile-id").textContent;
+    const url = `/api/profiles/${profileId}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (response.ok)
+    {
+        const data = await response.json();
+        document.getElementById("follower-count").textContent = data.followerCount;
+        document.getElementById("following-count").textContent = data.followingCount;
+    }
+    else
+    {
+        console.log("Error getting followers");
     }
 }

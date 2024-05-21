@@ -92,6 +92,10 @@ namespace ResuMeta.Services.Concrete
         public void AddFollower(int? profileId, int? followerId) {
             try
             {
+                if (profileId == followerId)
+                {
+                    throw new Exception("Cannot follow yourself");
+                }
                 Follower curr = _followerRepository.GetAll().Where(x => x.ProfileId == profileId && x.FollowerId == followerId).FirstOrDefault()!;
                 if (curr != null)
                 {
@@ -110,6 +114,10 @@ namespace ResuMeta.Services.Concrete
         {
             try
             {
+                if (profileId == followerId)
+                {
+                    throw new Exception("Cannot unfollow yourself");
+                }
                 Follower follower = _followerRepository.GetAll().Where(x => x.ProfileId == profileId && x.FollowerId == followerId).FirstOrDefault()!;
                 if (follower == null)
                 {

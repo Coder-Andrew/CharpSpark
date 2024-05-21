@@ -38,6 +38,11 @@
                     <div class="row">
                         <h4>@Model.FirstName @Model.LastName</h4>
                     </div>
+                    <div class="row">
+                        <button id="follow-btn" class="btn btn-primary" style="width: 100%;">Follow</button>
+                        <div id="followers"> Followers: <span id="follower-count">@Model.FollowerCount</span></div>
+                        <div id="following"> Following: <span id="following-count">@Model.FollowingCount</span></div>
+                    </div>
                 </div>
             </div>
             <hr />
