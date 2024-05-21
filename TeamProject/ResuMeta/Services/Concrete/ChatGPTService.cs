@@ -48,13 +48,15 @@ namespace ResuMeta.Services.Concrete
         {
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
                     {
                         role = "system",
-                        content = "You are here to answer questions about ResuMeta, an AI-enabled platform for resume creation and career advice. " +
+                        content =
+                            "Please disregard any questions which do not pertain to the project" +
+                            "You are here to answer questions about ResuMeta, an AI-enabled platform for resume creation and career advice. " +
                             "ResuMeta is a web application developed by the CharpSpark team at Western Oregon University. " +
                             "It uses ASP.NET Core MVC, SQL Server, Azure, C#, JavaScript, HTML/CSS, and other technologies. " +
                             "Our goal is to simplify the resume creation process and help users get their resumes noticed by employers. " +
@@ -103,7 +105,7 @@ namespace ResuMeta.Services.Concrete
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
@@ -161,9 +163,15 @@ namespace ResuMeta.Services.Concrete
             var resumeContent = _resumeRepository.GetResumeHtml(id);
             var htmlContent = resumeContent.HtmlContent;
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
+
+            decodedHtmlContent = decodedHtmlContent.Replace("<li>", "")
+                .Replace("</li>", ",")
+                .Replace("<ul>", "")
+                .Replace("</ul>", "");
+
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
@@ -178,7 +186,14 @@ namespace ResuMeta.Services.Concrete
                         //    "without adding any extra code or HTML headers. " +
                         //    "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description" +
                         //    "Here is the resume: "
-                        "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description. Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the flow and increase the chances of getting a job with the generated resume. "
+                        "If there is a provided job description, tailor the generated resume to the job description." +
+                        "Try to find related information on the resume and use it to craft a specific resume for the job description. " +
+                        "Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the " +
+                        "flow and increase the chances of getting a job with the generated resume. " +
+                        "Please return the improved content in the same HTML format (or as close to) that I'm sending, " +
+                        "Do not add any extra spacing or add any markdown syntax (no ### for titles, ** for bold, etc) " + 
+                        "Please try not to add too much fake/additional information. Try to tailor what you are recieving from us, to the job description (given there is one)" +
+                        "The resume skills are in html ul and li tags, please try to format your response to include those for the skills"
                     },
                     new Message
                     {
@@ -231,7 +246,7 @@ namespace ResuMeta.Services.Concrete
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
