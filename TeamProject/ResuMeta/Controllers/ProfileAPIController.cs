@@ -277,5 +277,58 @@ namespace ResuMeta.Controllers
             }
         }
 
+
+        // GET: api/profiles/followers/{profileId}
+        [AllowAnonymous]
+        [HttpGet("followers/{profileId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetFollowers(string profileId)
+        {
+            if (int.TryParse(profileId, out int id))
+            {
+                try
+                {
+                    var followers = await _followerService.GetFollowersByProfileId(id);
+                    return Ok(followers);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error getting followers");
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid Profile ID");
+            }
+        }
+
+        // GET: api/profiles/following/{profileId}
+        [AllowAnonymous]
+        [HttpGet("following/{profileId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetFollowing(string profileId)
+        {
+            if (int.TryParse(profileId, out int id))
+            {
+                try
+                {
+                    var followers = await _followerService.GetFollowingByProfileId(id);
+                    return Ok(followers);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error getting following");
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid Profile ID");
+            }
+        }
+
     }
 }
