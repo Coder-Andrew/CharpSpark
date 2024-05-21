@@ -33,7 +33,7 @@ public partial class Profile
     [InverseProperty("Profile")]
     public virtual ICollection<Follower> Followers { get; set; } = new List<Follower>();
 
-    [InverseProperty("Profile")]
+    [InverseProperty("FollowerProfile")]
     public virtual ICollection<Follower> Following { get; set; } = new List<Follower>();
 
     [InverseProperty("Profile")]

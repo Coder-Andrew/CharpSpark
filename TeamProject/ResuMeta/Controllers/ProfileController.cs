@@ -23,6 +23,7 @@ public class ProfileController : Controller
     private readonly IResumeService _resumeService;
     private readonly IRepository<Profile> _profileRepository;
     private readonly IProfileService _profileService;
+    private readonly IProfileViewsRepository _profileViewsRepository;
     public ProfileController(
         ILogger<ProfileController> logger,
         IRepository<UserInfo> userInfo,
@@ -30,7 +31,8 @@ public class ProfileController : Controller
         IRepository<Resume> resumeRepo,
         IResumeService resumeService,
         IRepository<Profile> profileRepository,
-        IProfileService profileService
+        IProfileService profileService,
+        IProfileViewsRepository profileViewsRepository
         )
     {
         _logger = logger;
@@ -40,6 +42,7 @@ public class ProfileController : Controller
         _resumeService = resumeService;
         _profileRepository = profileRepository;
         _profileService = profileService;
+        _profileViewsRepository = profileViewsRepository;
     }
 
     public IActionResult Index()
@@ -96,7 +99,9 @@ public class ProfileController : Controller
                 ResumeId = profile.ResumeId,
                 Description = profile.Description
             };
-            _profileRepository.AddOrUpdate(newProfile);
+            Profile addedProfile = _profileRepository.AddOrUpdate(newProfile);
+            addedProfile.ProfileViews.ViewCount = 0;
+            _profileViewsRepository.AddOrUpdate(addedProfile.ProfileViews);
         }
         catch (Exception e)
         {

@@ -43,6 +43,7 @@ function initializePage() {
     upVoteBtn.addEventListener("click", upVote, false);
     const downVoteBtn = document.getElementById("downvotes");
     downVoteBtn.addEventListener("click", downVote, false);
+    updateViewCount();
 }
 
 async function upVote() {
@@ -114,5 +115,21 @@ async function refreshVotes() {
     else
     {
         console.log("Error getting votes");
+    }
+}
+
+async function updateViewCount() {
+    const profileId = document.getElementById("profile-id").textContent;
+    const url = `/api/profiles/updateViews/${profileId}`;
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json; application/problem+json; charset=utf-8',
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    });
+    if (!response.ok)
+    {
+        console.log("Error updating view count");
     }
 }

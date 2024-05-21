@@ -24,13 +24,15 @@ namespace ResuMeta.Controllers
         private readonly ILogger<ProfileApiController> _logger;
         private readonly IVoteRepository _voteRepo;
         private readonly IUserInfoRepository _userInfoRepo;
+        private readonly IProfileViewsRepository _profileViewsRepo;
 
-        public ProfileApiController(IProfileService profileService, ILogger<ProfileApiController> logger, IVoteRepository voteRepo, IUserInfoRepository userInfoRepo)
+        public ProfileApiController(IProfileService profileService, ILogger<ProfileApiController> logger, IVoteRepository voteRepo, IUserInfoRepository userInfoRepo, IProfileViewsRepository profileViewsRepo)
         {
             _profileService = profileService;
             _logger = logger;
             _voteRepo = voteRepo;
             _userInfoRepo = userInfoRepo;
+            _profileViewsRepo = profileViewsRepo;
         }
 
 
@@ -106,6 +108,31 @@ namespace ResuMeta.Controllers
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Error voting on profile");
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid Profile ID");
+            }
+        }
+
+        // PUT: api/profiles/updateViews/{profileId}
+        [HttpPut("updateViews/{profileId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateViews(string profileId)
+        {
+            if (int.TryParse(profileId, out int id))
+            {
+                try
+                {
+                    await _profileViewsRepo.UpdateViewCount(id);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error incrementing views on profile");
                     return BadRequest();
                 }
             }
