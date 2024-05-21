@@ -226,7 +226,10 @@ async function fetchAndDisplayData(resumeId, quill2, jobLink) {
             throw new Error('Failed to parse response data');
         }
 
-        quill2.root.innerHTML = responseData;
+        const resumeArea2 = document.getElementById("resume-area2"); // Temporary element to hold HTML
+        resumeArea2.innerHTML = responseData; // Set HTML content
+        const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML); // Convert HTML to Delta
+        quill2.setContents(delta2); // Set contents of Quill editor with Delta
 
     } catch (error) {
         console.error('Error fetching and displaying data:', error);

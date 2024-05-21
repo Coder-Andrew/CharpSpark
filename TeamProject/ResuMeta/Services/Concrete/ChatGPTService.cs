@@ -164,10 +164,10 @@ namespace ResuMeta.Services.Concrete
             var htmlContent = resumeContent.HtmlContent;
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
 
-            decodedHtmlContent = decodedHtmlContent.Replace("<li>", "")
-                .Replace("</li>", ",")
-                .Replace("<ul>", "")
-                .Replace("</ul>", "");
+            //decodedHtmlContent = decodedHtmlContent.Replace("<li>", "")
+            //    .Replace("</li>", ",")
+            //    .Replace("<ul>", "")
+            //    .Replace("</ul>", "");
 
             JsonMessage jsonMessage = new JsonMessage
             {
@@ -191,9 +191,9 @@ namespace ResuMeta.Services.Concrete
                         "Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the " +
                         "flow and increase the chances of getting a job with the generated resume. " +
                         "Please return the improved content in the same HTML format (or as close to) that I'm sending, " +
-                        "Do not add any extra spacing or add any markdown syntax (no ### for titles, ** for bold, etc) " + 
-                        "Please try not to add too much fake/additional information. Try to tailor what you are recieving from us, to the job description (given there is one)" +
-                        "The resume skills are in html ul and li tags, please try to format your response to include those for the skills"
+                        "Do not add any extra spacing or add any markdown syntax (no ### for titles, ** for bold, etc). Try to keep spacing the same " + 
+                        "Please try not to add too much fake/additional information. Try to tailor what you are recieving from us, to the job description (given there is one)" //+
+                        //"The resume skills are in html ul and li tags, please try to format your response to include those for the skills"
                     },
                     new Message
                     {
