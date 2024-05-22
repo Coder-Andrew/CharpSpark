@@ -266,8 +266,6 @@ async function refreshFollowers()
 
 async function openModal(title) {
     closeModal();
-    console.log("Opening modal");
-    console.log(title);
     const modalBody = document.getElementById("modal-body");
     const modalLable = document.getElementById("modal-label");
     if (title === "Followers")
@@ -284,21 +282,25 @@ async function openModal(title) {
         if (response.ok)
         {
             const data = await response.json();
+            if (data.length === 0)
+                {
+                    const followingDiv = document.createElement("div");
+                    followingDiv.className = "follower";
+                    followingDiv.textContent = "No followers found";
+                    modalBody.appendChild(followingDiv);
+                }
             data.forEach(follower => {
                 const profileTemplate = document.getElementById("profile-template");
                 const templateClone = profileTemplate.content.cloneNode(true);
                 const clone = templateClone.querySelector(".card-body");
+                const cloneLink = clone.querySelector("#profile-link");
                 const cloneUsername = clone.querySelector("#profile-username");
                 const cloneFirstName = clone.querySelector("#profile-first-name");
                 const cloneLastName = clone.querySelector("#profile-last-name");
                 cloneUsername.textContent = follower.userName;
                 cloneFirstName.textContent = follower.firstName;
                 cloneLastName.textContent = follower.lastName;
-                // const followerDiv = document.createElement("div");
-                // followerDiv.className = "follower";
-                // const followerName = document.createElement("p");
-                // followerName.textContent = follower.userName;
-                // followerDiv.appendChild(followerName);
+                cloneLink.href = `/Profile/UserProfile/${follower.profileId}`;
                 modalBody.appendChild(clone);
             });
         }
@@ -324,21 +326,25 @@ async function openModal(title) {
         if (response.ok)
         {
             const data = await response.json();
+            if (data.length === 0)
+            {
+                const followingDiv = document.createElement("div");
+                followingDiv.className = "follower";
+                followingDiv.textContent = "Not following anyone";
+                modalBody.appendChild(followingDiv);
+            }
             data.forEach(following => {
                 const profileTemplate = document.getElementById("profile-template");
                 const templateClone = profileTemplate.content.cloneNode(true);
                 const clone = templateClone.querySelector(".card-body");
+                const cloneLink = clone.querySelector("#profile-link");
                 const cloneUsername = clone.querySelector("#profile-username");
                 const cloneFirstName = clone.querySelector("#profile-first-name");
                 const cloneLastName = clone.querySelector("#profile-last-name");
                 cloneUsername.textContent = following.userName;
                 cloneFirstName.textContent = following.firstName;
                 cloneLastName.textContent = following.lastName;
-                // const followingDiv = document.createElement("div");
-                // followingDiv.className = "follower";
-                // const followingName = document.createElement("p");
-                // followingName.textContent = following.userName;
-                // followingDiv.appendChild(followingName);
+                cloneLink.href = `/Profile/UserProfile/${following.profileId}`;
                 modalBody.appendChild(clone);
             });
         }
@@ -354,7 +360,6 @@ async function openModal(title) {
 }
 
 function closeModal() {
-    console.log("Closing modal");
     const modalBody = document.getElementById("modal-body");
     const modalLable = document.getElementById("modal-label");
 

@@ -106,7 +106,9 @@
         <template id="profile-template">
             <div class="card border-secondary mb-3" style="width: 18rem;">
                     <div class="card-body bg-secondary">
-                        <h5 class="card-title" id="profile-username"></h5>
+                        <a id="profile-link" href="">
+                            <h5 class="card-title" id="profile-username"></h5>
+                        </a>
                         <p class="card-text">
                             <span id="profile-first-name"></span> <span id="profile-last-name"></span>
                         </p>
@@ -141,6 +143,10 @@
     #followers:hover, #following:hover {
         color: rgb(172, 172, 172);
         cursor: pointer;
+    }
+    #modal-body {
+        overflow-y: scroll;
+        height: 500px;
     }
 </style>
 
