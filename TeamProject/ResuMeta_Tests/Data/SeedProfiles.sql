@@ -79,3 +79,11 @@ INSERT INTO [Vote] ([Id], [VoteValue]) VALUES
 INSERT INTO [UserVote] ([Id], [UserInfoId], [ResumeId], [VoteId]) VALUES
     (1, 2, 1, 1),
     (2, 3, 1, 2);
+
+INSERT INTO [ProfileViews] ([Id], [ProfileId], [ViewCount]) VALUES
+    (1, 1, 20),
+    (2, 2, 30);
+
+INSERT INTO [Follower] ([Id], [ProfileId], [FollowerId]) VALUES
+    (1, 1, 2),
+    (2, 2, 1);

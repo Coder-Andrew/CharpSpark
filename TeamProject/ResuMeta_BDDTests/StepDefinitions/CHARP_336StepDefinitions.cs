@@ -82,6 +82,19 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _registerPage.GoTo();
             _registerPage.Register(newEmail);
 
+            Common.ResetPaths();
+            _createResumePage.GoTo();
+            _createResumePage.FillOutEducationForm();
+            _createResumePage.SubmitForm();
+            _viewResumeUrl = _createResumePage.GetViewResumeUrl();
+            _viewResumeUrl = _createResumePage.GetViewResumeUrl();
+            Common.Paths["ViewResume"] = Common.Paths["ViewResume"] + _viewResumeUrl;
+            _viewResumePage.GoTo();
+            _viewResumePage.SaveResume();
+            
+            _createProfilePage.GoTo();
+            _createProfilePage.FillOutProfileForm();
+
             // go to the user profile
             _homePage.GoTo();
             _homePage.SearchProfile(email);

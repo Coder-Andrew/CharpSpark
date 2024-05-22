@@ -61,6 +61,30 @@ namespace ResuMeta_BDDTests.PageObjects
             downVoteBtn.Click();
         }
         
+        public IWebElement GetFollowerCount()
+        {
+            IWebElement followerCount = _webDriver.FindElement(By.Id("follower-count"));
+            return followerCount;
+        }
+
+        public IWebElement GetFollowingCount()
+        {
+            IWebElement followingCount = _webDriver.FindElement(By.Id("following-count"));
+            return followingCount;
+        }
         
+        public void ClickOnFollowers()
+        {
+            var followers = _webDriver.FindElement(By.Id("followers"));
+            followers.Click();
+            Thread.Sleep(500);
+        }
+
+        public IWebElement GetFollowers()
+        {
+            IWebElement followerMessage = _webDriver.FindElement(By.ClassName("follower"));
+            return followerMessage;
+        }
+
     }
 }
