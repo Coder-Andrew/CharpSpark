@@ -46,4 +46,5 @@
 
 .card-body {
     background-color: #222424 !important;
+    height: 100px;
 }

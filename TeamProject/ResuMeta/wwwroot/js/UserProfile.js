@@ -297,6 +297,27 @@ async function openModal(title) {
                 const cloneUsername = clone.querySelector("#profile-username");
                 const cloneFirstName = clone.querySelector("#profile-first-name");
                 const cloneLastName = clone.querySelector("#profile-last-name");
+                const cloneProfilePic = clone.querySelector("#profile-pic");
+                if (follower.profilePicturePath !== null && follower.profilePicturePath.length > 0)
+                {
+                    const profilePic = document.createElement("img");
+                    profilePic.src = `data:image;base64,${follower.profilePicturePath}`;
+                    profilePic.alt = "Profile Picture";
+                    profilePic.className = "img-thumbnail";
+                    profilePic.style = "width: 50px; height: 50px;";
+                    profilePic.id = "currentProfilePicture";
+                    cloneProfilePic.appendChild(profilePic);
+                }
+                else
+                {
+                    const profilePic = document.createElement("img");
+                    profilePic.src = "/Images/profile.svg";
+                    profilePic.alt = "Profile Picture";
+                    profilePic.className = "profile-placeholder img-thumbnail";
+                    profilePic.style = "width: 50px; height: 50px;";
+                    profilePic.id = "currentProfilePicture";
+                    cloneProfilePic.appendChild(profilePic);
+                }
                 cloneUsername.textContent = follower.userName;
                 cloneFirstName.textContent = follower.firstName;
                 cloneLastName.textContent = follower.lastName;
@@ -341,6 +362,27 @@ async function openModal(title) {
                 const cloneUsername = clone.querySelector("#profile-username");
                 const cloneFirstName = clone.querySelector("#profile-first-name");
                 const cloneLastName = clone.querySelector("#profile-last-name");
+                const cloneProfilePic = clone.querySelector("#profile-pic");
+                if (following.profilePicturePath !== null && following.profilePicturePath.length > 0)
+                {
+                    const profilePic = document.createElement("img");
+                    profilePic.src = `data:image;base64,${following.profilePicturePath}`;
+                    profilePic.alt = "Profile Picture";
+                    profilePic.className = "img-thumbnail";
+                    profilePic.style = "width: 50px; height: 50px;";
+                    profilePic.id = "currentProfilePicture";
+                    cloneProfilePic.appendChild(profilePic);
+                }
+                else
+                {
+                    const profilePic = document.createElement("img");
+                    profilePic.src = "/Images/profile.svg";
+                    profilePic.alt = "Profile Picture";
+                    profilePic.className = "profile-placeholder img-thumbnail";
+                    profilePic.style = "width: 50px; height: 50px;";
+                    profilePic.id = "currentProfilePicture";
+                    cloneProfilePic.appendChild(profilePic);
+                }
                 cloneUsername.textContent = following.userName;
                 cloneFirstName.textContent = following.firstName;
                 cloneLastName.textContent = following.lastName;

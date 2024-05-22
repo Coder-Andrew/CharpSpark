@@ -105,13 +105,20 @@
 
         <template id="profile-template">
             <div class="card border-secondary mb-3" style="width: 18rem;">
-                    <div class="card-body bg-secondary">
-                        <a id="profile-link" href="">
-                            <h5 class="card-title" id="profile-username"></h5>
-                        </a>
-                        <p class="card-text">
-                            <span id="profile-first-name"></span> <span id="profile-last-name"></span>
-                        </p>
+                    <div class="card-body bg-secondary row">
+                        <div class="form-group profile-picture-group col-md-2" id="profile-pic">
+
+                        </div>
+                        <div class="col-md-10">
+                            <a id="profile-link" href="">
+                                <h5 class="card-title" id="profile-username"></h5>
+                            </a>
+                            <div class="card-text row">
+                                <div>
+                                    <p><span id="profile-first-name"></span> <span id="profile-last-name"></span></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
             </div>
         </template>
