@@ -9,6 +9,7 @@
 
 <section>
     <div class="text-center">
+        <div id="profile-id" style="display: none;">@Model.ProfileId</div>
         <h1 class="display-4 title">Your Profile</h1>
         <button class="btn btn-primary" id="edit-profile-button" onclick="location.href='@Url.Action("EditProfile", "Profile")'"><span><i class="fa fa-pencil"></i> Edit</span></button>
         <hr />
@@ -37,6 +38,12 @@
                     </div>
                     <div class="row">
                         <h4>@Model.FirstName @Model.LastName</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <div id="followers" style="margin-right: 20px; margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#modal"> Followers: <span id="follower-count">@Model.FollowerCount</span></div>
+                            <div id="following" style="margin-right: 10px; margin-left: 20px;" data-bs-toggle="modal" data-bs-target="#modal"> Following: <span id="following-count">@Model.FollowingCount</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -74,6 +81,47 @@
         </div>
     </div>
 
+    <!-- Modal -->
+            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="modal-label"></h1>
+                            <button id="close-modal1" type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modal-body">
+
+                                
+                        </div>
+                        <div class="modal-footer form-btns">
+                            <button id="close-modal2" type="button" class="btn btn-secondary border-0 d-flex mx-1"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <template id="profile-template">
+            <div class="card border-secondary mb-3" style="width: 18rem;">
+                    <div class="card-body bg-secondary row">
+                        <div class="form-group profile-picture-group col-md-2" id="profile-pic">
+
+                        </div>
+                        <div class="col-md-10">
+                            <a id="profile-link" href="">
+                                <h5 class="card-title" id="profile-username"></h5>
+                            </a>
+                            <div class="card-text row">
+                                <div>
+                                    <p><span id="profile-first-name"></span> <span id="profile-last-name"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </template>
+
 <style>
     .upvotes {
         color: lime;
@@ -84,6 +132,19 @@
         color: rgb(255, 0, 64);
         margin-left: 5px;
         margin-right: 5px;
+    }
+    #followers, #following {
+        font-size: 1.2em;
+        color: rgb(88, 88, 88);
+        height: 38px;
+    }
+    #followers:hover, #following:hover {
+        color: rgb(172, 172, 172);
+        cursor: pointer;
+    }
+    #modal-body {
+        overflow-y: scroll;
+        height: 500px;
     }
 </style>
 

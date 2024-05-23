@@ -19,6 +19,9 @@ ALTER TABLE [Profile] DROP CONSTRAINT [Fk Profile Resume Id];
 ALTER TABLE [UserVote] DROP CONSTRAINT [Fk UserVote UserInfo Id];
 ALTER TABLE [UserVote] DROP CONSTRAINT [Fk UserVote Resume Id];
 ALTER TABLE [UserVote] DROP CONSTRAINT [Fk UserVote Vote Id];
+ALTER TABLE [ProfileViews] DROP CONSTRAINT [Fk ProfileViews Profile Id]
+ALTER TABLE [Followers] DROP CONSTRAINT [Fk Follower Profile Id]
+ALTER TABLE [Followers] DROP CONSTRAINT [Fk Follower FollowerProfile Id]
 
 DROP TABLE [ApplicationTracker];
 DROP TABLE [ReferenceContactInfo];
@@ -36,3 +39,5 @@ DROP TABLE [ResumeTemplate];
 DROP TABLE [Profile];
 DROP TABLE [UserVote];
 DROP TABLE [Vote];
+DROP TABLE [ProfileViews];
+DROP TABLE [Followers];

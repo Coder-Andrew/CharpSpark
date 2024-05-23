@@ -17,5 +17,7 @@ namespace ResuMeta.ViewModels
         public int? ResumeId { get; set; }
         public int? UpVoteCount { get; set; }
         public int? DownVoteCount { get; set; }
+        public int? FollowerCount { get; set; }
+        public int? FollowingCount { get; set; }
     }
 }

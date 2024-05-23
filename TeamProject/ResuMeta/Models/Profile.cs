@@ -29,4 +29,13 @@ public partial class Profile
     [ForeignKey("ResumeId")]
     [InverseProperty("Profile")]
     public virtual Resume? Resume { get; set; }
+
+    [InverseProperty("Profile")]
+    public virtual ICollection<Follower> Followers { get; set; } = new List<Follower>();
+
+    [InverseProperty("FollowerProfile")]
+    public virtual ICollection<Follower> Following { get; set; } = new List<Follower>();
+
+    [InverseProperty("Profile")]
+    public virtual ProfileViews ProfileViews { get; set; } = new ProfileViews();
 }

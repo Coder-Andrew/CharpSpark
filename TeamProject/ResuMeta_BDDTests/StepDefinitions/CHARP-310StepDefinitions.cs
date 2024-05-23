@@ -124,7 +124,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             description.Text.Should().Contain("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure do");
         }
 
-        [When ("I go to the \"YourProfile\" page")]
+        [When ("I go to the \"YourProfile\" page"), Given("I go to the \"YourProfile\" page")]
         public void WhenIGoToYourProfilePage()
         {
             _yourProfilePage.GoTo();
