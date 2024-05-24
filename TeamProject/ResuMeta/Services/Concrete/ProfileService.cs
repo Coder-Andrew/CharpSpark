@@ -19,13 +19,15 @@ namespace ResuMeta.Services.Concrete
         private readonly IProfileRepository _profileRepo;
         private readonly IRepository<Profile> _profileRepository;
         private readonly IVoteRepository _voteRepository;
+        private readonly IFollowerRepository _followerRepo;
         public ProfileService(
             ILogger<ProfileService> logger,
             UserManager<ApplicationUser> userManager,
             IRepository<UserInfo> userInfo,
             IProfileRepository profileRepo,
             IRepository<Profile> profileRepository,
-            IVoteRepository voteRepository
+            IVoteRepository voteRepository,
+            IFollowerRepository followerRepo
             )
         {
             _logger = logger;
@@ -34,6 +36,7 @@ namespace ResuMeta.Services.Concrete
             _profileRepo = profileRepo;
             _profileRepository = profileRepository;
             _voteRepository = voteRepository;
+            _followerRepo = followerRepo;
         }
 
         public async Task<ProfileVM> GetProfile(int profileId)
@@ -70,6 +73,10 @@ namespace ResuMeta.Services.Concrete
             else {
                 userProfile.DownVoteCount = 0;
             }
+            var followerCount = _followerRepo.GetFollowersByProfileId(profileId).Count;
+            var FollowingCount = _followerRepo.GetFollowingByProfileId(profileId).Count;
+            userProfile.FollowerCount = followerCount;
+            userProfile.FollowingCount = FollowingCount;
             return userProfile;
         }
 

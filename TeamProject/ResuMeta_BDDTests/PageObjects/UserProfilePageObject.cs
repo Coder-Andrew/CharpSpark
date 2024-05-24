@@ -59,6 +59,24 @@ namespace ResuMeta_BDDTests.PageObjects
             var downVoteBtn = _webDriver.FindElement(By.Id("downvotes"));
             downVoteBtn.Click();
         }
+
+        public void ClickFollowBtn()
+        {
+            Thread.Sleep(500);
+            var followBtn = _webDriver.FindElement(By.Id("follow-btn"));
+            followBtn.Click();
+        }
+
+        public IWebElement GetFollowerCount()
+        {
+            IWebElement followerCount = _webDriver.FindElement(By.Id("follower-count"));
+            return followerCount;
+        }
+
+        public IWebElement GetFollowBtn()
+        {
+            return _webDriver.FindElement(By.Id("follow-btn"));
+        }
         
         public IWebElement GetUpVoteBtn()
         {
