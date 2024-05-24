@@ -129,7 +129,8 @@ CREATE TABLE [UserVote] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [UserInfoId] integer,
   [ResumeId] integer,
-  [VoteId] integer
+  [VoteId] integer,
+  [Timestamp] DATETIME NOT NULL DEFAULT GETDATE()
 );
 
 CREATE TABLE [ProfileViews] (
@@ -141,7 +142,8 @@ CREATE TABLE [ProfileViews] (
 CREATE TABLE [Follower] (
   [Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
   [ProfileId] integer,
-  [FollowerId] integer
+  [FollowerId] integer,
+  [Timestamp] DATETIME NOT NULL DEFAULT GETDATE()
 );
 
 ALTER TABLE [Resume] ADD CONSTRAINT [Fk Resume UserInfo Id] 

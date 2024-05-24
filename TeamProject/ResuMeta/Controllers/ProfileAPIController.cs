@@ -330,5 +330,8 @@ namespace ResuMeta.Controllers
             }
         }
 
+
+        //[AllowAnonymous]
+        //[HttpGet("updateTrendingProfiles")]
     }
 }

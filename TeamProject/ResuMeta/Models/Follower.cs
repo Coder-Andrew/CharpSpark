@@ -15,6 +15,10 @@ public partial class Follower
     public int? ProfileId { get; set; }
     public int? FollowerId { get; set; }
 
+    [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime Timestamp { get; set; }
+
     [ForeignKey("ProfileId")]
     [InverseProperty("Followers")]
     public virtual Profile? Profile { get; set; }

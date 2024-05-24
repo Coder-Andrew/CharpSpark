@@ -125,5 +125,12 @@ namespace ResuMeta.Services.Concrete
             }
             return profileVMs;
         }
-    }
+
+
+        //public async void UpdateTrendingProfiles()
+        //{
+
+        //}
+
+    }    
 }

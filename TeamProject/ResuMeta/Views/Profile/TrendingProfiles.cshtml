@@ -11,6 +11,62 @@
 </div>
 
 
+<div id="profile-area" class="d-flex flex-wrap justify-content-center">
+
+    <div class="card bg-dark mx-3 my-3" style="width: 18rem; border-radius: 20px;">
+        <input type="hidden" class="profile-id" /> 
+        <img class="profile-image card-img-top mx-auto d-block mt-3" src="https://th.bing.com/th/id/R.fc9ff391e0b92927fc4a526a939b2ca3?rik=M35YB1MrloATrw&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2fd%2fd4%2fCat_March_2010-1a.jpg&ehk=lmx5Dow%2btE7KUtrgWeamODrZNBeLisLC4x4%2bkXQRDq8%3d&risl=1&pid=ImgRaw&r=0" alt="Card image cap" style="width: 150px; height: 150px; border-radius: 100px;">
+        <div class="card-body text-center">
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-muted"><span class="profile-views"></span> views</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <i class="fa fa-thumbs-up"></i>
+                    <span class="profile-upvotes">50</span>
+                </div>
+                <div class="col-6">
+                    <i class="fa fa-thumbs-down"></i>
+                    <span class="profile-downvotes">120</span>
+                </div>                
+            </div>
+            <p class="profile-description mt-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
+
+</div>
+
+
+<template id="profile-card-template">
+    <div class="card bg-dark mx-3 my-3" style="width: 18rem; border-radius: 20px;">
+        <input type="hidden" class="profile-id" />
+        <img class="profile-image card-img-top mx-auto d-block mt-3" src="https://th.bing.com/th/id/R.fc9ff391e0b92927fc4a526a939b2ca3?rik=M35YB1MrloATrw&riu=http%3a%2f%2fupload.wikimedia.org%2fwikipedia%2fcommons%2fd%2fd4%2fCat_March_2010-1a.jpg&ehk=lmx5Dow%2btE7KUtrgWeamODrZNBeLisLC4x4%2bkXQRDq8%3d&risl=1&pid=ImgRaw&r=0" alt="Card image cap" style="width: 150px; height: 150px; border-radius: 100px;">
+        <div class="card-body text-center">
+            <div class="row">
+                <div class="col-12">
+                    <p class="text-muted"><span class="profile-views"></span> views</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <i class="fa fa-thumbs-up"></i>
+                    <span class="profile-upvotes">50</span>
+                </div>
+                <div class="col-6">
+                    <i class="fa fa-thumbs-down"></i>
+                    <span class="profile-downvotes">120</span>
+                </div>
+            </div>
+            <p class="profile-description mt-2">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
+</template>
+
+
+
+
 @section Scripts {
     <script type="text/javascript" src="~/js/TrendingProfiles.js"></script>
 }
