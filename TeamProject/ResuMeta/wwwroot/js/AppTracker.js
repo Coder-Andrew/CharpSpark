@@ -8,6 +8,11 @@ function initializePage() {
     sortButton.addEventListener('click', sortTable, false);
     const resetButton = document.getElementById('reset-filters');
     resetButton.addEventListener('click', refreshTable, false);
+    document.querySelectorAll('th').forEach(header => {
+        if(header.id != 'Job-Listing' && header.id != 'Job-Notes') {
+            header.addEventListener('click', sortByArrow, false);
+        }
+    });
 }
 
 function setApplyReminder(applicationTrackerId) {
@@ -146,20 +151,28 @@ function refreshTable(sortOption, sortOrder) {
         .then(data => {
             if (sortOption && sortOrder) {
                 data.sort(function (a, b) {
-                    var dateA, dateB;
-
+                    var comparisonResult;
+                
                     if (sortOption === 'applied-date') {
-                        dateA = new Date(a.appliedDate);
-                        dateB = new Date(b.appliedDate);
+                        var dateA = new Date(a.appliedDate);
+                        var dateB = new Date(b.appliedDate);
+                        comparisonResult = dateA - dateB;
                     } else if (sortOption === 'application-deadline') {
-                        dateA = new Date(a.applicationDeadline);
-                        dateB = new Date(b.applicationDeadline);
+                        var dateA = new Date(a.applicationDeadline);
+                        var dateB = new Date(b.applicationDeadline);
+                        comparisonResult = dateA - dateB;
+                    } else if (sortOption === 'status' || sortOption === 'job-status') {
+                        comparisonResult = a.status.localeCompare(b.status);
+                    } else if (sortOption === 'company-name') {
+                        comparisonResult = a.companyName.localeCompare(b.companyName);
+                    } else if (sortOption === 'job-title') {
+                        comparisonResult = a.jobTitle.localeCompare(b.jobTitle);
                     }
-
+                
                     if (sortOrder === 'ascending') {
-                        return dateA - dateB;
+                        return comparisonResult;
                     } else if (sortOrder === 'descending') {
-                        return dateB - dateA;
+                        return -comparisonResult;
                     }
                 });
             }
@@ -252,4 +265,20 @@ function sortTable() {
     var sortOption = document.getElementById('sort-option').value;
     var sortOrder = document.getElementById('sort-order').value;
     refreshTable(sortOption, sortOrder);
+}
+
+function sortByArrow(event) {
+    var header = event.target.closest('th');
+    if (!header) return;
+
+    var sortOption = header.id.toLowerCase();
+    console.log(sortOption);
+    var sortOrder = header.getAttribute('data-sort-order') === 'ascending' ? 'descending' : 'ascending';
+    header.setAttribute('data-sort-order', sortOrder);
+    refreshTable(sortOption, sortOrder);
+
+    var arrow = header.querySelector('.sort-arrow');
+    if (arrow) {
+        arrow.innerHTML = sortOrder === 'ascending' ? '&#9652;' : '&#9662;';
+    }
 }
