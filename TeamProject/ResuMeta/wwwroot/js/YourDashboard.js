@@ -7,14 +7,20 @@ function initializePage() {
     const dashBoardTitle = document.getElementById('dashboard-title');
     const resumeSection = document.getElementById('resume-section');
     var resumeSearchBar = document.getElementById('resume-search-bar');
-    resumeSearchBar.addEventListener('keyup', function () {
-        searchResume(resumeSearchBar);
-    });
-    var coverLetterSearchBar = document.getElementById('cover-letter-search-bar');
-    coverLetterSearchBar.addEventListener('keyup', function () {
-        searchCoverLetter(coverLetterSearchBar);
-    });
 
+    if (resumeSearchBar) {
+        resumeSearchBar.addEventListener('keyup', function () {
+            searchResume(resumeSearchBar);
+        });
+    }
+
+    var coverLetterSearchBar = document.getElementById('cover-letter-search-bar');
+    if (coverLetterSearchBar) {
+        coverLetterSearchBar.addEventListener('keyup', function () {
+            searchCoverLetter(coverLetterSearchBar);
+        });
+
+    }
     console.log(resumeSection);
 
     // Moved onclick in html to js eventlistener
