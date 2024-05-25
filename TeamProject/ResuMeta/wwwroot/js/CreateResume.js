@@ -84,7 +84,7 @@ function initializePage() {
         console.log(event);
         setTimeout(() => {
             skillsDropdown.classList.remove("show")
-        }, 100);
+        }, 350);
     });
 
     // Add event listener to dropdown
