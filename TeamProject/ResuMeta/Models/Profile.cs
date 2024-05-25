@@ -20,7 +20,6 @@ public partial class Profile
     public int? ResumeId { get; set; }
 
     [Required]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public int? ProfileScore { get; set; }
 
     [StringLength(250)]

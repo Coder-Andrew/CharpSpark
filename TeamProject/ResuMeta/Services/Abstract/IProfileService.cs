@@ -10,5 +10,7 @@ namespace ResuMeta.Services.Abstract
         Task<ProfileVM> GetProfile(int profileId);
         bool SaveProfile(int userId, ProfileVM profile);
         Task<List<ProfileVM>> SearchProfile(string keyWord);
+        void UpdateTrendingProfiles();
+        Task<List<ProfileVM2>> GetTrendingProfiles();
     }
 }

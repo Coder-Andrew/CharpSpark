@@ -331,7 +331,36 @@ namespace ResuMeta.Controllers
         }
 
 
-        //[AllowAnonymous]
-        //[HttpGet("updateTrendingProfiles")]
+        [AllowAnonymous]
+        [HttpPost("UpdateTrendingProfiles")]
+        public IActionResult UpdateTrendingProfiles()
+        {
+            try
+            {
+                _profileService.UpdateTrendingProfiles();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error updating trending profiles");
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetTrendingProfiles")]
+        public async Task<IActionResult> GetTrendingProfiles()
+        {
+            try
+            {
+                var profiles = await _profileService.GetTrendingProfiles();
+                return Ok(profiles);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error getting trending profiles");
+                return BadRequest();
+            }
+        }
     }
 }

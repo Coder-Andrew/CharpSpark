@@ -127,10 +127,127 @@ namespace ResuMeta.Services.Concrete
         }
 
 
-        //public async void UpdateTrendingProfiles()
-        //{
+        public void UpdateTrendingProfiles()
+        {
+            // Define weights
+            const float w_upvotes = 1.0F;
+            const float cw_downvotes = 1.0F;
+            const float w_days_since_upvote = 0.1F;
+            const float w_days_since_downvote = 0.1F;
+            const float w_followers = 1.5F;
+            const float w_following = 0.5F;
+            const float w_days_since_follower = 0.05F;
+            const float w_days_since_following = 0.05F;
+            const float w_resume_sections = 2.0F;
 
-        //}
+            DateTime now = DateTime.Now;
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+            List<Profile> profiles = _profileRepository.GetAll().ToList();
+
+            foreach (Profile profile in profiles)
+            {
+                ProfileVM2 userProfile = _profileRepo.GetProfileById(profile.Id);
+
+                // get most recent upvote and downvote
+                DateTime sinceLastupVote = _voteRepository.GetAllUpVotesByResumeId(profile.ResumeId)
+                    .OrderByDescending(uv => uv.Timestamp)
+                    .FirstOrDefault()
+                    ?.Timestamp ?? epoch;
+
+                DateTime sinceLastDownVote = _voteRepository.GetAllUpVotesByResumeId(profile.ResumeId)
+                    .OrderByDescending(dv => dv.Timestamp)
+                    .FirstOrDefault()
+                    ?.Timestamp ?? now;
+
+                // get most recent follower
+                DateTime sinceLastFollower = _followerRepo.GetFollowersByProfileId(profile.Id)
+                    .OrderByDescending(f => f.Timestamp)
+                    .FirstOrDefault()
+                    ?.Timestamp ?? epoch;
+
+                DateTime sinceLastFollowing = _followerRepo.GetFollowingByProfileId(profile.Id)
+                    .OrderByDescending(f => f.Timestamp)
+                    .FirstOrDefault()
+                    ?.Timestamp ?? epoch;
+
+                // get counts
+                int upvotes = userProfile.UpVoteCount ?? 0;
+                int downvotes = userProfile.DownVoteCount ?? 0;
+                int followers = userProfile.FollowerCount ?? 0;
+                int following = userProfile.FollowingCount ?? 0;
+                int resumeSections = userProfile.ResumeSections ?? 0;
+
+
+                // get days since last action
+                int daysSinceLastUpvote    = (int)(now - sinceLastupVote).TotalDays;
+                int daysSinceLastDownvote  = (int)(now - sinceLastDownVote).TotalDays;
+                int daysSinceLastFollower  = (int)(now - sinceLastFollower).TotalDays;
+                int daysSinceLastFollowing = (int)(now - sinceLastFollowing).TotalDays;
+
+                float net_score = (w_upvotes * userProfile.UpVoteCount - cw_downvotes * userProfile.DownVoteCount) ?? 1F;
+
+                // recency factors
+                double recency_upvote = Math.Exp(-w_days_since_upvote * daysSinceLastUpvote);
+                double recency_downvote = 1 + w_days_since_downvote * daysSinceLastDownvote;
+                double recency_follower = followers > 0 ? Math.Exp(-w_days_since_follower * daysSinceLastFollower) : 0;
+                double recency_following = following > 0 ? Math.Exp(-w_days_since_following * daysSinceLastFollowing) : 0;
+
+                // calculate followers and following scores
+                double followers_score = followers > 0 ? w_followers * followers * recency_follower : -5;
+                double following_score = following > 0 ? w_following * following * recency_following : -5;
+
+                // resume sections score
+                float resume_score = resumeSections > 0 ? w_resume_sections * resumeSections : -2;
+
+                // base score
+                float base_score = 1;
+
+                // calculate final score
+                double final_score = (net_score * recency_upvote * recency_downvote) +
+                                     followers_score +
+                                     following_score +
+                                     resume_score +
+                                     base_score;
+
+                profile.ProfileScore = (int)final_score;
+                _profileRepository.AddOrUpdate(profile);
+            }
+        }
+
+        public async Task<List<ProfileVM2>> GetTrendingProfiles()
+        {
+            //    List<Profile> profiles = _profileRepository.GetAll().ToList();
+            //    List<Profile> topProfiles = profiles.GetRange(0, Math.Min(5, profiles.Count));
+            //    List<ProfileVM> profileVMs = new List<ProfileVM>();
+            //    foreach (Profile profile in topProfiles)
+            //    {
+            //        try
+            //        {
+            //            ProfileVM profileVM = await GetProfile(profile.Id);
+            //            profileVMs.Add(profileVM);
+            //        }
+            //        catch (Exception)
+            //        {
+            //            continue;
+            //        }
+            //    }
+            //    return profileVMs;
+            //}
+            List<Profile> profiles = _profileRepository
+                .GetAll()
+                .OrderByDescending(p => p.ProfileScore)
+                .ToList();
+
+            List<ProfileVM2> profileViewModels = new List<ProfileVM2>();
+
+            foreach (Profile profile in profiles)
+            {
+                profileViewModels.Add(_profileRepo.GetProfileById(profile.Id));
+            }
+
+
+            return profileViewModels;
+        }
     }    
 }
