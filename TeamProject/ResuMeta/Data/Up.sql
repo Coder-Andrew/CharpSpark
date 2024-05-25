@@ -117,7 +117,7 @@ CREATE TABLE [Profile] (
   [UserInfoId] integer,
   [Resume] nvarchar(MAX),
   [ResumeId] integer,
-  [ProfileScore] integer NOT NULL DEFAULT 0,
+  [ProfileScore] integer DEFAULT 0,
   [Description] nvarchar(250)
 );
 

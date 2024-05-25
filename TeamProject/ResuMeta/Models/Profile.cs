@@ -19,7 +19,6 @@ public partial class Profile
 
     public int? ResumeId { get; set; }
 
-    [Required]
     public int? ProfileScore { get; set; }
 
     [StringLength(250)]

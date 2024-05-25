@@ -32,7 +32,6 @@ namespace ResuMeta.DAL.Concrete
                 FirstName = firstName,
                 LastName = lastName,
                 ProfilePicturePath = profilePicturePath,
-                ProfileScore = profile.ProfileScore,
             };
         }
         public ProfileVM2 GetProfileById(int userId)

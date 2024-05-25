@@ -97,7 +97,7 @@ public class ProfileController : Controller
                 UserInfoId = currUser.Id,
                 ResumeHtml = profile.Resume,
                 ResumeId = profile.ResumeId,
-                Description = profile.Description
+                Description = profile.Description,
             };
             Profile addedProfile = _profileRepository.AddOrUpdate(newProfile);
             addedProfile.ProfileViews.ViewCount = 0;

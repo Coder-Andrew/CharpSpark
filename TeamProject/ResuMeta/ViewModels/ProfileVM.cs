@@ -19,7 +19,6 @@ namespace ResuMeta.ViewModels
         public int? DownVoteCount { get; set; }
         public int? FollowerCount { get; set; }
         public int? FollowingCount { get; set; }
-        public int? ProfileScore { get; set; } = 0;
     }
 
     public class ProfileVM2

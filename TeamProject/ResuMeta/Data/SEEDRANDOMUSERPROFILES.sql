@@ -127,16 +127,16 @@ VALUES
 -- Insert default data for ProfileViews table
 INSERT INTO [ProfileViews] (ProfileId, ViewCount)
 VALUES
-(1, 100),
+(1, 0),
 (2, 50),
 (3, 20),
 (4, 0),
 (5, 0),
-(6, 0),
+(6, 200),
 (7, 0),
 (8, 0),
 (9, 0),
-(10, 0),
+(10, 150),
 (11, 0),
 (12, 0),
 (13, 0),

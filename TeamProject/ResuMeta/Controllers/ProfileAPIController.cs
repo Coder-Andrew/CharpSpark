@@ -236,7 +236,7 @@ namespace ResuMeta.Controllers
             {
                 try
                 {
-                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     if (userId == null)
                     {
                         _logger.LogError("User not found");
