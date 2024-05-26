@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", initializePage, false);
 
+
 function initializePage() {
     refreshTable();
     const applicationForm = document.getElementById('application-form');
@@ -40,6 +41,13 @@ function closeMaximizedTable() {
     const maximizeTableHeader = document.getElementById('app-table').querySelector('#maximize-table');
     maximizeTableHeader.innerHTML = '&#xf0c9;';
     maximizeTableHeader.onclick = maximizeTable;
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
 }
 
 function setApplyReminder(applicationTrackerId) {

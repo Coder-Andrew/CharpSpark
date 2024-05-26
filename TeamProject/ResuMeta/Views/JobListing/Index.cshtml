@@ -176,6 +176,28 @@
         </template>
     }
 
+    <button id="help-btn" class="btn btn-info">?</button>
+
+    <div class="modal " id="help-modal" tabindex="-1" aria-labelledby="helloModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helloModalLabel">Help</h5>
+                </div>
+                <div class="modal-body">
+                    <p>1. From here, you can search all jobs or only remote roles. To search all jobs, enter in a job title, the city, and the state (US only). </p>
+                    <p>2. If you see a job you are interested in, click on it, and it will bring you to the Indeed listing. </p>
+                    <p>3. Once you have navigated back to the ResuMeta site, you will be greeted with a popup asking if you applied. If you click yes, it will auto fill the details from that job into the Application Tracker. </p>
+                    <p>4. You will also see the option to create a resume based on the job description. This uses AI to write a resume for you. </p>
+                    <p>5. Lastly, there is another option to create a cover letter with AI based on the job description. Upon clicking the “Create Cover Letter” button, you will see the option to choose one of your pre-existing resumes to base the cover letter on. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-btn" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 

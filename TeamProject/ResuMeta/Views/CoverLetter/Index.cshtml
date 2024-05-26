@@ -7,11 +7,41 @@
 
 
 <section>
-<div class="text-center">
-    <h1 class="display-4 title">Cover Letter Center</h1>
-    <hr />
-    <div class="container text-center">
-        <h4>Create a cover letter from Scratch</h4>
-        <a asp-controller="CoverLetter" asp-action="CreateCoverLetter" class="btn btn-primary">Create Cover Letter</a>
+    <div class="text-center">
+        <h1 class="display-4 title">Cover Letter Center</h1>
+        <hr />
+        <div class="container text-center">
+            <h4>Create a cover letter from Scratch</h4>
+            <a asp-controller="CoverLetter" asp-action="CreateCoverLetter" class="btn btn-primary">Create Cover
+                Letter</a>
+        </div>
     </div>
-</div>
+
+
+    <button id="help-btn" class="btn btn-info">?</button>
+
+    <div class="modal " id="help-modal" tabindex="-1" aria-labelledby="helloModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helloModalLabel">Help</h5>
+                </div>
+                <div class="modal-body">
+                    <p> 1. Click the create cover letter button. </p>
+                    <p> 2. Either enter the hiring managers name, or select “I don’t know the name”. </p>
+                    <p> 3. Write the body of your cover letter and click submit. </p>
+                    <p> 4. Next, you will be taken to the view cover letter page. Here, you can adjust the formatting or
+                        make any edits as needed. You can also improve the cover letter with AI, save the cover letter,
+                        and export it. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-btn" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script type="module" src="~/js/CoverLetterIndex.js"></script>
+    }
