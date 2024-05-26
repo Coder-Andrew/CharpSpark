@@ -199,7 +199,7 @@ public class ProfileController : Controller
     }
     
     [AllowAnonymous]
-    public async Task<IActionResult> TrendingProfiles()
+    public IActionResult TrendingProfiles()
     {
         return View();
     }

@@ -1,3 +1,5 @@
+-- If you are using this script, must run this script AFTER the app db users have been seeded (start the app after running the up script then run this script) 
+
 -- Insert random data for UserInfo table
 INSERT INTO [VOTE] ([VOTEVALUE]) VALUES
     ('UP'),

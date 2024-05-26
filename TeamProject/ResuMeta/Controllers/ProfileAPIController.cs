@@ -349,11 +349,11 @@ namespace ResuMeta.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetTrendingProfiles")]
-        public async Task<IActionResult> GetTrendingProfiles()
+        public IActionResult GetTrendingProfiles()
         {
             try
             {
-                var profiles = await _profileService.GetTrendingProfiles();
+                var profiles = _profileService.GetTrendingProfiles();
                 return Ok(profiles);
             }
             catch (Exception e)

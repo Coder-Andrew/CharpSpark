@@ -229,7 +229,7 @@ namespace ResuMeta.Services.Concrete
 
 
 
-        public async Task<List<ProfileVM2>> GetTrendingProfiles()
+        public List<ProfileVM2> GetTrendingProfiles()
         {
             List<Profile> profiles = _profileRepository
                 .GetAll()
