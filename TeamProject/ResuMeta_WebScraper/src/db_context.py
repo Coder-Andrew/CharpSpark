@@ -53,9 +53,17 @@ class mongo_db_context(IDbContext):
             raise ValueError("Page number is greater than the number of pages")
         
         if not search_term:
-            return list(self.collection.find().skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE).limit(NUMBER_OF_LISTINGS_PER_PAGE))
+            return list(self.collection
+                        .find()
+                        .sort("listing_scrape_date", -1)
+                        .skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE)
+                        .limit(NUMBER_OF_LISTINGS_PER_PAGE))
         
-        return list(self.collection.find({"listing_title": {"$regex": search_term, "$options":'i'}}).skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE).limit(NUMBER_OF_LISTINGS_PER_PAGE))
+        return list(self.collection
+                    .find({"listing_title": {"$regex": search_term, "$options":'i'}})
+                    .sort("listing_scrape_date", -1)
+                    .skip((pageNumber - 1) * NUMBER_OF_LISTINGS_PER_PAGE)
+                    .limit(NUMBER_OF_LISTINGS_PER_PAGE))
     
     def get_number_of_listings(self):
         return self.collection.count_documents({})

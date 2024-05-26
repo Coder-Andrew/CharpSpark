@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', initializePage, false);
 let jobDesc = '';
 let pageNumber = 1;
 let numberOfPages = 0;
+let isImprovingResume = false;
 
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
@@ -12,14 +13,19 @@ function initializePage() {
     const improveWithAiBtn = document.getElementById('improve-with-ai');
     const createCoverLetterAiBtn = document.getElementById('create-cover-letter-ai');
 
+    window.addEventListener('beforeunload', () => {
+        if (!isImprovingResume) {
+            sessionStorage.clear();
+        }
+    })
+
     // redirect to /Resume/YourDashboard
     if (improveWithAiBtn) {
         improveWithAiBtn.addEventListener('click', () => {
-            console.log("test")
+            isImprovingResume = true;
             window.location.href = "/Resume/YourDashboard";
         })
     }
-
 
     if (createCoverLetterAiBtn) {
         createCoverLetterAiBtn.addEventListener('click', async (event) => {
