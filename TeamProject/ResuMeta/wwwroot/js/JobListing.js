@@ -22,7 +22,7 @@ function initializePage() {
 
     window.addEventListener('beforeunload', () => {
         if (!isImprovingResume) {
-            sessionStorage.clear();
+            sessionStorage.removeItem("jobLink");
         }
     })
 
