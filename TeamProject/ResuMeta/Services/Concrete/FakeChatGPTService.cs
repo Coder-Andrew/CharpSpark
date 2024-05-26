@@ -43,5 +43,14 @@ namespace ResuMeta.Services.Concrete
                 Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
             };
         }
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task<ChatGPTResponse> GenerateCareerSuggestions(int id)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            return new ChatGPTResponse
+            {
+                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+            };
+        }
     }
 }

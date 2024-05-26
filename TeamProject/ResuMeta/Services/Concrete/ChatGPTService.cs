@@ -292,5 +292,61 @@ namespace ResuMeta.Services.Concrete
             
             };
         }
+
+
+        public async Task<ChatGPTResponse> GenerateCareerSuggestions(int id)
+        {   
+            var resumeContent = _resumeRepository.GetResumeHtml(id);
+            var htmlContent = resumeContent.HtmlContent;
+            var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
+
+            JsonMessage jsonMessage = new JsonMessage
+            {
+                model = "gpt-4o",
+                messages = new List<Message>
+                {
+                    new Message
+                    {
+                        role = "system",
+                        content = 
+                        "You are here to suggest 5 possible career paths for me based on my resume/experience." +
+                        "Please return 5 career path suggestions and a short description for each." +
+                        "Do not add any markdown syntax (no ### for titles, ** for bold, etc)." + 
+                        "Do not include any additional conversation in your response (i.e don't say certainly, here you go, etc)."
+                    },
+                    new Message
+                    {
+                        role = "user",
+                        content = decodedHtmlContent
+                    }
+                }
+            };
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            string message = JsonSerializer.Serialize<JsonMessage>(jsonMessage, options);
+
+            StringContent postContent = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("v1/chat/completions", postContent);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error: {response.StatusCode} - {content}");
+                throw new Exception($"Error: {response.StatusCode} - {content}");
+            }
+
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
+
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
+            return new ChatGPTResponse
+            {
+                Response = cGPTResponse.choices![0].message!.content
+            
+            };
+        }
+
     }
 }
