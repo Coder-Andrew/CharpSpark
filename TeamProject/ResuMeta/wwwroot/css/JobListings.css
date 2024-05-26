@@ -211,6 +211,10 @@ input {
     margin: 0 20px; /* Adjust the value as needed */
 }
 
+.g-recaptcha {
+    margin-top: 10px;
+}
+
 .modal-backdrop.show {
     opacity: 0.75 !important;
     background-color: #000 !important;
@@ -219,7 +223,6 @@ input {
 .modal-body {
     text-align: left !important; 
 }
-
 
 #help-btn {
     position: fixed;

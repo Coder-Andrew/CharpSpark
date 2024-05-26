@@ -116,6 +116,8 @@ function initializePage() {
         }
     })
 }
+
+
 function hideLoader() {
     document.getElementById('page-number').classList.remove("invisible");
     document.getElementById("loader").classList.add("invisible");
