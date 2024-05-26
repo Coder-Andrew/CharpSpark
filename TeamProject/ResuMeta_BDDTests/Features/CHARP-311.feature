@@ -24,10 +24,10 @@ Given I am a user with the first name 'Adrian'
 When I click on a random job listing
 Then I should see a "Create Cover Letter" button
 
-# Scenario: User should be able to click the "Create Cover Letter" button
-# Given I am a user with the first name 'Adrian'
-# 	And I login
-# 	And I am on the "JobListings" page
-# When I click on a random job listing
-# When I click the "Create Cover Letter" button
-# Then I should see a dropdown selection appear
+Scenario: User should be able to click the "Create Cover Letter" button
+Given I am a user with the first name 'Adrian'
+	And I login
+	And I am on the "JobListings" page
+When I click on a random job listing
+When I click the "Create Cover Letter" button
+Then I should see a dropdown selection appear

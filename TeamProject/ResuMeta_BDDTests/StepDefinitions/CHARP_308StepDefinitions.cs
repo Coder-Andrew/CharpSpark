@@ -50,8 +50,8 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _jobListingPage.ClickJobListing();
         }
 
-        [Then("I should see the {string} button")]
-        public void ThenIShouldSeeTheButton(string p0)
+        [Then("I should see the \"Improve with AI\" button")]
+        public void ThenIShouldSeeTheButton()
         {
             //Thread.Sleep(5000);
             _jobListingPage.ButtonShouldExist("improve-with-ai").Should().NotBeNull();
@@ -64,19 +64,20 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _jobListingPage.ClickJobListing();
         }
 
-        [When("I click the {string} button")]
-        public void WhenIClickTheButton(string p0)
+        [When("I click the \"Improve with AI\" button")]
+        public void WhenIClickTheButton()
         {
             _jobListingPage.ButtonShouldExist("improve-with-ai").Click();
         }
 
-        [Then("I should be redirected to the {string} page")]
-        public void ThenIShouldBeRedirectedToThePage(string yourDashboard)
-        {
-        }
+        // Hard code the page name, this function destroys other tests as it creates ambiguity for the compiler
+        // [Then("I should be redirected to the {string} page")]
+        // public void ThenIShouldBeRedirectedToThePage(string yourDashboard)
+        // {
+        // }
 
-        [Given("I click the {string} button")]
-        public void GivenIClickTheButton(string p0)
+        [Given("I click the \"Improve with AI\" button")]
+        public void GivenIClickTheButton()
         {
             _jobListingPage.ButtonShouldExist("improve-with-ai").Click();
             _dashboardPage.FirstResumeDiv.Click(); //This should not be here, but test does not work otherwise

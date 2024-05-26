@@ -9,3 +9,42 @@
     border-right: 2px solid rgb(88, 88, 88) !important;
     border-bottom: 2px solid rgb(88, 88, 88) !important;
 }
+
+.card-link {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.card-link:hover, .card-link:focus {
+    text-decoration: none !important;
+}
+
+.card-title {
+    color: #e9912c;
+    border-bottom: 1px solid #e9912c;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.card-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(to right, #E91D1C, #FEB617);
+}
+
+.card-body:hover .card-title {
+    text-decoration: underline;
+}
+
+.card-body .fa {
+    color: #868686;
+}
+
+.card-body {
+    background-color: #222424 !important;
+    height: 100px;
+}

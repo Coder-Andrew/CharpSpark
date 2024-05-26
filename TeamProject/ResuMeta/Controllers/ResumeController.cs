@@ -73,6 +73,8 @@ public class ResumeController : Controller
         }
         List<ResumeVM> resumeList = _resumeService.GetAllResumes(user.Id);
         List<CoverLetterVM> coverLetterList = _coverLetterService.GetAllCoverLetters(user.Id);
+        resumeList.Reverse();
+        coverLetterList.Reverse();
         DashboardVM dashboardVM = new DashboardVM
         {
             Resumes = resumeList,

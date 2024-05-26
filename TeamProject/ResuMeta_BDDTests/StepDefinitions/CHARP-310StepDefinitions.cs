@@ -40,10 +40,6 @@ namespace ResuMeta_BDDTests.StepDefinitions
 
         public string GenerateEmail(int length)
         {
-            if (length == 0)
-            {
-                length = 5;
-            }
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray()) + "@mail.com";
@@ -52,7 +48,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [Given("I am a random user")]
         public void GivenIAmARandomUser()
         {
-            var email = GenerateEmail(random.Next(10));
+            var email = GenerateEmail(random.Next(7, 21));
             _registerPage.GoTo();
             _registerPage.Register(email);
         }
@@ -106,7 +102,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _createProfilePage.FillOutProfileForm();
         }
 
-        [Then ("I should be redirected to the \"YourProfile\" page")]
+        [Then ("I should be rerouted to the \"YourProfile\" page")]
         public void ThenIShouldBeRedirectedToTheYourProfilePage()
         {
             string url = _createProfilePage.GetCurrentUrl();
@@ -128,7 +124,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             description.Text.Should().Contain("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure do");
         }
 
-        [When ("I go to the \"YourProfile\" page")]
+        [When ("I go to the \"YourProfile\" page"), Given("I go to the \"YourProfile\" page")]
         public void WhenIGoToYourProfilePage()
         {
             _yourProfilePage.GoTo();

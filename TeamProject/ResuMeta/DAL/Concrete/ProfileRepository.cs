@@ -25,7 +25,8 @@ namespace ResuMeta.DAL.Concrete
             return new ProfileVM
             {
                 ProfileId = profile.Id,
-                Resume = profile.Resume,
+                Resume = profile.ResumeHtml,
+                ResumeId = profile.ResumeId,
                 Description = profile.Description,
                 UserName = userName,
                 FirstName = firstName,

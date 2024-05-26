@@ -22,7 +22,70 @@ namespace ResuMeta_BDDTests.PageObjects
             // using a named page (in Common.cs)
             _pageName = "UserProfile";
         }
+        public IWebElement GetUpVoteCount()
+        {
+            ReadOnlyCollection<IWebElement> upVoteList = _webDriver.FindElements(By.Id("upvotes-count"));
+            if (upVoteList.Count > 0)
+            {
+                return upVoteList[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
 
+        public IWebElement GetDownVoteCount()
+        {
+            ReadOnlyCollection<IWebElement> downVoteList = _webDriver.FindElements(By.Id("downvotes-count"));
+            if (downVoteList.Count > 0)
+            {
+                return downVoteList[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public void ClickUpVoteBtn()
+        {
+            var upVoteBtn = _webDriver.FindElement(By.Id("upvotes"));
+            upVoteBtn.Click();
+        }
+
+        public void ClickDownVoteBtn()
+        {
+            var downVoteBtn = _webDriver.FindElement(By.Id("downvotes"));
+            downVoteBtn.Click();
+        }
+
+        public void ClickFollowBtn()
+        {
+            Thread.Sleep(500);
+            var followBtn = _webDriver.FindElement(By.Id("follow-btn"));
+            followBtn.Click();
+        }
+
+        public IWebElement GetFollowerCount()
+        {
+            IWebElement followerCount = _webDriver.FindElement(By.Id("follower-count"));
+            return followerCount;
+        }
+
+        public IWebElement GetFollowBtn()
+        {
+            return _webDriver.FindElement(By.Id("follow-btn"));
+        }
         
+        public IWebElement GetUpVoteBtn()
+        {
+            return _webDriver.FindElement(By.Id("upvotes"));
+        }
+
+        public IWebElement GetDownVoteBtn()
+        {
+            return _webDriver.FindElement(By.Id("downvotes"));
+        }
     }
 }

@@ -25,7 +25,7 @@ Given I am a random user
    And I am on the "Home" page
    And I click on the "Profile" tab of the navbar
 When I fill out the form for "CreateProfile"
-Then I should be redirected to the "YourProfile" page
+Then I should be rerouted to the "YourProfile" page
 
 Scenario: User will be able to see their information displayed on their public profile page
 Given I am a random user

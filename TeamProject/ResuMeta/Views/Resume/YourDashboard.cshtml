@@ -15,18 +15,21 @@
             <h4>Resumes</h4>
             @if(Model != null && Model.Resumes?.Count() > 0)
             {
+                <div class="search-bar-container">
+                    <input type="text" id="resume-search-bar" placeholder="Search resumes..." />
+                </div>
                 <section id="resume-section">
-                @foreach(var resume in Model.Resumes)
-                {
-                    <div class="thumbnail" data-url="@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})">
-                        <div class="resume-content-ids" id="resume-content-@resume.ResumeId"></div>
-                        <div class="thumbnail-title">@resume.Title</div>
-                    </div>
-                    <script type="text/javascript">
-                        var resumeContentDiv = document.getElementById('resume-content-@resume.ResumeId');
-                        resumeContentDiv.innerHTML = decodeURIComponent("@Html.Raw(resume.HtmlContent)");
-                    </script>
-                }
+                    @foreach(var resume in Model.Resumes)
+                    {
+                        <div class="thumbnail" data-url="@Url.Action("YourResume", "Resume", new {resumeId = @resume.ResumeId})">
+                            <div class="resume-content-ids" id="resume-content-@resume.ResumeId"></div>
+                            <div class="thumbnail-title">@resume.Title</div>
+                        </div>
+                        <script type="text/javascript">
+                            var resumeContentDiv = document.getElementById('resume-content-@resume.ResumeId');
+                            resumeContentDiv.innerHTML = decodeURIComponent("@Html.Raw(resume.HtmlContent)");
+                        </script>
+                    }
                 </section>
             }
             else
@@ -42,6 +45,9 @@
             <h4>Cover Letters</h4>
             @if(Model != null && Model.CoverLetters?.Count() > 0)
             {
+                <div class="search-bar-container">
+                    <input type="text" id="cover-letter-search-bar" placeholder="Search cover letters..." />
+                </div>
                 <section id="cover-letter-section">
                 @foreach(var coverLetter in Model.CoverLetters)
                 {

@@ -20,6 +20,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [Given(@"I am a visitor")]
         public void GivenIAmAVisitor()
         {
+            _homePage.GoTo();
             if (_homePage.IsLoggedIn())
             {
                 _homePage.Logout();

@@ -4,6 +4,7 @@ const jobLink = sessionStorage.getItem('jobLink');
 let jobDescription = "";
 
 function loadQuill() {
+    console.log("Entering fetchAndDisplayData");
     console.log("Loading Quill");
     var script = document.createElement('script');
     script.src = "https://cdn.quilljs.com/1.0.0/quill.js";
@@ -193,6 +194,8 @@ async function fetchAndDisplayData(resumeId, quill2, jobLink) {
     const loadingScreen = document.getElementById("loading-screen");
     loadingScreen.style.display = "block";
 
+    console.log("Entering fetchAndDisplayData")
+
     quill2.root.innerHTML = "Loading...";
 
     if (jobLink) {
@@ -218,11 +221,15 @@ async function fetchAndDisplayData(resumeId, quill2, jobLink) {
         let responseData;
         try {
             responseData = await response.text();
+            console.log(responseData);
         } catch (error) {
             throw new Error('Failed to parse response data');
         }
 
-        quill2.root.innerHTML = responseData;
+        const resumeArea2 = document.getElementById("resume-area2"); // Temporary element to hold HTML
+        resumeArea2.innerHTML = responseData; // Set HTML content
+        const delta2 = quill2.clipboard.convert(resumeArea2.innerHTML); // Convert HTML to Delta
+        quill2.setContents(delta2); // Set contents of Quill editor with Delta
 
     } catch (error) {
         console.error('Error fetching and displaying data:', error);

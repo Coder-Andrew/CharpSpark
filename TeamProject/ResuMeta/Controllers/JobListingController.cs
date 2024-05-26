@@ -46,6 +46,7 @@ public class JobListingController : Controller
         }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Index(JobListingVM jobListing)
     {
         return RedirectToAction("Index", "ApplicationTracker", jobListing);

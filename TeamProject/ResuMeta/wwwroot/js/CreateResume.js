@@ -84,14 +84,14 @@ function initializePage() {
         console.log(event);
         setTimeout(() => {
             skillsDropdown.classList.remove("show")
-        }, 100);
+        }, 350);
     });
 
     // Add event listener to dropdown
     skillsDropdown.addEventListener('click', (event) => {
         skillInput.value = "";    
-        skillsDropdown.classList.remove("show");
         addSkillToSkillList(event);
+        skillsDropdown.classList.remove("show");
     }, false);
 
     // get info boxes
