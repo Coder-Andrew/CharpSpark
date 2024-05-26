@@ -210,3 +210,7 @@ input {
 #resume-selection {
     margin: 0 20px; /* Adjust the value as needed */
 }
+
+.g-recaptcha {
+    margin-top: 10px;
+}

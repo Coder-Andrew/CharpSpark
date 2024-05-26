@@ -13,6 +13,20 @@ function initializePage() {
             header.addEventListener('click', sortByArrow, false);
         }
     });
+    const maximizeTableBtn = document.getElementById('maximize-table');
+    maximizeTableBtn.addEventListener('click', maximizeTable, false);
+    const closeMaximizedTableBtn = document.getElementById('close-maximized-modal');
+    closeMaximizedTableBtn.addEventListener('click', closeMaximizedTable, false);
+}
+
+function maximizeTable() {
+    document.getElementById('maximized-table').appendChild(table);
+    document.getElementById('maximized-modal').style.display = 'block';
+}
+
+function closeMaximizedTable() {
+    document.getElementById('maximized-modal').style.display = 'none';
+    document.getElementById('maximized-table').innerHTML = '';
 }
 
 function setApplyReminder(applicationTrackerId) {
