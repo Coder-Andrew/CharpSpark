@@ -90,8 +90,8 @@ function initializePage() {
     // Add event listener to dropdown
     skillsDropdown.addEventListener('click', (event) => {
         skillInput.value = "";    
-        skillsDropdown.classList.remove("show");
         addSkillToSkillList(event);
+        skillsDropdown.classList.remove("show");
     }, false);
 
     // get info boxes
