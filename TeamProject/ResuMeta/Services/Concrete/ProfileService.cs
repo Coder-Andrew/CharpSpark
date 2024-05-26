@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using ResuMeta.Models.DTO;
 using ResuMeta.ViewModels;
 using ResuMeta.Data;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ResuMeta.Services.Concrete
 {
@@ -148,7 +149,14 @@ namespace ResuMeta.Services.Concrete
 
             foreach (Profile profile in profiles)
             {
-                ProfileVM2 userProfile = _profileRepo.GetProfileById(profile.Id);
+                ProfileVM2 userProfile = _profileRepo.GetProfileById(profile.UserInfoId ?? 0);
+
+                if (userProfile.ResumeId == null || userProfile.Resume.IsNullOrEmpty())
+                {
+                    profile.ProfileScore = 1;
+                    _profileRepository.AddOrUpdate(profile);
+                    continue;
+                }
 
                 DateTime sinceLastUpVote = _voteRepository.GetAllUpVotesByResumeId(profile.ResumeId)
                     .OrderByDescending(uv => uv.Timestamp)
@@ -232,7 +240,7 @@ namespace ResuMeta.Services.Concrete
 
             foreach (Profile profile in profiles)
             {
-                profileViewModels.Add(_profileRepo.GetProfileById(profile.Id));
+                profileViewModels.Add(_profileRepo.GetProfileById(profile.UserInfoId ?? 0));
             }
 
 
