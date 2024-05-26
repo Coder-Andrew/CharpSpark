@@ -12,6 +12,13 @@ function initializePage() {
     const pageNumberInput = document.getElementById('pagination');
     const improveWithAiBtn = document.getElementById('improve-with-ai');
     const createCoverLetterAiBtn = document.getElementById('create-cover-letter-ai');
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
 
     window.addEventListener('beforeunload', () => {
         if (!isImprovingResume) {

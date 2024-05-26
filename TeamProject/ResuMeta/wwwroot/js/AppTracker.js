@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", initializePage, false);
 
+
 function initializePage() {
     refreshTable();
     const applicationForm = document.getElementById('application-form');
@@ -8,6 +9,13 @@ function initializePage() {
     sortButton.addEventListener('click', sortTable, false);
     const resetButton = document.getElementById('reset-filters');
     resetButton.addEventListener('click', refreshTable, false);
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
 }
 
 function setApplyReminder(applicationTrackerId) {
