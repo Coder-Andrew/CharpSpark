@@ -20,6 +20,29 @@
     <div class="content">
         <body class="flex-container">
             <div class="text-center">
+                
+
+
+
+
+@* <div id="career-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div id="modal-content">
+      <!-- Modal content goes here -->
+    </div>
+  </div>
+</div> *@
+
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modal-message"></p>
+        </div>
+    </div>
+
+
+
                 <div id="validation-area"></div>
                 <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success" style="display:none;">
                 </div>
@@ -44,6 +67,7 @@
                         
                         <div>
                             <button class="btn btn-primary" id="improve-with-ai">Improve With AI</button>
+                            <button class="btn btn-primary" id="generate-careers">Career Suggestions</button>
                             <button class="btn btn-primary" id="preview-resume">Preview Resume</button>
                             <button class="btn btn-primary" id="save-resume">Save Resume</button>
                             <button class="btn btn-primary" id="delete-resume">Delete Resume</button>

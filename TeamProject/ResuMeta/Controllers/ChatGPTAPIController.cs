@@ -110,9 +110,6 @@ namespace ResuMeta.Controllers
             }
         }
 
-
-
-
         // POST: api/cgpt/generatecareers/{id}
         [HttpPost("generatecareers/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]

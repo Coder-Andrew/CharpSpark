@@ -97,6 +97,8 @@ function initializePage() {
     themeSwitcher.addEventListener('click', SwitchTheme, false);
     const improveWithAiBtn = document.getElementById("improve-with-ai");
     improveWithAiBtn.addEventListener("click", redirectToAiPage);
+    const generateCareersBtn = document.getElementById("generate-careers");
+    generateCareersBtn.addEventListener("click", generateCareers);
     const previewBtn = document.getElementById('preview-resume');
     previewBtn.addEventListener('click', () => PreviewResume(), false);
     const closePreviewBtn = document.getElementById('close-preview');
@@ -289,4 +291,28 @@ function redirectToAiPage() {
     console.log("Redirecting to improve with ai page");
     // Redirect the user to improve with ai page
     window.location.href = aiPageUrl;
+}
+
+async function generateCareers() {
+    const id = document.getElementById("resume-id").value;
+    console.log("here is the id: " + id);
+    const response = await fetch(`/api/cgpt/generatecareers/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+    } else {
+        const data = await response.text();
+        console.log(data);
+        var careerModal = document.getElementById("modal-content");
+       careerModal.innerHTML = data;
+       var modalElement = document.getElementById('career-modal');
+       var modalInstance = new bootstrap.Modal(modalElement, {});
+       modalInstance.show();
+      //  $('#modal').modal('show'); // Using jQuery to show the modal
+    }
 }
