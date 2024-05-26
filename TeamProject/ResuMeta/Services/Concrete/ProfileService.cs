@@ -126,13 +126,11 @@ namespace ResuMeta.Services.Concrete
             return profileVMs;
         }
 
-
         public void UpdateTrendingProfiles()
         {
-            // ADD WEIGHTS FOR VIEWS 
             // Define weights
             const float w_upvotes = 1.0F;
-            const float w_downvotes = 2.0F;
+            const float w_downvotes = 5.0F;
             const float w_days_since_upvote = 0.1F;
             const float w_days_since_downvote = 0.1F;
             const float w_followers = 1.5F;
@@ -193,13 +191,14 @@ namespace ResuMeta.Services.Concrete
                 double recency_following = Math.Exp(-w_days_since_following * daysSinceLastFollowing);
 
                 // calculate net score
-                float net_score = w_upvotes * upvotes - w_downvotes * downvotes;
+                float net_score = (w_upvotes * upvotes) - (w_downvotes * downvotes);
 
                 // calculate ratios
                 double follower_following_ratio = following > 0 ? (double)followers / following : 0;
                 double upvote_downvote_ratio = downvotes > 0 ? (double)upvotes / downvotes : upvotes;
 
-                // calculate followers and following scores
+                // calculate followers, following, and views scores
+                double views_score = w_view_count * viewCount;
                 double followers_score = w_followers * followers * recency_follower;
                 double following_score = w_following * following * recency_following;
 
@@ -207,18 +206,18 @@ namespace ResuMeta.Services.Concrete
                 float resume_score = w_resume_sections * resumeSections;
 
                 // calculate final score
-                double final_score = (net_score * recency_upvote * recency_downvote) +
+                double final_score = net_score +
                                      followers_score +
                                      following_score +
                                      resume_score +
-                                     (follower_following_ratio * w_followers) +
-                                     (upvote_downvote_ratio * w_upvotes) +
+                                     views_score +
                                      base_score;
 
-                profile.ProfileScore = (int)final_score;
+                profile.ProfileScore = Math.Max(1,(int)final_score);
                 _profileRepository.AddOrUpdate(profile);
             }
         }
+
 
 
 

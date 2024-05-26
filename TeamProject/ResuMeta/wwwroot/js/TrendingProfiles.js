@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", initializePage);
 
 function initializePage() {
     updateTrending();
-    getTrendingProfiles();
+
+    setTimeout(() => { getTrendingProfiles() }, 2000);
 }
 
 async function updateTrending() {
@@ -12,7 +13,18 @@ async function updateTrending() {
     });
 }
 
+function hideLoadingCircle() {
+    const loading_circle = document.querySelector(".loading-circle");
+    loading_circle.classList.add("invisible");
+}
+
+function showLoadingCircle() {
+    const loading_circle = document.querySelector(".loading-circle");
+    loading_circle.classList.remove("invisible");
+}
+
 async function getTrendingProfiles() {
+    showLoadingCircle();
     const profileArea = document.getElementById("profile-area");
     profileArea.textContent = "";
 
@@ -28,6 +40,8 @@ async function getTrendingProfiles() {
         profileArea.textContent = "Error loading profiles";
         return;
     }
+
+    hideLoadingCircle();
 
     const profiles = await response.json();
 
@@ -53,7 +67,6 @@ function cloneNode(jsonProfile) {
     const profileName        =  firstElement.querySelector(".profile-name");
     const profileDescription =  firstElement.querySelector(".profile-description");
 
-
     profileLink.href               = `/Profile/UserProfile/${jsonProfile.profileId}`;
     profileId.value                 = jsonProfile.profileId;
     profileImage.src                = jsonProfile.profilePicturePath ? `data:image;base64,${jsonProfile.profilePicturePath}` : "/Images/profile.svg";
@@ -63,8 +76,6 @@ function cloneNode(jsonProfile) {
     profileDownvotes.textContent    = jsonProfile.downVoteCount;
     profileName.textContent         = `${jsonProfile.firstName} ${jsonProfile.lastName}`;
     profileDescription.textContent  = jsonProfile.description.length > 100 ? jsonProfile.description.substring(0, 100) + "..." : jsonProfile.description;
-
-
 
     return firstElement;
 }
