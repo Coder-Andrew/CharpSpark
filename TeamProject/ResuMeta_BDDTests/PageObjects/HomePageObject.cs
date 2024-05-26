@@ -23,6 +23,13 @@ namespace ResuMeta_BDDTests.PageObjects
         public IWebElement ChatSendButton => _webDriver.FindElement(By.Id("send"));
         public ReadOnlyCollection<IWebElement> ChatGPTResponses => _webDriver.FindElements(By.CssSelector(".rounded.p-2.text-white.bg-primary"));
         public IWebElement ProfileButton => _webDriver.FindElement(By.CssSelector("a[href=\"/Profile\"]"));
+        public IWebElement TrendingButton => _webDriver.FindElement(By.ClassName("fa-thumbs-up"));
+        public void ClickAcceptCookiesButton()
+        {
+            IWebElement cookiesBtn = _webDriver.FindElement(By.Id("consent-yes"));
+            cookiesBtn.Click();
+        }
+
 
         public IWebElement ShowHideChatButton()
         {

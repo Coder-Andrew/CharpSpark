@@ -16,6 +16,9 @@ public partial class UserVote
     public int? ResumeId { get; set; }
     public int? VoteId { get; set; }
 
+    [Required]
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime Timestamp { get; set; }
     [ForeignKey("UserInfoId")]
     [InverseProperty("UserVotes")]
     public virtual UserInfo? UserInfo { get; set; }
@@ -27,5 +30,4 @@ public partial class UserVote
     [ForeignKey("VoteId")]
     [InverseProperty("UserVotes")]
     public virtual Vote? Vote { get; set; }
-
 }

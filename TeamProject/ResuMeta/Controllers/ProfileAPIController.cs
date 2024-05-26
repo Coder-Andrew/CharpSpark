@@ -236,7 +236,7 @@ namespace ResuMeta.Controllers
             {
                 try
                 {
-                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     if (userId == null)
                     {
                         _logger.LogError("User not found");
@@ -330,5 +330,37 @@ namespace ResuMeta.Controllers
             }
         }
 
+
+        [AllowAnonymous]
+        [HttpPost("UpdateTrendingProfiles")]
+        public IActionResult UpdateTrendingProfiles()
+        {
+            try
+            {
+                _profileService.UpdateTrendingProfiles();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error updating trending profiles");
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetTrendingProfiles")]
+        public IActionResult GetTrendingProfiles()
+        {
+            try
+            {
+                var profiles = _profileService.GetTrendingProfiles();
+                return Ok(profiles);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error getting trending profiles");
+                return BadRequest();
+            }
+        }
     }
 }
