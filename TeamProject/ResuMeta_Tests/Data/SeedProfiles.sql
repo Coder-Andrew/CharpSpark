@@ -76,14 +76,14 @@ INSERT INTO [Vote] ([Id], [VoteValue]) VALUES
     (1, "UP"),
     (2, "DOWN");
 
-INSERT INTO [UserVote] ([Id], [UserInfoId], [ResumeId], [VoteId]) VALUES
-    (1, 2, 1, 1),
-    (2, 3, 1, 2);
+INSERT INTO [UserVote] ([Id], [UserInfoId], [ResumeId], [VoteId], [Timestamp]) VALUES
+    (1, 2, 1, 1, datetime('now')),
+    (2, 3, 1, 2, datetime('now'));
 
 INSERT INTO [ProfileViews] ([Id], [ProfileId], [ViewCount]) VALUES
     (1, 1, 20),
     (2, 2, 30);
 
-INSERT INTO [Follower] ([Id], [ProfileId], [FollowerId]) VALUES
-    (1, 1, 2),
-    (2, 2, 1);
+INSERT INTO [Follower] ([Id], [ProfileId], [FollowerId], [Timestamp]) VALUES
+    (1, 1, 2, datetime('now')),
+    (2, 2, 1, datetime('now'));
