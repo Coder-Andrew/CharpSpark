@@ -2,10 +2,18 @@ import { isPdfExtension } from "./ResumeIndex_Modules/utility-mod.js";
 
 document.addEventListener("DOMContentLoaded", initializePage);
 
+
 function initializePage() {
     console.log("Hello world!");
 
     document.getElementById('upload-btn').addEventListener('click', sendPdf);
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
 }
 
 function sendPdf() {
@@ -36,3 +44,5 @@ function sendPdf() {
 function redirectToDashboard() {
     window.location.href = "/Resume/YourDashboard";
 }
+
+
