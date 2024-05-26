@@ -92,20 +92,31 @@ button {
     display: none;
     position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
+    left: 3%;
+    top: 10%;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
 }
 
 .maximized-modal-content {
     position: relative;
     margin: auto;
-    padding: 0;
-    width: 90%;
+    padding: 15px;
+    width: 100%;
     max-width: 1200px;
+    max-height: 80vh;
+    background-color: #242525;
+    border:1px solid rgb(101, 104, 104);
+    transform: scale(1.1);
+    overflow: auto;
+}
+
+.maximized-modal tr:nth-child(odd) td {
+    background-color: #1a1b1b;
+}
+
+.maximized-modal tr:nth-child(even) {
+    background-color: #323333;
 }
 
 .close {
@@ -115,4 +126,18 @@ button {
     color: #000;
     font-size: 35px;
     font-weight: bold;
+}
+
+#maximize-table {
+    font-family: 'FontAwesome';
+    text-decoration: none !important;
+}
+
+#maximize-table:hover {
+    cursor: pointer;
+}
+
+#close-maximized-modal {
+    cursor: pointer;
+    color: #e9912c;
 }

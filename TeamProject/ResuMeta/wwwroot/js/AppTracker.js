@@ -20,13 +20,26 @@ function initializePage() {
 }
 
 function maximizeTable() {
-    document.getElementById('maximized-table').appendChild(table);
+    const table = document.getElementById('app-table');
+    if (!table) {
+        console.error('Table not found');
+        return;
+    }
+    const clonedTable = table.cloneNode(true);
+    document.getElementById('maximized-table').appendChild(clonedTable);
     document.getElementById('maximized-modal').style.display = 'block';
+
+    const maximizeTableHeader = clonedTable.querySelector('#maximize-table');
+    maximizeTableHeader.innerHTML = '';
 }
 
 function closeMaximizedTable() {
     document.getElementById('maximized-modal').style.display = 'none';
     document.getElementById('maximized-table').innerHTML = '';
+
+    const maximizeTableHeader = document.getElementById('app-table').querySelector('#maximize-table');
+    maximizeTableHeader.innerHTML = '&#xf0c9;';
+    maximizeTableHeader.onclick = maximizeTable;
 }
 
 function setApplyReminder(applicationTrackerId) {

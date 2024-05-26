@@ -110,10 +110,6 @@ function initializePage() {
     })
 }
 
-function validateRecaptcha() {
-    const recaptchaResponse = grecaptcha.getResponse();
-    return recaptchaResponse !== '';
-}
 
 function hideLoader() {
     document.getElementById('page-number').classList.remove("invisible");
@@ -196,10 +192,6 @@ function addPaginationLink(number, active = false) {
 
 
 async function searchJobListings() {
-    if (!validateRecaptcha()) {
-        alert('Please complete the reCAPTCHA.');
-        return;
-    }
     showLoader();
     //console.log("Searching job listings");
     const jobListingContainer = document.getElementById('job-container');

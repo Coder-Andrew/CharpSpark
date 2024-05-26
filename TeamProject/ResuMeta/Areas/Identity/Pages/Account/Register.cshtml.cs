@@ -161,15 +161,17 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             
             string recaptchaResponse = Request.Form["g-recaptcha-response"];
 
-            if (string.IsNullOrEmpty(recaptchaResponse) || !await ValidateRecaptcha(recaptchaResponse))
+            if (string.IsNullOrEmpty(recaptchaResponse))
             {
                 ModelState.AddModelError(string.Empty, "reCAPTCHA validation is required.");
+                GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"];
                 return Page();
             }
             
             if (!await ValidateRecaptcha(recaptchaResponse))
             {
                 ModelState.AddModelError(string.Empty, "Invalid reCAPTCHA.");
+                GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"];
                 return Page();
             }
 

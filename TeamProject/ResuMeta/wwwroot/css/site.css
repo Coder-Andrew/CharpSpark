@@ -530,7 +530,7 @@ font-size: 1.2em;
   margin-bottom: 0px !important;
 }
 
-.modal {
+#cookie-consent-modal {
   display: none;
   position: fixed;
   z-index: 2000;
@@ -544,7 +544,7 @@ font-size: 1.2em;
   text-align: center;
 }
 
-.modal-content {
+#cookie-consent-modal .modal-content {
   background-color: #242525;
   margin: 15% auto;
   padding: 30px;
@@ -552,15 +552,9 @@ font-size: 1.2em;
   width: 30%;
 }
 
-.modal-content h2 {
+#cookie-consent-modal .modal-content h2 {
   color: #e9782c;
   font-weight: bold;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
 }
 
 #consent-yes, #consent-no {

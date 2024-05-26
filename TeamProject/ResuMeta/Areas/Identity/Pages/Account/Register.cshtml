@@ -108,9 +108,13 @@
     <script src="https://www.google.com/recaptcha/api.js"></script>
     <script>
         window.onload = function() {
-            grecaptcha.render('recaptcha', {
-                'sitekey' : '@Model.GoogleReCaptchaSiteKey'
-            });
-        }
+            var recaptchaElement = document.getElementById('recaptcha');
+            if (!recaptchaElement.classList.contains('g-recaptcha-rendered')) {
+                grecaptcha.render('recaptcha', {
+                    'sitekey' : '@Model.GoogleReCaptchaSiteKey'
+                });
+                recaptchaElement.classList.add('g-recaptcha-rendered');
+            }
+        };
     </script>
 }

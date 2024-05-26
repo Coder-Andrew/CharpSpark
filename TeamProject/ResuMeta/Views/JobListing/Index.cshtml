@@ -34,10 +34,6 @@
                 style="width: 300px;" />
             <button class="" id="search-cached-job-listings">Search Remote</button>
         </div>
-        
-        <div class="form-floating mb-3" style="display: flex; justify-content: center;">
-            <div class="g-recaptcha" data-sitekey="@Model.GoogleReCaptchaSiteKey"></div>
-        </div>
 
         <div class="d-flex justify-content-center">
             <div class="loader my-2" id="loader"></div>
@@ -185,5 +181,4 @@
 
 @section Scripts {
     <script src="~/js/JobListing.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 }
