@@ -12,10 +12,17 @@ function initializePage() {
     const pageNumberInput = document.getElementById('pagination');
     const improveWithAiBtn = document.getElementById('improve-with-ai');
     const createCoverLetterAiBtn = document.getElementById('create-cover-letter-ai');
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
 
     window.addEventListener('beforeunload', () => {
         if (!isImprovingResume) {
-            sessionStorage.clear();
+            sessionStorage.removeItem("jobLink");
         }
     })
 
@@ -109,6 +116,8 @@ function initializePage() {
         }
     })
 }
+
+
 function hideLoader() {
     document.getElementById('page-number').classList.remove("invisible");
     document.getElementById("loader").classList.add("invisible");

@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using ResuMeta.Models;
 using ResuMeta.Data;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace ResuMeta.Areas.Identity.Pages.Account
 {
@@ -34,6 +36,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ResuMetaDbContext _ResuMetaDbContext;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+        private readonly IConfiguration _configuration;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -42,7 +45,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ResuMetaDbContext context,
-            IPasswordHasher<ApplicationUser> passwordHasher)
+            IPasswordHasher<ApplicationUser> passwordHasher,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -52,6 +56,7 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _ResuMetaDbContext = context;
             _passwordHasher = passwordHasher;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -72,6 +77,8 @@ namespace ResuMeta.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        public string GoogleReCaptchaSiteKey { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -140,17 +147,34 @@ namespace ResuMeta.Areas.Identity.Pages.Account
             public string SecurityAnswer3 { get; set; }
         }
 
-
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"];
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
+            string recaptchaResponse = Request.Form["g-recaptcha-response"];
+
+            if (string.IsNullOrEmpty(recaptchaResponse))
+            {
+                ModelState.AddModelError(string.Empty, "reCAPTCHA validation is required.");
+                GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"];
+                return Page();
+            }
+            
+            if (!await ValidateRecaptcha(recaptchaResponse))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid reCAPTCHA.");
+                GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"];
+                return Page();
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -213,6 +237,24 @@ namespace ResuMeta.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task<bool> ValidateRecaptcha(string recaptchaResponse)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("secret", _configuration["GoogleReCaptchaSecretKey"]),
+                    new KeyValuePair<string, string>("response", recaptchaResponse)
+                });
+
+                var response = await httpClient.PostAsync("https://www.google.com/recaptcha/api/siteverify", content);
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                dynamic responseObject = JsonConvert.DeserializeObject(responseString);
+                return responseObject.success;
+            }
         }
 
         private ApplicationUser CreateUser()

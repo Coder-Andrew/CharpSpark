@@ -99,8 +99,11 @@
                 <hr />
                 <label for="sort-option">Sort by:</label>
                 <select id="sort-option">
-                    <option value="applied-date">Date Created</option>
+                    <option value="applied-date">Applied Date</option>
+                    <option value="job-title">Job Title</option>
+                    <option value="company-name">Company Name</option>
                     <option value="application-deadline">Application Deadline</option>
+                    <option value="status">Status</option>
                 </select>
 
                 <label for="sort-order">Order:</label>
@@ -118,13 +121,14 @@
             <table id="app-table" class="table text-center ">
             <thead>
                 <tr>
-                    <th class="wrap-text" id="Job-Title">Job Title</th>
-                    <th class="wrap-text" id="Company-Name">Company Name</th>
+                    <th class="wrap-text" id="Job-Title">Job Title<span class="sort-arrow">&#9662;</span></th>
+                    <th class="wrap-text" id="Company-Name">Company Name<span class="sort-arrow">&#9662;</span></th>
                     <th class="wrap-text" id="Job-Listing">Job Listing URL</th>
-                    <th class="wrap-text" id="Applied-Date">Applied Date</th>
-                    <th class="wrap-text" id="Application-Deadline">Application Deadline</th>
-                    <th class="wrap-text" id="Job-Status">Status</th>
+                    <th class="wrap-text" id="Applied-Date">Applied Date<span class="sort-arrow">&#9662;</span></th>
+                    <th class="wrap-text" id="Application-Deadline">Application Deadline<span class="sort-arrow">&#9662;</span></th>
+                    <th class="wrap-text" id="Job-Status">Status<span class="sort-arrow">&#9662;</span></th>
                     <th class="wrap-text" id="Job-Notes">Notes</th>
+                    <th class="wrap-text" id="maximize-table">&#xf0c9;</th>
                     @* <th class="wrap-text"> </th> *@
                 </tr>
             </thead>
@@ -137,7 +141,33 @@
 
     <hr />
 }
+    <button id="help-btn" class="btn btn-info">?</button>
 
+<div id="maximized-modal" class="maximized-modal">
+    <div class="maximized-modal-content">
+        <span id="close-maximized-modal" class="close">&times;</span>
+        <div id="maximized-table"></div>
+    </div>
+</div>
+
+    <div class="modal " id="help-modal" tabindex="-1" aria-labelledby="helloModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helloModalLabel">Help</h5>
+                </div>
+                <div class="modal-body">
+                    <p>1. Enter in the relevant details for the job applications you would like to keep track of (job title, url, company name, deadline, date you applied, notes, and status). </p>
+                    <p>2. Upon clicking the submit button, you will see your application details show up in the table below. You can now sort your applications by the date they were created or by the date you applied. </p>
+                    <p>3. You also have the option to set a reminder for each application. The “Followup Reminder” will send you an email 7 days after the date you applied to remind you to follow up with the recruiter. The “Apply Reminder” will send you an email 2 days before the job application is due to remind you to apply. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-btn" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 @section Scripts {

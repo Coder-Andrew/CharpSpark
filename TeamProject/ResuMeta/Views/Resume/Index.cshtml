@@ -6,27 +6,57 @@
 }
 
 <section>
-<div class="text-center">
-    <h1 class="display-4 title">Resume Center</h1>
-    <hr />
-    <div class="container">
-        <div class="row">
-            <h1 class="rounded-pill bg-success invisible" id="success-msg">PDF Import Successful Redirecting...</h1>
-            <div class="col-md-6">
-                <h4>Create Resume from Scratch</h4>
-                <a asp-controller="Resume" asp-action="CreateResume" class="btn btn-primary">Create Resume</a>      
-            </div>
-            <div class="col-md-6">
-                <h4>Upload a Resume</h4>
-                @* <form enctype="multipart/form-data"> *@
-                    <input class="input-group" type="file" name="pdfFile" accept=".pdf" id="pdf-upload"/>
+    <div class="text-center">
+        <h1 class="display-4 title">Resume Center</h1>
+        <hr />
+        <div class="container">
+            <div class="row">
+
+
+                <button id="help-btn" class="btn btn-info">?</button>
+
+                <div class="modal " id="help-modal" tabindex="-1" aria-labelledby="helloModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="helloModalLabel">Help</h5>
+                                \
+                            </div>
+                            <div class="modal-body">
+                                <p> 1. Click create a resume from scratch or upload an existing resume.</p>
+                                <p> 2. To create a resume from scratch, fill out the education, employment, skills &
+                                    achievements, projects, and personal summary sections. (Note: you do not need to
+                                    complete each section to build a resume)</p>
+                                <p> 3. Upon submission, you will be taken to a preview screen and be given the option to
+                                    save the resume. Once you have saved your resume, you have the option to improve it
+                                    with AI, apply a template, or export it. </p>
+                                <p> 4. Once you have created and saved a resume, it will appear on the Dashboard page.
+                                    From there, you can select a resume and edit it further. </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="close-btn" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="rounded-pill bg-success invisible" id="success-msg">PDF Import Successful Redirecting...</h1>
+                <div class="col-md-6">
+                    <h4>Create Resume from Scratch</h4>
+                    <a asp-controller="Resume" asp-action="CreateResume" class="btn btn-primary">Create Resume</a>
+                </div>
+                <div class="col-md-6">
+                    <h4>Upload a Resume</h4>
+                    @* <form enctype="multipart/form-data"> *@
+                    <input class="input-group" type="file" name="pdfFile" accept=".pdf" id="pdf-upload" />
                     <button class="btn btn-primary" id="upload-btn">Upload Resume</button>
-                @* </form> *@
+                    @* </form> *@
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    <script type="module" src="~/js/ResumeIndex.js"></script>
-}
+    @section Scripts {
+        <script type="module" src="~/js/ResumeIndex.js"></script>
+    }

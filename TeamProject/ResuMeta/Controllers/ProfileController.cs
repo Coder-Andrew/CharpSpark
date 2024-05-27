@@ -98,7 +98,7 @@ public class ProfileController : Controller
                 UserInfoId = currUser.Id,
                 ResumeHtml = profile.Resume,
                 ResumeId = profile.ResumeId,
-                Description = profile.Description
+                Description = profile.Description,
             };
             Profile addedProfile = _profileRepository.AddOrUpdate(newProfile);
             addedProfile.ProfileViews.ViewCount = 0;
@@ -198,10 +198,19 @@ public class ProfileController : Controller
         }
     }
     
+    [AllowAnonymous]
+    public IActionResult TrendingProfiles()
+    {
+        return View();
+    }
+    
+    
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+
 }

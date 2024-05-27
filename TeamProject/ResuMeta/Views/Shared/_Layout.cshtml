@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ResuMeta.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<input type="hidden" id="is-authenticated" value="@(Context.User.Identity.IsAuthenticated.ToString().ToLower())" />
+<input type="hidden" id="is-authenticated" value="@(Context.User.Identity?.IsAuthenticated.ToString().ToLower())" />
 <div id="cookie-consent-modal" class="modal">
     <div class="modal-content">
         <h2><i class="fa-solid fa-cookie-bite"></i> This site uses cookies</h2>
@@ -51,6 +51,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link nav-reactive" asp-area="" asp-controller="Profile" asp-action="Index"><span><i class='fa fa-globe'></i> Profile</span></a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link nav-reactive" asp-area="" asp-controller="Profile" asp-action="TrendingProfiles"><span><i class='fa fa-thumbs-up'></i> Trending</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link nav-reactive" asp-area="" asp-controller="Resume" asp-action="Index"><span><i class="fa fa-pencil"></i> Resumes</span></a>

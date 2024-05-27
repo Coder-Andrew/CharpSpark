@@ -7,5 +7,6 @@ namespace ResuMeta.ViewModels
         public string? Location { get; set; }
         public string? JobTitle { get; set; }
         public DateOnly? DateApplied { get; set; }
+        public string? GoogleReCaptchaSiteKey { get; set; }
     }
 }

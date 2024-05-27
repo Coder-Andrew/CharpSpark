@@ -93,6 +93,10 @@
                 <span asp-validation-for="Input.SecurityAnswer3" class="text-danger"></span>
             </div>
 
+            <div class="form-floating mb-3" style="display: flex; justify-content: center;">
+                <div id="recaptcha" class="g-recaptcha" data-sitekey="@Model.GoogleReCaptchaSiteKey"></div>
+            </div>
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
@@ -100,4 +104,17 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        window.onload = function() {
+            var recaptchaElement = document.getElementById('recaptcha');
+            if (!recaptchaElement.classList.contains('g-recaptcha-rendered')) {
+                grecaptcha.render('recaptcha', {
+                    'sitekey' : '@Model.GoogleReCaptchaSiteKey'
+                });
+                recaptchaElement.classList.add('g-recaptcha-rendered');
+            }
+        };
+    </script>
 }
