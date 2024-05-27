@@ -97,12 +97,11 @@ function initializePage() {
     themeSwitcher.addEventListener('click', SwitchTheme, false);
     const improveWithAiBtn = document.getElementById("improve-with-ai");
     improveWithAiBtn.addEventListener("click", redirectToAiPage);
-    const generateCareersBtn = document.getElementById("generate-careers");
-    generateCareersBtn.addEventListener("click", generateCareers);
     const previewBtn = document.getElementById('preview-resume');
     previewBtn.addEventListener('click', () => PreviewResume(), false);
     const closePreviewBtn = document.getElementById('close-preview');
     closePreviewBtn.addEventListener('click', () => closePreview(), false);
+    document.getElementById('generate-careers').addEventListener('click', generateCareers);
 }
 
 async function PreviewResume() {
@@ -295,7 +294,12 @@ function redirectToAiPage() {
 
 async function generateCareers() {
     const id = document.getElementById("resume-id").value;
-    console.log("here is the id: " + id);
+    const modalBody = document.querySelector('#help-modal .modal-body');
+    // Show loading spinner
+    modalBody.innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+    const helpModal = new bootstrap.Modal(document.getElementById('help-modal'));
+    helpModal.show();
+
     const response = await fetch(`/api/cgpt/generatecareers/${id}`, {
         method: 'POST',
         headers: {
@@ -305,14 +309,11 @@ async function generateCareers() {
 
     if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
+        modalBody.innerText = "Error fetching career suggestions. Please try again later.";
     } else {
         const data = await response.text();
         console.log(data);
-        var careerModal = document.getElementById("modal-content");
-       careerModal.innerHTML = data;
-       var modalElement = document.getElementById('career-modal');
-       var modalInstance = new bootstrap.Modal(modalElement, {});
-       modalInstance.show();
-      //  $('#modal').modal('show'); // Using jQuery to show the modal
+        const formattedData = data.split('\n').join('<br>');
+        modalBody.innerHTML = formattedData;
     }
 }

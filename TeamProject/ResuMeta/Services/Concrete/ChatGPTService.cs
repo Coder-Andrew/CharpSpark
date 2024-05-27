@@ -311,7 +311,8 @@ namespace ResuMeta.Services.Concrete
                         content = 
                         "You are here to suggest 5 possible career paths for me based on my resume/experience." +
                         "Please return 5 career path suggestions and a short description for each." +
-                        "Do not add any markdown syntax (no ### for titles, ** for bold, etc)." + 
+                        "Do not add any markdown syntax (no ### for titles, ** for bold, etc)." +
+                        "Please leave one empty line between each career path suggestion and description. " +
                         "Do not include any additional conversation in your response (i.e don't say certainly, here you go, etc)."
                     },
                     new Message

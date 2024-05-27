@@ -5,117 +5,120 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link id="theme-stylesheet" rel="stylesheet" href="~/css/ViewResumeDark.css" asp-append-version="true" />
-        <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    </head>
 
-    <div class="content">
-        <body class="flex-container">
-            <div class="text-center">
-                
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link id="theme-stylesheet" rel="stylesheet" href="~/css/ViewResumeDark.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.0.0/quill.snow.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
 
+<div class="content">
 
+    <body class="flex-container">
+        <div class="text-center">
 
-
-@* <div id="career-modal" class="modal fade">
-  <div class="modal-dialog">
-    <div id="modal-content">
-      <!-- Modal content goes here -->
-    </div>
-  </div>
-</div> *@
-
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p id="modal-message"></p>
-        </div>
-    </div>
-
-
-
-                <div id="validation-area"></div>
-                <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success" style="display:none;">
-                </div>
-                <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error" style="display:none;">
-                </div>
-                @if (Model.Resume != null)
-                {
-                    <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
-                    <input type="hidden" id="resume-content" value="@Model.Resume.HtmlContent" />
-                    <div class="container" id="resume-area" style="display: none;">
-                        
-                    </div>
-                    <div class="editor-header">
-                        <div class="left-section">
-                            <button id="back-button" onclick="location.href='@Url.Action("YourDashboard", "Resume")'">
-                                <i class="fa fa-arrow-circle-left"></i>
-                            </button>
-                            <div class="mt-3 mx-2" style="float: left;">
-                                <h6><strong>Title:</strong> <input type="text" id="resume-title"  value="@Model.Resume.Title" /></h6>
-                            </div>
+            <div class="modal " id="help-modal" tabindex="-1" aria-labelledby="helloModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-center" id="helloModalLabel">Career Suggestions</h5>
                         </div>
-                        
-                        <div>
-                            <button class="btn btn-primary" id="improve-with-ai">Improve With AI</button>
-                            <button class="btn btn-primary" id="generate-careers">Career Suggestions</button>
-                            <button class="btn btn-primary" id="preview-resume">Preview Resume</button>
-                            <button class="btn btn-primary" id="save-resume">Save Resume</button>
-                            <button class="btn btn-primary" id="delete-resume">Delete Resume</button>
-                            <button class="btn btn-primary" id="export-pdf">Export PDF</button>
-                            <label for="theme-switcher" id="theme-label">Switch Theme</label>
-                            <label class="switch">
-                                <input type="checkbox" id="theme-switcher" onchange="SwitchTheme()">
-                                <span class="slider round"></span>
-                            </label>
+                        <div class="modal-body">
+                            @* modal content goes here *@
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="close-btn" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
-                    <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
-
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-danger" role="alert">
-                        <strong>Oops!</strong> No resume found.
-                    </div>
-                }
+                </div>
             </div>
 
-            @for (int i = 0; i < Model.TemplatesList!.Count; i++)
+            <div id="validation-area"></div>
+            <div class="alert alert-success alert-dismissable fade show" role="alert" id="validation-success"
+                style="display:none;">
+            </div>
+            <div class="alert alert-danger alert-dismissable fade show" role="alert" id="validation-error"
+                style="display:none;">
+            </div>
+            @if (Model.Resume != null)
             {
-                <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
-                <div class="container" id="template@(i+1)-area" style="display: none;"></div>
-            }
+                <input type="hidden" id="resume-id" value="@Model.Resume.ResumeId" />
+                <input type="hidden" id="resume-content" value="@Model.Resume.HtmlContent" />
+                <div class="container" id="resume-area" style="display: none;">
 
-            <div class="templates-title" id="templates-title">
-                <h1 class="display-4 title">Templates</h1>
-                <p>Choose a template to preview your resume</p>
-                <hr />
-                <button class="btn btn-primary" id="close-preview">Close Preview</button>
-            </div>
-            <div class="templates" id="templates">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    <div class="template-editor" id="template@(i)-editor"
-                    onclick="location.href='@Url.Action("PreviewResume", "Resume", new { currentResumeId = Model.Resume!.ResumeId, templateId = Model.TemplatesList[i - 1].ResumeId })'">
+                </div>
+                <div class="editor-header">
+                    <div class="left-section">
+                        <button id="back-button" onclick="location.href='@Url.Action("YourDashboard", "Resume")'">
+                            <i class="fa fa-arrow-circle-left"></i>
+                        </button>
+                        <div class="mt-3 mx-2" style="float: left;">
+                            <h6><strong>Title:</strong> <input type="text" id="resume-title" value="@Model.Resume.Title" />
+                            </h6>
+                        </div>
                     </div>
-                }
-            </div>
 
-            <script src="~/lib/jquery/dist/jquery.min.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-            <script type="text/javascript" src="~/js/YourResume.js"></script>
-        </body>
-    </div>
+                    <div>
+                        <button class="btn btn-primary" id="improve-with-ai">Improve With AI</button>
+                        <button class="btn btn-primary" id="generate-careers">Career Suggestions</button>
+                        <button class="btn btn-primary" id="preview-resume">Preview Resume</button>
+                        <button class="btn btn-primary" id="save-resume">Save Resume</button>
+                        <button class="btn btn-primary" id="delete-resume">Delete Resume</button>
+                        <button class="btn btn-primary" id="export-pdf">Export PDF</button>
+                        <label for="theme-switcher" id="theme-label">Switch Theme</label>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-switcher" onchange="SwitchTheme()">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div id="editor" style="height: 100vh; width: 816; margin: 0 auto;">
+
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    <strong>Oops!</strong> No resume found.
+                </div>
+            }
+        </div>
+
+        @for (int i = 0; i < Model.TemplatesList!.Count; i++)
+        {
+            <input type="hidden" id="template@(i+1)-content" value="@Model.TemplatesList[i].HtmlContent" />
+            <div class="container" id="template@(i+1)-area" style="display: none;"></div>
+        }
+
+        <div class="templates-title" id="templates-title">
+            <h1 class="display-4 title">Templates</h1>
+            <p>Choose a template to preview your resume</p>
+            <hr />
+            <button class="btn btn-primary" id="close-preview">Close Preview</button>
+        </div>
+        <div class="templates" id="templates">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <div class="template-editor" id="template@(i)-editor"
+                    onclick="location.href='@Url.Action("PreviewResume", "Resume", new { currentResumeId = Model.Resume!.ResumeId, templateId = Model.TemplatesList[i - 1].ResumeId })'">
+                </div>
+            }
+        </div>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/YourResume.js"></script>
+    </body>
+</div>
+
 </html>
