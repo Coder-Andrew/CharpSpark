@@ -101,6 +101,7 @@ function initializePage() {
     previewBtn.addEventListener('click', () => PreviewResume(), false);
     const closePreviewBtn = document.getElementById('close-preview');
     closePreviewBtn.addEventListener('click', () => closePreview(), false);
+    document.getElementById('generate-careers').addEventListener('click', generateCareers);
 }
 
 async function PreviewResume() {
@@ -289,4 +290,30 @@ function redirectToAiPage() {
     console.log("Redirecting to improve with ai page");
     // Redirect the user to improve with ai page
     window.location.href = aiPageUrl;
+}
+
+async function generateCareers() {
+    const id = document.getElementById("resume-id").value;
+    const modalBody = document.querySelector('#help-modal .modal-body');
+    // Show loading spinner
+    modalBody.innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+    const helpModal = new bootstrap.Modal(document.getElementById('help-modal'));
+    helpModal.show();
+
+    const response = await fetch(`/api/cgpt/generatecareers/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        modalBody.innerText = "Error fetching career suggestions. Please try again later.";
+    } else {
+        const data = await response.text();
+        console.log(data);
+        const formattedData = data.split('\n').join('<br>');
+        modalBody.innerHTML = formattedData;
+    }
 }

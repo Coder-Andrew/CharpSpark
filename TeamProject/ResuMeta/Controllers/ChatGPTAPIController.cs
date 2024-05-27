@@ -110,5 +110,29 @@ namespace ResuMeta.Controllers
             }
         }
 
+        // POST: api/cgpt/generatecareers/{id}
+        [HttpPost("generatecareers/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK), ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GenerateCareerSuggestions(int id)
+        {
+            try
+            {   
+                var response = await _chatGPTService.GenerateCareerSuggestions(id);
+
+                if (response == null || response.Response == null)
+                {
+                    return BadRequest();
+                }
+                
+                string responseData = response.Response.Trim('"');
+
+                return Content(responseData, "text/html");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }
