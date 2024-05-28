@@ -60,4 +60,7 @@ public partial class UserInfo
 
     [InverseProperty("UserInfo")]
     public virtual Profile? Profile {get; set;}
+
+    [InverseProperty("UserInfo")]
+    public virtual ICollection<UserVote>? UserVotes { get; set; } = new List<UserVote>();
 }

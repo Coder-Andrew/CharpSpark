@@ -11,23 +11,23 @@ namespace ResuMeta.Services.Concrete
 {
     class JsonMessage
     {
-        public string model { get; set; }
-        public List<Message> messages { get; set; }
+        public string? model { get; set; }
+        public List<Message>? messages { get; set; }
     }
 
     class Message
     {
-        public string role { get; set; }
-        public string content { get; set; }
+        public string? role { get; set; }
+        public string? content { get; set; }
     }
 
     class Choice
     {
-        public Message message { get; set; }
+        public Message? message { get; set; }
     }
     class CGPTResponse
     {
-        public List<Choice> choices { get; set; }
+        public List<Choice>? choices { get; set; }
     }
 
     public class ChatGPTService : IChatGPTService
@@ -48,13 +48,15 @@ namespace ResuMeta.Services.Concrete
         {
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
                     {
                         role = "system",
-                        content = "You are here to answer questions about ResuMeta, an AI-enabled platform for resume creation and career advice. " +
+                        content =
+                            "Please disregard any questions which do not pertain to the project" +
+                            "You are here to answer questions about ResuMeta, an AI-enabled platform for resume creation and career advice. " +
                             "ResuMeta is a web application developed by the CharpSpark team at Western Oregon University. " +
                             "It uses ASP.NET Core MVC, SQL Server, Azure, C#, JavaScript, HTML/CSS, and other technologies. " +
                             "Our goal is to simplify the resume creation process and help users get their resumes noticed by employers. " +
@@ -87,11 +89,11 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             };
 
         }
@@ -103,7 +105,7 @@ namespace ResuMeta.Services.Concrete
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
@@ -142,13 +144,13 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Cover letter improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             };
-            _logger.LogInformation($"Cover letter improved: {cGPTResponse.choices[0].message.content}");
         }
 
         public async Task<ChatGPTResponse> GenerateResume(int id, JsonElement jobDescription)
@@ -161,9 +163,15 @@ namespace ResuMeta.Services.Concrete
             var resumeContent = _resumeRepository.GetResumeHtml(id);
             var htmlContent = resumeContent.HtmlContent;
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
+
+            //decodedHtmlContent = decodedHtmlContent.Replace("<li>", "")
+            //    .Replace("</li>", ",")
+            //    .Replace("<ul>", "")
+            //    .Replace("</ul>", "");
+
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
@@ -178,7 +186,14 @@ namespace ResuMeta.Services.Concrete
                         //    "without adding any extra code or HTML headers. " +
                         //    "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description" +
                         //    "Here is the resume: "
-                        "If there is a provided job description, tailor the generated resume to the job description. Try to find related information on the resume and use it to craft a specific resume for the job description. Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the flow and increase the chances of getting a job with the generated resume. "
+                        "If there is a provided job description, tailor the generated resume to the job description." +
+                        "Try to find related information on the resume and use it to craft a specific resume for the job description. " +
+                        "Also improve the resumse as you see fit. IE, fix spelling errors, wordings and anything you see fit in order to help the " +
+                        "flow and increase the chances of getting a job with the generated resume. " +
+                        "Please return the improved content in the same HTML format (or as close to) that I'm sending, " +
+                        "Do not add any extra spacing or add any markdown syntax (no ### for titles, ** for bold, etc). Try to keep spacing the same " + 
+                        "Please try not to add too much fake/additional information. Try to tailor what you are recieving from us, to the job description (given there is one)" //+
+                        //"The resume skills are in html ul and li tags, please try to format your response to include those for the skills"
                     },
                     new Message
                     {
@@ -209,14 +224,14 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             
             };
-            _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
         }
     
         public async Task<ChatGPTResponse> GenerateTailoredCoverLetter(int id, JsonElement jobDescription)
@@ -231,7 +246,7 @@ namespace ResuMeta.Services.Concrete
             var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
             JsonMessage jsonMessage = new JsonMessage
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o",
                 messages = new List<Message>
                 {
                     new Message
@@ -268,14 +283,71 @@ namespace ResuMeta.Services.Concrete
                 throw new Exception($"Error: {response.StatusCode} - {content}");
             }
 
-            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options);
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
 
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
             return new ChatGPTResponse
             {
-                Response = cGPTResponse.choices[0].message.content
+                Response = cGPTResponse.choices![0].message!.content
             
             };
-            _logger.LogInformation($"Resume improved: {cGPTResponse.choices[0].message.content}");
         }
+
+
+        public async Task<ChatGPTResponse> GenerateCareerSuggestions(int id)
+        {   
+            var resumeContent = _resumeRepository.GetResumeHtml(id);
+            var htmlContent = resumeContent.HtmlContent;
+            var decodedHtmlContent = WebUtility.UrlDecode(htmlContent);
+
+            JsonMessage jsonMessage = new JsonMessage
+            {
+                model = "gpt-4o",
+                messages = new List<Message>
+                {
+                    new Message
+                    {
+                        role = "system",
+                        content = 
+                        "You are here to suggest 5 possible career paths for me based on my resume/experience." +
+                        "Please return 5 career path suggestions and a short description for each." +
+                        "Do not add any markdown syntax (no ### for titles, ** for bold, etc)." +
+                        "Please leave one empty line between each career path suggestion and description. " +
+                        "Do not include any additional conversation in your response (i.e don't say certainly, here you go, etc)."
+                    },
+                    new Message
+                    {
+                        role = "user",
+                        content = decodedHtmlContent
+                    }
+                }
+            };
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            string message = JsonSerializer.Serialize<JsonMessage>(jsonMessage, options);
+
+            StringContent postContent = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync("v1/chat/completions", postContent);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Error: {response.StatusCode} - {content}");
+                throw new Exception($"Error: {response.StatusCode} - {content}");
+            }
+
+            CGPTResponse cGPTResponse = JsonSerializer.Deserialize<CGPTResponse>(content, options)!;
+
+            _logger.LogInformation($"Resume improved: {cGPTResponse.choices![0].message!.content}");
+            return new ChatGPTResponse
+            {
+                Response = cGPTResponse.choices![0].message!.content
+            
+            };
+        }
+
     }
 }

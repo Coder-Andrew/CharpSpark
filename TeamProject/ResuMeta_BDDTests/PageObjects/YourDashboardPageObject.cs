@@ -23,8 +23,8 @@ namespace ResuMeta_BDDTests.PageObjects
         
         public class ResumeVM
         {
-            public string? Title { get; set; }
-            public string? Url { get; set; }
+            public string Title { get; set; }
+            public string Url { get; set; }
         }
 
         public List<ResumeVM> SavedResumes
@@ -36,7 +36,7 @@ namespace ResuMeta_BDDTests.PageObjects
                 var resumes = resumeDivs.Select(div =>
                 {
                     var title = div.FindElement(By.CssSelector(".thumbnail-title")).Text;
-                    var url = div.GetAttribute("onclick").Split('\'')[1];
+                    var url = div.GetAttribute("data-url");
                     return new ResumeVM { Title = title, Url = url };
                 }).ToList();
 
@@ -46,8 +46,8 @@ namespace ResuMeta_BDDTests.PageObjects
 
         public class CoverLetterVM
         {
-            public string? Title { get; set; }
-            public string? Url { get; set; }
+            public string Title { get; set; }
+            public string Url { get; set; }
         }
 
         public List<CoverLetterVM> SavedCoverLetters

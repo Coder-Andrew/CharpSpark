@@ -19,12 +19,14 @@ public class JobListingController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IResumeRepository _resumeRepository;
     private readonly IResumeService _resumeService;
-    public JobListingController(IRepository<UserInfo> userInfo, UserManager<ApplicationUser> userManager, IResumeRepository resumeRepository, IResumeService resumeService)
+    private readonly IConfiguration _configuration;
+    public JobListingController(IRepository<UserInfo> userInfo, UserManager<ApplicationUser> userManager, IResumeRepository resumeRepository, IResumeService resumeService, IConfiguration configuration)
     {
         _userInfo = userInfo;
         _userManager = userManager;
         _resumeRepository = resumeRepository;
         _resumeService = resumeService;
+        _configuration = configuration;
     }
 
         [AllowAnonymous]
@@ -41,11 +43,15 @@ public class JobListingController : Controller
             }
             ViewBag.Resumes = resumes.Select(r => new SelectListItem { Value = r.ResumeId.ToString(), Text = r.Title }).ToList();
 
-            JobListingVM jobListing = new JobListingVM();
+            JobListingVM jobListing = new JobListingVM
+            {
+                GoogleReCaptchaSiteKey = _configuration["GoogleReCaptchaSiteKey"]
+            };
             return View("Index", jobListing);
         }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Index(JobListingVM jobListing)
     {
         return RedirectToAction("Index", "ApplicationTracker", jobListing);

@@ -14,25 +14,25 @@ namespace ResuMeta.Services.Concrete
  
     class JsonListing
     {
-        public string listing_company { get; set; }
-        public string listing_link { get; set; }
-        public string listing_location { get; set; }
-        public string listing_title { get; set; }
+        public string? listing_company { get; set; }
+        public string? listing_link { get; set; }
+        public string? listing_location { get; set; }
+        public string? listing_title { get; set; }
     }
     class JsonListings
     {
-        public List<JsonListing> listings { get; set; }
+        public List<JsonListing>? listings { get; set; }
         public int number_of_pages { get; set; }
     }
 
     class JsonJobs
     {
-        public List<JsonListing> jobs { get; set; }
+        public List<JsonListing>? jobs { get; set; }
     }
 
     class JsonJobDescription
     {
-        public string job_description { get; set; }
+        public string? job_description { get; set; }
     }
     public class WebScraperService : IWebScraperService
     {
@@ -41,7 +41,7 @@ namespace ResuMeta.Services.Concrete
         public WebScraperService(HttpClient httpClient, IOptions<WebScraperServiceOptions> options)
         {
             _httpClient = httpClient;
-            _scraperUrl = options.Value.ScraperUrl;
+            _scraperUrl = options.Value.ScraperUrl!;
 
         }
 
@@ -58,7 +58,7 @@ namespace ResuMeta.Services.Concrete
                 {
                     var jobListings = JsonSerializer.Deserialize<JsonListings>(responseString);
                     JobListingContainerVM listingsContainer = new JobListingContainerVM();
-                    listingsContainer.JobListings = jobListings.listings.Select(l => new JobListingVM
+                    listingsContainer.JobListings = jobListings!.listings!.Select(l => new JobListingVM
                     {
                         Company = l.listing_company,
                         Link = l.listing_link,
@@ -70,7 +70,7 @@ namespace ResuMeta.Services.Concrete
 
                     return listingsContainer;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new Exception("Error getting cached listings");
                 }
@@ -93,7 +93,7 @@ namespace ResuMeta.Services.Concrete
                 try
                 {
                     var jobListings = JsonSerializer.Deserialize<JsonJobs>(responseString);
-                    return jobListings.jobs.Select(l => new JobListingVM
+                    return jobListings!.jobs!.Select(l => new JobListingVM
                     {
                         Company = l.listing_company,
                         Link = l.listing_link,
@@ -101,7 +101,7 @@ namespace ResuMeta.Services.Concrete
                         JobTitle = l.listing_title
                     }).ToList();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new Exception("Error searching jobs");
                 }
@@ -127,11 +127,11 @@ namespace ResuMeta.Services.Concrete
                     var jobDescription = JsonSerializer.Deserialize<JsonJobDescription>(responseString);
                     JobDescriptionVM description = new JobDescriptionVM
                     {
-                        JobDescription = jobDescription.job_description
+                        JobDescription = jobDescription!.job_description
                     };
                     return description;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new Exception("Error getting job description");
                 }

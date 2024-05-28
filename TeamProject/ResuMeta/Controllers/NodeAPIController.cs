@@ -53,7 +53,7 @@ namespace ResuMeta.Controllers
             try
             {
                 // get user id from User object
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
                 
                 await _nodeService.ImportPdfAsync(pdfFile, userId);
             }

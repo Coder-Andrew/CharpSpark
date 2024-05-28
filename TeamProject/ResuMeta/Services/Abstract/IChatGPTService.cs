@@ -9,5 +9,6 @@ namespace ResuMeta.Services.Abstract
         Task<ChatGPTResponse> GenerateResume(int id, JsonElement jobDescription);
         Task<ChatGPTResponse> GenerateCoverLetter(int id);
         Task<ChatGPTResponse> GenerateTailoredCoverLetter(int id, JsonElement jobDescription);
+        Task<ChatGPTResponse> GenerateCareerSuggestions(int id);
     }
 }

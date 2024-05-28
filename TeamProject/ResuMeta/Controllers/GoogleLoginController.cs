@@ -54,7 +54,7 @@ namespace ResuMeta.Controllers
             if (user == null)
             {
                 // User not found, create a new user.
-                var emailClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Email);
+                var emailClaim = claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email);
                 user = new ApplicationUser
                 {
                     UserName = emailClaim?.Value ?? googleIdClaim.Value,
@@ -75,9 +75,9 @@ namespace ResuMeta.Controllers
 
                 var appUser = new UserInfo
                 {
-                    FirstName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
-                    PhoneNumber = claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.HomePhone)?.Value ?? claims.FirstOrDefault(c => c.Type == ClaimTypes.OtherPhone)?.Value,
+                    FirstName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value,
+                    PhoneNumber = claims?.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value ?? claims?.FirstOrDefault(c => c.Type == ClaimTypes.HomePhone)?.Value ?? claims?.FirstOrDefault(c => c.Type == ClaimTypes.OtherPhone)?.Value,
                     Email = emailClaim?.Value,
                     AspnetIdentityId = user.Id
                 };

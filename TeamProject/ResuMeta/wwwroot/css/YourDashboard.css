@@ -75,3 +75,11 @@ h4 {
     margin-bottom: 20px;
     text-align: left;
 }
+
+.search-bar-container {
+    text-align: left;
+}
+
+#resume-search-bar, #cover-letter-search-bar {
+    padding: 5px;
+}

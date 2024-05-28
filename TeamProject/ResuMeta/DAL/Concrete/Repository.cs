@@ -41,8 +41,10 @@ namespace ResuMeta.DAL.Concrete
         // Find by ID assuming it's the PK and is an int
         public virtual TEntity FindById(int id)
         {
-            TEntity entity = _dbSet.Find(id);
+            TEntity? entity = _dbSet.Find(id);
+#pragma warning disable CS8603 // Possible null reference return.
             return entity;  // null if not found
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public virtual bool Exists(int id)

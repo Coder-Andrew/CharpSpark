@@ -85,7 +85,6 @@ namespace ResuMeta_BDDTests.StepDefinitions
                 _yourDashboardPage.GoTo("CreateResume");
                 GivenTheFollowingUsersCreatesAtLeastOneResume(null);
             }
-
             _yourDashboardPage.SavedResumes.Should().NotBeNull();
             _yourDashboardPage.SavedResumes.Count.Should().BeGreaterThan(0);
 
@@ -131,7 +130,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _yourDashboardPage.ClickResume();
         }
 
-        [Then("I should be redirected to the \"YourResume\" page")]
+        [Then("I should be rerouted to the \"YourResume\" page")]
         public void ThenIShouldBeRedirectedToTheYourResumePage()
         {
             var resumeId = _yourDashboardPage.GetResumeIds().FirstOrDefault();
@@ -153,7 +152,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _yourDashboardPage.ClickCoverLetter();
         }
 
-        [Then("I should be redirected to the \"YourCoverLetter\" page")]
+        [Then("I should be reroute to the \"YourCoverLetter\" page")]
         public void ThenIShouldBeRedirectedToTheYourCoverLetterPage()
         {
             var coverLetterId = _yourDashboardPage.GetCoverLetterIds().FirstOrDefault();

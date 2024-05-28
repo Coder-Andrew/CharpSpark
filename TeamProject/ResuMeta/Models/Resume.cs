@@ -38,4 +38,10 @@ public partial class Resume
 
     [InverseProperty("Resume")]
     public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
+
+    [InverseProperty("Resume")]
+    public virtual Profile? Profile { get; set; }
+
+    [InverseProperty("Resume")]
+    public virtual ICollection<UserVote> UserVotes { get; set; } = new List<UserVote>();
 }

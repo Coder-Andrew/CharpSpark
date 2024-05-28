@@ -50,14 +50,14 @@ namespace ResuMeta_BDDTests.StepDefinitions
             _jobListingPage.ClickJobListing();
         }
 
-        [Then("I should see a {string} button")]
-        public void ThenIShouldSeeAButton(string p0)
+        [Then("I should see a \"Create Cover Letter\" button")]
+        public void ThenIShouldSeeAButton()
         {
             _jobListingPage.ButtonShouldExist("create-cover-letter-ai").Should().NotBeNull();
         }
 
-        [When("I click on the create cover letter button")]
-        public void WhenIClickOnTheCreateCoverLetterButton(string p0)
+        [When("I click the \"Create Cover Letter\" button")]
+        public void WhenIClickOnTheCreateCoverLetterButton()
         {
             Thread.Sleep(5000);
             _jobListingPage.ClickOnTheCreateCoverLetterButton();
@@ -67,7 +67,7 @@ namespace ResuMeta_BDDTests.StepDefinitions
         [Then("I should see a dropdown selection appear")]
         public void ThenIShouldSeeADropdownSelectionAppear()
         {
-            Thread.Sleep(15000);
+            Thread.Sleep(5000);
             _jobListingPage.IsResumeSelectPresent().Should().BeTrue();
         }
     }

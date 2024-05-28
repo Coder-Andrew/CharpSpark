@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', initializePage, false);
 let jobDesc = '';
 let pageNumber = 1;
 let numberOfPages = 0;
+let isImprovingResume = false;
 
 function initializePage() {
     const getCachedListingsBtn = document.getElementById('get-cached-listings');
@@ -11,15 +12,27 @@ function initializePage() {
     const pageNumberInput = document.getElementById('pagination');
     const improveWithAiBtn = document.getElementById('improve-with-ai');
     const createCoverLetterAiBtn = document.getElementById('create-cover-letter-ai');
+    document.getElementById('help-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "block";
+    });
+    
+    document.getElementById('close-btn').addEventListener('click', function() {
+        document.getElementById('help-modal').style.display = "none";
+    });
+
+    window.addEventListener('beforeunload', () => {
+        if (!isImprovingResume) {
+            sessionStorage.removeItem("jobLink");
+        }
+    })
 
     // redirect to /Resume/YourDashboard
     if (improveWithAiBtn) {
         improveWithAiBtn.addEventListener('click', () => {
-            console.log("test")
+            isImprovingResume = true;
             window.location.href = "/Resume/YourDashboard";
         })
     }
-
 
     if (createCoverLetterAiBtn) {
         createCoverLetterAiBtn.addEventListener('click', async (event) => {
@@ -103,6 +116,8 @@ function initializePage() {
         }
     })
 }
+
+
 function hideLoader() {
     document.getElementById('page-number').classList.remove("invisible");
     document.getElementById("loader").classList.add("invisible");

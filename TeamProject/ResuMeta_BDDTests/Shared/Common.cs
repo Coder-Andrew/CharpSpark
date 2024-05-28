@@ -35,7 +35,8 @@ namespace ResuMeta_BDDTests.Shared
             { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" },
             { "CreateProfile", "/Profile/" },
             { "YourProfile", "/Profile/YourProfile/" },
-            { "User", "/Profile/UserProfile/" }
+            { "UserProfile", "/Profile/UserProfile/" },
+            { "Trending", "/Profile/TrendingProfiles" }
         };
 
         public static string PathFor(string pathName, string id = "") => Paths[pathName] + id;
@@ -61,7 +62,7 @@ namespace ResuMeta_BDDTests.Shared
                 { "ImproveCoverLetter", "/CoverLetter/ImproveCoverLetter/" },
                 { "CreateProfile", "/Profile/" },
                 { "YourProfile", "/Profile/YourProfile/" },
-                { "User", "/Profile/UserProfile/" }
+                { "UserProfile", "/Profile/UserProfile/" }
             };
         }
     }
