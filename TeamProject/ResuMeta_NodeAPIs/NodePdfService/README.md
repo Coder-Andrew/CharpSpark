@@ -1,10 +1,48 @@
-### How to set up ###
-I use the CLI for most everything, so I don't know the translation to Visual Studio -- sorry Andrew XD
-- first ensure you have "npm" and "node" installed on your machine
-  --to check run `which npm` & `which node` (for linux/OS X), if they are installed then you should see a path outputted from those commands
-- open a CLI & `cd` into "ResuMeta_NodeAPI/NodePdf"
-- from here, package.json includes the packages used in this project, to set up the packages run `npm install`
-- you should now see a "node_modules" folder in the project, this folder contains the packages
-- now, run `node .` to start the server, it will start "index.js" which will listen for requests
-- you're now ready to try exporting a resume from the .NET server, just remember to set the NodeUrl variable:
-`dotnet user-secrets set NodeUrl "http://localhost:8080"` ~ for local development
+# ResuMeta Node API Documentation
+
+## Overview
+The ResuMeta Node microservice is designed to handle the import and export of resumes in PDF format. It transcribes resumes into a readable format for the site and exports resumes back to PDF format.
+
+## Prerequisites
+Before setting up the microservice, ensure you have the following installed on your machine:
+- Node.js
+- npm (Node Package Manager)
+
+## How to Set Up
+
+1. **Clone the Repository**
+    ```bash
+    git clone <repository-url>
+    ```
+
+2. **Navigate to the Project Directory**
+    ```bash
+    cd ResuMeta_NodeAPI/NodePdf
+    ```
+
+3. **Install Dependencies**
+    - The `package.json` file includes all the packages used in this project.
+    - Run the following command to install the required packages:
+    ```bash
+    npm install
+    ```
+
+4. **Verify Installation**
+    - You should now see a `node_modules` folder in the project directory. This folder contains all the installed packages.
+
+5. **Start the Server**
+    - Run the following command to start the server. This will execute `index.js`, which listens for requests:
+    ```bash
+    node .
+    ```
+
+## Usage
+After setting up the server, you can start using the microservice to import and export resumes. Ensure the `NodeUrl` variable is correctly set in your .NET server configuration to interact with this Node.js microservice.
+
+## Additional Information
+- The microservice is designed to handle PDF files for resumes.
+- Make sure to test the endpoints to ensure they are working as expected.
+
+---
+
+By following these steps, you should be able to set up and run the ResuMeta Node microservice on your machine.

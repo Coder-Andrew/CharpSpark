@@ -97,18 +97,14 @@ resuMeta is a software application that enables stakeholders who already have a 
 ### Sequence Diagrams
 
 ### Other Modeling
-- ![DB Diagram](Resources/Models/CurrDB.svg)
+- ![DB Diagram](Resources/Models/FinalER.svg)
 - [DB Diagram Link](https://dbdiagram.io/d/65b57b80ac844320aedb5a1f)
 - ![Use Case Diagram](Resources/Models/M3_UseCaseDiagram.png)
 - ![Home Page](Resources/Models/Home%20Page.svg)
 - ![Creation Choice Page](Resources/Models/Creation%20Choice%20Page.svg)
 - ![Create Page](Resources/Models/Create%20Page.svg)
 - ![View Page](Resources/Models/View%20Page.svg)
-
-## Identify Non-Functional Requirements
-    1.
-    2.
-    3.
+- ![Architecture Diagram](Resources/Models/ResuMeta_ArchitectureDiagram.png)
 
 ## Identify Functional Requirements (In User Story Format)
 
