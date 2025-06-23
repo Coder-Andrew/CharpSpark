@@ -18,6 +18,12 @@ using SendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//if (builder.Environment.IsProduction())
+//{
+//    builder.Configuration.AddEnvironmentVariables();
+//}
+builder.Configuration.AddEnvironmentVariables();
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
@@ -125,14 +131,15 @@ builder.Services.AddScoped<IApplicationTrackerService, ApplicationTrackerService
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
-builder.Services.AddScoped<ISendGridService, SendGridService>();
+// builder.Services.AddScoped<ISendGridService, SendGridService>(); // Uncomment out to use actual service
+builder.Services.AddScoped<ISendGridService, FakeSendGridService>();
 
 
 //builder.Services.AddScoped<INodeService, NodeService>();
 builder.Services.AddSwaggerGen();
 
 // Used for testing the service without using the Chatgpt API, uncomment to use
-//builder.Services.AddScoped<IChatGPTService, FakeChatGPTService>();
+builder.Services.AddScoped<IChatGPTService, FakeChatGPTService>();
 
 builder.Services.AddAuthorization(options =>
 {

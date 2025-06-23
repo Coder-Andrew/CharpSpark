@@ -65,7 +65,8 @@ namespace ResuMeta.Controllers
 
                 // Calculate the time until the reminder date
                 TimeOnly currentTime = TimeOnly.FromTimeSpan(DateTime.Now.TimeOfDay);
-                DateTime reminderDateTime = reminderDate.ToDateTime(currentTime);
+                //DateTime reminderDateTime = reminderDate.ToDateTime(currentTime); // Uncomment to use actual reminder date
+                DateTime reminderDateTime = DateTime.UtcNow.AddSeconds(20);
 
                 _logger.LogInformation($"Reminder DateTime: {reminderDateTime}");
 

@@ -6,13 +6,14 @@ namespace ResuMeta.Services.Concrete
 {
     public class FakeChatGPTService : IChatGPTService
     {
+        private static string DefaultResponse(string message) => $"This is a fake service used for testing the ChatGPT service, please reach out to contact@andrewjesch.com if you'd like access to actual api, message: {message}";
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<ChatGPTResponse> AskQuestion(string question)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             return new ChatGPTResponse
             {
-                Response = $"This is a fake service used for testing the ChatGPT service, message: {question}"
+                Response = DefaultResponse(question)
             };
         }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -21,7 +22,7 @@ namespace ResuMeta.Services.Concrete
         {
             return new ChatGPTResponse
             {
-                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+                Response = DefaultResponse(id.ToString())
             };
         }
 
@@ -31,7 +32,7 @@ namespace ResuMeta.Services.Concrete
         {
             return new ChatGPTResponse
             {
-                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+                Response = DefaultResponse(id.ToString())
             };
         }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -40,7 +41,7 @@ namespace ResuMeta.Services.Concrete
         {
             return new ChatGPTResponse
             {
-                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+                Response = DefaultResponse(id.ToString())
             };
         }
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -49,7 +50,7 @@ namespace ResuMeta.Services.Concrete
         {
             return new ChatGPTResponse
             {
-                Response = $"This is a fake service used for testing the ChatGPT service, message: {id}"
+                Response = DefaultResponse(id.ToString())
             };
         }
     }
