@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ResuMeta.Data;
+using DotNetEnv;
 using ResuMeta.Models;
 using ResuMeta.Utilities;
 using ResuMeta.DAL.Concrete;
@@ -18,10 +19,7 @@ using SendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//if (builder.Environment.IsProduction())
-//{
-//    builder.Configuration.AddEnvironmentVariables();
-//}
+DotNetEnv.Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.

@@ -1,0 +1,41 @@
+services:
+  ResuMeta:
+    image: ResuMeta:latest
+    build:
+      context: ./ResuMeta
+      dockerfile: Dockerfile
+    ports:
+      - 7206:7206
+    environment:
+      - SeedUserPassword=${SEED_USER_PASSWORD}
+      - ScraperUrl=http://ResuMeta_WebScraper:5722/
+      - NodeUrl=http://ResuMeta_WebScraper:8081/
+      - GoogleReCaptchaSiteKey=${GOOGLE_RECAPTCHA_SITE_KEY}
+      - GoogleReCaptchaSecret=${GOOGLE_RECAPTCHA_SITE_SECRET}
+      - SendGridApiKey=${SENDGRID_API_KEY}
+      - SendFromEmail=${SENDGRID_FROM_EMAIL}
+      - ChatGPTAPIKey=${CHATGPT_API_KEY}
+      - Authentication__Google__ClientId=${GOOGLE_CLIENT_ID}
+      - Authentication__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
+      - ConnectionStrings__AuthConnection=Data Source=Server=my-database;Database=ResuMetaAuth;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
+      - ConnectionStrings__ResuMetaConnection=Server=my-database;Database=ResuMeta;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
+    networks:
+      - app_network
+  ResuMeta_PDF_Service:
+    image: ResuMeta_PDF_Service:latest
+    build:
+      context: ./ResuMeta_NodeAPIs/NodePdfService
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+  ResuMeta_WebScraper:
+    image: ResuMeta_WebScraper:latest
+    build:
+      context: ./ResuMeta_WebScraper
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    external: true
