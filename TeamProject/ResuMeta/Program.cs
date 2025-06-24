@@ -131,6 +131,8 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<SendGridClient>(provider => new SendGridClient(sendGridApiKey));
 // builder.Services.AddScoped<ISendGridService, SendGridService>(); // Uncomment out to use actual service
 builder.Services.AddScoped<ISendGridService, FakeSendGridService>();
+builder.Services.AddScoped<IWebScraperService, FakeWebScraper>(); // Delete to use actual service
+
 
 
 //builder.Services.AddScoped<INodeService, NodeService>();
@@ -180,7 +182,7 @@ else
 }
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

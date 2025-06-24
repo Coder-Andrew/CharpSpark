@@ -1,41 +1,62 @@
 services:
   ResuMeta:
-    image: ResuMeta:latest
+    image: resumeta:latest
     build:
       context: ./ResuMeta
       dockerfile: Dockerfile
     ports:
       - 7206:7206
     environment:
-      - SeedUserPassword=${SEED_USER_PASSWORD}
+      - ASPNETCORE_URLS=http://+:${ASPNET_PORT}
+      - SeedUserPW=${SEED_USER_PASSWORD}
       - ScraperUrl=http://ResuMeta_WebScraper:5722/
       - NodeUrl=http://ResuMeta_WebScraper:8081/
       - GoogleReCaptchaSiteKey=${GOOGLE_RECAPTCHA_SITE_KEY}
-      - GoogleReCaptchaSecret=${GOOGLE_RECAPTCHA_SITE_SECRET}
+      - GoogleRecaptchaSecretKey=${GOOGLE_RECAPTCHA_SITE_SECRET}
       - SendGridApiKey=${SENDGRID_API_KEY}
       - SendFromEmail=${SENDGRID_FROM_EMAIL}
       - ChatGPTAPIKey=${CHATGPT_API_KEY}
       - Authentication__Google__ClientId=${GOOGLE_CLIENT_ID}
       - Authentication__Google__ClientSecret=${GOOGLE_CLIENT_SECRET}
-      - ConnectionStrings__AuthConnection=Data Source=Server=my-database;Database=ResuMetaAuth;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
+      - ConnectionStrings__AuthConnection=Server=my-database;Database=ResuMetaAuth;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
       - ConnectionStrings__ResuMetaConnection=Server=my-database;Database=ResuMeta;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
     networks:
       - app_network
   ResuMeta_PDF_Service:
-    image: ResuMeta_PDF_Service:latest
+    image: resumeta_pdf_service:latest
     build:
       context: ./ResuMeta_NodeAPIs/NodePdfService
       dockerfile: Dockerfile
     networks:
       - app_network
-  ResuMeta_WebScraper:
-    image: ResuMeta_WebScraper:latest
-    build:
-      context: ./ResuMeta_WebScraper
-      dockerfile: Dockerfile
-    networks:
-      - app_network
 
+  # mongodb:
+  #   image: mongo:6.0
+  #   container_name: mongodb
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   networks:
+  #     - app_network
+  #   ports:
+  #     - 27017:27017
+
+  # ResuMeta_WebScraper:
+  #   image: resumeta_webscraper:latest
+  #   build:
+  #     context: ./ResuMeta_WebScraper
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - MONGO_USER=${MONGO_USER}
+  #     - MONGO_PASS=${MONGO_PASS}
+  #   command: ["sh", "-c", "python app.py mongodb://$MONGO_USER:$MONGO_PASS@mongodb:27017"]
+  #   networks:
+  #     - app_network
+
+# volumes:
+#   mongo-data:
 networks:
   app_network:
     external: true

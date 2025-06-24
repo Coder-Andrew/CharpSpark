@@ -8,11 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="global.json" />
     <Content Remove="wwwroot\js\sum.js" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\js\sum.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="global.json" />
   </ItemGroup>
 
   <ItemGroup>
