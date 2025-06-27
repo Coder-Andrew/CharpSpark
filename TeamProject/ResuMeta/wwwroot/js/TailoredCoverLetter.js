@@ -1,4 +1,4 @@
-
+import { basePathHelper } from "./BasePathHelper.js";
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 const htmlContent = decodeURIComponent(sessionStorage.getItem('htmlContent'));
@@ -79,7 +79,7 @@ async function getHtmlInfoToSave() {
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Cover Letter saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
-        window.location.href = `/Resume/YourDashboard`;
+        window.location.href = basePathHelper(`/Resume/YourDashboard`);
         return;
     }
     else {

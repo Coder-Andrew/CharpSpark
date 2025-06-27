@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 
@@ -258,7 +260,7 @@ function redirectToAiPage() {
     const aiPageUrl = `/CoverLetter/ImproveCoverLetter/${coverLetterId}`;
     console.log("Redirecting to improve with ai page");
     // Redirect the user to improve with ai page
-    window.location.href = aiPageUrl;
+    window.location.href = basePathHelper(aiPageUrl);
     }
     else
     {

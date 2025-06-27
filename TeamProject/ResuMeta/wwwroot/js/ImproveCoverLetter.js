@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 function loadQuill() {
@@ -49,7 +51,7 @@ function initializePage() {
     const saveBtn = document.getElementById("save-and-apply");
     saveBtn.addEventListener('click', async () => {
         await getHtmlInfo();
-        window.location.href = `/Resume/YourDashboard`;
+        window.location.href = basePathHelper(`/Resume/YourDashboard`);
     }, false);
     const exportBtn = document.getElementById("export-pdf");
     exportBtn.addEventListener('click', () => exportPdf(quill2), false);

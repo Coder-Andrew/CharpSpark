@@ -1,3 +1,4 @@
+import { basePathHelper } from "./BasePathHelper.js";
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
 let jobDesc = '';
@@ -30,7 +31,7 @@ function initializePage() {
     if (improveWithAiBtn) {
         improveWithAiBtn.addEventListener('click', () => {
             isImprovingResume = true;
-            window.location.href = "/Resume/YourDashboard";
+            window.location.href = basePathHelper("/Resume/YourDashboard");
         })
     }
 
@@ -83,7 +84,7 @@ function initializePage() {
     
                 spinner.style.display = 'none'; // hide the spinner
                 loadingScreen.style.display = "none"; // hide the loading screen
-                window.location.href = `/CoverLetter/TailoredCoverLetter/`;
+                window.location.href = basePathHelper(`/CoverLetter/TailoredCoverLetter/`);
                 console.log('the response is', response);
             });
         })

@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener('DOMContentLoaded', initializePage);
 
 let jobLink = sessionStorage.getItem('jobLink');
@@ -32,9 +34,9 @@ function initializePage() {
             isImprovingResume = true;
             const resumeId = target.dataset.url.split('/').pop();
             sessionStorage.setItem('resumeId', resumeId); // Get the resumeId from the url
-            window.location.href = `/Resume/ImproveResume/${resumeId}`;
+            window.location.href = basePathHelper(`/Resume/ImproveResume/${resumeId}`);
         } else if (target) {
-            window.location.href = target.dataset.url;
+            window.location.href = basePathHelper(target.dataset.url);
         }
     })
 

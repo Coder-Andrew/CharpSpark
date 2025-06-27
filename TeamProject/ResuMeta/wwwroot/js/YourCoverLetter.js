@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 function loadQuill() {
@@ -169,7 +171,7 @@ async function deleteCoverLetter() {
         cloneSuccess.style.display = "block";
         cloneSuccess.innerHTML = `Cover letter deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
-        window.location.href = "/Resume/YourDashboard";
+        window.location.href = basePathHelper("/Resume/YourDashboard");
         return;
     }
     else {
@@ -241,5 +243,5 @@ function redirectToAiPage() {
     const aiPageUrl = `/CoverLetter/ImproveCoverLetter/${coverLetterId}`;
     console.log("Redirecting to improve with ai page");
     // Redirect the user to improve with ai page
-    window.location.href = aiPageUrl;
+    window.location.href = basePathHelper(aiPageUrl);
 }

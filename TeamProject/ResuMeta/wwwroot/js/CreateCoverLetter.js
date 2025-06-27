@@ -1,4 +1,5 @@
 import { checkForIllegalCharacters, validateNonEmptyInput } from "./CreateResume_Modules/utility-mod.js";
+import { basePathHelper } from "./BasePathHelper.js";
 
 document.addEventListener("DOMContentLoaded", initializePage, false);
 var coverLetterId = 1; 
@@ -59,7 +60,7 @@ async function submitInfo() {
      {
          const responseJson = await response.json();
          const url = responseJson.redirectUrl;
-         window.location.href = url;
+         window.location.href = basePathHelper(url);
      }
 }
 

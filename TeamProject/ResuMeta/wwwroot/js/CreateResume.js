@@ -3,7 +3,8 @@ import {addProjectsFromContainer, validateProjects} from './CreateResume_Modules
 import {addPersonalSummaryFromContainer, validatePersonalSummary} from './CreateResume_Modules/personalSummary-mod.js';
 import {addEmploymentFromContainer, validateEmployment} from './CreateResume_Modules/employment-mod.js';
 import {addAchievementsFromContainer, validateAchievements} from './CreateResume_Modules/achievement-mod.js';
-import {validateDates} from './CreateResume_Modules/utility-mod.js';
+import { validateDates } from './CreateResume_Modules/utility-mod.js';
+import { basePathHelper } from "./BasePathHelper.js";
 
 
 document.addEventListener("DOMContentLoaded", initializePage, false);
@@ -208,7 +209,7 @@ async function submitInfo() {
     {
         const responseJson = await response.json();
         const url = responseJson.redirectUrl
-        window.location.href = url;
+        window.location.href = basePathHelper(url);
     }
     else
     {

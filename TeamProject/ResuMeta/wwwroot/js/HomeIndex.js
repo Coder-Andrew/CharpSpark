@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener('DOMContentLoaded', initializePage, false);
 
 function initializePage() {
@@ -49,7 +51,7 @@ function generateProfileNode(profile) {
     const profileNode = document.getElementById('profile-template').content.cloneNode(true).firstElementChild;
     profileNode.querySelector('#profile-username').textContent = profile.userName;
     profileNode.querySelector('#profile-name').textContent = profile.firstName + " " + profile.lastName;
-    profileNode.addEventListener('click', () => window.location.href = `/Profile/UserProfile/${profile.profileId}`, false);
+    profileNode.addEventListener('click', () => window.location.href = basePathHelper(`/Profile/UserProfile/${profile.profileId}`), false);
     return profileNode;
 }
 

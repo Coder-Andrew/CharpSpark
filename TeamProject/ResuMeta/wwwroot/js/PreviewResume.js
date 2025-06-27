@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 function loadQuill() {
@@ -152,7 +154,7 @@ async function getHtmlInfo()
         cloneSuccess.innerHTML = `Resume saved successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
         validationArea.appendChild(cloneSuccess);
         // Redirect to the YourResume page
-        window.location.href = `/Resume/YourResume/${resumeId}`;
+        window.location.href = basePathHelper(`/Resume/YourResume/${resumeId}`);
         return;
     }
     else

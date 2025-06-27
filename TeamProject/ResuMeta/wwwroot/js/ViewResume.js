@@ -1,3 +1,5 @@
+import { basePathHelper } from "./BasePathHelper.js";
+
 document.addEventListener("DOMContentLoaded", loadQuill, false);
 
 function loadQuill() {
@@ -78,7 +80,7 @@ function initializePage() {
         templatequill.setContents(templatedelta);
 
         templateEditor.addEventListener('click', function() {
-            window.location.href = 'Resume/PreviewResume';
+            window.location.href = basePathHelper('Resume/PreviewResume');
         });
     }
 
@@ -170,7 +172,7 @@ async function deleteResume() {
             cloneSuccess.style.display = "block";
             cloneSuccess.innerHTML = `Resume deleted successfully. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="float:right;"></button>`;
             validationArea.appendChild(cloneSuccess);
-            window.location.href = "/Resume/YourDashboard";
+            window.location.href = basePathHelper("/Resume/YourDashboard");
             return;
         }
         else {
@@ -316,7 +318,7 @@ function redirectToAiPage() {
     const aiPageUrl = `/Resume/ImproveResume/${resumeId}`;
     console.log("Redirecting to improve with ai page");
     // Redirect the user to improve with ai page
-    window.location.href = aiPageUrl;
+    window.location.href = basePathHelper(aiPageUrl);
     }
     else
     {

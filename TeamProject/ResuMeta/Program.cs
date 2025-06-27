@@ -25,6 +25,7 @@ builder.Configuration.AddEnvironmentVariables();
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new InvalidOperationException("Connection string 'AuthConnection' not found.");
 var resuMetaConnectionString = builder.Configuration.GetConnectionString("ResuMetaConnection") ?? throw new InvalidOperationException("Connection string 'ResuMetaConnection' not found.");
+var pathBase = builder.Configuration["PathBase"];
 var chatGPTApiKey = builder.Configuration["ChatGPTAPIKey"] ?? throw new InvalidOperationException("Connection string 'ChatGPTAPIKey' not found.");
 var sendGridApiKey = builder.Configuration["SendGridApiKey"] ?? throw new InvalidOperationException("Connection string 'SendGridApiKey' not found.");
 var sendFromEmail = builder.Configuration["SendFromEmail"] ?? throw new InvalidOperationException("Connection string 'SendFromEmail' not found.");
@@ -149,6 +150,10 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
+if (!string.IsNullOrEmpty(pathBase))
+{
+    app.UsePathBase(pathBase);
+}
 
 using (var scope = app.Services.CreateScope())
 {

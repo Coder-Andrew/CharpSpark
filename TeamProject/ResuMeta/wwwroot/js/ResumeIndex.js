@@ -1,4 +1,5 @@
 import { isPdfExtension } from "./ResumeIndex_Modules/utility-mod.js";
+import { basePathHelper } from "./BasePathHelper.js";
 
 document.addEventListener("DOMContentLoaded", initializePage);
 
@@ -42,7 +43,7 @@ function sendPdf() {
 }
 
 function redirectToDashboard() {
-    window.location.href = "/Resume/YourDashboard";
+    window.location.href = basePathHelper("/Resume/YourDashboard");
 }
 
 
