@@ -152,6 +152,10 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 if (!string.IsNullOrEmpty(pathBase))
 {
+    if (!pathBase.StartsWith("/"))
+    {
+        pathBase = "/" + pathBase;
+    }
     app.UsePathBase(pathBase);
 }
 
